@@ -1,0 +1,34 @@
+
+# The Job defines all the different data for each supported task
+# the supported tasks are:
+# packDeploy: Deploy all contents of folder in expansionPath
+# packImport: Import contents of file in buildFile
+# packExport: Export from all queries and manifest and expand at expansionPath
+# packBuildFile: Build the buildFile from the expansionPath data
+# packExpandFile: Create the contents of folders in expansionPath from the buildFile
+
+projectPath: vlocity.rm.src # Primary project path allows for merging in Property File properties or can be a regular value
+expansionPath: datapack-expanded/CampaignBaseTemplates # The Specific Path after the projectPath to insert these Queried Files
+buildFile: staticresources/CampaignBaseTemplates.resource # File to create
+compileOnBuild: true # Compiled files will not be generated as part of this Export
+# You can also run Anonymous Apex before and After a Job by job type.
+# Available types are Import, Export, Deploy BuildFile, ExpandFile
+# Apex files live in vloc_release/apex or in your projectPath
+# You can include multiple Apex files with "//include FileName.cls;" in you .cls file
+preJobApex:
+  Export: DeactivateTemplates.cls
+postJobApex:
+  Export: ActivateTemplates.cls
+# Data for Job can be Specified through either queries OR manfifest not both
+queries: # Array of Queries to get Data for Job by DataPackType
+  - VlocityDataPackType: VlocityUITemplate # The VlocityDataPackType the Query is finding Id's for
+    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'campaign%' # SOQL Query use %vlocity_namespace%__
+manifestOnly: false # If true, an Export job will only save items specifically listed in the manifest
+manifest: # Object defining Type and Export Data - Can be String or Object
+  VlocityCard: # VlocityDataPackType
+    - Campaign-Story # Name
+  OmniScript: # VlocityDataPackType
+    - Type: Insurance # This object would export the currently Active OmniScript
+      SubType: Billing # for this Type/SubType/Language
+      Language: English
+delete: true # Delete the VlocityDataPack__c file on finish

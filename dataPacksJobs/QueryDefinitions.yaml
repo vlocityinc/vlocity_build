@@ -1,0 +1,15 @@
+
+# Shared Query Definitions
+
+ActiveOmniScripts:
+  query: Select Id from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true
+	VlocityDataPackType: OmniScript
+ActiveCards:
+	query: Select Id from %vlocity_namespace%__VlocityUILayout__c where %vlocity_namespace%__Active__c = true
+	VlocityDataPackType: VlocityUILayout
+ActiveTemplates:
+	query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c = true
+	VlocityDataPackType: VlocityUITemplate
+
+
+

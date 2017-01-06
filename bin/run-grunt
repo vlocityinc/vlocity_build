@@ -1,0 +1,15 @@
+# /bin/sh
+
+echo $@
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+command -v nvm >/dev/null 2>&1 || { echo >&2 "\nIMPORTANT!!!!\n\nI require NVM to ensure we use the right version of Node.\n\nPlease download the latest NVM from https://github.com/creationix/nvm#installation\n\n\n"; exit 1; }
+
+nvm install
+nvm use
+
+npm install
+./node_modules/.bin/grunt build-js $*
+echo "Grunt completed..."

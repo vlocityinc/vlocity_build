@@ -1,0 +1,269 @@
+{
+    "SObject": {
+       
+    },
+    "AttributeCategory": {
+        "%vlocity_namespace%__AttributeCategory__c": {
+            "%vlocity_namespace%__Attribute__c": "object"
+        },
+        "%vlocity_namespace%__Attribute__c": {
+            "FileName": [
+                "Attribute",
+                "Name"
+            ],
+            "FileType": "json"
+        },
+        "Data": "%vlocity_namespace%__AttributeCategory__c"
+    },
+    "CalculationMatrix": {
+        "%vlocity_namespace%__CalculationMatrixRow__c": {
+            "FileName": [
+                "Rows"
+            ],
+            "FileType": "json",
+            "JsonFields": [
+                "%vlocity_namespace%__InputData__c",
+                "%vlocity_namespace%__OutputData__c"
+            ],
+            "SortFields": [
+                "%vlocity_namespace%__InputData__c"
+            ]
+        },
+        "%vlocity_namespace%__CalculationMatrixVersion__c": {
+            "FileName": [
+                "Version"
+            ],
+            "FileType": "json",
+            "%vlocity_namespace%__CalculationMatrixRow__c": "list"
+        },
+        "%vlocity_namespace%__CalculationMatrix__c": {
+            "%vlocity_namespace%__CalculationMatrixVersion__c": "object"  
+        },
+        "Data": "%vlocity_namespace%__CalculationMatrix__c"
+    },
+    "CalculationProcedure": {
+        "%vlocity_namespace%__CalculationProcedureStep__c": {
+             "FileName": [
+                "Steps"
+            ],
+            "FileType": "json"
+        },
+        "%vlocity_namespace%__CalculationProcedureVersion__c": {
+            "FileName": [
+                "Version"
+            ],
+            "FileType": "json",
+            "%vlocity_namespace%__CalculationProcedureStep__c": "list"
+        },
+        "%vlocity_namespace%__CalculationProcedure__c": {
+            "%vlocity_namespace%__CalculationProcedureVersion__c": "object"  
+        },
+        "Data": "%vlocity_namespace%__CalculationProcedure__c"
+    },
+    "DataRaptor": {
+        "%vlocity_namespace%__DRBundle__c": {
+            "%vlocity_namespace%__DRMapItem__c": "list",
+            "%vlocity_namespace%__InputJson__c": {
+                "FileName": [
+                    "InputJson"
+                ],
+                "FileType": "json"
+            },
+            "%vlocity_namespace%__TargetOutJson__c": {
+                "FileName": [
+                    "TargetOutJson"
+                ],
+                "FileType": "json"
+            }
+        },
+        "%vlocity_namespace%__DRMapItem__c": {
+            "FileName": [
+                "Mappings"
+            ],
+            "FileType": "json",
+            "SortFields": [
+                "%vlocity_namespace%__DomainObjectCreationOrder__c",
+                "%vlocity_namespace%__InterfaceObjectLookupOrder__c"
+            ]
+        },
+        "Data": "%vlocity_namespace%__DRBundle__c"
+    },
+    "DefaultValues": {
+        "FileName": [
+            "Name"
+        ],
+        "FilterFields": [
+            "Id",
+            "VlocityDataPackIsIncluded",
+            "LastViewedDate",
+            "LastReferencedDate"
+        ],
+        "SortFields": [
+            "Name"
+        ],
+        "SourceKeyFields": [
+            "Name"
+        ]
+    },
+    "Document": {
+        "Data": "Document",
+        "Document": {
+            "Body": {
+                "FileExt": "Type",
+                "FileType": "base64"
+            }
+        }
+    },
+    "OmniScript": {
+        "%vlocity_namespace%__Element__c": {
+            "FileName": [
+                "Elements"
+            ],
+            "FileType": "json",
+            "JsonFields": [
+                "%vlocity_namespace%__PropertySet__c"
+            ],
+            "SortFields": [
+                "%vlocity_namespace%__Level__c",
+                "%vlocity_namespace%__Order__c"
+            ]
+        },
+
+        "%vlocity_namespace%__OmniScript__c": {
+            "%vlocity_namespace%__CustomJavaScript__c": {
+                "FileName": [
+                    "JavaScript"
+                ],
+                "FileType": "js"
+            },
+            "%vlocity_namespace%__Element__c": "list",
+            "%vlocity_namespace%__OmniScriptDefinition__c": "object",
+            "%vlocity_namespace%__PropertySet__c": {
+                "FileName": [
+                    "PropertySet"
+                ],
+                "FileType": "json"
+            },
+            "%vlocity_namespace%__TestHTMLTemplates__c": {
+                "FileName": [
+                    "HTMLTemplates"
+                ],
+                "FileType": "html"
+            },
+            "FileName": [
+                "%vlocity_namespace%__Type__c",
+                "%vlocity_namespace%__SubType__c",
+                "%vlocity_namespace%__Language__c"
+            ]
+        },
+        "%vlocity_namespace%__OmniScriptDefinition__c": {
+            "FileName": [
+                "Definition"
+            ],
+            "FileType": "json",
+            "%vlocity_namespace%__Content__c": {
+                "FileName": [
+                    "Compiled"
+                ],
+                "FileType": "json"
+            }
+        },
+        "Data": "%vlocity_namespace%__OmniScript__c"
+    },
+    "Product2": {
+        "%vlocity_namespace%__AttributeAssignment__c": {
+            "FileName": [
+                "AttributeAssignments"
+            ],
+            "FileType": "json",
+            "FilterFields": [
+                "%vlocity_namespace%__ObjectLink__c"
+            ],
+            "JsonFields": [
+                "%vlocity_namespace%__ValidValuesData__c"
+            ]
+        },
+        "Data": "Product2",
+        "PricebookEntry": {
+            "FileName": [
+                "PricebookEntry"
+            ],
+            "FileType": "json"
+        },
+        "Product2": {
+            "%vlocity_namespace%__AttributeAssignment__c": "list",
+            "%vlocity_namespace%__JSONAttribute__c": {
+                "FileName": [
+                    "Attributes"
+                ],
+                "FileType": "json"
+            },
+            "PricebookEntry": "object"
+        }
+    },
+    "ProductChildItem": {
+        "%vlocity_namespace%__ProductChildItem__c": {},
+        "Data": "%vlocity_namespace%__ProductChildItem__c"
+    },
+    "SourceKeyDefinitions": {
+        "%vlocity_namespace%__DRMapItem__c": [
+            "%vlocity_namespace%__MapId__c"
+        ],
+        "%vlocity_namespace%__OmniScript__c": [
+            "%vlocity_namespace%__Type__c",
+            "%vlocity_namespace%__SubType__c",
+            "%vlocity_namespace%__Language__c"
+        ]
+    },
+    "VlocityAction": {
+        "%vlocity_namespace%__VlocityAction__c": {},
+        "Data": "%vlocity_namespace%__VlocityAction__c"
+    },
+    "VlocityCard": {
+        "%vlocity_namespace%__VlocityCard__c": {
+            "%vlocity_namespace%__Definition__c": "json"
+        },
+        "Data": "%vlocity_namespace%__VlocityCard__c"
+    },
+    "VlocityStateModel": {
+        "%vlocity_namespace%__VlocityStateModel__c": {
+            "FileName": [
+                "v",
+                "testdr13perf__VersionNumber__c"
+            ],
+            "FileType": "json",
+            "JsonFields": [
+                "%vlocity_namespace%__VlocityStateTransition__c"
+            ]
+        },
+        "%vlocity_namespace%__VlocityState__c": {},
+        "Data": "%vlocity_namespace%__VlocityStateModel__c"
+    },
+    "VlocityUILayout": {
+        "%vlocity_namespace%__VlocityUILayout__c": {
+            "%vlocity_namespace%__Definition__c": "json"
+        },
+        "Data": "%vlocity_namespace%__VlocityUILayout__c"
+    },
+    "VlocityUITemplate": {
+        "%vlocity_namespace%__VlocityUITemplate__c": {
+            "%vlocity_namespace%__CSS__c": "css",
+            "%vlocity_namespace%__CustomJavascript__c": "js",
+            "%vlocity_namespace%__HTML__c": "html",
+            "%vlocity_namespace%__SampleJson__c": {
+                "FileName": [
+                    "Sample"
+                ],
+                "FileType": "json"
+            },
+            "%vlocity_namespace%__Sass__c": {
+                "CompiledField": "%vlocity_namespace%__CSS__c",
+                "FileType": "scss"
+            },
+            "CompiledFields": [
+                "%vlocity_namespace%__CSS__c"
+            ]
+        },
+        "Data": "%vlocity_namespace%__VlocityUITemplate__c"
+    }
+}

@@ -1,0 +1,105 @@
+<project name="VlocityAnt" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/lib/ant-contrib-1.0b3.jar" />
+
+	<property environment="env"/>
+
+	<!-- If no propertyfile was passed in command line, attempt to load a build.properties if it exists -->
+	<if>
+		<not><isset property="sf.username" /></not>
+		<then>
+			<trycatch property="buildprop" reference="propbuild">
+				<try>
+					<loadproperties srcFile="${basedir}/build.properties"/>
+				</try>
+				<catch>
+					<echo>No propertyfile selected. Please create a "build.properties" file following the template provided in template.build.properties. Or specify a -propertyfile.</echo>
+				</catch>
+			</trycatch>
+		</then>
+	</if>
+
+    <script language="javascript"> <![CDATA[
+  		var commandLine = java.lang.System.getProperty("sun.java.command");
+	  	var parts = commandLine.split(' ');
+	  	var property = null;
+	  	for (var i = 0; i < parts.length; i++) {
+			if (parts[i] === '-propertyfile') {
+				//	next part is our buildfile for grunt
+				property = VlocityAnt.createTask("property");
+				property.setName('grunt.propertyfile');
+				property.setValue(parts[i+1]);
+		      	property.perform();
+		      	break;
+			}
+	  	}
+		if (!property) {
+			property = VlocityAnt.createTask("property");
+			property.setName('grunt.propertyfile');
+			property.setValue('build.properties');
+	      	property.perform();
+		}
+    ]]></script>
+
+	<echo> Developer Org - ${sf.username} </echo>
+	<if>
+		<isset property="sf.description" />
+		<then>
+			<echo> Description - ${sf.description}</echo>
+		</then>
+	</if>
+
+	<var name="serverurl" unset="true" />
+	<if>
+		<not><isset property="sf.serverurl" /></not>
+		<then>
+			<property name="serverurl" value="https://login.salesforce.com" />
+			<property name="sf.serverurl" value="https://login.salesforce.com" />
+		</then>
+		<else>
+			<property name="serverurl" value="${sf.serverurl}" />
+		</else>
+	</if>
+
+	<var name="maxPoll" unset="true" />
+	<if>
+		<isset property="sf.maxPoll" />
+		<then>
+			<property name="maxPoll" value="${sf.maxPoll}" />
+		</then>
+		<else>
+			<property name="maxPoll" value="500" />
+			<property name="sf.maxPoll" value="500" />
+		</else>
+	</if>
+
+	<target name="packExport" description="">
+		<runDataPackJob packCommand="packExport" job="${vlocity.dataPackJob}" />
+	</target>
+
+	<target name="packDeploy" description="">
+		<runDataPackJob packCommand="packDeploy" job="${vlocity.dataPackJob}" />
+	</target>
+
+	<macrodef name="runDataPackJob" >
+		<attribute name="packCommand" />
+		<attribute name="job" />
+		<sequential>
+			<trycatch property="deployFailureProperty">
+				<try>
+					<echo> ------------------------------------------- </echo>
+					<echo> ------------------------------------------- </echo>
+					<echo> Running - @{packCommand} - @{job}</echo>
+						<exec executable="${basedir}/bin/run-grunt" dir="${basedir}">
+							<arg value="@{packCommand}"/>
+							<arg value="-job"/>
+							<arg value="@{job}"/>
+							<arg value="-propertyfile"/>
+							<arg value="${grunt.propertyfile}"/>
+						</exec>
+					<echo>Finished</echo>
+				</try>
+			</trycatch>
+		</sequential>
+	</macrodef>
+</project>
