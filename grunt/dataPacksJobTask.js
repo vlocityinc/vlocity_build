@@ -24,19 +24,35 @@ module.exports = function (grunt) {
 
       	grunt.log.writeln('DataPacks Job Started - ' + jobName + ' Org: ' + properties['sf.username']);
 
+      	if (properties['vlocity.dataPacksJobFolder']) {
+      		dataPacksJobFolder = properties['vlocity.dataPacksJobFolder'];
+      	}
+      	
       	var dataPacksJobsData = {};
+      	var queryDefinitions;
 
-      	fs.readdirSync(dataPacksJobFolder).filter(function(file) {
+		try {
+		    queryDefinitions = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/QueryDefinitions.yaml', 'utf8'));
+		} catch (e) {
+		    
+		}
 
-      		console.log(file);
+		var dataPackFolderExists;
 
-      		try {
-      			var fileName = file.substr(0,file.indexOf('.'));
-      			dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
-      		} catch (e) { 
-      			//console.log(e);
-      		}
-    	});
+		try {
+	      	fs.readdirSync(dataPacksJobFolder).filter(function(file) {
+	      		try {
+	      			var fileName = file.substr(0,file.indexOf('.'));
+	      			dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
+
+	      			dataPacksJobsData[fileName].QueryDefinitions = queryDefinitions;
+	      		} catch (e1) { 
+	      			//console.log(e);
+	      		}
+	    	});
+		} catch (e2) {
+			console.log('No DataPacksJob Folder Found: ' + dataPacksJobFolder);
+		}
 
 	    if (dataPacksJobsData[jobName]) {
 		    if (dataPacksJobsData[jobName].projectPath && properties[dataPacksJobsData[jobName].projectPath]) {
@@ -45,6 +61,10 @@ module.exports = function (grunt) {
 
 		    if (dataPacksJobsData[jobName].projectPath) {
 		    	dataPacksJobsData[jobName].projectPath = grunt.template.process(dataPacksJobsData[jobName].projectPath, {data: properties});
+		    }
+
+		    if (!dataPacksJobsData[jobName].projectPath) {
+		    	dataPacksJobsData[jobName].projectPath = dataPacksJobFolder;
 		    }
 
 			if (grunt.option('query') && grunt.option('type')) {
@@ -79,6 +99,52 @@ module.exports = function (grunt) {
 	    }
 	}
 
+	function runTaskForAllJobFiles(taskName, callback)
+	{
+        var dataPacksJobsData = {};
+
+        var properties = grunt.config.get('properties');
+
+		if (properties['vlocity.dataPacksJobFolder']) {
+      		dataPacksJobFolder = properties['vlocity.dataPacksJobFolder'];
+      	}
+
+      	try {
+
+	        fs.readdirSync(dataPacksJobFolder).filter(function(file) {
+	            try {
+	                var fileName = file.substr(0,file.indexOf('.'));
+	                if (!/ReadMe-Example|QueryDefinitions/.test(fileName)) {
+	     				dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));;
+	                }
+	            } catch (e) {
+	                //console.log(e);
+	            }
+	        });
+
+	        var countDown = Object.keys(dataPacksJobsData).length;
+
+	        Object.keys(dataPacksJobsData).forEach(function(job, index) {
+	            grunt.log.ok('Kicking off ' + index + ' job');
+	            dataPacksJob(taskName, job, function(error) {
+
+	            	if (error) {
+	            		grunt.fail.warn(taskName + ': Failed');
+	            	}
+	                countDown--;
+	                if (countDown === 0) {
+	                    grunt.log.ok(taskName + ': All files successfully completed');
+	                    callback();
+	                    return;
+	                }
+	                grunt.log.ok(taskName + ': ' + countDown + ' Remaining');
+	            }, true);
+	        })
+	    } catch (e) {
+	    	console.log('No DataPacksJob Folder Found: ' + dataPacksJobFolder);
+	    }
+	}
+
 	grunt.registerTask('packDeploy', 'Run a DataPacks Job', function() {
 		
 		var done = this.async();		
@@ -106,37 +172,31 @@ module.exports = function (grunt) {
 		});
 	});
 
+	grunt.registerTask('packAllExport', 'Run a DataPacks Job', function() {
+        
+        var done = this.async();
+
+        runTaskForAllJobFiles('Export', function() {
+        	done();
+        });
+    });
+
+    grunt.registerTask('packAllDeploy', 'Run a DataPacks Job', function() {
+        
+        var done = this.async();
+
+        runTaskForAllJobFiles('Deploy', function() {
+        	done();
+        });
+    });
+
     grunt.registerTask('packAllBuildFiles', 'Run a DataPacks Job', function() {
         
         var done = this.async();
 
-        var dataPacksJobsData = {};
-
-        fs.readdirSync(dataPacksJobFolder).filter(function(file) {
-            try {
-                var fileName = file.substr(0,file.indexOf('.'));
-                if (!/ReadMe-Example/.test(fileName)) {
-                    dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
-                }
-            } catch (e) {
-                //console.log(e);
-            }
+        runTaskForAllJobFiles('BuildFile', function() {
+        	done();
         });
-
-        var countDown = Object.keys(dataPacksJobsData).length;
-
-        Object.keys(dataPacksJobsData).forEach(function(job, index) {
-            grunt.log.ok('Kicking off ' + index + ' job');
-            dataPacksJob('BuildFile', job, function() {
-                countDown--;
-                if (countDown === 0) {
-                    grunt.log.ok('All files built successfully');
-                    done();
-                    return;
-                }
-                grunt.log.ok(countDown + ' packs left to build');
-            }, true);
-        })
     });
 
 	grunt.registerTask('packExpandFile', 'Run a DataPacks Job', function() {

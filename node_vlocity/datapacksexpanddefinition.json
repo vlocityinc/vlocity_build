@@ -128,7 +128,6 @@
                 "%vlocity_namespace%__Order__c"
             ]
         },
-
         "%vlocity_namespace%__OmniScript__c": {
             "%vlocity_namespace%__CustomJavaScript__c": {
                 "FileName": [
@@ -137,7 +136,6 @@
                 "FileType": "js"
             },
             "%vlocity_namespace%__Element__c": "list",
-            "%vlocity_namespace%__OmniScriptDefinition__c": "object",
             "%vlocity_namespace%__PropertySet__c": {
                 "FileName": [
                     "PropertySet"
@@ -155,18 +153,6 @@
                 "%vlocity_namespace%__SubType__c",
                 "%vlocity_namespace%__Language__c"
             ]
-        },
-        "%vlocity_namespace%__OmniScriptDefinition__c": {
-            "FileName": [
-                "Definition"
-            ],
-            "FileType": "json",
-            "%vlocity_namespace%__Content__c": {
-                "FileName": [
-                    "Compiled"
-                ],
-                "FileType": "json"
-            }
         },
         "Data": "%vlocity_namespace%__OmniScript__c"
     },
