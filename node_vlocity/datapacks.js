@@ -115,11 +115,14 @@ DataPacks.prototype.getErrorsFromDataPack = function(dataPackData, callback) {
 
 				Object.keys(mapOfDataPacks[dataPackKey].VlocityDataPackAllRelationships).forEach(function(parentKey) {
 
-					if (listOfRels != '') {
-						listOfRels += ' | ';
-					}
+					if (mapOfDataPacks[parentKey] && mapOfDataPacks[parentKey].VlocityDataPackName) {
 
-					listOfRels += mapOfDataPacks[parentKey].VlocityDataPackName;
+						if (listOfRels != '') {
+							listOfRels += ' | ';
+						}
+
+						listOfRels += mapOfDataPacks[parentKey].VlocityDataPackName;
+					}
 				});
 
 				errorMessage += ' --- Referenced by: ' + listOfRels;

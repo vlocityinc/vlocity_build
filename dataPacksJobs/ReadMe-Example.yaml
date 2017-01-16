@@ -7,8 +7,7 @@
 # packBuildFile: Build the buildFile from the expansionPath data
 # packExpandFile: Create the contents of folders in expansionPath from the buildFile
 
-projectPath: vlocity.rm.src # Primary project path allows for merging in Property File properties or can be a regular value
-expansionPath: datapack-expanded/CampaignBaseTemplates # The Specific Path after the projectPath to insert these Queried Files
+expansionPath: datapack-expanded/ # The Path relative to the vlocity.dataPacksJobFolder to insert the expanded files
 buildFile: staticresources/CampaignBaseTemplates.resource # File to create
 compileOnBuild: true # Compiled files will not be generated as part of this Export
 # You can also run Anonymous Apex before and After a Job by job type.
