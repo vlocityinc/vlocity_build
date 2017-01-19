@@ -207,7 +207,13 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     var sobjectDataField = self.dataPacksExpandedDefinition[dataPackType].Data;
 
                     // Always an Array in Actualy Data Model
-                    nextImport.VlocityDataPackData[sobjectDataField] = self.buildFromFiles(JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackName + '_DataPack.json']), fullPathToFiles, dataPackType, sobjectDataField);
+                    var dataPackImportBuilt = self.buildFromFiles(JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackName + '_DataPack.json']), fullPathToFiles, dataPackType, sobjectDataField);
+
+                    if (dataPackImportBuilt[0] != null && dataPackImportBuilt[0].VlocityDataPackType == 'SObject') {
+                        sobjectDataField = dataPackImportBuilt[0].VlocityRecordSObjectType;
+                    }
+
+                    nextImport.VlocityDataPackData[sobjectDataField] = dataPackImportBuilt;
 
                     self.currentStatus[dataPackKey] = 'Added';
                 } catch (e) {
@@ -242,7 +248,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
             }
 
             Object.keys(dataPackData).forEach(function(field) {            
-                if (dataFieldDef[field]) {
+                if (dataFieldDef && dataFieldDef[field]) {
 
                     var fileNames = dataPackData[field];
  
@@ -299,7 +305,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                 }
             });
 
-            if (dataFieldDef.JsonFields) {
+            if (dataFieldDef && dataFieldDef.JsonFields) {
                 dataFieldDef.JsonFields.forEach(function(jsonField) { 
                     dataPackData[jsonField] = stringify(dataPackData[jsonField]);
                 });
