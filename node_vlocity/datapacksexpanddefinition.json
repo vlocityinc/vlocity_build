@@ -1,6 +1,9 @@
 {
-    "SObject": {
-       
+    "ApexImportDataKeys": {
+        "Product2": [
+            "Name",
+            "%vlocity_namespace%__GlobalKey__c"
+        ]
     },
     "AttributeCategory": {
         "%vlocity_namespace%__AttributeCategory__c": {
@@ -30,33 +33,33 @@
             ]
         },
         "%vlocity_namespace%__CalculationMatrixVersion__c": {
+            "%vlocity_namespace%__CalculationMatrixRow__c": "list",
             "FileName": [
                 "Version"
             ],
-            "FileType": "json",
-            "%vlocity_namespace%__CalculationMatrixRow__c": "list"
+            "FileType": "json"
         },
         "%vlocity_namespace%__CalculationMatrix__c": {
-            "%vlocity_namespace%__CalculationMatrixVersion__c": "object"  
+            "%vlocity_namespace%__CalculationMatrixVersion__c": "object"
         },
         "Data": "%vlocity_namespace%__CalculationMatrix__c"
     },
     "CalculationProcedure": {
         "%vlocity_namespace%__CalculationProcedureStep__c": {
-             "FileName": [
+            "FileName": [
                 "Steps"
             ],
             "FileType": "json"
         },
         "%vlocity_namespace%__CalculationProcedureVersion__c": {
+            "%vlocity_namespace%__CalculationProcedureStep__c": "list",
             "FileName": [
                 "Version"
             ],
-            "FileType": "json",
-            "%vlocity_namespace%__CalculationProcedureStep__c": "list"
+            "FileType": "json"
         },
         "%vlocity_namespace%__CalculationProcedure__c": {
-            "%vlocity_namespace%__CalculationProcedureVersion__c": "object"  
+            "%vlocity_namespace%__CalculationProcedureVersion__c": "object"
         },
         "Data": "%vlocity_namespace%__CalculationProcedure__c"
     },
@@ -169,6 +172,15 @@
                 "%vlocity_namespace%__ValidValuesData__c"
             ]
         },
+        "%vlocity_namespace%__ProductChildItem__c": {
+            "FileName": [
+                "ProductChildItems"
+            ],
+            "FileType": "json",
+            "SortFields": [
+                "Name"
+            ]
+        },
         "Data": "Product2",
         "PricebookEntry": {
             "FileName": [
@@ -184,13 +196,18 @@
                 ],
                 "FileType": "json"
             },
+            "%vlocity_namespace%__ProductChildItem__c": "list",
+            "FileName": [
+                "Name",
+                "%vlocity_namespace%__GlobalKey__c"
+            ],
+            "JsonFields": [
+                "%vlocity_namespace%__CategoryData__c"
+            ],
             "PricebookEntry": "object"
         }
     },
-    "ProductChildItem": {
-        "%vlocity_namespace%__ProductChildItem__c": {},
-        "Data": "%vlocity_namespace%__ProductChildItem__c"
-    },
+    "SObject": {},
     "SourceKeyDefinitions": {
         "%vlocity_namespace%__DRMapItem__c": [
             "%vlocity_namespace%__MapId__c"
@@ -199,6 +216,9 @@
             "%vlocity_namespace%__Type__c",
             "%vlocity_namespace%__SubType__c",
             "%vlocity_namespace%__Language__c"
+        ],
+        "Product2": [
+            "%vlocity_namespace%__GlobalKey__c"
         ]
     },
     "VlocityAction": {

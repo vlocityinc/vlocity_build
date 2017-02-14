@@ -57,6 +57,17 @@ DataPacksUtils.prototype.getJsonFields = function(dataPackType, SObjectType) {
 	return this.getExpandedDefinition(dataPackType, SObjectType, "JsonFields");
 }
 
+DataPacksUtils.prototype.getApexImportDataKeys = function(SObjectType) {
+	var defaults = ["VlocityRecordSObjectType", "Name" ];
+	var apexImportDataKeys = this.dataPacksExpandedDefinition.ApexImportDataKeys[SObjectType];
+
+	if (apexImportDataKeys) {
+		return defaults.concat(apexImportDataKeys);
+	}
+
+	return defaults;
+}
+
 DataPacksUtils.prototype.isCompiledField = function(dataPackType, SObjectType, field) {
 	var compiledFields = this.getExpandedDefinition(dataPackType, SObjectType, "CompiledFields");
 	return compiledFields && compiledFields.indexOf(field) != -1;
@@ -161,8 +172,7 @@ DataPacksUtils.prototype.isInManifest = function(dataPackData, manifest) {
 	return false;
 }
 
-
-DataPacksUtils.prototype.runApex = function(projectPath, filePath) {
+DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {
 	var self = this;
 
 	console.log('Executing runApex: ' + projectPath + ' -- ' + filePath);
@@ -193,6 +203,11 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath) {
 				}		
 			}
 
+			if (currentContextData) {
+				apexFileData = apexFileData.replace(/CURRENT_DATA_PACKS_CONTEXT_DATA/g, JSON.stringify(currentContextData));
+			}
+
+			apexFileData = apexFileData.replace(/%vlocity_namespace%/g, this.vlocity.namespace);
 			apexFileData = apexFileData.replace(/vlocity_namespace/g, this.vlocity.namespace);
 
 			return self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, function(err, res) {

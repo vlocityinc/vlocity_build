@@ -16,6 +16,8 @@ var SUPPORTED_JOB_KEY_TO_OPTION_MAP = {
 	source: 'source' 
 };
 
+var MAX_PER_GROUP = 100;
+
 DataPacksJob.prototype.getOptionsFromJobInfo = function(jobInfo) {
 	var options = {};
 
@@ -54,7 +56,14 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
 		var prePromise;
 
     	if (jobInfo.preJobApex && jobInfo.preJobApex[action]) {
-    		prePromise = self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action]);
+
+    		// Builds the JSON Array sent to Anon Apex that gets run before deploy
+    		// Issues when > 32000 chars. Need to add chunking for this. 
+    		if (action == 'Deploy') {
+    			self.vlocity.datapacksbuilder.initializeImportStatus(jobInfo.projectPath + '/' + jobInfo.expansionPath, jobInfo.manifest);
+    		}
+
+    		prePromise = self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], self.vlocity.datapacksbuilder.importDataSummary);
     	} else {
     		prePromise = Promise.resolve(true);
     	}
@@ -180,18 +189,38 @@ DataPacksJob.prototype.exportJob = function(jobInfo, onComplete) {
 
 DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 	var self = this;
+	
+	var toExportGroups = [];
+	var exportGroupTypes = [];
+	var splitGroupIndex = -1;
 
-	async.eachSeries(Object.keys(jobInfo.manifest), function(dataPackType, callback) {
-		var dataList = jobInfo.manifest[dataPackType];
-		var exportData = [];
+	Object.keys(jobInfo.manifest).forEach(function(dataPackType) {
+		splitGroupIndex++;
+		toExportGroups.push([]);
+		exportGroupTypes.push(dataPackType);
 
-		dataList.forEach(function(exData) {
+		jobInfo.manifest[dataPackType].forEach(function(exData) {
+			if (toExportGroups[splitGroupIndex].length == MAX_PER_GROUP) {
+				toExportGroups.push([]);
+				exportGroupTypes.push(dataPackType);
+				splitGroupIndex++;
+			}
+
 			if (typeof exData === 'object') {
-				exportData.push(exData);
+				toExportGroups[splitGroupIndex].push(exData);
 			} else {
-				exportData.push({ Id: exData });
+				toExportGroups[splitGroupIndex].push({ Id: exData });
 			}
 		});
+
+	});
+
+	splitGroupIndex = -1;
+
+	async.eachSeries(toExportGroups, function(exportData, callback) {
+		splitGroupIndex++;
+
+		var dataPackType = exportGroupTypes[splitGroupIndex];
 
 		self.vlocity.datapacks.export(dataPackType, exportData, self.getOptionsFromJobInfo(jobInfo),
 			function(result) {

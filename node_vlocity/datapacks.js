@@ -173,7 +173,7 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 			} else if (/(Ready|InProgress)/.test(result.Status)) {
 				dataPackData.processData = result;
 
-				if (result.Total && result.Finished) {
+				if (result.Total != null && result.Finished != null) {
 					console.log(result.VlocityDataPackProcess + ' Status - Finished: ' + result.Finished + ' Total: ' + result.Total);
 				}
 
@@ -197,8 +197,6 @@ DataPacks.prototype.export = function(dataPackType, exportData, options, onSucce
 				VlocityDataPackData: exportData
 		}
 	};
-
-	console.log('dataPackData', dataPackData);
 
 	this.runDataPackProcess(dataPackData, options, onSuccess, onError);
 }

@@ -143,8 +143,7 @@ DataPacksExpand.prototype.processObjectEntry = function(dataPackType, dataPackDa
 
     if (jsonFields) {
         jsonFields.forEach(function(field) {
-            if (typeof dataPackData[field] === "string") {
-
+            if (typeof dataPackData[field] === "string" && dataPackData[field] != "") {
                 try {
                     dataPackData[field] = JSON.parse(dataPackData[field]);
                 } catch (e) {

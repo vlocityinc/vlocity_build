@@ -13,6 +13,7 @@ var DataPacksBuilder = module.exports = function(vlocity) {
     this.defaultDataPack = JSON.parse(fs.readFileSync('./node_vlocity/defaultdatapack.json', 'utf8'));
     this.currentStatus;
     this.currentImportData = {};
+    this.importDataSummary = [];
 };
 
 DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo) {
@@ -46,7 +47,6 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
     return dataPackImport.dataPacks.length > 0 ? dataPackImport : null;  
 };
 
-
 DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath) {
     var self = this;
 
@@ -65,6 +65,18 @@ DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath) {
         }
        
         self.allFileDataMap[srcpath + '/' + filename] = fs.readFileSync(srcpath + '/' + filename, encoding);
+
+        if (filename.indexOf('_DataPack') != -1) {
+
+            var jsonData = JSON.parse(self.allFileDataMap[srcpath + '/' + filename]);
+            var apexImportData = {};
+
+            self.vlocity.datapacksutils.getApexImportDataKeys(jsonData.VlocityRecordSObjectType).forEach(function(field) {
+                apexImportData[field] = jsonData[field];
+            });
+            
+            self.importDataSummary.push(apexImportData);
+        }
     });
 };
 

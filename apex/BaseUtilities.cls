@@ -1,12 +1,15 @@
+// CURRENT_DATA_PACKS_CONTEXT will be replaced with:
+// 1. The Manifest being exported
+// 2. The Query results being exported
+// 3. A Summary of the DataPack data being imported
+List<Object> dataSetObjects = (List<Object>)JSON.deserializeUntyped('CURRENT_DATA_PACKS_CONTEXT_DATA');
 
-void setTemplatesActiveStatus(Boolean status)
+List<Map<String, Object>> dataPackDataSet = new List<Map<String, Object>>();
+
+for (Object obj : dataSetObjects)
 {
-  	List<vlocity_namespace__VlocityUITemplate__c> layouts = [SELECT Id, Name, Active__c FROM vlocity_namespace__VlocityUITemplate__c];
-
-    for (vlocity_namespace__VlocityUITemplate__c layout : layouts)
-    {
-    	layout.Active__c = status;
-    }
-
-    update layouts;
+	if (obj != null)
+	{
+		dataPackDataSet.add((Map<String, Object>)obj);
+	}
 }
