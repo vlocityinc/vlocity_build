@@ -1,3 +1,25 @@
+Initial Setup  
+
+Install Homebrew (Mac Only)  
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+More Info: http://brew.sh/  
+
+Install Apache Ant
+http://ant.apache.org/manual/install.html  
+
+Install Node.js  
+https://nodejs.org/  
+
+USe the following commands:  
+brew install nvm  
+
+mkdir ~/.nvm  
+export NVM_DIR="$HOME/.nvm"  
+. "$(brew --prefix nvm)/nvm.sh"  
+nvm install v4.3  
+nvm use 4.3  
+npm rebuild node-sass  
+
 To begin, fill in the information in the build.properties file, or create your own property file.
 
 sf.username: Salesforce Username  

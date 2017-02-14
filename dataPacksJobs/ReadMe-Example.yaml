@@ -7,6 +7,7 @@
 # packBuildFile: Build the buildFile from the expansionPath data
 # packExpandFile: Create the contents of folders in expansionPath from the buildFile
 
+projectPath: ../my-project # Where the project will be contained. use . for this folder
 expansionPath: datapack-expanded/ # The Path relative to the vlocity.dataPacksJobFolder to insert the expanded files
 buildFile: staticresources/CampaignBaseTemplates.resource # File to create
 compileOnBuild: true # Compiled files will not be generated as part of this Export
@@ -15,9 +16,7 @@ compileOnBuild: true # Compiled files will not be generated as part of this Expo
 # Apex files live in vloc_release/apex or in your projectPath
 # You can include multiple Apex files with "//include FileName.cls;" in you .cls file
 preJobApex:
-  Export: DeactivateTemplates.cls
-postJobApex:
-  Export: ActivateTemplates.cls
+  Deploy: DeactivateTemplatesAndLayouts.cls
 # Data for Job can be Specified through either queries OR manfifest not both
 queries: # Array of Queries to get Data for Job by DataPackType
   - VlocityDataPackType: VlocityUITemplate # The VlocityDataPackType the Query is finding Id's for
@@ -31,3 +30,4 @@ manifest: # Object defining Type and Export Data - Can be String or Object
       SubType: Billing # for this Type/SubType/Language
       Language: English
 delete: true # Delete the VlocityDataPack__c file on finish
+activate: true # Will Activate everything after it is imported / deployed
