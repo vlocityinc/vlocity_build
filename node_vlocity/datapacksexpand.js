@@ -9,9 +9,6 @@ var DataPacksExpand = module.exports = function(vlocity) {
     var self = this;
     self.vlocity = vlocity || {};
     self.utils = self.vlocity.datapacksutils;
-    
-    self.vlocityKeysToNewNamesMap = {};
-    self.vlocityRecordSourceKeyMap = {};
 };
 
 DataPacksExpand.prototype.generateFolderPath = function(dataPackType, parentName) {
@@ -40,10 +37,10 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         }
 
         // If key references a field adds that otherwise is literal string
-        if (dataPackData[key]) {
+        if (key.indexOf('#') == 0) {
+            filename += key.substring(1);
+        } else if (dataPackData[key]) {
              filename += unidecode(dataPackData[key].replace(/\//g, "-"));
-        } else {
-            filename += key;
         }
     });
 
@@ -53,6 +50,11 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
 DataPacksExpand.prototype.getDataPackName = function(dataPackType, sObjectType, dataPackData) {
     var self = this;
     return self.getNameWithFields(self.utils.getFileName(dataPackType, sObjectType), dataPackData);
+};
+
+DataPacksExpand.prototype.getDataPackFolder = function(dataPackType, sObjectType, dataPackData) {
+    var self = this;
+    return self.getNameWithFields(self.utils.getFolderName(dataPackType, sObjectType), dataPackData);
 };
 
 DataPacksExpand.prototype.expandDatapackElement = function(datapackElement) {
@@ -154,7 +156,7 @@ DataPacksExpand.prototype.processObjectEntry = function(dataPackType, dataPackDa
     }
 };
 
-DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey) {
+DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey, options) {
 
     var self = this;
 
@@ -162,7 +164,7 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
        
         if (Array.isArray(currentData)) {
             currentData.forEach(function(childData) {
-                self.preprocessDataPack(childData, dataPackKey);
+                self.preprocessDataPack(childData, dataPackKey, options);
             });
 
         } else {
@@ -171,7 +173,7 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
 
                 // Must already be found
                 if (currentData.VlocityMatchingRecordSourceKey) {
-                    currentData.VlocityMatchingRecordSourceKey = this.vlocityRecordSourceKeyMap[currentData.VlocityMatchingRecordSourceKey];
+                    currentData.VlocityMatchingRecordSourceKey = options.vlocityRecordSourceKeyMap[currentData.VlocityMatchingRecordSourceKey];
                 } else {
 
                     var keyFields = self.utils.getSourceKeyDefinitionFields(currentData.VlocityRecordSObjectType);
@@ -182,10 +184,10 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
                         newSourceKey += "/" + currentData[keyField];
                     });
 
-                    self.vlocityRecordSourceKeyMap[currentData.VlocityRecordSourceKey] = newSourceKey;
+                    options.vlocityRecordSourceKeyMap[currentData.VlocityRecordSourceKey] = newSourceKey;
 
                     if (currentData.Id) {
-                        this.vlocityRecordSourceKeyMap[currentData.Id] = newSourceKey;
+                        options.vlocityRecordSourceKeyMap[currentData.Id] = newSourceKey;
                     }
 
                     if (currentData.VlocityRecordSourceKey) {
@@ -202,18 +204,20 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
 
                 var dataPackType = currentData.VlocityDataPackType;
                
-                if (self.utils.isValidType(dataPackType)) {
-                    var dataField = self.utils.getDataField(currentData);
+                var dataField = self.utils.getDataField(currentData);
+
+                if (dataField) {
                     var dataPackDataChild = currentData.VlocityDataPackData[dataField];
+                    var parentName;
 
                     if (dataPackDataChild) {
 
                         // Top level is always an array with 1 element
                         dataPackDataChild = dataPackDataChild[0];
 
-                        var parentName = this.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
+                        parentName = self.getDataPackFolder(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
 
-                        this.vlocityKeysToNewNamesMap[currentData.VlocityDataPackKey] = dataPackType + "/" + parentName;
+                        options.vlocityKeysToNewNamesMap[currentData.VlocityDataPackKey] = dataPackType + "/" + parentName;
                     }
 
                     dataPackKey = dataPackType + "/" + parentName;
@@ -222,10 +226,10 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
 
             Object.keys(currentData).forEach(function(sobjectField) {
                 if (typeof currentData[sobjectField] === "object") {
-                    self.preprocessDataPack(currentData[sobjectField], dataPackKey);
-                } else if (self.vlocityRecordSourceKeyMap[currentData[sobjectField]]) {
+                    self.preprocessDataPack(currentData[sobjectField], dataPackKey, options);
+                } else if (options.vlocityRecordSourceKeyMap[currentData[sobjectField]]) {
                     // This attempts to replace any Id with a SourceKey
-                    currentData[sobjectField] = self.vlocityRecordSourceKeyMap[currentData[sobjectField]];
+                    currentData[sobjectField] = options.vlocityRecordSourceKeyMap[currentData[sobjectField]];
                 }
             });
         }
@@ -239,55 +243,63 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
 
         var dataPackType = dataPackData.VlocityDataPackType;
 
-        if ((!options.manifestOnly || self.utils.isInManifest(dataPackData.VlocityDataPackData, options.manifest)) && self.utils.isValidType(dataPackType)) {
+        if ((!options.manifestOnly || self.utils.isInManifest(dataPackData.VlocityDataPackData, options.manifest))) {
 
             var dataField = self.utils.getDataField(dataPackData);
 
-            var dataPackDataChild = dataPackData.VlocityDataPackData[dataField];
+            if (dataField) {
 
-            if (dataPackDataChild) {
+                var dataPackDataChild = dataPackData.VlocityDataPackData[dataField];
 
-                // Top level is always an array with 1 element
-                dataPackDataChild = dataPackDataChild[0];
+                if (dataPackDataChild) {
 
-                var parentName = this.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
-                
-                fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
+                    // Top level is always an array with 1 element
+                    dataPackDataChild = dataPackDataChild[0];
 
-                if (dataPackData.VlocityDataPackParents && dataPackData.VlocityDataPackParents.length > 0) {
-                    var sanitizedParentKeys = [];
+                    var parentName = self.getDataPackFolder(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
 
-                    dataPackData.VlocityDataPackParents.forEach(function(parentKey) {
-                        if (self.vlocityKeysToNewNamesMap[parentKey]) {
-                            sanitizedParentKeys.push(self.vlocityKeysToNewNamesMap[parentKey]);
+                    var dataPackName = self.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
+                    
+                    fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
+
+                    if (dataPackData.VlocityDataPackParents && dataPackData.VlocityDataPackParents.length > 0) {
+                        var allParentKeys = [];
+
+                        dataPackData.VlocityDataPackParents.forEach(function(parentKey) {
+                            if (options.vlocityKeysToNewNamesMap[parentKey]) {
+                                allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
+                            } else {
+                                allParentKeys.push(parentKey);
+                            }
+                        });
+
+                        if (allParentKeys.length > 0) {
+                            self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys","json", allParentKeys);
                         }
-                    });
-
-                    if (sanitizedParentKeys.length > 0) {
-                        self.writeFile(dataPackType, parentName, parentName + "_ParentKeys","json", sanitizedParentKeys);
                     }
-                }
 
-                if (dataPackData.VlocityDataPackAllRelationships) {
-                    var sanitizedRels = {};
+                    if (dataPackData.VlocityDataPackAllRelationships) {
+                        var allRels = {};
 
-                    Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function(relKey) {
-                        if (self.vlocityKeysToNewNamesMap[relKey]) {
-                            sanitizedRels[self.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];
+                        Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function(relKey) {
+                            if (options.vlocityKeysToNewNamesMap[relKey]) {
+                                allRels[options.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];
+                            } else {
+                                allRels[relKey] = dataPackData.VlocityDataPackAllRelationships[relKey];
+                            }
+                        });
+
+                        if (Object.keys(allRels).length > 0) {
+                            self.writeFile(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json", allRels);
                         }
-                    });
-
-                    if (Object.keys(sanitizedRels).length > 0) {
-                        self.writeFile(dataPackType, parentName, parentName + "_AllRelationshipKeys", "json", sanitizedRels);
                     }
-                }
 
-                self.processDataPackData(dataPackType, parentName, null, dataPackDataChild);
+                    self.processDataPackData(dataPackType, parentName, null, dataPackDataChild);
+                }
             }
         }
     }
 }
-
 
 DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentName, filename, dataPackData) {
     var self = this;
@@ -295,7 +307,6 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
     if (dataPackData) {
 
        if (dataPackData.VlocityRecordSObjectType) {
-
             var sObjectType = dataPackData.VlocityRecordSObjectType;
 
             var currentObjectName = this.getDataPackName(dataPackType, sObjectType, dataPackData);
@@ -318,7 +329,6 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
             this.processObjectEntry(dataPackType, dataPackData);
            
             Object.keys(dataPackData).forEach(function(sobjectField) {
-
                 if (self.utils.isValidSObject(dataPackType, sObjectType)) {
                     var expansionType = self.utils.getExpandedDefinition(dataPackType, sObjectType, sobjectField);
                     
@@ -427,9 +437,9 @@ DataPacksExpand.prototype.expand = function(targetPath, dataPackData, options) {
     self.compileOnBuild = options.compileOnBuild;
     self.targetPath = targetPath;
     if (dataPackData.dataPacks) {
-
+       
         dataPackData.dataPacks.forEach(function(dataPack) {
-            self.preprocessDataPack(dataPack);
+            self.preprocessDataPack(dataPack, null, options);
         });
 
         dataPackData.dataPacks.forEach(function(dataPack) {

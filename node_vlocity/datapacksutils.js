@@ -49,6 +49,10 @@ DataPacksUtils.prototype.getFileName = function(dataPackType, SObjectType) {
 	return this.getExpandedDefinition(dataPackType, SObjectType, "FileName");
 }
 
+DataPacksUtils.prototype.getFolderName = function(dataPackType, SObjectType) {
+	return this.getExpandedDefinition(dataPackType, SObjectType, "FolderName");
+}
+
 DataPacksUtils.prototype.getFileType = function(dataPackType, SObjectType) {
 	return this.getExpandedDefinition(dataPackType, SObjectType, "FileType");
 }

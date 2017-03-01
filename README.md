@@ -10,7 +10,7 @@ http://ant.apache.org/manual/install.html
 Install Node.js  
 https://nodejs.org/  
 
-USe the following commands:  
+Use the following commands:  
 brew install nvm  
 
 mkdir ~/.nvm  

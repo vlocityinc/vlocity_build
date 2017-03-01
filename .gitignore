@@ -1,3 +1,4 @@
 build_*.properties
 dataPacksJobs/local.yaml
 node_modules/
+vlocity-deploy-temp/

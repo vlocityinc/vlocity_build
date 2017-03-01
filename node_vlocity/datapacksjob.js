@@ -13,10 +13,11 @@ var SUPPORTED_JOB_KEY_TO_OPTION_MAP = {
 	dataPackName: 'name', 
 	description: 'description', 
 	version: 'version', 
-	source: 'source' 
+	source: 'source',
+	alreadyExportedKeys: 'alreadyExportedKeys'
 };
 
-var MAX_PER_GROUP = 100;
+var MAX_PER_GROUP = 5;
 
 DataPacksJob.prototype.getOptionsFromJobInfo = function(jobInfo) {
 	var options = {};
@@ -37,6 +38,7 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
     var jobInfo = jobData[jobName];
 
     jobInfo.jobName = jobName;
+    jobInfo.jobAction = action;
 
     if (!jobInfo.projectPath) {
     	jobInfo.projectPath = './';
@@ -119,6 +121,12 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
 DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
 	var self = this;
 
+	// Will not continue a single DataPack, but will continue when there are breaks in the job
+	if (action == 'Continue') {
+		jobInfo = JSON.parse(fs.readFileSync('vlocity-deploy-temp/currentJobInfo.json', 'utf8'));
+		action = jobInfo.jobAction;
+	}
+
 	if (action == 'Export') {
 		self.exportJob(jobInfo, onComplete);
 	} else if (action == 'Import') {
@@ -155,7 +163,7 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
 
 				if (self.vlocity.verbose) {
 					if (err) {
-						console.log('\x1b[31m', 'Query result had error >>' ,'\x1b[0m', err);
+						console.log('\x1b[32m', 'Query result had error >>' ,'\x1b[0m', err);
 					}
 					if (res) {
 						console.log('\x1b[36m', 'Query result >>' ,'\x1b[0m', res);
@@ -189,90 +197,168 @@ DataPacksJob.prototype.exportJob = function(jobInfo, onComplete) {
 
 DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 	var self = this;
-	
-	var toExportGroups = [];
-	var exportGroupTypes = [];
-	var splitGroupIndex = -1;
 
-	Object.keys(jobInfo.manifest).forEach(function(dataPackType) {
-		splitGroupIndex++;
-		toExportGroups.push([]);
-		exportGroupTypes.push(dataPackType);
+	// All this allows continuing an in process
+	if (jobInfo.extendedManifest == null) {
+		jobInfo.extendedManifest = {};
+	}
 
-		jobInfo.manifest[dataPackType].forEach(function(exData) {
-			if (toExportGroups[splitGroupIndex].length == MAX_PER_GROUP) {
-				toExportGroups.push([]);
-				exportGroupTypes.push(dataPackType);
-				splitGroupIndex++;
-			}
+	if (jobInfo.alreadyExportedKeys == null) {
+		jobInfo.alreadyExportedKeys = [];
+	}
 
-			if (typeof exData === 'object') {
-				toExportGroups[splitGroupIndex].push(exData);
-			} else {
-				toExportGroups[splitGroupIndex].push({ Id: exData });
-			}
+	if (jobInfo.alreadyExportedIdsByType == null) {
+		jobInfo.alreadyExportedIdsByType = {};
+	}
+
+	if (jobInfo.totalExported == null) {
+		jobInfo.totalExported = 0;
+	}
+
+	if (jobInfo.totalToExport == null) {
+		jobInfo.totalToExport = 0;
+	}
+
+	if (jobInfo.vlocityKeysToNewNamesMap == null) {
+		jobInfo.vlocityKeysToNewNamesMap = {};
+	}
+
+	if (jobInfo.vlocityRecordSourceKeyMap == null) {
+		jobInfo.vlocityRecordSourceKeyMap = {};
+	}
+
+	if (jobInfo.toExportGroups == null) {
+		jobInfo.toExportGroups = [[]];
+
+		Object.keys(jobInfo.manifest).forEach(function(dataPackType) {
+			
+			jobInfo.manifest[dataPackType].forEach(function(exData) {
+				if (jobInfo.toExportGroups[jobInfo.toExportGroups.length - 1].length >= MAX_PER_GROUP) {
+					jobInfo.toExportGroups.push([]);
+				}
+
+				if (typeof exData === 'object') {
+					if (exData.VlocityDataPackType == null) {
+						exData.VlocityDataPackType = dataPackType;
+					}
+
+					jobInfo.toExportGroups[jobInfo.toExportGroups.length - 1].push(exData);
+				} else {
+					jobInfo.toExportGroups[jobInfo.toExportGroups.length - 1].push({ Id: exData, VlocityDataPackType: dataPackType });
+				}
+
+				jobInfo.totalToExport++;
+			});
+		});
+	}
+
+	async.eachSeries(jobInfo.toExportGroups, function(exportDataFromManifest, callback) {
+		fs.outputFileSync('vlocity-deploy-temp/currentJobInfo.json', stringify(jobInfo, { space: 4 }), 'utf8');
+
+		var exportData = exportDataFromManifest.filter(function(dataPack) {
+			return jobInfo.alreadyExportedIdsByType[dataPack.VlocityDataPackType] == null || jobInfo.alreadyExportedIdsByType[dataPack.VlocityDataPackType].indexOf(dataPack.Id) == -1;
 		});
 
-	});
-
-	splitGroupIndex = -1;
-
-	async.eachSeries(toExportGroups, function(exportData, callback) {
-		splitGroupIndex++;
-
-		var dataPackType = exportGroupTypes[splitGroupIndex];
-
-		self.vlocity.datapacks.export(dataPackType, exportData, self.getOptionsFromJobInfo(jobInfo),
-			function(result) {
-				if (self.vlocity.verbose) {
-					console.log('\x1b[36m', 'datapacks.export >>' ,'\x1b[0m', result);
-				}
-				if (!jobInfo.VlocityDataPackIds) {
-					jobInfo.VlocityDataPackIds = [];
-				}
-
-				jobInfo.VlocityDataPackIds.push(result.VlocityDataPackId);
-
-				self.vlocity.datapacks.getDataPackData(result.VlocityDataPackId, function(dataPackData) {
+		if (exportData.length == 0) {
+			console.log('Skipping ');
+			callback();
+		} else {
+			self.vlocity.datapacks.export('SObject', exportData, self.getOptionsFromJobInfo(jobInfo),
+				function(result) {
 					if (self.vlocity.verbose) {
-						console.log('\x1b[36m', 'datapacks.getDataPackData >>' ,'\x1b[0m', dataPackData);
+						console.log('\x1b[36m', 'datapacks.export >>' ,'\x1b[0m', result);
+					}
+					if (!jobInfo.VlocityDataPackIds) {
+						jobInfo.VlocityDataPackIds = [];
+					}
+
+					jobInfo.VlocityDataPackIds.push(result.VlocityDataPackId);
+
+					self.vlocity.datapacks.getDataPackData(result.VlocityDataPackId, function(dataPackData) {
+						if (self.vlocity.verbose) {
+							console.log('\x1b[36m', 'datapacks.getDataPackData >>' ,'\x1b[0m', dataPackData);
+						}
+
+						if (dataPackData.dataPacks != null) {
+							dataPackData.dataPacks.forEach(function(dataPack) {
+								if (jobInfo.alreadyExportedKeys.indexOf(dataPack.VlocityDataPackKey) == -1) {
+
+									if (dataPack.VlocityDataPackStatus == 'Success') {
+										
+										jobInfo.totalExported++;
+
+										if (jobInfo.alreadyExportedIdsByType[dataPack.VlocityDataPackType] == null) {
+											jobInfo.alreadyExportedIdsByType[dataPack.VlocityDataPackType] = [];
+										}
+
+										if (dataPack.VlocityDataPackData != null 
+											&& dataPack.VlocityDataPackData.Id != null) {
+											jobInfo.alreadyExportedIdsByType[dataPack.VlocityDataPackType].push(dataPack.VlocityDataPackData.Id);
+										}
+										
+										jobInfo.alreadyExportedKeys.push(dataPack.VlocityDataPackKey);
+									} else if (dataPack.VlocityDataPackStatus == 'Ready') {
+
+										if (jobInfo.extendedManifest[dataPack.VlocityDataPackType] == null) {
+											jobInfo.extendedManifest[dataPack.VlocityDataPackType] = [];
+										}
+
+										jobInfo.extendedManifest[dataPack.VlocityDataPackType].push(dataPack.VlocityDataPackData);
+									}
+								}
+							});
+						}
+						
+				        if (jobInfo.expansionPath) {
+				        	self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo);
+				        }
+
+				        console.log('\x1b[32m', 'Finished: ' + jobInfo.totalExported + ' To Export: ' + jobInfo.totalToExport);
+
+				        var afterDelete = function() {
+				        	callback();
+				        }
+
+				        if (jobInfo.delete != false) {
+				        	self.vlocity.datapacks.delete(result.VlocityDataPackId, self.getOptionsFromJobInfo(jobInfo), afterDelete, afterDelete);
+				        } else {
+				        	callback();
+				        }
+					});
+				}, 
+				function(err) {
+			   		if (self.vlocity.verbose) {
+						console.error('\x1b[31m', 'datapacks.export >>' ,'\x1b[0m', err);
 					}
 
 			        if (jobInfo.expansionPath) {
-			        	self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo);
-			        }
+			        	self.vlocity.datapacks.getDataPackData(err.VlocityDataPackId, function(dataPackData) {
+					   		
+			        		self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo);
 
-			        var afterDelete = function() {
-			        	callback();
-			        }
+			        		if (self.vlocity.verbose) {
+			        			console.error('\x1b[31m', 'writing error file to >>' ,'\x1b[0m', 'vlocity-deploy-temp/deployError.json');
+								fs.outputFileSync('vlocity-deploy-temp/deployError.json', stringify(dataPackData, { space: 4 }), 'utf8');
+							}
 
-					self.vlocity.datapacks.delete(result.VlocityDataPackId, self.getOptionsFromJobInfo(jobInfo), afterDelete, afterDelete);
-				});
-			}, 
-			function(err) {
-		   		if (self.vlocity.verbose) {
-					console.error('\x1b[31m', 'datapacks.export >>' ,'\x1b[0m', err);
-				}
-
-		        if (jobInfo.expansionPath) {
-		        	self.vlocity.datapacks.getDataPackData(err.VlocityDataPackId, function(dataPackData) {
-				   		
-		        		self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo);
-
-		        		if (self.vlocity.verbose) {
-		        			console.error('\x1b[31m', 'writing error file to >>' ,'\x1b[0m', 'vlocity-deploy-temp/deployError.json');
-							fs.outputFileSync('vlocity-deploy-temp/deployError.json', stringify(dataPackData, { space: 4 }), 'utf8');
-						}
-
-						self.getJobErrors(dataPackData, jobInfo, onComplete);
-		        	});
-		        }
-				else {
-					self.getJobErrors(err, jobInfo, onComplete);
-				}
-		});
+							self.getJobErrors(dataPackData, jobInfo, onComplete);
+			        	});
+			        } else {
+						self.getJobErrors(err, jobInfo, onComplete);
+					}
+			});
+		}
 	}, function(err, result) {
-        onComplete(jobInfo);
+		console.log('Chaining Job - Total Exports', Object.keys(jobInfo.extendedManifest).length);
+		if (Object.keys(jobInfo.extendedManifest).length > 0) {
+			jobInfo.manifest = jobInfo.extendedManifest;
+			jobInfo.extendedManifest = {};
+			jobInfo.toExportGroups = null;
+
+			self.exportFromManifest(jobInfo, onComplete);
+		} else {
+			onComplete(jobInfo);
+		}
 	});	
 };
 

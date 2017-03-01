@@ -50,7 +50,7 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
 DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath) {
     var self = this;
 
-    self.vlocity.datapacksutils.getFiles(srcpath).forEach(function(filename){
+    self.vlocity.datapacksutils.getFiles(srcpath).forEach(function(filename) {
 
         var encoding = 'base64';
 
@@ -80,12 +80,21 @@ DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath) {
     });
 };
 
+DataPacksBuilder.prototype.getDataPackLabel = function(dataPackTypeDir, dataPackName) {
+    var allFiles = this.vlocity.datapacksutils.getFiles(dataPackTypeDir + '/' + dataPackName);
+    for (var i = 0; i < allFiles.length; i++) {
+        if (allFiles[i].indexOf('_DataPack.json') != -1) {
+           return allFiles[i].substr(0, allFiles[i].indexOf('_DataPack.json'));
+        }
+    }
+};
+
 DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifest) {
     var self = this;
     var matchingFunction = function(dataPackType, dataPackName) {
         if (Array.isArray(manifest[dataPackType])) {
             return !!manifest[dataPackType].find(function(entry) {
-                return (entry == dataPackName);
+                return (entry.replace(/ /g, '-') == dataPackName);
             });
         }
         var matchingString = manifest[dataPackType];
@@ -120,12 +129,13 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
         if (allDataPacksOfType) {
             allDataPacksOfType.forEach(function(dataPackName) {
 
-                var metadataFilename = dataPackTypeDir + '/' + dataPackName + '/' + dataPackName + '_DataPack.json';
+                var metadataFilename = dataPackTypeDir + '/' + dataPackName + '/' + self.getDataPackLabel(dataPackTypeDir, dataPackName) + '_DataPack.json';
+               
 
                 var dataPackKey = dataPackType + '/' + dataPackName;
 
                 try {
-                    if ((!manifest || (manifest[dataPackType] && matchingFunction(dataPackType, dataPackName)))) {
+                    if (metadataFilename && (!manifest || (manifest[dataPackType] && matchingFunction(dataPackType, dataPackName)))) {
 
                         if (self.vlocity.datapacksutils.fileExists(metadataFilename)) {
                             self.currentStatus[dataPackKey] = 'Ready';
@@ -133,7 +143,7 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
                             if (Array.isArray(self.pendingFromManifest[dataPackType])) {
                                 var beforeCount = self.pendingFromManifest[dataPackType].length;
                                 self.pendingFromManifest[dataPackType] = self.pendingFromManifest[dataPackType].filter(function(value) {
-                                    return value !== dataPackName;
+                                    return value.replace(/ /g, '-') !== dataPackName;
                                 });
                             } else {
                                 if (self.pendingFromManifest[dataPackType]) {
@@ -176,13 +186,15 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     var dataPackType = dataPackKey.substr(0, typeIndex);
                     var dataNameIndex = dataPackKey.lastIndexOf('/')+1;
                     var dataPackName = dataPackKey.substr(dataNameIndex);
+                    var dataPackLabel = self.getDataPackLabel(importPath + '/' + dataPackType, dataPackName);
+
                     var fullPathToFiles = importPath + '/' + dataPackKey;
-                    var parentData = self.allFileDataMap[ fullPathToFiles + '/' + dataPackName + '_ParentKeys.json'];
+                    var parentData = self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_ParentKeys.json'];
                     var allRelatedKeys = null;
 
-                    if (self.allFileDataMap[ fullPathToFiles + '/' + dataPackName + '_AllRelationshipKeys.json'])
+                    if (self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_AllRelationshipKeys.json'])
                     {
-                        allRelatedKeys = JSON.parse(self.allFileDataMap[ fullPathToFiles + '/' + dataPackName + '_AllRelationshipKeys.json']);
+                        allRelatedKeys = JSON.parse(self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_AllRelationshipKeys.json']);
                     }
                     
                     var needsParents = false;
@@ -216,10 +228,12 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                         }
                     }
 
-                    var sobjectDataField = self.dataPacksExpandedDefinition[dataPackType].Data;
+                    var dataPackDataMetadata = JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackLabel + '_DataPack.json'])
+
+                    var sobjectDataField = dataPackDataMetadata.VlocityRecordSObjectType;
 
                     // Always an Array in Actualy Data Model
-                    var dataPackImportBuilt = self.buildFromFiles(JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackName + '_DataPack.json']), fullPathToFiles, dataPackType, sobjectDataField);
+                    var dataPackImportBuilt = self.buildFromFiles(dataPackDataMetadata, fullPathToFiles, dataPackType, sobjectDataField);
 
                     if (dataPackImportBuilt[0] != null && dataPackImportBuilt[0].VlocityDataPackType == 'SObject') {
                         sobjectDataField = dataPackImportBuilt[0].VlocityRecordSObjectType;

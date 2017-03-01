@@ -208,5 +208,14 @@ module.exports = function (grunt) {
 		});
 	});
 
+	grunt.registerTask('packContinue', 'Run a DataPacks Job', function() {
+		
+		var done = this.async();		
+
+		dataPacksJob('Continue', grunt.option('job'), function() {
+		  	done();
+		});
+	});
+
   	return dataPacksJob;
 };

@@ -159,24 +159,26 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 		});
 	}
 	
-	self.vlocity.checkLogin(function(){
+	self.vlocity.checkLogin(function() {
 		self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint, dataPackData, function(err, result) {
 			if (typeof result == "string") {
 				result = JSON.parse(result);
 			}
 
-			console.log('Result', result);
+			if (self.vlocity.verbose) { 
+				console.log('Result', result);
+			}
+
+			if (result.Total != null && result.Finished != null) {
+				console.log('\x1b[36m', 'Current ' + result.VlocityDataPackProcess + ' Status - Success: ' + result.Finished + ' Total: ' + result.Total);
+			}
 			
 			if (err) { 
 				if (onError) onError(err);
 				else throw err;
 			} else if (/(Ready|InProgress)/.test(result.Status)) {
 				dataPackData.processData = result;
-
-				if (result.Total != null && result.Finished != null) {
-					console.log(result.VlocityDataPackProcess + ' Status - Finished: ' + result.Finished + ' Total: ' + result.Total);
-				}
-
+				
 				setTimeout(function() { self.runDataPackProcess(dataPackData, options, onSuccess, onError); }, result.Async ? 3000 : 1);
 			} else if (/(Complete|Deleted)/.test(result.Status)) {
 				if (onSuccess) onSuccess(result);
