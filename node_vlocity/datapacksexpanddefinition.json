@@ -219,9 +219,9 @@
     "ProductChildItem": {
         "%vlocity_namespace%__ProductChildItem__c": {
             "FolderName": [
+                "Name",
                 "%vlocity_namespace%__ParentProductId__r.Name",
-                "%vlocity_namespace%__ChildProductId__r.Name",
-                "Name"
+                "%vlocity_namespace%__ChildProductId__r.Name"
             ]
         }
     },
@@ -328,6 +328,12 @@
     },
     "SObject": {},
     "SourceKeyDefinitions": {
+        "%vlocity_namespace%__Attribute__c": [
+            "%vlocity_namespace%__Code__c"
+        ],
+        "%vlocity_namespace%__AttributeCategory__c": [
+            "%vlocity_namespace%__Code__c"
+        ],
         "%vlocity_namespace%__DRMapItem__c": [
             "%vlocity_namespace%__MapId__c"
         ],
@@ -383,6 +389,9 @@
         "%vlocity_namespace%__VlocityCard__c": {
             "%vlocity_namespace%__Definition__c": "json"
         }
+    },
+    "VlocityPicklist": {
+        "%vlocity_namespace%__Picklist__c": {}
     },
     "VlocityStateModel": {
         "%vlocity_namespace%__VlocityStateModel__c": {

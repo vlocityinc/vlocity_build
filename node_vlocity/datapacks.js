@@ -1,10 +1,13 @@
 var jsforce = require('jsforce');
+var ProgressBar = require('progress');
 
 var DATA_PACKS_REST_RESOURCE = "/v1/VlocityDataPacks/";
 
 var DataPacks = module.exports = function(vlocity) {
 	this.vlocity = vlocity || {};
 	this.dataPacksEndpoint = '/' + this.vlocity.namespace + DATA_PACKS_REST_RESOURCE;
+
+	this.bar; 
 };
 
 DataPacks.prototype.getAllDataPacks = function(callback) {
@@ -158,7 +161,7 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 			dataPackData.processData[optionKey] = options[optionKey];
 		});
 	}
-	
+
 	self.vlocity.checkLogin(function() {
 		self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint, dataPackData, function(err, result) {
 			if (typeof result == "string") {
@@ -170,7 +173,9 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 			}
 
 			if (result.Total != null && result.Finished != null) {
-				console.log('\x1b[36m', 'Current ' + result.VlocityDataPackProcess + ' Status - Success: ' + result.Finished + ' Total: ' + result.Total);
+
+				self.bar = new ProgressBar(':bar Current Status - Success: :current Total: :total', { total: result.Total, width: (result.total < result.Total ? result.Total : 50) });
+				self.bar.tick(result.Finished);
 			}
 			
 			if (err) { 
@@ -181,6 +186,7 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 				
 				setTimeout(function() { self.runDataPackProcess(dataPackData, options, onSuccess, onError); }, result.Async ? 3000 : 1);
 			} else if (/(Complete|Deleted)/.test(result.Status)) {
+
 				if (onSuccess) onSuccess(result);
 				else console.log(result);
 			} else if (/Error/.test(result.Status)) {

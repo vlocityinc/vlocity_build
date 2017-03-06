@@ -62,10 +62,10 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
     		// Builds the JSON Array sent to Anon Apex that gets run before deploy
     		// Issues when > 32000 chars. Need to add chunking for this. 
     		if (action == 'Deploy') {
-    			self.vlocity.datapacksbuilder.initializeImportStatus(jobInfo.projectPath + '/' + jobInfo.expansionPath, jobInfo.manifest);
+    			self.vlocity.datapacksbuilder.initializeImportStatus(jobInfo.projectPath + '/' + jobInfo.expansionPath, jobInfo.manifest, jobInfo);
     		}
 
-    		prePromise = self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], self.vlocity.datapacksbuilder.importDataSummary);
+    		prePromise = self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], jobInfo.preDeployDataSummary);
     	} else {
     		prePromise = Promise.resolve(true);
     	}
@@ -84,7 +84,7 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
     	.then(function(jobStatus) {
     		
 	    	if (!jobStatus.hasError && jobInfo.postJobApex && jobInfo.postJobApex[action]) {
-				return self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.postJobApex[action]);
+				return self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.postJobApex[action], jobInfo.postDeployResults);
 	    	} else {
 	    		return Promise.resolve(jobStatus);
 	    	}
@@ -158,13 +158,17 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
 			}
 
 			var query = queryData.query.replace(/%vlocity_namespace%/g, self.vlocity.namespace);
+
+			console.log('\x1b[36m', 'Running Query >>' ,'\x1b[0m', query);
 			
 			self.vlocity.jsForceConnection.query(query, function(err, res) {
 
+				if (err) {
+					console.log('\x1b[32m', 'Query result had error >>' ,'\x1b[0m', err);
+				}
+
 				if (self.vlocity.verbose) {
-					if (err) {
-						console.log('\x1b[32m', 'Query result had error >>' ,'\x1b[0m', err);
-					}
+					
 					if (res) {
 						console.log('\x1b[36m', 'Query result >>' ,'\x1b[0m', res);
 					}
@@ -227,6 +231,10 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 		jobInfo.vlocityRecordSourceKeyMap = {};
 	}
 
+	if (jobInfo.startTime == null) {
+		jobInfo.startTime = Date.now();
+	}
+
 	if (jobInfo.toExportGroups == null) {
 		jobInfo.toExportGroups = [[]];
 
@@ -251,6 +259,8 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 			});
 		});
 	}
+
+	console.log('\x1b[32m', 'Initial Export Total: ' + jobInfo.totalToExport);
 
 	async.eachSeries(jobInfo.toExportGroups, function(exportDataFromManifest, callback) {
 		fs.outputFileSync('vlocity-deploy-temp/currentJobInfo.json', stringify(jobInfo, { space: 4 }), 'utf8');
@@ -312,8 +322,9 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 				        if (jobInfo.expansionPath) {
 				        	self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo);
 				        }
+				        var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
 
-				        console.log('\x1b[32m', 'Finished: ' + jobInfo.totalExported + ' To Export: ' + jobInfo.totalToExport);
+				        console.log('\x1b[32m', 'Exported: ' + jobInfo.totalExported + ' Elapsed Time: ' + Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's');
 
 				        var afterDelete = function() {
 				        	callback();
@@ -443,7 +454,7 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 	if (jobInfo.queries) {
 		deployManifest = null;
 	}
-
+	
 	var dataJson = self.vlocity.datapacksbuilder.buildImport(jobInfo.projectPath, deployManifest, jobInfo);
 
 	if (dataJson) {
@@ -462,52 +473,68 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 	} else {
 		if ((jobInfo.activate || jobInfo.delete) && jobInfo.VlocityDataPackIds) {
 			async.eachSeries(jobInfo.VlocityDataPackIds, function(dataPackId, callback) {
-				if (jobInfo.activate) {
-					if (!jobInfo.activationStatus) {
-						jobInfo.activationStatus = {};
-					}
 
-					self.vlocity.datapacks.activate(dataPackId, ['ALL'], self.getOptionsFromJobInfo(jobInfo), 
-						function(activateResult) {
-							jobInfo.activationStatus[dataPackId] = 'Success';
+				self.vlocity.datapacks.getDataPackData(dataPackId, function(dataPackData) {
 
-							if (jobInfo.delete) {
-								self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
-									function(res) {
-										callback();
-									},
-									function(res) {
-										callback();
-									});
-							} else {
-								callback();
+					dataPackData.dataPacks.forEach(function(dataPack) {
+						if (jobInfo.postDeployResults == null) {
+							jobInfo.postDeployResults = [];
+						}
+
+						dataPack.VlocityDataPackRecords.forEach(function(record) {
+							if (record.VlocityRecordStatus == "Success") {
+								jobInfo.postDeployResults.push({ "Id": record.VlocityRecordSalesforceId });
 							}
-						}, 
-						function(error) {
-							jobInfo.activationStatus[dataPackId] = 'Error';
-
-							if (jobInfo.delete) {
-								self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
-									function(res) {
-										callback();
-									}, 
-									function(res) {
-										callback();
-									});
-							} else {
-								callback();
-							}
+						})
 					});
 
-				} else if (jobInfo.delete) {
-					self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
-						function(res) {
-							callback();
-						}, 
-						function(res) {
-							callback();
+					if (jobInfo.activate) {
+						if (!jobInfo.activationStatus) {
+							jobInfo.activationStatus = {};
+						}
+
+						self.vlocity.datapacks.activate(dataPackId, ['ALL'], self.getOptionsFromJobInfo(jobInfo), 
+							function(activateResult) {
+								jobInfo.activationStatus[dataPackId] = 'Success';
+
+								if (jobInfo.delete) {
+									self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
+										function(res) {
+											callback();
+										},
+										function(res) {
+											callback();
+										});
+								} else {
+									callback();
+								}
+							}, 
+							function(error) {
+								jobInfo.activationStatus[dataPackId] = 'Error';
+
+								if (jobInfo.delete) {
+									self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
+										function(res) {
+											callback();
+										}, 
+										function(res) {
+											callback();
+										});
+								} else {
+									callback();
+								}
 						});
-				}
+
+					} else if (jobInfo.delete) {
+						self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
+							function(res) {
+								callback();
+							}, 
+							function(res) {
+								callback();
+							});
+					}
+				});
 			}, function(err, result) {
 				if (onComplete) {
 					onComplete(jobInfo);

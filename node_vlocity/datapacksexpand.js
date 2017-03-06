@@ -44,6 +44,10 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         }
     });
 
+    if (filename == "") {
+        filename += unidecode(dataPackData.Name.replace(/\//g, "-"));
+    }
+
     return filename;
 };
 
@@ -180,9 +184,17 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
 
                     var newSourceKey = dataPackKey + "/" + currentData.VlocityRecordSObjectType;
 
+                    var addedSourceKeyField = false;
                     keyFields.forEach(function(keyField) {
-                        newSourceKey += "/" + currentData[keyField];
+                        if (currentData[keyField] != null) {
+                            newSourceKey += "/" + currentData[keyField];
+                            addedSourceKeyField = true;
+                        }
                     });
+
+                    if (!addedSourceKeyField) {
+                        newSourceKey += "/" + currentData.Name;
+                    }
 
                     options.vlocityRecordSourceKeyMap[currentData.VlocityRecordSourceKey] = newSourceKey;
 
@@ -268,8 +280,6 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
                         dataPackData.VlocityDataPackParents.forEach(function(parentKey) {
                             if (options.vlocityKeysToNewNamesMap[parentKey]) {
                                 allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
-                            } else {
-                                allParentKeys.push(parentKey);
                             }
                         });
 
@@ -284,8 +294,6 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
                         Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function(relKey) {
                             if (options.vlocityKeysToNewNamesMap[relKey]) {
                                 allRels[options.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];
-                            } else {
-                                allRels[relKey] = dataPackData.VlocityDataPackAllRelationships[relKey];
                             }
                         });
 
