@@ -12,6 +12,27 @@
                 "FileType": "base64"
             }
         }
+    }, 
+    "ItemImplementation": {
+        "%vlocity_namespace%__ItemImplementation__c": {}
+    },
+    "ManualQueue": {
+        "%vlocity_namespace%__ManualQueue__c": {}
+    },
+
+    "OrchestrationDependencyDefinition": {
+        "%vlocity_namespace%__OrchestrationDependencyDefinition__c": {}
+    },
+
+    "OrchestrationItemDefinition": {
+        "%vlocity_namespace%__OrchestrationItemDefinition__c": {}
+    },
+
+    "OrchestrationPlanDefinition": {
+        "%vlocity_namespace%__OrchestrationPlanDefinition__c": {}
+    },
+    "System": {
+        "%vlocity_namespace%__System__c": {}
     },
     "AttributeCategory": {
         "%vlocity_namespace%__AttributeCategory__c": {
