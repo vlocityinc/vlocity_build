@@ -90,14 +90,14 @@ preJobApex:
 With this setting, the Apex Code in DeativateTemplatesAndLayouts.cls will run before the deploy to the org. In this case it will Deactivate the Vlocity Templates and Vlocity UI Layouts (Cards) associated with the Deploy. See Advanced Anonymous Apex for more details.
 ##### Additional Options 
 The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API.
-###### Vlocity Build 
+##### Vlocity Build 
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
 | compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
 | manifestOnly      | If true, an Export job will only save items specifically listed in the manifest      |   Boolean | false |
 | delete | Delete the VlocityDataPack__c file on finish   |    Boolean | true |
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
-###### DataPacks API
+##### DataPacks API
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
 | ignoreAllErrors | Ignore Errors during Job | Boolean | false |
@@ -164,10 +164,10 @@ for (Object obj : dataSetObjects)
 ```
 The token CURRENT_DATA_PACKS_CONTEXT_DATA will be replaced with JSON data and converted into a List<Map<String, Object>> with data depending on the type of setting and type of job being run.
 
-##### PreJobApex Replacement Format
+#### PreJobApex Replacement Format
 Pre Job Apex is what runs before the Job.
 
-###### Export by Manifest
+##### Export by Manifest
 If Exporting with a Manifest, each JSON Object will be one entry in the Manifest in the form of:
 ```yaml
 manifest:
@@ -197,7 +197,7 @@ Which becomes:
     "Language": "English"
 }
 ```
-###### Export by Queries
+##### Export by Queries
 For a Query, each result from the Query will be a JSON Object with the appropriate DataPack Type.
 ```yaml
 queries: 
@@ -211,7 +211,7 @@ Becomes:
     "Id": "01r61000000DeTeAAN",
 }
 ```
-###### Deploy
+##### Deploy
 Before a Deploy, each JSON Object will be a small amount of information about the Object. By default it is the Name of the Object. For a VlocityUILayout it would be:
 ```json
 {
@@ -220,9 +220,9 @@ Before a Deploy, each JSON Object will be a small amount of information about th
 }
 ```
 In the DeactivateTemplatesAndLayouts.cls this Name is used to Deactivate the Layouts that are pending for Deploy.
-##### PostJobApex Replacement Format
+#### PostJobApex Replacement Format
 Post Job Apex runs after the Job completes successfully.
-###### Deploy
+##### Deploy
 After a Deploy the Ids of every record deployed will be in the JSON Object List. This may be too much data for Anonymous Apex for large deploys.
 ```json
 {
