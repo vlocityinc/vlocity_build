@@ -12,32 +12,16 @@
                 "FileType": "base64"
             }
         }
-    }, 
-    "ItemImplementation": {
-        "%vlocity_namespace%__ItemImplementation__c": {}
     },
-    "ManualQueue": {
-        "%vlocity_namespace%__ManualQueue__c": {}
-    },
-
-    "OrchestrationDependencyDefinition": {
-        "%vlocity_namespace%__OrchestrationDependencyDefinition__c": {}
-    },
-
-    "OrchestrationItemDefinition": {
-        "%vlocity_namespace%__OrchestrationItemDefinition__c": {}
-    },
-
-    "OrchestrationPlanDefinition": {
-        "%vlocity_namespace%__OrchestrationPlanDefinition__c": {}
-    },
-    "System": {
-        "%vlocity_namespace%__System__c": {}
+    "AttributeAssignmentRule": {
+        "%vlocity_namespace%__AttributeAssignmentRule__c": {}
     },
     "AttributeCategory": {
         "%vlocity_namespace%__AttributeCategory__c": {
             "%vlocity_namespace%__Attribute__c": "list",
-            "FolderName": [ "%vlocity_namespace%__Code__c" ]
+            "FolderName": [
+                "%vlocity_namespace%__Code__c"
+            ]
         },
         "%vlocity_namespace%__Attribute__c": {
             "FileName": [
@@ -87,6 +71,9 @@
             "%vlocity_namespace%__CalculationProcedureVersion__c": "object"
         }
     },
+     "ContractType": {
+        "%vlocity_namespace%__ContractType__c": {}
+    },
     "DataRaptor": {
         "%vlocity_namespace%__DRBundle__c": {
             "%vlocity_namespace%__DRMapItem__c": "list",
@@ -115,22 +102,22 @@
         "FileName": [
             "Name"
         ],
-        "FolderName": [
-            "Name"
-        ],
+        "FileType": "json",
         "FilterFields": [
             "Id",
             "VlocityDataPackIsIncluded",
             "LastViewedDate",
             "LastReferencedDate"
         ],
+        "FolderName": [
+            "Name"
+        ],
         "SortFields": [
             "Name"
         ],
         "SourceKeyFields": [
             "Name"
-        ], 
-        "FileType" : "json"
+        ]
     },
     "Document": {
         "Document": {
@@ -139,6 +126,12 @@
                 "FileType": "base64"
             }
         }
+    },
+    "DocumentClause": {
+        "%vlocity_namespace%__DocumentClause__c": {}
+    },
+    "DocumentTemplate": {
+        "%vlocity_namespace%__DocumentTemplate__c": {}
     },
     "EntityFilter": {
         "%vlocity_namespace%__EntityFilterCondition__c": {
@@ -164,6 +157,12 @@
                 "%vlocity_namespace%__GlobalKey__c"
             ]
         }
+    },
+    "ItemImplementation": {
+        "%vlocity_namespace%__ItemImplementation__c": {}
+    },
+    "ManualQueue": {
+        "%vlocity_namespace%__ManualQueue__c": {}
     },
     "ObjectClass": {
         "%vlocity_namespace%__ObjectClass__c": {
@@ -218,6 +217,15 @@
             ]
         }
     },
+    "OrchestrationDependencyDefinition": {
+        "%vlocity_namespace%__OrchestrationDependencyDefinition__c": {}
+    },
+    "OrchestrationItemDefinition": {
+        "%vlocity_namespace%__OrchestrationItemDefinition__c": {}
+    },
+    "OrchestrationPlanDefinition": {
+        "%vlocity_namespace%__OrchestrationPlanDefinition__c": {}
+    },
     "Pricebook2": {
         "Pricebook2": {
             "%vlocity_namespace%__CustomJavaScript__c": {
@@ -237,15 +245,6 @@
             ]
         }
     },
-    "ProductChildItem": {
-        "%vlocity_namespace%__ProductChildItem__c": {
-            "FolderName": [
-                "Name",
-                "%vlocity_namespace%__ParentProductId__r.Name",
-                "%vlocity_namespace%__ChildProductId__r.Name"
-            ]
-        }
-    },
     "Product2": {
         "%vlocity_namespace%__AttributeAssignment__c": {
             "FileName": [
@@ -258,9 +257,37 @@
                 "%vlocity_namespace%__ValidValuesData__c"
             ]
         },
+        "%vlocity_namespace%__OverrideDefinition__c": {
+            "FileName": [
+                "#OverrideDefinitions"
+            ]
+        },
+        "%vlocity_namespace%__ProductAvailability__c": {
+            "FileName": [
+                "#ProductAvailabilities"
+            ]
+        },
         "%vlocity_namespace%__ProductChildItem__c": {
             "FileName": [
                 "#ProductChildItems"
+            ],
+            "SortFields": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        },
+        "%vlocity_namespace%__ProductConfigurationProcedure__c": {
+            "FileName": [
+                "#ProductConfigurationProcedures"
+            ]
+        },
+        "%vlocity_namespace%__ProductEligibility__c": {
+            "FileName": [
+                "#ProductEligibilities"
+            ]
+        },
+        "%vlocity_namespace%__ProductRelationship__c": {
+            "FileName": [
+                "#ProductRelationships"
             ],
             "SortFields": [
                 "%vlocity_namespace%__GlobalKey__c"
@@ -279,46 +306,27 @@
                 ],
                 "FileType": "json"
             },
+            "%vlocity_namespace%__OverrideDefinition__c": "list",
+            "%vlocity_namespace%__ProductAvailability__c": "list",
+            "%vlocity_namespace%__ProductChildItem__c": "list",
+            "%vlocity_namespace%__ProductConfigurationProcedure__c": "list",
+            "%vlocity_namespace%__ProductEligibility__c": "list",
+            "%vlocity_namespace%__ProductRelationship__c": "list",
             "FolderName": [
                 "%vlocity_namespace%__GlobalKey__c"
             ],
-            "%vlocity_namespace%__ProductChildItem__c": "list",
-            "%vlocity_namespace%__ProductRelationship__c": "list",
-            "%vlocity_namespace%__ProductAvailability__c": "list",
-            "%vlocity_namespace%__ProductEligibility__c": "list",
-            "%vlocity_namespace%__OverrideDefinition__c": "list",
-            "%vlocity_namespace%__ProductConfigurationProcedure__c": "list",
             "JsonFields": [
                 "%vlocity_namespace%__CategoryData__c"
             ],
             "PricebookEntry": "object"
-        },
-        "%vlocity_namespace%__ProductRelationship__c": {
-            "FileName": [
-                "#ProductRelationships"
-            ],
-            "SortFields": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        },
-        "%vlocity_namespace%__ProductAvailability__c": {
-            "FileName": [
-                "#ProductAvailabilities"
-            ]
-        },
-        "%vlocity_namespace%__ProductEligibility__c": {
-            "FileName": [
-                "#ProductEligibilities"
-            ]
-        },
-        "%vlocity_namespace%__OverrideDefinition__c": {
-            "FileName": [
-                "#OverrideDefinitions"
-            ]
-        },
-        "%vlocity_namespace%__ProductConfigurationProcedure__c": {
-            "FileName": [
-                "#ProductConfigurationProcedures"
+        }
+    },
+    "ProductChildItem": {
+        "%vlocity_namespace%__ProductChildItem__c": {
+            "FolderName": [
+                "Name",
+                "%vlocity_namespace%__ParentProductId__r.Name",
+                "%vlocity_namespace%__ChildProductId__r.Name"
             ]
         }
     },
@@ -349,36 +357,36 @@
     },
     "SObject": {},
     "SourceKeyDefinitions": {
-        "%vlocity_namespace%__Attribute__c": [
+        "%vlocity_namespace%__AttributeCategory__c": [
             "%vlocity_namespace%__Code__c"
         ],
-        "%vlocity_namespace%__AttributeCategory__c": [
+        "%vlocity_namespace%__Attribute__c": [
             "%vlocity_namespace%__Code__c"
         ],
         "%vlocity_namespace%__DRMapItem__c": [
             "%vlocity_namespace%__MapId__c"
+        ],
+        "%vlocity_namespace%__EntityFilter__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__ObjectClass__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__ObjectLayout__c": [
+            "%vlocity_namespace%__GlobalKey__c"
         ],
         "%vlocity_namespace%__OmniScript__c": [
             "%vlocity_namespace%__Type__c",
             "%vlocity_namespace%__SubType__c",
             "%vlocity_namespace%__Language__c"
         ],
-        "%vlocity_namespace%__EntityFilter__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__Rule__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
         "%vlocity_namespace%__ProductChildItem__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
-        "%vlocity_namespace%__ObjectLayout__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__ObjectClass__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
         "%vlocity_namespace%__ProductRelationship__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__Rule__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
         "Product2": [
@@ -388,6 +396,9 @@
             "SobjectType",
             "DeveloperName"
         ]
+    },
+    "System": {
+        "%vlocity_namespace%__System__c": {}
     },
     "UIFacet": {
         "%vlocity_namespace%__UIFacet__c": {
@@ -406,6 +417,9 @@
     "VlocityAction": {
         "%vlocity_namespace%__VlocityAction__c": {}
     },
+     "VlocityAttachment": {
+        "%vlocity_namespace%__VlocityAttachment__c": {}
+    },
     "VlocityCard": {
         "%vlocity_namespace%__VlocityCard__c": {
             "%vlocity_namespace%__Definition__c": "json"
@@ -413,6 +427,9 @@
     },
     "VlocityPicklist": {
         "%vlocity_namespace%__Picklist__c": {}
+    },
+    "VlocitySearchWidgetSetup": {
+        "%vlocity_namespace%__VlocitySearchWidgetSetup__c": {}
     },
     "VlocityStateModel": {
         "%vlocity_namespace%__VlocityStateModel__c": {
@@ -450,5 +467,11 @@
                 "%vlocity_namespace%__CSS__c"
             ]
         }
+    },
+    "VqMachine": {
+        "%vlocity_namespace%__VqMachine__c": {}
+    },
+    "VqResource": {
+        "%vlocity_namespace%__VqResource__c": {}
     }
 }

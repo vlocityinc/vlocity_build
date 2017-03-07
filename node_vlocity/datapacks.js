@@ -5,8 +5,13 @@ var DATA_PACKS_REST_RESOURCE = "/v1/VlocityDataPacks/";
 
 var DataPacks = module.exports = function(vlocity) {
 	this.vlocity = vlocity || {};
-	this.dataPacksEndpoint = '/' + this.vlocity.namespace + DATA_PACKS_REST_RESOURCE;
 
+	this.dataPacksEndpoint = DATA_PACKS_REST_RESOURCE;
+
+	if (this.vlocity.namespace) {
+		this.dataPacksEndpoint = '/' + this.vlocity.namespace + DATA_PACKS_REST_RESOURCE;
+	}
+	
 	this.bar; 
 };
 
