@@ -273,7 +273,7 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 			console.log('Skipping ');
 			callback();
 		} else {
-			self.vlocity.datapacks.export('SObject', exportData, self.getOptionsFromJobInfo(jobInfo),
+			self.vlocity.datapacks.export(exportData[0].VlocityDataPackType, exportData, self.getOptionsFromJobInfo(jobInfo),
 				function(result) {
 					if (self.vlocity.verbose) {
 						console.log('\x1b[36m', 'datapacks.export >>' ,'\x1b[0m', result);
@@ -320,6 +320,7 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 						}
 						
 				        if (jobInfo.expansionPath) {
+							fs.outputFileSync('vlocity-deploy-temp/previousExport.json', stringify(dataPackData, { space: 4 }), 'utf8');
 				        	self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo);
 				        }
 				        var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;

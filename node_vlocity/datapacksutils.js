@@ -21,7 +21,7 @@ DataPacksUtils.prototype.isValidType = function(dataPackType) {
 }
 
 DataPacksUtils.prototype.isValidSObject = function(dataPackType, SObjectType) {
-	return dataPackType == 'SObject' || (this.isValidType(dataPackType) && this.dataPacksExpandedDefinition[dataPackType].hasOwnProperty(SObjectType)); 
+	return dataPackType == 'SObject' || (this.isValidType(dataPackType) && (this.dataPacksExpandedDefinition[dataPackType].hasOwnProperty(SObjectType) || this.dataPacksExpandedDefinition[dataPackType].hasOwnProperty('%vlocity_namespace%__' + SObjectType))); 
 }
 
 DataPacksUtils.prototype.getDataField = function(dataPackData) {
