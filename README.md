@@ -80,7 +80,7 @@ manifest: # Object defining Type and Export Data - Can be String or Object
 
 Additionally, an Export Build File can be created as part of an Export. It is a single file with all of the exported DataPack Data in it. This file is not Importable to a Salesforce Org. Use the BuildFile task to create an Importable file
 ```yaml
-buildExportFile: exportFile/exportFile.json
+exportBuildFile: exportFile/exportFile.json
 ```
 
 ##### BuildFile  
