@@ -235,6 +235,11 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 		jobInfo.startTime = Date.now();
 	}
 
+	if (jobInfo.exportBuildFile && !jobInfo.addedToExportBuildFile) {
+		jobInfo.addedToExportBuildFile = [];
+		self.vlocity.datapacksexportbuildfile.resetExportBuildFile(jobInfo);
+	}
+
 	if (jobInfo.toExportGroups == null) {
 		jobInfo.toExportGroups = [[]];
 
@@ -323,6 +328,10 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 							fs.outputFileSync('vlocity-deploy-temp/previousExport.json', stringify(dataPackData, { space: 4 }), 'utf8');
 				        	self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo);
 				        }
+				        if (jobInfo.exportBuildFile) {
+				        	self.vlocity.datapacksexportbuildfile.addToExportBuildFile(jobInfo, dataPackData);
+				        }
+
 				        var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
 
 				        console.log('\x1b[32m', 'Exported: ' + jobInfo.totalExported + ' Elapsed Time: ' + Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's');

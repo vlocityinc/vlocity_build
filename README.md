@@ -77,6 +77,12 @@ manifest: # Object defining Type and Export Data - Can be String or Object
       SubType: Billing # for this Type/SubType/Language
       Language: English
 ```
+
+Additionally, an Export Build File can be created as part of an Export. It is a single file with all of the exported DataPack Data in it. This file is not Importable to a Salesforce Org. Use the BuildFile task to create an Importable file
+```yaml
+buildExportFile: exportFile/exportFile.json
+```
+
 ##### BuildFile  
 ```yaml
 buildFile: staticresources/CampaignBaseTemplates.resource # File to create from DataPack Directory

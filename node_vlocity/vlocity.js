@@ -5,6 +5,7 @@ var datapacksjob = require('./datapacksjob');
 var datapacksexpand = require('./datapacksexpand');
 var datapacksbuilder = require('./datapacksbuilder');
 var datapacksutils = require('./datapacksutils');
+var datapacksexportbuildfile = require('./datapacksexportbuildfile');
 
 var Vlocity = module.exports = function(options) {
 	options = options || {};
@@ -27,6 +28,7 @@ var Vlocity = module.exports = function(options) {
 	this.datapacksjob = new datapacksjob(this);
 	this.datapacksexpand = new datapacksexpand(this);
 	this.datapacksbuilder = new datapacksbuilder(this);
+	this.datapacksexportbuildfile = new datapacksexportbuildfile(this);
 	
 };
 
