@@ -444,6 +444,14 @@ DataPacksJob.prototype.buildFile = function(jobInfo, onComplete) {
 DataPacksJob.prototype.expandFile = function(jobInfo, onComplete) {
 	var self = this;
 
+	if (jobInfo.vlocityKeysToNewNamesMap == null) {
+		jobInfo.vlocityKeysToNewNamesMap = {};
+	}
+
+	if (jobInfo.vlocityRecordSourceKeyMap == null) {
+		jobInfo.vlocityRecordSourceKeyMap = {};
+	}
+
 	self.vlocity.datapacksexpand.expandFile(jobInfo.projectPath + '/' + jobInfo.expansionPath, jobInfo.projectPath + '/' + jobInfo.buildFile, jobInfo);
 
 	if (onComplete) {

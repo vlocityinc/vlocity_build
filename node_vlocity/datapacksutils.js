@@ -13,6 +13,10 @@ DataPacksUtils.prototype.getSourceKeyDefinitionFields = function(SObjectType) {
 		return this.dataPacksExpandedDefinition.SourceKeyDefinitions[SObjectType];
 	}
 
+	if (this.dataPacksExpandedDefinition.SourceKeyDefinitions[this.getWithNamespace(SObjectType)]) {
+		return this.dataPacksExpandedDefinition.SourceKeyDefinitions[this.getWithNamespace(SObjectType)];
+	}
+
 	return this.dataPacksExpandedDefinition.DefaultValues.SourceKeyFields; 
 }
 
@@ -21,7 +25,15 @@ DataPacksUtils.prototype.isValidType = function(dataPackType) {
 }
 
 DataPacksUtils.prototype.isValidSObject = function(dataPackType, SObjectType) {
-	return dataPackType == 'SObject' || (this.isValidType(dataPackType) && (this.dataPacksExpandedDefinition[dataPackType].hasOwnProperty(SObjectType) || this.dataPacksExpandedDefinition[dataPackType].hasOwnProperty('%vlocity_namespace%__' + SObjectType))); 
+	return dataPackType == 'SObject' || (this.isValidType(dataPackType) && (this.dataPacksExpandedDefinition[dataPackType].hasOwnProperty(SObjectType) || this.dataPacksExpandedDefinition[dataPackType].hasOwnProperty(this.getWithNamespace(SObjectType)))); 
+}
+
+DataPacksUtils.prototype.getWithoutNamespace = function(field) {
+	return field.substring(field.indexOf('%vlocity_namespace%__') + 21);
+}
+
+DataPacksUtils.prototype.getWithNamespace = function(field) {
+	return '%vlocity_namespace%__' + field;
 }
 
 DataPacksUtils.prototype.getDataField = function(dataPackData) {
@@ -85,6 +97,8 @@ DataPacksUtils.prototype.getExpandedDefinition = function(dataPackType, SObjectT
 		if (SObjectType) {
 			if (this.dataPacksExpandedDefinition[dataPackType][SObjectType]) {
 				definitionValue = this.dataPacksExpandedDefinition[dataPackType][SObjectType][dataKey]; 
+			} else if (this.dataPacksExpandedDefinition[dataPackType][this.getWithNamespace(SObjectType)]) {
+				definitionValue = this.dataPacksExpandedDefinition[dataPackType][this.getWithNamespace(SObjectType)][dataKey];
 			}
 		} else {
 			definitionValue = this.dataPacksExpandedDefinition[dataPackType][dataKey]; 

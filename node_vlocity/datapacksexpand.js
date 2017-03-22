@@ -175,40 +175,31 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
 
             if (currentData.VlocityRecordSObjectType) {
 
-                // Must already be found
-                if (currentData.VlocityMatchingRecordSourceKey) {
-                    currentData.VlocityMatchingRecordSourceKey = options.vlocityRecordSourceKeyMap[currentData.VlocityMatchingRecordSourceKey];
-                } else {
-
+                // This only applies to the actual object
+                if (currentData.Id && currentData.VlocityRecordSourceKey) {
                     var keyFields = self.utils.getSourceKeyDefinitionFields(currentData.VlocityRecordSObjectType);
 
-                    var newSourceKey = dataPackKey + "/" + currentData.VlocityRecordSObjectType;
+                    var newSourceKey = currentData.VlocityRecordSObjectType;
 
                     var addedSourceKeyField = false;
                     keyFields.forEach(function(keyField) {
                         if (currentData[keyField] != null) {
                             newSourceKey += "/" + currentData[keyField];
                             addedSourceKeyField = true;
+                        } else if (currentData[self.utils.getWithoutNamespace(keyField)] != null) {
+                            newSourceKey += "/" + currentData[self.utils.getWithoutNamespace(keyField)];
+                            addedSourceKeyField = true;
                         }
                     });
 
                     if (!addedSourceKeyField) {
-                        newSourceKey += "/" + currentData.Name;
+                        newSourceKey = dataPackKey + "/" + currentData.VlocityRecordSObjectType + "/" + currentData.Name;
                     }
 
                     options.vlocityRecordSourceKeyMap[currentData.VlocityRecordSourceKey] = newSourceKey;
+                    options.vlocityRecordSourceKeyMap[currentData.Id] = newSourceKey;
 
-                    if (currentData.Id) {
-                        options.vlocityRecordSourceKeyMap[currentData.Id] = newSourceKey;
-                    }
-
-                    if (currentData.VlocityRecordSourceKey) {
-                        currentData.VlocityRecordSourceKey = newSourceKey;
-                    }
-
-                    if (currentData.VlocityLookupRecordSourceKey) {
-                        currentData.VlocityLookupRecordSourceKey = newSourceKey;
-                    }
+                    currentData.VlocityRecordSourceKey = newSourceKey;
                 }
             }
 
@@ -239,6 +230,55 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
             Object.keys(currentData).forEach(function(sobjectField) {
                 if (typeof currentData[sobjectField] === "object") {
                     self.preprocessDataPack(currentData[sobjectField], dataPackKey, options);
+                }
+            });
+        }
+    }
+};
+
+DataPacksExpand.prototype.updateSourceKeysInDataPack = function(currentData, dataPackKey, options) {
+
+    var self = this;
+
+    if (currentData) {
+       
+        if (Array.isArray(currentData)) {
+            currentData.forEach(function(childData) {
+                self.updateSourceKeysInDataPack(childData, dataPackKey, options);
+            });
+
+        } else {
+
+            if (currentData.VlocityRecordSObjectType) {
+
+                // This only applies to the actual object
+                if (currentData.VlocityLookupRecordSourceKey && !options.vlocityRecordSourceKeyMap[currentData.VlocityLookupRecordSourceKey]) {
+                    var keyFields = self.utils.getSourceKeyDefinitionFields(currentData.VlocityRecordSObjectType);
+
+                    var newSourceKey = currentData.VlocityRecordSObjectType;
+
+                    var addedSourceKeyField = false;
+                    keyFields.forEach(function(keyField) {
+                        if (currentData[keyField] != null) {
+                            newSourceKey += "/" + currentData[keyField];
+                            addedSourceKeyField = true;
+                        } else if (currentData[self.utils.getWithoutNamespace(keyField)] != null) {
+                            newSourceKey += "/" + currentData[self.utils.getWithoutNamespace(keyField)];
+                            addedSourceKeyField = true;
+                        }
+                    });
+
+                    if (!addedSourceKeyField) {
+                        newSourceKey = currentData.VlocityRecordSObjectType + "/" + currentData.Name;
+                    }
+
+                    currentData.VlocityLookupRecordSourceKey = newSourceKey;
+                }
+            }
+
+            Object.keys(currentData).forEach(function(sobjectField) {
+                if (typeof currentData[sobjectField] === "object") {
+                    self.updateSourceKeysInDataPack(currentData[sobjectField], dataPackKey, options);
                 } else if (options.vlocityRecordSourceKeyMap[currentData[sobjectField]]) {
                     // This attempts to replace any Id with a SourceKey
                     currentData[sobjectField] = options.vlocityRecordSourceKeyMap[currentData[sobjectField]];
@@ -246,7 +286,7 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
             });
         }
     }
-};
+}
 
 DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
 
@@ -448,6 +488,10 @@ DataPacksExpand.prototype.expand = function(targetPath, dataPackData, options) {
        
         dataPackData.dataPacks.forEach(function(dataPack) {
             self.preprocessDataPack(dataPack, null, options);
+        });
+
+         dataPackData.dataPacks.forEach(function(dataPack) {
+            self.updateSourceKeysInDataPack(dataPack, null, options);
         });
 
         dataPackData.dataPacks.forEach(function(dataPack) {
