@@ -191,8 +191,8 @@ manifest:
 manifest: 
   OmniScript: 
     - Type: Insurance 
-	  SubType: Billing
-  	  Language: English
+      SubType: Billing
+      Language: English
 ```
 Which becomes:
 ```json
