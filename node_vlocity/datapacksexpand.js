@@ -379,16 +379,28 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
             Object.keys(dataPackData).forEach(function(sobjectField) {
                 if (self.utils.isValidSObject(dataPackType, sObjectType)) {
                     var expansionType = self.utils.getExpandedDefinition(dataPackType, sObjectType, sobjectField);
-                    
+
                     if (expansionType) {
 
                         var extension = expansionType;
                         var filenameKeys;
-                        
-                        if (expansionType.FileType) {
-                            filenameKeys = expansionType.FileName; 
-                            extension = expansionType.FileType;
-                            expansionType = expansionType.FileType;
+
+                        if (expansionType && typeof expansionType === "object") {
+                            if (expansionType.FileName) {
+                                filenameKeys = expansionType.FileName;
+                            }
+                            
+                            if (expansionType.FileType) {
+                                expansionType = expansionType.FileType;
+                            } else {
+                                expansionType = 'json';
+                            }
+
+                            if (expansionType.FileExt) {
+                                 extension = expansionType.FileExt;
+                            } else {
+                                 extension = 'json';
+                            }
                         }
 
                         var expansionData = dataPackData[sobjectField];
