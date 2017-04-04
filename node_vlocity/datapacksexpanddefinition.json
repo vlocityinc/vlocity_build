@@ -214,6 +214,11 @@
                 "%vlocity_namespace%__Type__c",
                 "%vlocity_namespace%__SubType__c",
                 "%vlocity_namespace%__Language__c"
+            ],
+            "FileName": [
+                "%vlocity_namespace%__Type__c",
+                "%vlocity_namespace%__SubType__c",
+                "%vlocity_namespace%__Language__c"
             ]
         }
     },

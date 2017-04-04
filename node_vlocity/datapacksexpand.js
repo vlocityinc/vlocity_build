@@ -399,7 +399,7 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
                             if (expansionType.FileExt) {
                                  extension = expansionType.FileExt;
                             } else {
-                                 extension = 'json';
+                                 extension = expansionType;
                             }
                         }
 
