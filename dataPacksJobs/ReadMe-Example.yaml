@@ -2,7 +2,6 @@
 # The Job defines all the different data for each supported task
 # the supported tasks are:
 # packDeploy: Deploy all contents of folder in expansionPath
-# packImport: Import contents of file in buildFile
 # packExport: Export from all queries and manifest and expand at expansionPath
 # packBuildFile: Build the buildFile from the expansionPath data
 # packExpandFile: Create the contents of folders in expansionPath from the buildFile
