@@ -40,8 +40,7 @@ The supported DataPacks actions are as follow:
 packExport: Export from a Salesforce org into a DataPack Directory
 packDeploy: Deploy all contents of a DataPacks Directory 
 packBuildFile: Build a DataPacks Directory into a DataPack file of   
-packExpandFile: Create a DataPack Directory from a previosuly exported file
-packImport: Import contents of a DataPack file  
+packExpandFile: Create a DataPack Directory from a previosuly exported file  
 
 When running a DataPack Job through ANT, the "vlocity.dataPackJob" property will be the job run. A property in a build.properties file can be overridden with: 
 ```bash
