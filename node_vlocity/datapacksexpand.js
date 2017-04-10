@@ -48,7 +48,7 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         if (dataPackData.Name && typeof dataPackData.Name === "string") {
             filename += unidecode(dataPackData.Name.replace(/\//g, "-"));
         } else {
-            filename = "unknown";
+            filename = null;
         }
     }
 
@@ -57,7 +57,8 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
 
 DataPacksExpand.prototype.getDataPackName = function(dataPackType, sObjectType, dataPackData) {
     var self = this;
-    return self.getNameWithFields(self.utils.getFileName(dataPackType, sObjectType), dataPackData);
+    var name = self.getNameWithFields(self.utils.getFileName(dataPackType, sObjectType), dataPackData);
+    return name ? name : dataPackType;
 };
 
 DataPacksExpand.prototype.getDataPackFolder = function(dataPackType, sObjectType, dataPackData) {
