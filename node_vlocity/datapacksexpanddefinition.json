@@ -478,5 +478,20 @@
     },
     "VqResource": {
         "%vlocity_namespace%__VqResource__c": {}
+    },
+    "TimePolicy": {
+        "%vlocity_namespace%__TimePolicy__c": {}
+    },
+    "TimePlan": {
+        "%vlocity_namespace%__TimePlan__c": {}
+    },
+    "PricingVariable": {
+        "%vlocity_namespace%__PricingVariable__c": {}
+    },
+    "Promotion": {
+        "%vlocity_namespace%__Promotion__c": {}
+    },
+    "PriceList": {
+        "%vlocity_namespace%__PriceList__c": {}
     }
 }
