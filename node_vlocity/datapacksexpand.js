@@ -39,7 +39,7 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         // If key references a field adds that otherwise is literal string
         if (key.indexOf('#') == 0) {
             filename += key.substring(1);
-        } else if (dataPackData[key]) {
+        } else if (dataPackData[key] && typeof dataPackData[key] === "string") {
              filename += unidecode(dataPackData[key].replace(/\//g, "-"));
         }
     });
