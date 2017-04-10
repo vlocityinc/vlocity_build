@@ -45,7 +45,11 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
     });
 
     if (filename == "") {
-        filename += unidecode(dataPackData.Name.replace(/\//g, "-"));
+        if (dataPackData.Name && typeof dataPackData.Name === "string") {
+            filename += unidecode(dataPackData.Name.replace(/\//g, "-"));
+        } else {
+            filename = "unknown";
+        }
     }
 
     return filename;
