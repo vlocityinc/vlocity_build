@@ -181,7 +181,7 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
             if (currentData.VlocityRecordSObjectType) {
 
                 if (typeof currentData.Name === 'object') {
-                    currentData.Name = currentData.Id;
+                    currentData.Name = currentData.VlocityRecordSObjectType + '/' + currentData.Id;
                 }
 
                 // This only applies to the actual object
