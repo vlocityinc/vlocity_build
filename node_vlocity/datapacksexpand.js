@@ -188,10 +188,10 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
 
                     var addedSourceKeyField = false;
                     keyFields.forEach(function(keyField) {
-                        if (currentData[keyField] != null) {
+                        if (currentData[keyField]) {
                             newSourceKey += "/" + currentData[keyField];
                             addedSourceKeyField = true;
-                        } else if (currentData[self.utils.getWithoutNamespace(keyField)] != null) {
+                        } else if (currentData[self.utils.getWithoutNamespace(keyField)]) {
                             newSourceKey += "/" + currentData[self.utils.getWithoutNamespace(keyField)];
                             addedSourceKeyField = true;
                         }
@@ -264,10 +264,10 @@ DataPacksExpand.prototype.updateSourceKeysInDataPack = function(currentData, dat
 
                     var addedSourceKeyField = false;
                     keyFields.forEach(function(keyField) {
-                        if (currentData[keyField] != null) {
+                        if (currentData[keyField]) {
                             newSourceKey += "/" + currentData[keyField];
                             addedSourceKeyField = true;
-                        } else if (currentData[self.utils.getWithoutNamespace(keyField)] != null) {
+                        } else if (currentData[self.utils.getWithoutNamespace(keyField)]) {
                             newSourceKey += "/" + currentData[self.utils.getWithoutNamespace(keyField)];
                             addedSourceKeyField = true;
                         }
