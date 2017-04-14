@@ -180,6 +180,10 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
 
             if (currentData.VlocityRecordSObjectType) {
 
+                if (typeof currentData.Name === 'object') {
+                    currentData.Name = currentData.Id;
+                }
+
                 // This only applies to the actual object
                 if (currentData.Id && currentData.VlocityRecordSourceKey) {
                     var keyFields = self.utils.getSourceKeyDefinitionFields(currentData.VlocityRecordSObjectType);
