@@ -17,7 +17,7 @@ DataPacksUtils.prototype.getSourceKeyDefinitionFields = function(SObjectType) {
 		return this.dataPacksExpandedDefinition.SourceKeyDefinitions[this.getWithNamespace(SObjectType)];
 	}
 
-	return this.dataPacksExpandedDefinition.DefaultValues.SourceKeyFields; 
+	return []; 
 }
 
 DataPacksUtils.prototype.isValidType = function(dataPackType) {
