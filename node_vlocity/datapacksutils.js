@@ -4,7 +4,7 @@ var path  = require('path');
 var DataPacksUtils = module.exports = function(vlocity) {
 	this.vlocity = vlocity || {};
 
-	this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync("./node_vlocity/datapacksexpanddefinition.json", 'utf8'));
+	this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
 };
 
 DataPacksUtils.prototype.getSourceKeyDefinitionFields = function(SObjectType) {
