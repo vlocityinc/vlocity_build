@@ -1,5 +1,6 @@
 var request = require('request');
 var yaml = require('js-yaml');
+var path = require('path');
 var fs = require('fs-extra');
 var sass = require('node-sass');
 var stringify = require('json-stable-stringify');
@@ -9,8 +10,8 @@ var UTF8_EXTENSIONS = [ "css", "json", "yaml", "scss", "html", "js"];
 var DataPacksBuilder = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
 
-    this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync('./node_vlocity/datapacksexpanddefinition.json', 'utf8'));
-    this.defaultDataPack = JSON.parse(fs.readFileSync('./node_vlocity/defaultdatapack.json', 'utf8'));
+    this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
+    this.defaultDataPack = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
     this.currentStatus;
     this.currentImportData = {};
 };

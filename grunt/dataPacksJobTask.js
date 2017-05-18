@@ -4,7 +4,7 @@ var fs = require('fs-extra');
 
 var node_vlocity = require('../node_vlocity/vlocity.js');
 
-var notify = require('../node_modules/grunt-notify/lib/notify-lib');
+var notify = require('grunt-notify/lib/notify-lib');
 
 module.exports = function (grunt) {
 

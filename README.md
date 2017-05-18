@@ -33,14 +33,16 @@ sf.password: Salesforce Password
 vlocity.namespace: The namespace of the Vlocity Package. vlocity_ins, vlocity_cmt, or vlocity_ps  
 vlocity.dataPackJob: The name of the Job being run.  
 
-** All commands support "-propertyfile filename.properties" **
+**All commands support "-propertyfile filename.properties"**
 
 #### Basic Commands
-The supported DataPacks actions are as follow:  
-packExport: Export from a Salesforce org into a DataPack Directory
-packDeploy: Deploy all contents of a DataPacks Directory 
-packBuildFile: Build a DataPacks Directory into a DataPack file of   
-packExpandFile: Create a DataPack Directory from a previosuly exported file  
+The supported DataPacks actions are as follow:
+
+`packExport`: Export from a Salesforce org into a DataPack Directory  
+`packDeploy`: Deploy all contents of a DataPacks Directory  
+`packBuildFile`: Build a DataPacks Directory into a DataPack file of  
+`packExpandFile`: Create a DataPack Directory from a previosuly exported file
+
 
 When running a DataPack Job through ANT, the "vlocity.dataPackJob" property will be the job run. A property in a build.properties file can be overridden with: 
 ```bash
@@ -55,7 +57,7 @@ DataPack Job Files
 ------------
 The files defining Jobs should be placed in the dataPacksJobs folder. They are YAML files which specify what will happen when the job is run. They are similar to a Salesforce package.xml file, however they also contain additional options for the job when it is run. 
 
-** For a full example file with notes see dataPacksJobs/ReadMe-Example.yaml **
+**For a full example file with notes see dataPacksJobs/ReadMe-Example.yaml**
 
 #### Settings 
 ##### Basic  
