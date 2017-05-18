@@ -66,20 +66,7 @@ DataPacksExpand.prototype.getDataPackFolder = function(dataPackType, sObjectType
     return self.getNameWithFields(self.utils.getFolderName(dataPackType, sObjectType), dataPackData);
 };
 
-DataPacksExpand.prototype.expandDatapackElement = function(datapackElement) {
-    var self = this;
-
-    if (self.utils.isValidType(datapackElement.VlocityDataPackType)) {
-        var dataField = self.utils.getDataField(datapackElement);
-        var dataPackData = datapackElement[dataField];
-
-        if (dataPackData) {
-            self.processDataPackData(datapackElement.VlocityDataPackType, null, null, dataPackData[0]);
-        }
-    } 
-};
-
-DataPacksExpand.prototype.processList = function(dataPackType, parentName, filename, listData) {
+DataPacksExpand.prototype.processList = function(dataPackType, parentName, filename, listData, isPagination) {
     var self = this;
 
     if (listData.length > 0) {
@@ -87,7 +74,7 @@ DataPacksExpand.prototype.processList = function(dataPackType, parentName, filen
         var sObjectType = listData[0].VlocityRecordSObjectType;
       
         listData.forEach(function(dataPack) {
-            self.processObjectEntry(dataPackType, dataPack);
+            self.processObjectEntry(dataPackType, dataPack, isPagination);
         });
 
         var sortFields = self.utils.getSortFields(dataPackType, sObjectType);
@@ -110,7 +97,7 @@ DataPacksExpand.prototype.processList = function(dataPackType, parentName, filen
             packName = dataPackName;
         }
 
-        return self.writeFile(dataPackType, parentName, packName, fileType, listData);
+        return self.writeFile(dataPackType, parentName, packName, fileType, listData, isPagination);
     }
 };
 
@@ -131,7 +118,7 @@ DataPacksExpand.prototype.listSortBy = function(obj1, obj2, fieldsArray, fieldsA
     return this.listSortBy(obj1, obj2, fieldsArray, fieldsArrayIndex+1);
 };
 
-DataPacksExpand.prototype.processObjectEntry = function(dataPackType, dataPackData)
+DataPacksExpand.prototype.processObjectEntry = function(dataPackType, dataPackData, isPagination)
 {
     var self = this;
     var sObjectType = dataPackData.VlocityRecordSObjectType;
@@ -297,7 +284,7 @@ DataPacksExpand.prototype.updateSourceKeysInDataPack = function(currentData, dat
     }
 }
 
-DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
+DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPagination) {
 
     var self = this;
     if (dataPackData.VlocityDataPackData) {
@@ -321,7 +308,9 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
 
                     var dataPackName = self.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
                     
-                    fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
+                    if (!isPagination) {
+                        fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
+                    }
 
                     if (dataPackData.VlocityDataPackParents && dataPackData.VlocityDataPackParents.length > 0) {
                         var allParentKeys = [];
@@ -333,7 +322,7 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
                         });
 
                         if (allParentKeys.length > 0) {
-                            self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys","json", allParentKeys);
+                            self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys","json", allParentKeys, isPagination);
                         }
                     }
 
@@ -347,23 +336,23 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options) {
                         });
 
                         if (Object.keys(allRels).length > 0) {
-                            self.writeFile(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json", allRels);
+                            self.writeFile(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json", allRels, isPagination);
                         }
                     }
 
-                    self.processDataPackData(dataPackType, parentName, null, dataPackDataChild);
+                    self.processDataPackData(dataPackType, parentName, null, dataPackDataChild, isPagination);
                 }
             }
         }
     }
 }
 
-DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentName, filename, dataPackData) {
+DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentName, filename, dataPackData, isPagination) {
     var self = this;
 
     if (dataPackData) {
 
-       if (dataPackData.VlocityRecordSObjectType) {
+        if (dataPackData.VlocityRecordSObjectType) {
             var sObjectType = dataPackData.VlocityRecordSObjectType;
 
             var currentObjectName = this.getDataPackName(dataPackType, sObjectType, dataPackData);
@@ -383,7 +372,7 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
 
             var dataPackMetadata = {};
 
-            this.processObjectEntry(dataPackType, dataPackData);
+            this.processObjectEntry(dataPackType, dataPackData, isPagination);
            
             Object.keys(dataPackData).forEach(function(sobjectField) {
                 if (self.utils.isValidSObject(dataPackType, sObjectType)) {
@@ -415,12 +404,12 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
                         var expansionData = dataPackData[sobjectField];
                         if (expansionData) {
                             if (expansionType == "list") {
-                                dataPackMetadata[sobjectField] = self.processList(dataPackType, parentName, packName, expansionData);
+                                dataPackMetadata[sobjectField] = self.processList(dataPackType, parentName, packName, expansionData, isPagination);
                             } else if (expansionType == "object") {
                                 var listExpansion = [];
 
                                 expansionData.forEach(function(childInList) {
-                                    listExpansion.push(self.processDataPackData(dataPackType, parentName, packName, childInList));
+                                    listExpansion.push(self.processDataPackData(dataPackType, parentName, packName, childInList, isPagination));
                                 });
 
                                 if (expansionData.length == 1) {
@@ -450,7 +439,7 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
                                     }
                                 } 
 
-                                dataPackMetadata[sobjectField] = self.writeFile(dataPackType, parentName, dataFileName, extension, expansionData, encoding);
+                                dataPackMetadata[sobjectField] = self.writeFile(dataPackType, parentName, dataFileName, extension, expansionData, isPagination, encoding);
                             }
                         }
                     } else {
@@ -459,13 +448,35 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
                 }
             });
 
-            return this.writeFile(dataPackType, parentName, packName + nameExtension, fileType, dataPackMetadata);
+            return this.writeFile(dataPackType, parentName, packName + nameExtension, fileType, dataPackMetadata, isPagination);
         }
     }
 };
 
-DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filename, fileType, fileData, encoding) {
+DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filename, fileType, fileData, isPagination, encoding) {
     var self = this;
+
+    // File Path should have "Project Name"
+    var fullFilePath = this.generateFilepath(dataPackType, parentName, filename, fileType);
+
+    if (isPagination) {
+        try {
+            if (Array.isArray(fileData)) {
+                var previousFileData = JSON.parse(fs.readFileSync(fullFilePath, { "encoding": encoding }));
+                fileData = previousFileData.concat(fileData);
+               
+            } else if (fileName.indexOf('_AllRelationshipKeys') > 0) {
+                var previousFileData = JSON.parse(fs.readFileSync(fullFilePath, { "encoding": encoding }));
+
+                Object.keys(previousFileData).forEach(function(key) {
+                    fileData[key] = previousFileData[key];
+                });
+            } 
+        } catch (e) {
+            //console.log(e);
+        }
+    }
+
     if (fileType == "json") {
         if (typeof fileData === "object") {
             fileData = stringify(fileData, { space: 4 });
@@ -477,9 +488,6 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
             }
         }
     }
-
-    // File Path should have "Project Name"
-    var fullFilePath = this.generateFilepath(dataPackType, parentName, filename, fileType);
 
     if (!encoding) {
         encoding = 'utf8';
@@ -511,12 +519,20 @@ DataPacksExpand.prototype.expand = function(targetPath, dataPackData, options) {
             self.preprocessDataPack(dataPack, null, options);
         });
 
-         dataPackData.dataPacks.forEach(function(dataPack) {
+        dataPackData.dataPacks.forEach(function(dataPack) {
             self.updateSourceKeysInDataPack(dataPack, null, options);
         });
 
         dataPackData.dataPacks.forEach(function(dataPack) {
-            self.processDataPack(dataPack, options);
+           if (dataPack.VlocityDataPackRelationshipType != "Pagination") {
+                self.processDataPack(dataPack, options, false);
+           }
+        });
+
+        dataPackData.dataPacks.forEach(function(dataPack) {
+            if (dataPack.VlocityDataPackRelationshipType == "Pagination") {
+                self.processDataPack(dataPack, options, true);
+            }
         });
     }
 };

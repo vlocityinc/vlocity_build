@@ -416,6 +416,9 @@ DataPacksJob.prototype.buildFile = function(jobInfo, onComplete) {
 	var fullDataPath = jobInfo.projectPath;
 
 	jobInfo.singleFile = true;
+	if (!jobInfo.currentPage) {
+		jobInfo.currentPage = 1;
+	}
 
 	if (self.vlocity.verbose) {
 		console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', fullDataPath, jobInfo.manifest, jobInfo);
@@ -427,18 +430,25 @@ DataPacksJob.prototype.buildFile = function(jobInfo, onComplete) {
 	}
 
 	if (dataJson) {
-		fs.outputFileSync(jobInfo.projectPath + '/' + jobInfo.buildFile, stringify(dataJson, { space: 4 }), 'utf8');
+
+		var fileName = jobInfo.buildFile;
+
+		if (jobInfo.currentPage > 1) {
+			fileName += '_' + jobInfo.currentPage;
+		}
+
+		fs.outputFileSync(jobInfo.projectPath + '/' + fileName, stringify(dataJson, { space: 4 }), 'utf8');
 		// also create .resource-meta.xml
-		fs.outputFileSync(jobInfo.projectPath + '/' + jobInfo.buildFile + '-meta.xml', '<?xml version="1.0" encoding="UTF-8"?><StaticResource xmlns="http://soap.sforce.com/2006/04/metadata"><cacheControl>Public</cacheControl><contentType>text/json</contentType></StaticResource>',
+		fs.outputFileSync(jobInfo.projectPath + '/' + fileName + '-meta.xml', '<?xml version="1.0" encoding="UTF-8"?><StaticResource xmlns="http://soap.sforce.com/2006/04/metadata"><cacheControl>Public</cacheControl><contentType>text/json</contentType></StaticResource>',
 				'utf8');
 		console.log('\x1b[31m', 'Creating File >>' ,'\x1b[0m', jobInfo.projectPath + '/' + jobInfo.buildFile);
 
-	} else {
-		jobInfo.hasError = true;
-		jobInfo.errorMessage = 'Project Path Empty: ' + fullDataPath;
-	}
+		jobInfo.currentPage++;
 
-	onComplete(jobInfo);
+		self.buildFile(jobInfo, onComplete);
+	} else {
+		onComplete(jobInfo);
+	}
 }
 
 DataPacksJob.prototype.expandFile = function(jobInfo, onComplete) {

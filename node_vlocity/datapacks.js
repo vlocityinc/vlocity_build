@@ -177,13 +177,19 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 				console.log('Result', result);
 			}
 
-			if (result.Total && result.Finished) {
+			if (result && result.Total > 0) {
+
+				if (result.Async && result.Total == result.Finished) {
+					result.Finished--;
+				}
 
 				self.bar = new ProgressBar(':bar Current Status - Success: :current Total: :total', { total: result.Total, width: (result.total < result.Total ? result.Total : 50) });
 				self.bar.tick(result.Finished);
 			}
 			
 			if (err) { 
+				console.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', err);
+				
 				if (onError) onError(err);
 				else throw err;
 			} else if (/(Ready|InProgress)/.test(result.Status)) {

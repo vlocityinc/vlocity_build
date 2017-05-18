@@ -301,6 +301,9 @@
         "PricebookEntry": {
             "FileName": [
                 "#StandardPricebookEntry"
+            ],
+            "SortFields": [
+                "CurrencyIsoCode"
             ]
         },
         "Product2": {
@@ -323,7 +326,7 @@
             "JsonFields": [
                 "%vlocity_namespace%__CategoryData__c"
             ],
-            "PricebookEntry": "object"
+            "PricebookEntry": "list"
         }
     },
     "ProductChildItem": {
@@ -371,6 +374,10 @@
         "%vlocity_namespace%__DRMapItem__c": [
             "%vlocity_namespace%__MapId__c"
         ],
+        "%vlocity_namespace%__Element__c": [
+            "%vlocity_namespace%__OmniScriptId__c",
+            "Name"
+        ],
         "%vlocity_namespace%__EntityFilter__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
@@ -393,6 +400,12 @@
         ],
         "%vlocity_namespace%__Rule__c": [
             "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__Promotion__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__PromotionItem__c": [
+            "Unique_Code__c"
         ],
         "Product2": [
             "%vlocity_namespace%__GlobalKey__c"

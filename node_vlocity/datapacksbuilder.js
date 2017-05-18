@@ -22,6 +22,10 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
 
     var MAX_IMPORT_SIZE = 400000;
 
+    if (jobInfo.maximumFileSize) {
+        MAX_IMPORT_SIZE = jobInfo.maximumFileSize;
+    }
+
     if (jobInfo.expansionPath) {
         importPath += '/' + jobInfo.expansionPath;
     }
@@ -331,7 +335,9 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
 
             if (dataFieldDef && dataFieldDef.JsonFields) {
                 dataFieldDef.JsonFields.forEach(function(jsonField) { 
-                    dataPackData[jsonField] = stringify(dataPackData[jsonField]);
+                    if (dataPackData[jsonField] != "") {
+                        dataPackData[jsonField] = stringify(dataPackData[jsonField]);
+                    }
                 });
             }
         });
