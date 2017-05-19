@@ -19,7 +19,7 @@ var DataPacksBuilder = module.exports = function(vlocity) {
 DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo) {
     var self = this;
 
-    var dataPackImport = JSON.parse(fs.readFileSync('./node_vlocity/defaultdatapack.json', 'utf8'));
+    var dataPackImport = Object.assign({}, self.defaultDataPack);
 
     var MAX_IMPORT_SIZE = 400000;
 
