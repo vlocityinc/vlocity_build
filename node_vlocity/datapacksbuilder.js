@@ -2,7 +2,7 @@ var request = require('request');
 var yaml = require('js-yaml');
 var path = require('path');
 var fs = require('fs-extra');
-var sass = require('node-sass');
+var sass = require('sass.js');
 var stringify = require('json-stable-stringify');
 
 var UTF8_EXTENSIONS = [ "css", "json", "yaml", "scss", "html", "js"];
@@ -316,16 +316,28 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                             includePathsForSass.push(fullPathToFiles + "/../" + dir + "/");
                                         });
 
-                                        var sassResult = sass.renderSync({
-                                          data: self.allFileDataMap[filename],
-                                          includePaths: includePathsForSass
-                                        });
-
-                                        dataPackData[self.dataPacksExpandedDefinition[dataPackType][currentDataField][field].CompiledField] = sassResult.css.toString();
-                                        dataPackData[field] = self.allFileDataMap[filename];
+                                        //var sassResult = sass.renderSync({
+                                        //  data: self.allFileDataMap[filename],
+                                        //  includePaths: includePathsForSass
+                                        //});
+										
+										var sassResult = null;
+										sass.compile(self.allFileDataMap[filename], function(result) {
+											// in node js Sass.JS runs in-sync
+											sassResult = result;
+										});
+										
+										if (sassResult.status !== 0) {
+											// print error so we know why it failed
+											console.log('\x1b[31m', 'Error while compiling SCSS in >>' ,'\x1b[0m', filename, '\n', sassResult.formatted);
+										} else {
+											dataPackData[self.dataPacksExpandedDefinition[dataPackType][currentDataField][field].CompiledField] = sassResult.text.toString();
+										}
+										
+										dataPackData[field] = self.allFileDataMap[filename];
                                     }
                                 } else if (!self.compileOnBuild || !self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields || 
-                                   self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields.indexOf(field) == -1) {
+                                    self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields.indexOf(field) == -1) {
                                     dataPackData[field] = self.allFileDataMap[filename];
                                 }
                             }
