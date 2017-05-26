@@ -11,7 +11,7 @@ var DataPacksBuilder = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
 
     this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
-    this.defaultDataPack = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
+    //this.defaultDataPack = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
     this.currentStatus;
     this.currentImportData = {};
 };
@@ -19,7 +19,7 @@ var DataPacksBuilder = module.exports = function(vlocity) {
 DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo) {
     var self = this;
 
-    var dataPackImport = Object.assign({}, self.defaultDataPack);
+    var dataPackImport = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
 
     var MAX_IMPORT_SIZE = 400000;
 
