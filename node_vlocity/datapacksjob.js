@@ -476,6 +476,8 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 		jobInfo.VlocityDataPackIds = [];
 	}
 
+	fs.outputFileSync('vlocity-deploy-temp/currentJobInfo.json', stringify(jobInfo, { space: 4 }), 'utf8');
+
 	// If there are both queries and manifest then assume the user wants to deploy all
 	// Otherwise only deploy the manifest
 	var deployManifest = jobInfo.manifest;
