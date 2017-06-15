@@ -40,7 +40,7 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
 
     do {
         
-        nextImport = self.getNextImport(importPath, Object.keys(jobInfo.currentStatus), false, jobInfo);
+        nextImport = self.getNextImport(importPath, Object.keys(jobInfo.currentStatus), jobInfo.singleFile === true, jobInfo);
 
         if (nextImport) {
             dataPackImport.dataPacks.push(nextImport);
@@ -207,17 +207,19 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     
                     var needsParents = false;
 
-                    if (!singleFile && parentData) {
+                    if (parentData) {
                         parentData = JSON.parse(parentData);
 
-                        parentData.forEach(function(parentKey) {
-                            if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
-                                needsParents = true;
-                            }
-                        });
+                        if (!singleFile) {
+                            parentData.forEach(function(parentKey) {
+                                if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
+                                    needsParents = true;
+                                }
+                            });
 
-                        if (needsParents) {
-                            return;
+                            if (needsParents) {
+                                return;
+                            }
                         }
                     }
 
