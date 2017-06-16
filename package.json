@@ -5,7 +5,8 @@
   "main": "Gruntfile.js",
   "scripts": {
     "packExport": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packExport",
-    "packDeploy": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packDeploy"
+    "packDeploy": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packDeploy",
+    "packBuildFile": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packBuildFile"
   },
   "author": "build@vlocity.com",
   "license": "MIT",
