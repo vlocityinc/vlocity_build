@@ -296,8 +296,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                 dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename]), fullPathToFiles, dataPackType, field);
                             } else {
                                 if (self.compileOnBuild && fieldData.CompiledField) {
-
-                                    // Push new job to async compile qeueu
+                                    // Push job to compile qeueu; the data will be compiled after the import is completed
                                     self.compileQueue.push({
                                         filename: filename,
                                         status: null,
@@ -310,17 +309,6 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                             dataPackData[fieldData.CompiledField] = compiledResult;
                                         }
                                     });
-
-                                    if (fieldData.FileType == 'scss') {
-
-                                     var includePathsForSass = [];
-                                     self.vlocity.datapacksutils.getDirectories(fullPathToFiles + "/..").forEach(function(dir) {
-                                            includePathsForSass.push(fullPathToFiles + "/../" + dir + "/");
-                                        });
-
-                                    } else {
-                                        console.log('\x1b[31m', 'Unknown file type for file >>' ,'\x1b[0m', filename, '\n');
-                                    }
                                 } else if (!self.compileOnBuild || 
                                            !self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields ||
                                             self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields.indexOf(field) == -1) {
