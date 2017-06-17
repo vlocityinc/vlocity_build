@@ -198,7 +198,7 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
 		var apexFileName;
 
 		if (self.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
-			apexFileName = projectPath + '/' + jobInfo.preJobApex[action];
+			apexFileName = projectPath + '/' + filePath;
 		} else if (self.vlocity.datapacksutils.fileExists('apex/' + filePath)) {
 			apexFileName = 'apex/' + filePath;
 		}

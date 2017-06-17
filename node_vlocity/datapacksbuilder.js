@@ -11,9 +11,7 @@ var DataPacksBuilder = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
 
     this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
-    this.defaultDataPack = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
-    this.currentStatus;
-    this.currentImportData = {};
+    //this.defaultDataPack = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
     this.compileQueue = []; // array with files that require compilation
 };
 
@@ -22,8 +20,8 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
 		console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', importPath, jobInfo.manifest, jobInfo);
 	}
     
-    var dataPackImport = JSON.parse(fs.readFileSync('./node_vlocity/defaultdatapack.json', 'utf8'));
-    var maximumFileSize = jobInfo.maximumFileSize ? jobInfo.maximumFileSize : 400000;
+    var dataPackImport = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
+    var maximumFileSize = jobInfo.maximumFileSize ? jobInfo.maximumFileSize : 200000;
 
     if (jobInfo.expansionPath) {
         importPath += '/' + jobInfo.expansionPath;
@@ -31,14 +29,17 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
 
     this.compileOnBuild = jobInfo.compileOnBuild;
 
-    if (!this.currentStatus) {
-        this.initializeImportStatus(importPath, manifest, jobInfo);
+   
+    if (!self.allFileDataMap) {
+        self.initializeImportStatus(importPath, manifest, jobInfo);
     }
 
     var nextImport;
 
     do {
-        nextImport = this.getNextImport(importPath, Object.keys(this.currentStatus));
+        
+        nextImport = self.getNextImport(importPath, Object.keys(jobInfo.currentStatus), jobInfo.singleFile === true, jobInfo);
+
         if (nextImport) {
             dataPackImport.dataPacks.push(nextImport);
         }
@@ -98,6 +99,10 @@ DataPacksBuilder.prototype.getDataPackLabel = function(dataPackTypeDir, dataPack
 DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifest, jobInfo) {
     var self = this;
 
+    if (!jobInfo.currentStatus) {
+        jobInfo.currentStatus = {};
+    }
+
     var matchingFunction = function(dataPackType, dataPackName) {
         if (Array.isArray(manifest[dataPackType])) {
             return !!manifest[dataPackType].find(function(entry) {
@@ -110,8 +115,6 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
         }
         return (matchingString.indexOf(dataPackName) != -1);
     }
-
-    self.currentStatus = {};
 
     if (manifest) {
         self.pendingFromManifest = JSON.parse(stringify(manifest));
@@ -142,7 +145,10 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
                     if (metadataFilename && (!manifest || (manifest[dataPackType] && matchingFunction(dataPackType, dataPackName)))) {
 
                         if (self.vlocity.datapacksutils.fileExists(metadataFilename)) {
-                            self.currentStatus[dataPackKey] = 'Ready';
+
+                            if (!jobInfo.currentStatus[dataPackKey]) {
+                                jobInfo.currentStatus[dataPackKey] = 'Ready';
+                            }
 
                             self.loadFilesAtPath(dataPackTypeDir + '/' + dataPackName, jobInfo);
                             if (Array.isArray(self.pendingFromManifest[dataPackType])) {
@@ -176,13 +182,13 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
     }
 };
 
-DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, singleFile) {
+DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, singleFile, jobInfo) {
     var self = this;
     var nextImport;
 
     dataPackKeys.forEach(function(dataPackKey) {
         if (!nextImport) {
-            if (self.currentStatus[dataPackKey] == 'Ready') {
+            if (jobInfo.currentStatus[dataPackKey] == 'Ready') {
                 try {
                     var typeIndex = dataPackKey.indexOf('/');
                     var dataPackType = dataPackKey.substr(0, typeIndex);
@@ -195,11 +201,12 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     
                     var needsParents = false;
 
-                    if (!singleFile && parentData) {
+                    if (parentData) {
                         parentData = JSON.parse(parentData);
 
+                        if (!singleFile) {
                         parentData.forEach(function(parentKey) {
-                            if (self.currentStatus[parentKey] == 'Ready') {
+                                if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
                                 needsParents = true;
                             }
                         });
@@ -207,6 +214,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                         if (needsParents) {
                             return;
                         }
+                    }
                     }
 
                     nextImport = {
@@ -234,7 +242,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     }
 
                     nextImport.VlocityDataPackData[sobjectDataField] = dataPackImportBuilt;
-                    self.currentStatus[dataPackKey] = 'Added';                    
+                    jobInfo.currentStatus[dataPackKey] = 'Added';
                 } catch (e) {
                     console.log('\x1b[31m', 'Error Formatting Deploy >>' ,'\x1b[0m', dataPackKey, e);
                     throw e;
