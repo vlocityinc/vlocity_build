@@ -16,7 +16,9 @@ var DataPacksBuilder = module.exports = function(vlocity) {
 };
 
 DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo, onComplete) {
-    if (this.vlocity.verbose) {
+     var self = this;
+    
+    if (self.vlocity.verbose) {
 		console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', importPath, jobInfo.manifest, jobInfo);
 	}
     
@@ -27,7 +29,7 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
         importPath += '/' + jobInfo.expansionPath;
     }
 
-    this.compileOnBuild = jobInfo.compileOnBuild;
+    self.compileOnBuild = jobInfo.compileOnBuild;
 
    
     if (!self.allFileDataMap) {
@@ -45,7 +47,7 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
         }
     } while (nextImport && (jobInfo.singleFile || stringify(dataPackImport).length < maximumFileSize))
 
-    this.compileQueuedData(() => {
+    self.compileQueuedData(() => {
         onComplete(dataPackImport.dataPacks.length > 0 ? dataPackImport : null);
     });
 };
@@ -303,7 +305,8 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                             if (fieldData == 'list' || fieldData == 'object') {
                                 dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename]), fullPathToFiles, dataPackType, field);
                             } else {
-                                if (self.compileOnBuild && fieldData.CompiledField) {
+                                if (self.compileOnBuild && fieldData.CompiledField) {                                    
+                                    dataPackData[field] = self.allFileDataMap[filename];
                                     // Push job to compile qeueu; the data will be compiled after the import is completed
                                     self.compileQueue.push({
                                         filename: filename,
