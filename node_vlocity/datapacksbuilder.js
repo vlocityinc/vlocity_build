@@ -11,7 +11,6 @@ var DataPacksBuilder = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
 
     this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
-    //this.defaultDataPack = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
 };
 
 DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo) {
@@ -19,10 +18,20 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
 
     var dataPackImport = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
 
-    var MAX_IMPORT_SIZE = 200000;
+    var maxImportSize = 200000;
+    var maxImportCount = 200000;
+
+    if (jobInfo.resetFileData) {
+        self.allFileDataMap = null;
+        jobInfo.resetFileData = false;
+    }
 
     if (jobInfo.maximumFileSize) {
-        MAX_IMPORT_SIZE = jobInfo.maximumFileSize;
+        maxImportSize = jobInfo.maximumFileSize;
+    }
+
+    if (jobInfo.maximumDeployCount) {
+        maxImportCount = jobInfo.maximumDeployCount;
     }
 
     if (jobInfo.expansionPath) {
@@ -31,7 +40,6 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
 
     self.compileOnBuild = jobInfo.compileOnBuild;
 
-   
     if (!self.allFileDataMap) {
         self.initializeImportStatus(importPath, manifest, jobInfo);
     }
@@ -46,12 +54,12 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
             dataPackImport.dataPacks.push(nextImport);
         }   
 
-    } while (nextImport && (jobInfo.singleFile || stringify(dataPackImport).length < MAX_IMPORT_SIZE))
+    } while (nextImport && (jobInfo.singleFile || (stringify(dataPackImport).length < maxImportSize &&  dataPackImport.dataPacks.length < maxImportCount)))
 
     return dataPackImport.dataPacks.length > 0 ? dataPackImport : null;  
 };
 
-DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath, jobInfo) {
+DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath, jobInfo, dataPackKey) {
     var self = this;
 
     self.vlocity.datapacksutils.getFiles(srcpath).forEach(function(filename) {
@@ -83,7 +91,15 @@ DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath, jobInfo) {
                 jobInfo.preDeployDataSummary = [];
             }
 
+            if (jobInfo.allDeployDataSummary == null) {
+                jobInfo.allDeployDataSummary = {};
+            }
+
             jobInfo.preDeployDataSummary.push(apexImportData);
+
+            if (dataPackKey) {
+                jobInfo.allDeployDataSummary[dataPackKey] = apexImportData;
+            }
         }
     });
 };
@@ -141,8 +157,6 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
             allDataPacksOfType.forEach(function(dataPackName) {
 
                 var metadataFilename = dataPackTypeDir + '/' + dataPackName + '/' + self.getDataPackLabel(dataPackTypeDir, dataPackName) + '_DataPack.json';
-               
-
                 var dataPackKey = dataPackType + '/' + dataPackName;
 
                 try {
@@ -154,7 +168,7 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
                                 jobInfo.currentStatus[dataPackKey] = 'Ready';
                             }
 
-                            self.loadFilesAtPath(dataPackTypeDir + '/' + dataPackName, jobInfo);
+                            self.loadFilesAtPath(dataPackTypeDir + '/' + dataPackName, jobInfo, dataPackKey);
                             if (Array.isArray(self.pendingFromManifest[dataPackType])) {
                                 var beforeCount = self.pendingFromManifest[dataPackType].length;
                                 self.pendingFromManifest[dataPackType] = self.pendingFromManifest[dataPackType].filter(function(value) {
@@ -251,6 +265,14 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     nextImport.VlocityDataPackData[sobjectDataField] = dataPackImportBuilt;
 
                     jobInfo.currentStatus[dataPackKey] = 'Added';
+
+                    var nextImportHash = self.vlocity.datapacksutils.getDataPackHash(nextImport);
+
+                    if (jobInfo.hashOfDataPacksExport && jobInfo.hashOfDataPacksExport[dataPackKey] == nextImportHash) {
+                        nextImport = null;
+                        jobInfo.currentStatus[dataPackKey] = 'Skipped';
+                        console.log('\x1b[31m', 'Skipping Deploy - No Changes >>' ,'\x1b[0m', dataPackKey);
+                    }
                 } catch (e) {
                     console.log('\x1b[31m', 'Error Formatting Deploy >>' ,'\x1b[0m', dataPackKey, e);
                     throw e;
@@ -286,7 +308,6 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                 if (dataFieldDef && dataFieldDef[field]) {
 
                     var fileNames = dataPackData[field];
- 
                     var fileType = self.dataPacksExpandedDefinition[dataPackType][currentDataField][field];
 
                     if (fileType == 'object' && Array.isArray(fileNames)) {

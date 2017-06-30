@@ -208,6 +208,24 @@ module.exports = function (grunt) {
 		});
 	});
 
+    grunt.registerTask('packGetDiffs', 'Run a DataPacks Job', function() {
+        
+        var done = this.async();        
+
+        dataPacksJob('GetDiffs', grunt.option('job'), function() {
+            done();
+        });
+    });
+
+    grunt.registerTask('packGetDiffsAndDeploy', 'Run a DataPacks Job', function() {
+        
+        var done = this.async();        
+
+        dataPacksJob('GetDiffsAndDeploy', grunt.option('job'), function() {
+            done();
+        });
+    });
+
 	grunt.registerTask('packContinue', 'Run a DataPacks Job', function() {
 		
 		var done = this.async();		
@@ -216,6 +234,71 @@ module.exports = function (grunt) {
 		  	done();
 		});
 	});
+
+    grunt.registerTask('runApex', 'Run a DataPacks Job', function() {
+        var self = this;
+
+        var done = this.async();
+
+        var properties = grunt.config.get('properties');
+        
+        var vlocity = new node_vlocity({
+          username: properties['sf.username'], 
+          password: properties['sf.password'], 
+          vlocityNamespace: properties['vlocity.namespace'],
+          verbose: grunt.option('verbose'),
+          loginUrl: properties['sf.loginUrl']
+        });
+
+        vlocity.checkLogin(function(res) {
+            vlocity.jsForceConnection.tooling.sobject('DebugLevel').find({ DeveloperName: "SFDC_DevConsole" }).execute(function(err, debugLevel) {
+
+                var thirtyMinutesLater = new Date();
+                thirtyMinutesLater.setMinutes(thirtyMinutesLater.getMinutes() + 30);
+                var thirtyMinutesLaterString = thirtyMinutesLater.toISOString();
+
+                vlocity.jsForceConnection.tooling.sobject('TraceFlag').create({
+                    TracedEntityId: vlocity.jsForceConnection.userInfo.id,
+                    DebugLevelId: debugLevel[0].Id,
+                    ExpirationDate: thirtyMinutesLaterString,
+                    LogType: 'DEVELOPER_LOG'
+                }, function(err, res) {
+                    console.log(res);
+
+                    if (err) { 
+                        console.error(err); 
+                    }
+        
+                    vlocity.datapacksutils.runApex('.', 'test.cls', {}, function() {
+
+                        vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
+
+                            vlocity.jsForceConnection.request("/services/data/v37.0/tooling/sobjects/ApexLog/" + res.records[0].Id + "/Body/", function(err, logBody) {
+
+                                if (err) { 
+                                    console.error('err', err); 
+                                }
+
+                                var allLoggingStatments = [];
+
+                                logBody.split("\n").forEach(function(line) {
+                                    var vPerfIndex = line.indexOf('VPERF');
+
+                                    if (vPerfIndex > -1) {
+                                        allLoggingStatments.push(line);
+                                    }
+                                });
+
+                                console.log(allLoggingStatments);
+
+                                done();  
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 
   	return dataPacksJob;
 };

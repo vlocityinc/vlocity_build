@@ -40,6 +40,7 @@ The supported DataPacks actions are as follow:
 
 `packExport`: Export from a Salesforce org into a DataPack Directory  
 `packDeploy`: Deploy all contents of a DataPacks Directory  
+`packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org
 `packBuildFile`: Build a DataPacks Directory into a DataPack file of  
 `packExpandFile`: Create a DataPack Directory from a previosuly exported file
 
@@ -89,7 +90,7 @@ exportBuildFile: exportFile/exportFile.json
 buildFile: staticresources/CampaignBaseTemplates.resource # File to create from DataPack Directory
 ```
 ##### Anonymous Apex  
-You can also run Anonymous Apex before and After a Job by job type. Available types are Import, Export, Deploy BuildFile, ExpandFile Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file
+You can run Anonymous Apex before and After a Job by job type and before each step of a Deploy. Available types are Import, Export, Deploy, BuildFile, and ExpandFile. Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file
 ```yaml
 preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
@@ -104,6 +105,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | manifestOnly      | If true, an Export job will only save items specifically listed in the manifest      |   Boolean | false |
 | delete | Delete the VlocityDataPack__c file on finish   |    Boolean | true |
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
+| maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act againsta single DataPack at a time | Integer | 1000
 ##### DataPacks API
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
@@ -173,6 +175,13 @@ The token CURRENT_DATA_PACKS_CONTEXT_DATA will be replaced with JSON data and co
 
 #### PreJobApex Replacement Format
 Pre Job Apex is what runs before the Job.
+
+#### preJobApex vs preStepApex
+Anonymous Apex has a total character limit of 32000 characters. Therefore, large projects cannot successfully run preJobApex against the entire project. Instead, preStepApex will send only the DataPack context data for the currently running API call. 
+
+For Deploys, this means that instead of Deactivating all Templates and Layouts for an entire project before beginning a full deploy, using the same provided DeactivateTemplatesAndLayouts.cls as preStepApex, the target Salesforce Org will be minimally impacted as each Template or Card will only be Deactivated while it is being deployed. Best when combined with the maximumDeployCount of 1. 
+
+Currently preStepApex is only supported for Deploy, but additional job types and postStepApex functionality will follow in time.
 
 ##### Export by Manifest
 If Exporting with a Manifest, each JSON Object will be one entry in the Manifest in the form of:

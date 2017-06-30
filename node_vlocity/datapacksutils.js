@@ -1,5 +1,6 @@
 var fs = require("fs-extra");
 var path  = require('path');
+var stringify = require('json-stable-stringify');
 
 var DataPacksUtils = module.exports = function(vlocity) {
 	this.vlocity = vlocity || {};
@@ -190,11 +191,11 @@ DataPacksUtils.prototype.isInManifest = function(dataPackData, manifest) {
 	return false;
 }
 
-DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {
+DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData, shouldDebug, callback) {
 	var self = this;
 
 	console.log('Executing runApex: ' + projectPath + ' -- ' + filePath);
-	if (projectPath && filePath) {			
+	if (projectPath && filePath) {
 		var apexFileName;
 
 		if (self.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
@@ -215,7 +216,7 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
 
 					var className = includedClasses[i].replace("//include ", "").replace(";", "");
 
-					var includedFileData = fs.readFileSync(srcdir+'/'+className, 'utf8');
+					var includedFileData = fs.readFileSync(srcdir + '/' + className, 'utf8');
 
 					apexFileData = apexFileData.replace(includedClasses[i], includedFileData);
 				}		
@@ -228,32 +229,127 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
 			apexFileData = apexFileData.replace(/%vlocity_namespace%/g, this.vlocity.namespace);
 			apexFileData = apexFileData.replace(/vlocity_namespace/g, this.vlocity.namespace);
 
-			return self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, function(err, res) {
+			var thirtyMinutesLater = new Date();
+            thirtyMinutesLater.setMinutes(thirtyMinutesLater.getMinutes() + 30);
+            var thirtyMinutesLaterString = thirtyMinutesLater.toISOString();
 
-				if (res.success === false) {
-					if (res.compileProblem) {
-						console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', res.compileProblem);
-					} 
-					if (res.exceptionMessage) {
-						console.log('\x1b[36m', '>>' ,'\x1b[0m Exception Message', res.exceptionMessage);
-					} 
+    		return new Promise(function(resolve, reject) {
 
-					if (res.exceptionStackTrace) {
-						console.log('\x1b[36m', '>>' ,'\x1b[0m Exception StackTrace', res.exceptionStackTrace);
+    			if (shouldDebug) {
+	    			self.vlocity.jsForceConnection.tooling.sobject('DebugLevel').find({ DeveloperName: "SFDC_DevConsole" }).execute(function(err, debugLevel) {
+
+	    				if (debugLevel[0].Id) {
+				            self.vlocity.jsForceConnection.tooling.sobject('TraceFlag').create({
+				                TracedEntityId: self.vlocity.jsForceConnection.userInfo.id,
+				                DebugLevelId: debugLevel[0].Id,
+				                ExpirationDate: thirtyMinutesLaterString,
+				                LogType: 'DEVELOPER_LOG'
+				            }, function(err, res) {
+				                resolve();
+				            });
+				        } else {
+				        	console.log('\x1b[36m', '>>' ,'\x1b[0 No Logging Level called: SFDC_DevConsole');
+				        	resolve();
+				        }
+			        });
+			    } else {
+			    	resolve();
+			    }
+		    })
+		    .then(function() {
+
+		    	if (apexFileData.length > 32000)
+		    	{
+		    		console.log('\x1b[36m', '>>' ,'\x1b[o File Data Length: ' + apexFileData.length + ' is too large for a single Anonymous Apex call. Please use the preStepApex or remove the CURRENT_DATA_PACKS_CONTEXT_DATA variable from your Apex classes for preJobApex.');
+		    		return Promise.reject();
+		    	}
+
+				self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, function(err, res) {
+
+					if (res == null) {
+						console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', err);
 					}
 
-					return Promise.resolve(true);
-				} else {
-					return Promise.resolve(true);
-				}				
+					if (res.success === false) {
+						if (res.compileProblem) {
+							console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', res.compileProblem);
+						} 
+						if (res.exceptionMessage) {
+							console.log('\x1b[36m', '>>' ,'\x1b[0m Exception Message', res.exceptionMessage);
+						} 
+
+						if (res.exceptionStackTrace) {
+							console.log('\x1b[36m', '>>' ,'\x1b[0m Exception StackTrace', res.exceptionStackTrace);
+						}
+					}
+
+					if (shouldDebug) {
+						self.vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
+							
+                            self.vlocity.jsForceConnection.request("/services/data/v37.0/tooling/sobjects/ApexLog/" + res.records[0].Id + "/Body/", function(err, logBody) {
+                            	
+                                if (err) { 
+                                    console.error('err', err); 
+                                }
+
+                                var allLoggingStatments = [];
+
+                                logBody.split("\n").forEach(function(line) {
+                                    var isDebug = line.indexOf('USER_DEBUG');
+
+                                    if (isDebug > -1) {
+                                       console.log(line);
+                                    }
+                                });
+
+                                if (callback) {
+									callback();
+								} else {
+									return Promise.resolve();
+								}
+                            });
+	                    });
+					} else {
+						if (callback) {
+							callback();
+						} else {
+							return Promise.resolve();
+						}
+					}
+				});				
 			});
 		} else {
-			return Promise.resolve(true);
+			return Promise.resolve();
 		}
 	} else {
-		return Promise.resolve(true);
+		return Promise.resolve();
 	}
 }
+
+DataPacksUtils.prototype.hashCode = function(toHash) {
+ 	var hash = 0, i, chr;
+
+ 	if (toHash.length === 0) return hash;
+
+	for (i = 0; i < toHash.length; i++) {
+		chr   = toHash.charCodeAt(i);
+		hash  = ((hash << 5) - hash) + chr;
+		hash |= 0; // Convert to 32bit integer
+	}
+
+	return hash;
+};
+
+DataPacksUtils.prototype.getDataPackHash = function(dataPack) {
+
+	var clonedDataPackData = JSON.parse(stringify(dataPack));
+
+	// Remove these as they would not be real changes
+	clonedDataPackData.VlocityDataPackParents = null;
+	clonedDataPackData.VlocityDataPackAllRelationships = null;
+
+	return this.hashCode(stringify(clonedDataPackData));
+};
 
 
 
