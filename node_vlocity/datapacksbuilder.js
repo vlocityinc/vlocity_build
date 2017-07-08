@@ -47,7 +47,11 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
         }
     } while (nextImport && (jobInfo.singleFile || stringify(dataPackImport).length < maximumFileSize))
 
-    self.compileQueuedData(() => {
+    self.compileQueuedData(result => {
+        if(result.hasErrors) {            
+            jobInfo.hasError = true;
+	    	jobInfo.errorMessage = result.errors.join('\n');
+        }
         onComplete(dataPackImport.dataPacks.length > 0 ? dataPackImport : null);
     });
 };
@@ -200,23 +204,22 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
 
                     var fullPathToFiles = importPath + '/' + dataPackKey;
                     var parentData = self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_ParentKeys.json'];
-                    
                     var needsParents = false;
 
                     if (parentData) {
                         parentData = JSON.parse(parentData);
 
                         if (!singleFile) {
-                        parentData.forEach(function(parentKey) {
-                                if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
-                                needsParents = true;
-                            }
-                        });
+                            parentData.forEach(function(parentKey) {
+                                    if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
+                                    needsParents = true;
+                                }
+                            });
 
-                        if (needsParents) {
-                            return;
+                            if (needsParents) {
+                                return;
+                            }
                         }
-                    }
                     }
 
                     nextImport = {
@@ -305,21 +308,33 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                             if (fieldData == 'list' || fieldData == 'object') {
                                 dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename]), fullPathToFiles, dataPackType, field);
                             } else {
-                                if (self.compileOnBuild && fieldData.CompiledField) {                                    
-                                    dataPackData[field] = self.allFileDataMap[filename];
+                                if (self.compileOnBuild && fieldData.CompiledField) { 
+                                    // these options will be passed to the importer function 
+                                    var importerOptions = {
+                                        // collect paths to look for imported/inclyded files
+                                        includePaths: self.vlocity.datapacksutils.getDirectories(fullPathToFiles + "/..").map(function(dir) {
+                                            return path.normalize(fullPathToFiles + "/../" + dir + "/");
+                                        })
+                                    };
                                     // Push job to compile qeueu; the data will be compiled after the import is completed
                                     self.compileQueue.push({
                                         filename: filename,
                                         status: null,
                                         language: fieldData.FileType,
                                         source: self.allFileDataMap[filename],
+                                        options: {
+                                            // this is options that is passed to the compiler
+                                            importer: importerOptions
+                                        },
                                         callback: function(error, compiledResult) {
                                             if (error) {
-                                                return console.log('\x1b[31m', 'Error while compiling SCSS in >>' ,'\x1b[0m', filename, '\n', error.message);
+                                                return console.log('\x1b[31m', 'Failed to compile SCSS for >>' ,'\x1b[0m', filename, '\n', error.message);
                                             }
                                             dataPackData[fieldData.CompiledField] = compiledResult;
                                         }
                                     });
+                                    // save source into datapack to ensure the uncompiled data also gets deployed
+                                    dataPackData[field] = self.allFileDataMap[filename];
                                 } else if (!self.compileOnBuild || 
                                            !self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields ||
                                             self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields.indexOf(field) == -1) {
@@ -347,11 +362,13 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
 DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
     var compilerBacklogSize = this.compileQueue.length;    
     if(compilerBacklogSize == 0) {
-        return onComplete(null);
-    }  
-
+        return onComplete({
+            compileCount: 0, 
+            hasErrors: false
+        });
+    }
     var compileCount = 0;
-    var compileErrors = 0;
+    var errors = [];
     while (this.compileQueue.length > 0) {
         var job = this.compileQueue.pop();
 
@@ -363,7 +380,7 @@ DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
             if(error) {
                 console.log('\x1b[31m', error.message, '>>' ,'\x1b[0m', '\n');
                 job.callback(error, null);
-                compileErrors++;
+                errors.push(error);
             } else {
                 job.callback(null, compiledResult);
                 compileCount++;
@@ -371,22 +388,68 @@ DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
             
             if(--compilerBacklogSize == 0) {
                 if (this.vlocity.verbose) {
-                    console.log('\x1b[31m', 'Compilation done >>' ,'\x1b[0m', 'Compiled', compileCount, 'files with', compileErrors, 'errors.');
+                    console.log('\x1b[31m', 'Compilation done >>' ,'\x1b[0m', 'compiled', compileCount, 'files with', errors.length, 'errors.');
                 }
-                onComplete(null);
+                onComplete({ 
+                    compileCount: compileCount,
+                    hasErrors: errors.length > 0, 
+                    errors: errors
+                });
             }
         });
     }
 };
 
+/** 
+ * recusive async function that loops through a list of paths trying to read a file and returns the data 
+ * of that file if it is succesfull
+ * @param {string} filename - name of the file to search for
+ * @param {string[]} pathArray - Array of paths to search in
+ * @param {callback} cb - callback(err, fileData)
+ */
+DataPacksBuilder.prototype.tryReadFile = function(fileName, pathArray, cb, i) {
+    if ((i = i || 0) >= pathArray.length) return cb(new Error("Requested file not found: " + fileName), null);
+    fs.readFile(path.join(pathArray[i], fileName), 'UTF8', (err, data) => {
+        if (!err) return cb(null, data);                                    
+        this.tryReadFile(fileName, pathArray, cb, ++i);
+    });
+};
+
 DataPacksBuilder.prototype.compile = function(lang, source, options, cb) {
     // This function contains the core code to execute compilation of source data
-    // add addtional languages here to support more compilation types
+    // add addtional languages here to support more compilation types    
     switch(lang) {
         case 'scss': {
+            // intercept file loading requests from libsass
+            sass.importer((request, done) => {
+                // (object) request
+                // (string) request.current path libsass wants to load (content of »@import "<path>";«)
+                // (string) request.previous absolute path of previously imported file ("stdin" if first)
+                // (string) request.resolved currentPath resolved against previousPath
+                // (string) request.path absolute path in file system, null if not found
+                // (mixed)  request.options the value of options.importer
+                // -------------------------------
+                // (object) result
+                // (string) result.path the absolute path to load from file system
+                // (string) result.content the content to use instead of loading a file
+                // (string) result.error the error message to print and abort the compilation
+                if (!request.path) {
+                    // do we have include paths -- if so start probing them
+                    if (request.options && request.options.includePaths && 
+                        Array.isArray(request.options.includePaths)) {
+                        return this.tryReadFile(request.current , request.options.includePaths, (err, data) => {
+                            if(err) return done({ error: err });
+                            done({ content: data });
+                        });
+                    }
+                }                
+                // return error
+                done({ error: "Unable to resolve requested SASS import; try setting the 'includePaths'" +
+                              "compiler option if your import is not in the root directory." });
+            });
             sass.compile(source, options, (result) => {
                 if (result.status !== 0) {
-                    var error = new Error('SASS compilatio error: ' + result.formatted);
+                    var error = new Error('SASS compilation failed, see error message for details: ' + result.formatted);
                     cb(error, null);
                 } else {
                     cb(null, result.text);
