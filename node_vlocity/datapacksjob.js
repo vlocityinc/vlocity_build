@@ -74,10 +74,10 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
     		return new Promise(function(resolve, reject) {
     			try {
 	    			self.doRunJob(jobInfo, action, resolve);
-	    		} catch (e) {
+	    		} catch (err) {
 	    			jobInfo.hasError = true;
-	    			jobInfo.errorMessage = e.message;
-	    			reject(jobInfo);
+	    			jobInfo.errorMessage = typeof err === 'string' ? err : err.message;
+	    			resolve(jobInfo);
 	    		}
     		});
     	})

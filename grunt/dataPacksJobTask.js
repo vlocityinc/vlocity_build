@@ -85,8 +85,8 @@ module.exports = function (grunt) {
                     callback();
 		    	},
 		    	function(result) {
-			    	grunt.log.error('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + result.errorMessage);
-
+			    	grunt.fail.warn('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + result.errorMessage);
+					
 			    	notify({
 			            title: 'DataPacks',
 			            message: 'Failed - ' + jobName
