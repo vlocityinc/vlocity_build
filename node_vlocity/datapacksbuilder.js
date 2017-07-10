@@ -437,7 +437,7 @@ DataPacksBuilder.prototype.compile = function(lang, source, options, cb) {
                     // do we have include paths -- if so start probing them
                     if (request.options && request.options.includePaths && 
                         Array.isArray(request.options.includePaths)) {
-                        return this.tryReadFile(request.current , request.options.includePaths, (err, data) => {
+                        return this.tryReadFile(request.current + '.scss', request.options.includePaths, (err, data) => {
                             if(err) return done({ error: err });
                             done({ content: data });
                         });
