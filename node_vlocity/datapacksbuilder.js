@@ -2,7 +2,7 @@ var request = require('request');
 var yaml = require('js-yaml');
 var path = require('path');
 var fs = require('fs-extra');
-var sass = require('node-sass');
+var sass = require('sass.js');
 var stringify = require('json-stable-stringify');
 
 var UTF8_EXTENSIONS = [ "css", "json", "yaml", "scss", "html", "js"];
@@ -12,18 +12,18 @@ var DataPacksBuilder = module.exports = function(vlocity) {
 
     this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
     //this.defaultDataPack = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
+    this.compileQueue = []; // array with files that require compilation
 };
 
-DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo) {
-    var self = this;
-
+DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo, onComplete) {
+     var self = this;
+    
+    if (self.vlocity.verbose) {
+		console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', importPath, jobInfo.manifest, jobInfo);
+	}
+    
     var dataPackImport = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
-
-    var MAX_IMPORT_SIZE = 200000;
-
-    if (jobInfo.maximumFileSize) {
-        MAX_IMPORT_SIZE = jobInfo.maximumFileSize;
-    }
+    var maximumFileSize = jobInfo.maximumFileSize ? jobInfo.maximumFileSize : 200000;
 
     if (jobInfo.expansionPath) {
         importPath += '/' + jobInfo.expansionPath;
@@ -44,11 +44,16 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
 
         if (nextImport) {
             dataPackImport.dataPacks.push(nextImport);
-        }   
+        }
+    } while (nextImport && (jobInfo.singleFile || stringify(dataPackImport).length < maximumFileSize))
 
-    } while (nextImport && (jobInfo.singleFile || stringify(dataPackImport).length < MAX_IMPORT_SIZE))
-
-    return dataPackImport.dataPacks.length > 0 ? dataPackImport : null;  
+    self.compileQueuedData(result => {
+        if(result.hasErrors) {            
+            jobInfo.hasError = true;
+	    	jobInfo.errorMessage = result.errors.join('\n');
+        }
+        onComplete(dataPackImport.dataPacks.length > 0 ? dataPackImport : null);
+    });
 };
 
 DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath, jobInfo) {
@@ -130,7 +135,6 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
     importPaths.forEach(function(dataPackType) {
 
         var dataPackTypeDir = importPath + '/' + dataPackType;
-
         var allDataPacksOfType = self.vlocity.datapacksutils.getDirectories(dataPackTypeDir);
 
         if (self.vlocity.verbose) {
@@ -141,8 +145,6 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
             allDataPacksOfType.forEach(function(dataPackName) {
 
                 var metadataFilename = dataPackTypeDir + '/' + dataPackName + '/' + self.getDataPackLabel(dataPackTypeDir, dataPackName) + '_DataPack.json';
-               
-
                 var dataPackKey = dataPackType + '/' + dataPackName;
 
                 try {
@@ -188,11 +190,9 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
 
 DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, singleFile, jobInfo) {
     var self = this;
-
     var nextImport;
 
     dataPackKeys.forEach(function(dataPackKey) {
-
         if (!nextImport) {
             if (jobInfo.currentStatus[dataPackKey] == 'Ready') {
                 try {
@@ -204,7 +204,6 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
 
                     var fullPathToFiles = importPath + '/' + dataPackKey;
                     var parentData = self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_ParentKeys.json'];
-                    
                     var needsParents = false;
 
                     if (parentData) {
@@ -212,7 +211,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
 
                         if (!singleFile) {
                             parentData.forEach(function(parentKey) {
-                                if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
+                                    if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
                                     needsParents = true;
                                 }
                             });
@@ -237,8 +236,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                         }
                     }
 
-                    var dataPackDataMetadata = JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackLabel + '_DataPack.json'])
-
+                    var dataPackDataMetadata = JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackLabel + '_DataPack.json']);
                     var sobjectDataField = dataPackDataMetadata.VlocityRecordSObjectType;
 
                     // Always an Array in Actualy Data Model
@@ -249,13 +247,11 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     }
 
                     nextImport.VlocityDataPackData[sobjectDataField] = dataPackImportBuilt;
-
                     jobInfo.currentStatus[dataPackKey] = 'Added';
                 } catch (e) {
                     console.log('\x1b[31m', 'Error Formatting Deploy >>' ,'\x1b[0m', dataPackKey, e);
                     throw e;
                 }
-
             }
         }
     });
@@ -285,11 +281,10 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
             Object.keys(dataPackData).forEach(function(field) {            
                 if (dataFieldDef && dataFieldDef[field]) {
 
-                    var fileNames = dataPackData[field];
- 
-                    var fileType = self.dataPacksExpandedDefinition[dataPackType][currentDataField][field];
+                    var fileNames = dataPackData[field]; 
+                    var fieldData = self.dataPacksExpandedDefinition[dataPackType][currentDataField][field];
 
-                    if (fileType == 'object' && Array.isArray(fileNames)) {
+                    if (fieldData == 'object' && Array.isArray(fileNames)) {
 
                         var allDataPackFileData = [];
 
@@ -310,28 +305,39 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
 
                         if (self.allFileDataMap[filename]) {    
 
-                            if (fileType == 'list' || fileType == 'object') {
+                            if (fieldData == 'list' || fieldData == 'object') {
                                 dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename]), fullPathToFiles, dataPackType, field);
                             } else {
-                                if (self.compileOnBuild && self.dataPacksExpandedDefinition[dataPackType][currentDataField][field].CompiledField) {
-                                    if (self.dataPacksExpandedDefinition[dataPackType][currentDataField][field].FileType == 'scss') {
-
-                                        var includePathsForSass = [];
-
-                                        self.vlocity.datapacksutils.getDirectories(fullPathToFiles + "/..").forEach(function(dir) {
-                                            includePathsForSass.push(fullPathToFiles + "/../" + dir + "/");
-                                        });
-
-                                        var sassResult = sass.renderSync({
-                                          data: self.allFileDataMap[filename],
-                                          includePaths: includePathsForSass
-                                        });
-
-                                        dataPackData[self.dataPacksExpandedDefinition[dataPackType][currentDataField][field].CompiledField] = sassResult.css.toString();
-                                        dataPackData[field] = self.allFileDataMap[filename];
-                                    }
-                                } else if (!self.compileOnBuild || !self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields || 
-                                   self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields.indexOf(field) == -1) {
+                                if (self.compileOnBuild && fieldData.CompiledField) { 
+                                    // these options will be passed to the importer function 
+                                    var importerOptions = {
+                                        // collect paths to look for imported/inclyded files
+                                        includePaths: self.vlocity.datapacksutils.getDirectories(fullPathToFiles + "/..").map(function(dir) {
+                                            return path.normalize(fullPathToFiles + "/../" + dir + "/");
+                                        })
+                                    };
+                                    // Push job to compile qeueu; the data will be compiled after the import is completed
+                                    self.compileQueue.push({
+                                        filename: filename,
+                                        status: null,
+                                        language: fieldData.FileType,
+                                        source: self.allFileDataMap[filename],
+                                        options: {
+                                            // this is options that is passed to the compiler
+                                            importer: importerOptions
+                                        },
+                                        callback: function(error, compiledResult) {
+                                            if (error) {
+                                                return console.log('\x1b[31m', 'Failed to compile SCSS for >>' ,'\x1b[0m', filename, '\n', error.message);
+                                            }
+                                            dataPackData[fieldData.CompiledField] = compiledResult;
+                                        }
+                                    });
+                                    // save source into datapack to ensure the uncompiled data also gets deployed
+                                    dataPackData[field] = self.allFileDataMap[filename];
+                                } else if (!self.compileOnBuild || 
+                                           !self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields ||
+                                            self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields.indexOf(field) == -1) {
                                     dataPackData[field] = self.allFileDataMap[filename];
                                 }
                             }
@@ -352,3 +358,108 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
 
     return dataPackDataArray;
 };
+
+DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
+    var compilerBacklogSize = this.compileQueue.length;    
+    if(compilerBacklogSize == 0) {
+        return onComplete({
+            compileCount: 0, 
+            hasErrors: false
+        });
+    }
+    var compileCount = 0;
+    var errors = [];
+    while (this.compileQueue.length > 0) {
+        var job = this.compileQueue.pop();
+
+        if (this.vlocity.verbose) {
+            console.log('\x1b[31m', 'Start compilation of >>' ,'\x1b[0m', job.filename);
+        }
+
+        this.compile(job.language, job.source, job.options || {}, (error, compiledResult) => {
+            if(error) {
+                console.log('\x1b[31m', error.message, '>>' ,'\x1b[0m', '\n');
+                job.callback(error, null);
+                errors.push(error);
+            } else {
+                job.callback(null, compiledResult);
+                compileCount++;
+            }
+            
+            if(--compilerBacklogSize == 0) {
+                if (this.vlocity.verbose) {
+                    console.log('\x1b[31m', 'Compilation done >>' ,'\x1b[0m', 'compiled', compileCount, 'files with', errors.length, 'errors.');
+                }
+                onComplete({ 
+                    compileCount: compileCount,
+                    hasErrors: errors.length > 0, 
+                    errors: errors
+                });
+            }
+        });
+    }
+};
+
+/** 
+ * recusive async function that loops through a list of paths trying to read a file and returns the data 
+ * of that file if it is succesfull
+ * @param {string} filename - name of the file to search for
+ * @param {string[]} pathArray - Array of paths to search in
+ * @param {callback} cb - callback(err, fileData)
+ */
+DataPacksBuilder.prototype.tryReadFile = function(fileName, pathArray, cb, i) {
+    if ((i = i || 0) >= pathArray.length) return cb(new Error("Requested file not found: " + fileName), null);
+    fs.readFile(path.join(pathArray[i], fileName), 'UTF8', (err, data) => {
+        if (!err) return cb(null, data);                                    
+        this.tryReadFile(fileName, pathArray, cb, ++i);
+    });
+};
+
+DataPacksBuilder.prototype.compile = function(lang, source, options, cb) {
+    // This function contains the core code to execute compilation of source data
+    // add addtional languages here to support more compilation types    
+    switch(lang) {
+        case 'scss': {
+            // intercept file loading requests from libsass
+            sass.importer((request, done) => {
+                // (object) request
+                // (string) request.current path libsass wants to load (content of »@import "<path>";«)
+                // (string) request.previous absolute path of previously imported file ("stdin" if first)
+                // (string) request.resolved currentPath resolved against previousPath
+                // (string) request.path absolute path in file system, null if not found
+                // (mixed)  request.options the value of options.importer
+                // -------------------------------
+                // (object) result
+                // (string) result.path the absolute path to load from file system
+                // (string) result.content the content to use instead of loading a file
+                // (string) result.error the error message to print and abort the compilation
+                if (!request.path) {
+                    // do we have include paths -- if so start probing them
+                    if (request.options && request.options.includePaths && 
+                        Array.isArray(request.options.includePaths)) {
+                        return this.tryReadFile(request.current , request.options.includePaths, (err, data) => {
+                            if(err) return done({ error: err });
+                            done({ content: data });
+                        });
+                    }
+                }                
+                // return error
+                done({ error: "Unable to resolve requested SASS import; try setting the 'includePaths'" +
+                              "compiler option if your import is not in the root directory." });
+            });
+            sass.compile(source, options, (result) => {
+                if (result.status !== 0) {
+                    var error = new Error('SASS compilation failed, see error message for details: ' + result.formatted);
+                    cb(error, null);
+                } else {
+                    cb(null, result.text);
+                }                
+            });
+        } return;
+        default: {       
+            cb(new Error('Unknown language: ' + lang), null);
+        } return;
+    }
+};
+
+

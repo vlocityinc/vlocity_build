@@ -74,10 +74,10 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
     		return new Promise(function(resolve, reject) {
     			try {
 	    			self.doRunJob(jobInfo, action, resolve);
-	    		} catch (e) {
+	    		} catch (err) {
 	    			jobInfo.hasError = true;
-	    			jobInfo.errorMessage = e.message;
-	    			reject(jobInfo);
+	    			jobInfo.errorMessage = typeof err === 'string' ? err : err.message;
+	    			resolve(jobInfo);
 	    		}
     		});
     	})
@@ -420,35 +420,32 @@ DataPacksJob.prototype.buildFile = function(jobInfo, onComplete) {
 		jobInfo.currentPage = 1;
 	}
 
-	if (self.vlocity.verbose) {
-		console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', fullDataPath, jobInfo.manifest, jobInfo);
-	}
-	var dataJson = self.vlocity.datapacksbuilder.buildImport(fullDataPath, jobInfo.manifest, jobInfo);
-
-	if (dataJson && jobInfo.dataPackName) {
-		dataJson.name = jobInfo.dataPackName;
-	}
-
-	if (dataJson) {
-
-		var fileName = jobInfo.buildFile;
-
-		if (jobInfo.currentPage > 1) {
-			fileName += '_' + jobInfo.currentPage;
+	self.vlocity.datapacksbuilder.buildImport(fullDataPath, jobInfo.manifest, jobInfo, (dataJson) => {
+		if (dataJson && jobInfo.dataPackName) {
+			dataJson.name = jobInfo.dataPackName;
 		}
 
-		fs.outputFileSync(jobInfo.projectPath + '/' + fileName, stringify(dataJson, { space: 4 }), 'utf8');
-		// also create .resource-meta.xml
-		fs.outputFileSync(jobInfo.projectPath + '/' + fileName + '-meta.xml', '<?xml version="1.0" encoding="UTF-8"?><StaticResource xmlns="http://soap.sforce.com/2006/04/metadata"><cacheControl>Public</cacheControl><contentType>text/json</contentType></StaticResource>',
-				'utf8');
-		console.log('\x1b[31m', 'Creating File >>' ,'\x1b[0m', jobInfo.projectPath + '/' + jobInfo.buildFile);
+		if (dataJson) {
 
-		jobInfo.currentPage++;
+			var fileName = jobInfo.buildFile;
 
-		self.buildFile(jobInfo, onComplete);
-	} else {
-		onComplete(jobInfo);
-	}
+			if (jobInfo.currentPage > 1) {
+				fileName += '_' + jobInfo.currentPage;
+			}
+
+			fs.outputFileSync(jobInfo.projectPath + '/' + fileName, stringify(dataJson, { space: 4 }), 'utf8');
+			// also create .resource-meta.xml
+			fs.outputFileSync(jobInfo.projectPath + '/' + fileName + '-meta.xml', '<?xml version="1.0" encoding="UTF-8"?><StaticResource xmlns="http://soap.sforce.com/2006/04/metadata"><cacheControl>Public</cacheControl><contentType>text/json</contentType></StaticResource>',
+					'utf8');
+			console.log('\x1b[31m', 'Creating File >>' ,'\x1b[0m', jobInfo.projectPath + '/' + jobInfo.buildFile);
+
+			jobInfo.currentPage++;
+
+			self.buildFile(jobInfo, onComplete);
+		} else {
+			onComplete(jobInfo);
+		}
+	});
 }
 
 DataPacksJob.prototype.expandFile = function(jobInfo, onComplete) {
@@ -485,95 +482,95 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 		deployManifest = null;
 	}
 	
-	var dataJson = self.vlocity.datapacksbuilder.buildImport(jobInfo.projectPath, deployManifest, jobInfo);
+	self.vlocity.datapacksbuilder.buildImport(jobInfo.projectPath, deployManifest, jobInfo, (dataJson) => {
+		if (dataJson) {
+			fs.outputFileSync('./vlocity-deploy-temp/deploy.json', stringify(dataJson, { space: 4 }), 'utf8');
+		}
 
-	if (dataJson) {
-		fs.outputFileSync('./vlocity-deploy-temp/deploy.json', stringify(dataJson, { space: 4 }), 'utf8');
-	}
+		if (dataJson) {
+			this.vlocity.datapacks.import(dataJson, self.getOptionsFromJobInfo(jobInfo),
+				function(result) {
+					jobInfo.VlocityDataPackIds.push(result.VlocityDataPackId);
+					self.deployJob(jobInfo, onComplete);
+				},
+				function(err) {
+					self.getJobErrors(err, jobInfo, onComplete);
+				});
+		} else {
+			if ((jobInfo.activate || jobInfo.delete) && jobInfo.VlocityDataPackIds) {
+				async.eachSeries(jobInfo.VlocityDataPackIds, function(dataPackId, callback) {
 
-	if (dataJson) {
-		this.vlocity.datapacks.import(dataJson, self.getOptionsFromJobInfo(jobInfo),
-			function(result) {
-				jobInfo.VlocityDataPackIds.push(result.VlocityDataPackId);
-				self.deployJob(jobInfo, onComplete);
-			},
-			function(err) {
-				self.getJobErrors(err, jobInfo, onComplete);
-			});
-	} else {
-		if ((jobInfo.activate || jobInfo.delete) && jobInfo.VlocityDataPackIds) {
-			async.eachSeries(jobInfo.VlocityDataPackIds, function(dataPackId, callback) {
+					self.vlocity.datapacks.getDataPackData(dataPackId, function(dataPackData) {
 
-				self.vlocity.datapacks.getDataPackData(dataPackId, function(dataPackData) {
-
-					dataPackData.dataPacks.forEach(function(dataPack) {
-						if (jobInfo.postDeployResults == null) {
-							jobInfo.postDeployResults = [];
-						}
-
-						dataPack.VlocityDataPackRecords.forEach(function(record) {
-							if (record.VlocityRecordStatus == "Success") {
-								jobInfo.postDeployResults.push({ "Id": record.VlocityRecordSalesforceId });
+						dataPackData.dataPacks.forEach(function(dataPack) {
+							if (jobInfo.postDeployResults == null) {
+								jobInfo.postDeployResults = [];
 							}
-						})
-					});
 
-					if (jobInfo.activate) {
-						if (!jobInfo.activationStatus) {
-							jobInfo.activationStatus = {};
-						}
-
-						self.vlocity.datapacks.activate(dataPackId, ['ALL'], self.getOptionsFromJobInfo(jobInfo), 
-							function(activateResult) {
-								jobInfo.activationStatus[dataPackId] = 'Success';
-
-								if (jobInfo.delete) {
-									self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
-										function(res) {
-											callback();
-										},
-										function(res) {
-											callback();
-										});
-								} else {
-									callback();
+							dataPack.VlocityDataPackRecords.forEach(function(record) {
+								if (record.VlocityRecordStatus == "Success") {
+									jobInfo.postDeployResults.push({ "Id": record.VlocityRecordSalesforceId });
 								}
-							}, 
-							function(error) {
-								jobInfo.activationStatus[dataPackId] = 'Error';
-
-								if (jobInfo.delete) {
-									self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
-										function(res) {
-											callback();
-										}, 
-										function(res) {
-											callback();
-										});
-								} else {
-									callback();
-								}
+							})
 						});
 
-					} else if (jobInfo.delete) {
-						self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
-							function(res) {
-								callback();
-							}, 
-							function(res) {
-								callback();
+						if (jobInfo.activate) {
+							if (!jobInfo.activationStatus) {
+								jobInfo.activationStatus = {};
+							}
+
+							self.vlocity.datapacks.activate(dataPackId, ['ALL'], self.getOptionsFromJobInfo(jobInfo), 
+								function(activateResult) {
+									jobInfo.activationStatus[dataPackId] = 'Success';
+
+									if (jobInfo.delete) {
+										self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
+											function(res) {
+												callback();
+											},
+											function(res) {
+												callback();
+											});
+									} else {
+										callback();
+									}
+								}, 
+								function(error) {
+									jobInfo.activationStatus[dataPackId] = 'Error';
+
+									if (jobInfo.delete) {
+										self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
+											function(res) {
+												callback();
+											}, 
+											function(res) {
+												callback();
+											});
+									} else {
+										callback();
+									}
 							});
+
+						} else if (jobInfo.delete) {
+							self.vlocity.datapacks.delete(dataPackId, self.getOptionsFromJobInfo(jobInfo), 
+								function(res) {
+									callback();
+								}, 
+								function(res) {
+									callback();
+								});
+						}
+					});
+				}, function(err, result) {
+					if (onComplete) {
+						onComplete(jobInfo);
 					}
 				});
-			}, function(err, result) {
-				if (onComplete) {
-					onComplete(jobInfo);
-				}
-			});
-		} else if (onComplete) {
-			onComplete(jobInfo);
+			} else if (onComplete) {
+				onComplete(jobInfo);
+			}
 		}
-	}
+	});
 };
 
 DataPacksJob.prototype.getJobErrors = function(err, jobInfo, onComplete) {
