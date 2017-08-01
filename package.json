@@ -9,6 +9,10 @@
     "packBuildFile": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packBuildFile",
     "packExpandFile": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packExpandFile"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlocityinc/vlocity_build.git"
+  },
   "author": "build@vlocity.com",
   "license": "MIT",
   "engine": "node == 4.3.0",
@@ -29,6 +33,7 @@
     "lodash": "4.17.4",
     "sass.js": "0.10.4",
     "properties": "1.2.1",
-    "request": "2.81.0"
+    "request": "2.81.0",
+    "node-notifier": "^5.1.2"
   }
 }
