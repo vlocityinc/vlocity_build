@@ -180,11 +180,57 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
                     var addedSourceKeyField = false;
                     keyFields.forEach(function(keyField) {
                         if (currentData[keyField]) {
-                            newSourceKey += "/" + currentData[keyField];
-                            addedSourceKeyField = true;
+
+                            var objectSourceData = currentData[keyField];
+                            if (typeof objectSourceData === "object") {
+                                 var keyFieldsForId = self.utils.getSourceKeyDefinitionFields(objectSourceData.VlocityRecordSObjectType);
+
+                                var parentSourceAdded = false;
+
+                                keyFieldsForId.forEach(function(keyFieldForId) {
+
+                                    if (objectSourceData[keyFieldForId]) {
+                                        newSourceKey += "/" + objectSourceData[keyFieldForId];
+                                        parentSourceAdded = true;
+                                    }
+                                });
+
+                                if (!parentSourceAdded && objectSourceData.Name) {
+                                    newSourceKey += "/" + objectSourceData.Name;
+                                }
+
+                                addedSourceKeyField = true;
+                            } else {
+                                newSourceKey += "/" + objectSourceData;
+                                addedSourceKeyField = true;   
+                            }
+                            
                         } else if (currentData[self.utils.getWithoutNamespace(keyField)]) {
-                            newSourceKey += "/" + currentData[self.utils.getWithoutNamespace(keyField)];
-                            addedSourceKeyField = true;
+                            var objectSourceData = currentData[self.utils.getWithoutNamespace(keyField)];
+                            if (typeof objectSourceData === "object") {
+                                var keyFieldsForId = self.utils.getSourceKeyDefinitionFields(objectSourceData.VlocityRecordSObjectType);
+
+                                var parentSourceAdded = false;
+
+                                keyFieldsForId.forEach(function(keyFieldForId) {
+
+                                    var keyFieldForIdWithout = self.utils.getWithoutNamespace(keyFieldForIdWithout);
+
+                                    if (objectSourceData[keyFieldForIdWithout]) {
+                                        newSourceKey += "/" + objectSourceData[keyFieldForIdWithout];
+                                        parentSourceAdded = true;
+                                    }
+                                });
+
+                                if (!parentSourceAdded && objectSourceData.Name) {
+                                    newSourceKey += "/" + objectSourceData.Name;
+                                }
+
+                                addedSourceKeyField = true;
+                            } else {
+                                newSourceKey += "/" + objectSourceData;
+                                addedSourceKeyField = true;
+                            }
                         }
                     });
 
