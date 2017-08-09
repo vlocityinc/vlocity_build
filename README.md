@@ -35,8 +35,11 @@ vlocity.dataPackJob: The name of the Job being run.
 
 **All commands support "-propertyfile filename.properties"**
 
-#### Basic Commands
-The supported DataPacks actions are as follow:
+#### Basic Grunt Commands
+This tool is primarily meant to be used with Grunt.  
+https://gruntjs.com/
+
+The supported DataPacks actions for grunt are as follow:
 
 `packExport`: Export from a Salesforce org into a DataPack Directory  
 `packDeploy`: Deploy all contents of a DataPacks Directory  
@@ -44,15 +47,19 @@ The supported DataPacks actions are as follow:
 `packBuildFile`: Build a DataPacks Directory into a DataPack file of  
 `packExpandFile`: Create a DataPack Directory from a previosuly exported file
 
+Grunt commands follow the sytax:  
+```bash
+grunt packExport -propertyfile MY_ORG.properties -job JOB_NAME
+```
 
-When running a DataPack Job through ANT, the "vlocity.dataPackJob" property will be the job run. A property in a build.properties file can be overridden with: 
+The tool also includes an ANT wrapper for certain commands. When running a DataPack Job through ANT, the "vlocity.dataPackJob" property will be the job run. A property in a build.properties file can be overridden with: 
 ```bash
 ant packExport -Dvlocity.dataPackJob JOB_NAME
 ```
 
 By default ANT will use the build.properties file, however the build file can be replaced by specifying the -propertyfile in the command:
 ```bash
-ant packExport -properytfile MY_ORG.properties 
+ant packExport -propertyfile MY_ORG.properties 
 ```
 DataPack Job Files
 ------------
