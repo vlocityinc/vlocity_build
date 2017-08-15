@@ -1,6 +1,10 @@
 var fs = require("fs-extra");
 var path  = require('path');
 
+// use consts for setting the namespace prefix so that we easily can reference it later on in this file
+const namespacePrefix = 'vlocity_namespace';
+const namespaceFieldPrefix = '%' + namespacePrefix + '%__';
+
 var DataPacksUtils = module.exports = function(vlocity) {
 	this.vlocity = vlocity || {};
 
@@ -29,11 +33,12 @@ DataPacksUtils.prototype.isValidSObject = function(dataPackType, SObjectType) {
 }
 
 DataPacksUtils.prototype.getWithoutNamespace = function(field) {
-	return field.substring(field.indexOf('%vlocity_namespace%__') + 21);
+	var nspos = field.indexOf(namespaceFieldPrefix);
+	return nspos != -1 ? field.substring(nspos + namespaceFieldPrefix.length) : field;
 }
 
 DataPacksUtils.prototype.getWithNamespace = function(field) {
-	return '%vlocity_namespace%__' + field;
+	return namespaceFieldPrefix + field;
 }
 
 DataPacksUtils.prototype.getDataField = function(dataPackData) {
