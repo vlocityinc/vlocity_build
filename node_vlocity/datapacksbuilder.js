@@ -211,7 +211,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
 
                         if (!singleFile) {
                             parentData.forEach(function(parentKey) {
-                                    if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
+                                if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
                                     needsParents = true;
                                 }
                             });
