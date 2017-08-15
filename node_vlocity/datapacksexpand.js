@@ -40,7 +40,7 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         if (key.indexOf('#') == 0) {
             filename += key.substring(1);
         } else if (dataPackData[key] && typeof dataPackData[key] === "string") {
-             filename += unidecode(dataPackData[key].replace(/\//g, "-"));
+            filename += unidecode(dataPackData[key].replace(/\//g, "-"));
         }
     });
 
@@ -52,7 +52,10 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         }
     }
 
-    return filename;
+    // fields can contain the Vlocity namespace placeholder
+    // we remove the namespace placeholder from files names to make them
+    // more readable
+    return filename.replace(/%vlocity_namespace%__/g,"");
 };
 
 DataPacksExpand.prototype.getDataPackName = function(dataPackType, sObjectType, dataPackData) {
@@ -294,55 +297,67 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
         if ((!options.manifestOnly || self.utils.isInManifest(dataPackData.VlocityDataPackData, options.manifest))) {
 
             var dataField = self.utils.getDataField(dataPackData);
+            if (!dataField)
+                return;
 
-            if (dataField) {
+            var dataPackDataChildern = dataPackData.VlocityDataPackData[dataField];
+            if (!dataPackDataChildern)
+                return;
 
-                var dataPackDataChild = dataPackData.VlocityDataPackData[dataField];
+            dataPackDataChildern.forEach((dataPackDataChild) => {
+                // Top level is always an array with 1 element -- not always true
+                //dataPackDataChild = dataPackDataChild[0];
 
-                if (dataPackDataChild) {
+                var parentName = self.getDataPackFolder(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
+                var dataPackName = self.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
 
-                    // Top level is always an array with 1 element
-                    dataPackDataChild = dataPackDataChild[0];
-
-                    var parentName = self.getDataPackFolder(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
-
-                    var dataPackName = self.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
-                    
-                    if (!isPagination) {
-                        fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
-                    }
-
-                    if (dataPackData.VlocityDataPackParents && dataPackData.VlocityDataPackParents.length > 0) {
-                        var allParentKeys = [];
-
-                        dataPackData.VlocityDataPackParents.forEach(function(parentKey) {
-                            if (options.vlocityKeysToNewNamesMap[parentKey]) {
-                                allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
-                            }
-                        });
-
-                        if (allParentKeys.length > 0) {
-                            self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys","json", allParentKeys, isPagination);
-                        }
-                    }
-
-                    if (dataPackData.VlocityDataPackAllRelationships) {
-                        var allRels = {};
-
-                        Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function(relKey) {
-                            if (options.vlocityKeysToNewNamesMap[relKey]) {
-                                allRels[options.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];
-                            }
-                        });
-
-                        if (Object.keys(allRels).length > 0) {
-                            self.writeFile(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json", allRels, isPagination);
-                        }
-                    }
-
-                    self.processDataPackData(dataPackType, parentName, null, dataPackDataChild, isPagination);
+                if (!isPagination) {
+                    fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
                 }
-            }
+
+                // handle additional dependencies
+                var htmlTemplateRels = [];
+                /*if (dataPackDataChild.hasOwnProperty("%vlocity_namespace%__PropertySet__c")) { 
+                    var propertySet = JSON.parse(dataPackDataChild["%vlocity_namespace%__PropertySet__c"]);
+                    var htmlTemplates = propertySet["elementTypeToHTMLTemplateMapping"];
+                    htmlTemplateRels = Object.keys(htmlTemplates).map((k) => "VlocityUITemplate/" + htmlTemplates[k]);
+                }*/
+
+                if (dataPackData.VlocityDataPackParents && dataPackData.VlocityDataPackParents.length > 0) {
+                    var allParentKeys = htmlTemplateRels.slice(0);
+
+                    dataPackData.VlocityDataPackParents.forEach(function (parentKey) {
+                        if (options.vlocityKeysToNewNamesMap[parentKey]) {
+                            allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
+                        }
+                    });
+
+                    if (allParentKeys.length > 0) {
+                        self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys", "json", allParentKeys, isPagination);
+                    }
+                }
+
+                if (dataPackData.VlocityDataPackAllRelationships) {
+                    var allRels = {};
+
+                    htmlTemplateRels.forEach(function (htmlTemplateId) {
+                        allRels[htmlTemplateId] = "Reference by Salesforce Id";
+                        allRels[htmlTemplateId] = "Reference by Salesforce Id";
+                    });
+
+                    Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function (relKey) {
+                        if (options.vlocityKeysToNewNamesMap[relKey]) {
+                            allRels[options.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];
+                        }
+                    });
+
+                    if (Object.keys(allRels).length > 0) {
+                        self.writeFile(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json", allRels, isPagination);
+                    }
+                }
+
+                self.processDataPackData(dataPackType, parentName, null, dataPackDataChild, isPagination);
+            });            
         }
     }
 }
