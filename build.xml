@@ -2,6 +2,12 @@
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/lib/ant-contrib-1.0b3.jar" />
 
+	<taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="${basedir}/lib/ant-salesforce.jar" />        	
+        </classpath>
+    </taskdef>
+
 	<property environment="env"/>
 
 	<!-- If no propertyfile was passed in command line, attempt to load a build.properties if it exists -->
@@ -72,6 +78,15 @@
 			<property name="sf.maxPoll" value="500" />
 		</else>
 	</if>
+
+    <target name="salesforceDeploy">
+	   	<sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${serverurl}" maxPoll="${maxPoll}" deployRoot="${basedir}/${sf.sourcedir}" pollWaitMillis="1000" />
+  	</target>
+
+  	<target name="salesforceRetrieve">
+  		<echo> ${sf.username} - ${basedir}/${sf.sourcedir}</echo>
+		<sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" retrieveTarget="${basedir}/${sf.sourcedir}" unpackaged="${basedir}/${sf.sourcedir}/package.xml" />
+    </target>
 
 	<target name="packExport" description="">
 		<runDataPackJob packCommand="packExport" job="${vlocity.dataPackJob}" />
