@@ -178,10 +178,60 @@
             ]
         }
     },
+    "IntegrationProcedure": {
+        "%vlocity_namespace%__Element__c": {
+            "FileName": [
+                "#Elements"
+            ],
+            "FilterFields": [
+                "%vlocity_namespace%__OmniScriptVersion__c"
+            ],
+            "JsonFields": [
+                "%vlocity_namespace%__PropertySet__c"
+            ],
+            "SortFields": [
+                "%vlocity_namespace%__Level__c",
+                "%vlocity_namespace%__Order__c"
+            ]
+        },
+        "%vlocity_namespace%__OmniScript__c": {
+            "%vlocity_namespace%__CustomJavaScript__c": {
+                "FileName": [
+                    "#JavaScript"
+                ],
+                "FileType": "js"
+            },
+            "%vlocity_namespace%__Element__c": "list",
+            "%vlocity_namespace%__PropertySet__c": {
+                "FileName": [
+                    "#PropertySet"
+                ]
+            },
+            "%vlocity_namespace%__TestHTMLTemplates__c": {
+                "FileName": [
+                    "#HTMLTemplates"
+                ],
+                "FileType": "html"
+            },
+            "FolderName": [
+                "%vlocity_namespace%__Type__c",
+                "%vlocity_namespace%__SubType__c",
+                "%vlocity_namespace%__Language__c"
+            ],
+            "FileName": [
+                "%vlocity_namespace%__Type__c",
+                "%vlocity_namespace%__SubType__c",
+                "%vlocity_namespace%__Language__c"
+            ]
+        }
+    },
     "OmniScript": {
         "%vlocity_namespace%__Element__c": {
             "FileName": [
                 "#Elements"
+            ],
+            "FilterFields": [
+                "%vlocity_namespace%__OmniScriptVersion__c"
             ],
             "JsonFields": [
                 "%vlocity_namespace%__PropertySet__c"

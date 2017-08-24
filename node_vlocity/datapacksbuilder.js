@@ -268,10 +268,14 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
 
                     var nextImportHash = self.vlocity.datapacksutils.getDataPackHash(nextImport);
 
+                    fs.outputFileSync('vlocity-deploy-temp/hashedAtImport.json', stringify(nextImport, { space: 4 }), 'utf8');
+
                     if (jobInfo.hashOfDataPacksExport && jobInfo.hashOfDataPacksExport[dataPackKey] == nextImportHash) {
                         nextImport = null;
                         jobInfo.currentStatus[dataPackKey] = 'Skipped';
                         console.log('\x1b[31m', 'Skipping Deploy - No Changes >>' ,'\x1b[0m', dataPackKey);
+                    } else {
+                        console.log('\x1b[31m', 'Adding to Deploy >>' ,'\x1b[0m', dataPackKey);
                     }
                 } catch (e) {
                     console.log('\x1b[31m', 'Error Formatting Deploy >>' ,'\x1b[0m', dataPackKey, e);

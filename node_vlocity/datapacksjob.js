@@ -693,10 +693,9 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
 				jobInfo.hashOfDataPacksExport[dataPack.VlocityDataPackKey] = self.vlocity.datapacksutils.getDataPackHash(dataPack);
 			});
 
-			
 			jobInfo.projectPath = savedProjectPath;
 			jobInfo.buildFile = savedBuildFile;
-
+			
 			fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
 
 			jobInfo.currentStatus = {};
@@ -705,7 +704,10 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
 			jobInfo.VlocityDataPackIds = [];
 
 			if (jobInfo.cancelDeploy) {
-				onComplete(jobInfo);
+
+				self.buildFile(jobInfo, function(jobInfo) {
+					onComplete(jobInfo);
+				});
 			} else {
 				self.runJobWithInfo(jobInfo, 'Deploy', onComplete, onComplete, false);
 			}

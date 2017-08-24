@@ -74,13 +74,19 @@
 			<property name="maxPoll" value="${sf.maxPoll}" />
 		</then>
 		<else>
-			<property name="maxPoll" value="500" />
-			<property name="sf.maxPoll" value="500" />
+			<property name="maxPoll" value="5000" />
+			<property name="sf.maxPoll" value="5000" />
 		</else>
 	</if>
 
     <target name="salesforceDeploy">
+    	<echo> ${sf.username} - ${basedir}/${sf.sourcedir}</echo>
 	   	<sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${serverurl}" maxPoll="${maxPoll}" deployRoot="${basedir}/${sf.sourcedir}" pollWaitMillis="1000" />
+  	</target>
+
+  	<target name="salesforceDeployTest">
+  		<echo> ${sf.username} - ${basedir}/${sf.sourcedir}</echo>
+	   	<sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${serverurl}" maxPoll="${maxPoll}" deployRoot="${basedir}/${sf.sourcedir}" pollWaitMillis="1000" checkOnly="true" />
   	</target>
 
   	<target name="salesforceRetrieve">
