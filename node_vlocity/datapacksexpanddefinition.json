@@ -71,7 +71,16 @@
             "%vlocity_namespace%__CalculationProcedureVersion__c": "object"
         }
     },
-     "ContractType": {
+    "ContextAction": {
+        "%vlocity_namespace%__ContextAction__c": {}
+    },
+    "ContextDimension": {
+        "%vlocity_namespace%__ContextDimension__c": {}
+    },
+    "ContextScope": {
+        "%vlocity_namespace%__ContextScope__c": {}
+    },
+    "ContractType": {
         "%vlocity_namespace%__ContractType__c": {}
     },
     "DataRaptor": {
@@ -94,7 +103,10 @@
             ],
             "SortFields": [
                 "%vlocity_namespace%__DomainObjectCreationOrder__c",
-                "%vlocity_namespace%__InterfaceObjectLookupOrder__c"
+                "%vlocity_namespace%__InterfaceObjectLookupOrder__c",
+                "%vlocity_namespace%__DomainObjectAPIName__c",
+                "%vlocity_namespace%__DomainObjectFieldAPIName__c",
+                "%vlocity_namespace%__InterfaceFieldAPIName__c"
             ]
         }
     },
@@ -158,26 +170,6 @@
             ]
         }
     },
-    "ItemImplementation": {
-        "%vlocity_namespace%__ItemImplementation__c": {}
-    },
-    "ManualQueue": {
-        "%vlocity_namespace%__ManualQueue__c": {}
-    },
-    "ObjectClass": {
-        "%vlocity_namespace%__ObjectClass__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "ObjectLayout": {
-        "%vlocity_namespace%__ObjectLayout__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
     "IntegrationProcedure": {
         "%vlocity_namespace%__Element__c": {
             "FileName": [
@@ -195,33 +187,45 @@
             ]
         },
         "%vlocity_namespace%__OmniScript__c": {
-            "%vlocity_namespace%__CustomJavaScript__c": {
-                "FileName": [
-                    "#JavaScript"
-                ],
-                "FileType": "js"
-            },
             "%vlocity_namespace%__Element__c": "list",
             "%vlocity_namespace%__PropertySet__c": {
                 "FileName": [
                     "#PropertySet"
                 ]
             },
-            "%vlocity_namespace%__TestHTMLTemplates__c": {
-                "FileName": [
-                    "#HTMLTemplates"
-                ],
-                "FileType": "html"
-            },
-            "FolderName": [
-                "%vlocity_namespace%__Type__c",
-                "%vlocity_namespace%__SubType__c",
-                "%vlocity_namespace%__Language__c"
-            ],
             "FileName": [
                 "%vlocity_namespace%__Type__c",
-                "%vlocity_namespace%__SubType__c",
-                "%vlocity_namespace%__Language__c"
+                "%vlocity_namespace%__SubType__c"
+            ],
+            "FilterFields": [
+                "%vlocity_namespace%__Version__c"
+            ],
+            "FolderName": [
+                "%vlocity_namespace%__Type__c",
+                "%vlocity_namespace%__SubType__c"
+            ]
+        }
+    },
+    "ItemImplementation": {
+        "%vlocity_namespace%__ItemImplementation__c": {}
+    },
+    "ManualQueue": {
+        "%vlocity_namespace%__ManualQueue__c": {}
+    },
+    "ObjectClass": {
+        "%vlocity_namespace%__ObjectClass__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
+    "ObjectContextRule": {
+        "%vlocity_namespace%__ObjectContextRule__c": {}
+    },
+    "ObjectLayout": {
+        "%vlocity_namespace%__ObjectLayout__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
             ]
         }
     },
@@ -260,12 +264,15 @@
                 ],
                 "FileType": "html"
             },
-            "FolderName": [
+            "FileName": [
                 "%vlocity_namespace%__Type__c",
                 "%vlocity_namespace%__SubType__c",
                 "%vlocity_namespace%__Language__c"
             ],
-            "FileName": [
+            "FilterFields": [
+                "%vlocity_namespace%__Version__c"
+            ],
+            "FolderName": [
                 "%vlocity_namespace%__Type__c",
                 "%vlocity_namespace%__SubType__c",
                 "%vlocity_namespace%__Language__c"
@@ -280,6 +287,9 @@
     },
     "OrchestrationPlanDefinition": {
         "%vlocity_namespace%__OrchestrationPlanDefinition__c": {}
+    },
+    "PriceList": {
+        "%vlocity_namespace%__PriceList__c": {}
     },
     "Pricebook2": {
         "Pricebook2": {
@@ -299,6 +309,9 @@
                 "Name"
             ]
         }
+    },
+    "PricingVariable": {
+        "%vlocity_namespace%__PricingVariable__c": {}
     },
     "Product2": {
         "%vlocity_namespace%__AttributeAssignment__c": {
@@ -388,6 +401,9 @@
             ]
         }
     },
+    "Promotion": {
+        "%vlocity_namespace%__Promotion__c": {}
+    },
     "Rule": {
         "%vlocity_namespace%__RuleAction__c": {
             "FileName": [
@@ -448,14 +464,14 @@
         "%vlocity_namespace%__ProductRelationship__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
-        "%vlocity_namespace%__Rule__c": [
-            "%vlocity_namespace%__GlobalKey__c"
+        "%vlocity_namespace%__PromotionItem__c": [
+            "Unique_Code__c"
         ],
         "%vlocity_namespace%__Promotion__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
-        "%vlocity_namespace%__PromotionItem__c": [
-            "Unique_Code__c"
+        "%vlocity_namespace%__Rule__c": [
+            "%vlocity_namespace%__GlobalKey__c"
         ],
         "Product2": [
             "%vlocity_namespace%__GlobalKey__c"
@@ -467,6 +483,12 @@
     },
     "System": {
         "%vlocity_namespace%__System__c": {}
+    },
+    "TimePlan": {
+        "%vlocity_namespace%__TimePlan__c": {}
+    },
+    "TimePolicy": {
+        "%vlocity_namespace%__TimePolicy__c": {}
     },
     "UIFacet": {
         "%vlocity_namespace%__UIFacet__c": {
@@ -485,13 +507,16 @@
     "VlocityAction": {
         "%vlocity_namespace%__VlocityAction__c": {}
     },
-     "VlocityAttachment": {
+    "VlocityAttachment": {
         "%vlocity_namespace%__VlocityAttachment__c": {}
     },
     "VlocityCard": {
         "%vlocity_namespace%__VlocityCard__c": {
             "%vlocity_namespace%__Definition__c": "json"
         }
+    },
+    "VlocityFunction": {
+        "%vlocity_namespace%__VlocityFunction__c": {}
     },
     "VlocityPicklist": {
         "%vlocity_namespace%__Picklist__c": {}
@@ -541,20 +566,5 @@
     },
     "VqResource": {
         "%vlocity_namespace%__VqResource__c": {}
-    },
-    "TimePolicy": {
-        "%vlocity_namespace%__TimePolicy__c": {}
-    },
-    "TimePlan": {
-        "%vlocity_namespace%__TimePlan__c": {}
-    },
-    "PricingVariable": {
-        "%vlocity_namespace%__PricingVariable__c": {}
-    },
-    "Promotion": {
-        "%vlocity_namespace%__Promotion__c": {}
-    },
-    "PriceList": {
-        "%vlocity_namespace%__PriceList__c": {}
     }
 }
