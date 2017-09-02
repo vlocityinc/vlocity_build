@@ -55,8 +55,6 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
     var toolingApi = self.vlocity.jsForceConnection.tooling;
 
 	function executeJob() {
-		var prePromise;
-
     	if (jobInfo.preJobApex && jobInfo.preJobApex[action]) {
 
     		// Builds the JSON Array sent to Anon Apex that gets run before deploy
@@ -65,12 +63,12 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
     			self.vlocity.datapacksbuilder.initializeImportStatus(jobInfo.projectPath + '/' + jobInfo.expansionPath, jobInfo.manifest, jobInfo);
     		}
 
-    		prePromise = self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], jobInfo.preDeployDataSummary);
+    		var prePromise = self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], jobInfo.preDeployDataSummary);
     	} else {
-    		prePromise = Promise.resolve(true);
+    		var prePromise = Promise.resolve(true);
     	}
 
-    	prePromise.then(function() {
+    	prePromise.then(function(preDeployResult) {
     		return new Promise(function(resolve, reject) {
     			try {
 	    			self.doRunJob(jobInfo, action, resolve);
