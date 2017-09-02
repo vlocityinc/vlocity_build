@@ -77,8 +77,6 @@ module.exports = function (grunt) {
 
 	    	vlocity.datapacksjob.runJob(dataPacksJobsData, jobName, action,
 	    		function(result) {
-	    			grunt.log.ok('DataPacks Job Success - ' + action + ' - ' + jobName);
-					
 					notifier.notify({
 			            title: 'Vlocity deployment tools',
 						message: 'Success - ' + jobName + '\n'+
@@ -86,20 +84,20 @@ module.exports = function (grunt) {
 						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
 						sound: true
 					}, function (err, response) {
-						 callback(result);
+						grunt.log.ok('DataPacks Job Success - ' + action + ' - ' + jobName);
+						callback(result);
 					});
 				},						
 		    	function(result) {
-					grunt.fail.warn('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + result.errorMessage);
-					
-			    	notifier.notify({
+					notifier.notify({
 			            title: 'Vlocity deployment tools',
 						message: 'Failed - ' + jobName + '\n'+
 								 'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',						
 						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
 						sound: true
 					}, function (err, response) {
-						 callback(result);
+						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + (result.errorMessage || result));
+						callback(result);
 					});
 			}, skipUpload);
 	    } else {
@@ -111,7 +109,6 @@ module.exports = function (grunt) {
 	function runTaskForAllJobFiles(taskName, callback)
 	{
         var dataPacksJobsData = {};
-
         var properties = grunt.config.get('properties');
 
 		if (properties['vlocity.dataPacksJobFolder']) {
