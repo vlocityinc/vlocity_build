@@ -29,7 +29,6 @@ var Vlocity = module.exports = function(options) {
 	this.datapacksexpand = new datapacksexpand(this);
 	this.datapacksbuilder = new datapacksbuilder(this);
 	this.datapacksexportbuildfile = new datapacksexportbuildfile(this);
-	
 };
 
 Vlocity.prototype.checkLogin = function(thenRun) {

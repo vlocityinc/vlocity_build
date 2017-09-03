@@ -74,6 +74,22 @@ DataPacksUtils.prototype.getJsonFields = function(dataPackType, SObjectType) {
 	return this.getExpandedDefinition(dataPackType, SObjectType, "JsonFields");
 }
 
+DataPacksUtils.prototype.isAllowParallel = function(dataPackType) {
+	return this.getExpandedDefinition(dataPackType, null, "SupportParallel");
+}
+
+DataPacksUtils.prototype.isSoloDeploy = function(dataPackType) {
+	return this.getExpandedDefinition(dataPackType, null, "SoloDeploy");
+}
+
+DataPacksUtils.prototype.isAllowHeadersOnly = function(dataPackType) {
+	return this.getExpandedDefinition(dataPackType, null, "AllowHeadersOnly");
+}
+
+DataPacksUtils.prototype.getExportGroupSizeForType = function(dataPackType) {
+	return this.getExpandedDefinition(dataPackType, null, "ExportGroupSize");
+}
+
 DataPacksUtils.prototype.getApexImportDataKeys = function(SObjectType) {
 	var defaults = ["VlocityRecordSObjectType", "Name" ];
 	var apexImportDataKeys = this.dataPacksExpandedDefinition.ApexImportDataKeys[SObjectType];
@@ -257,67 +273,71 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
 			    }
 		    })
 		    .then(function() {
+		    	return new Promise(function(resolve, reject) {
+			    	if (apexFileData.length > 32000)
+			    	{
+			    		console.log('\x1b[36m', '>>' ,'\x1b[o File Data Length: ' + apexFileData.length + ' is too large for a single Anonymous Apex call. Please use the preStepApex or remove the CURRENT_DATA_PACKS_CONTEXT_DATA variable from your Apex classes for preJobApex.');
+			    		return reject();
+			    	}
 
-		    	if (apexFileData.length > 32000)
-		    	{
-		    		console.log('\x1b[36m', '>>' ,'\x1b[o File Data Length: ' + apexFileData.length + ' is too large for a single Anonymous Apex call. Please use the preStepApex or remove the CURRENT_DATA_PACKS_CONTEXT_DATA variable from your Apex classes for preJobApex.');
-		    		return Promise.reject();
-		    	}
+			    	console.log('Executing executeAnonymous: ', apexFileData);
 
-				self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, function(err, res) {
+					self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, function(err, res) {
 
-					if (res == null) {
-						console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', err);
-					}
-
-					if (res.success === false) {
-						if (res.compileProblem) {
-							console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', res.compileProblem);
-						} 
-						if (res.exceptionMessage) {
-							console.log('\x1b[36m', '>>' ,'\x1b[0m Exception Message', res.exceptionMessage);
-						} 
-
-						if (res.exceptionStackTrace) {
-							console.log('\x1b[36m', '>>' ,'\x1b[0m Exception StackTrace', res.exceptionStackTrace);
+						console.log('Executing res: ', res, err);
+						if (res == null) {
+							console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', err);
 						}
-					}
 
-					if (shouldDebug) {
-						self.vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
-							
-                            self.vlocity.jsForceConnection.request("/services/data/v37.0/tooling/sobjects/ApexLog/" + res.records[0].Id + "/Body/", function(err, logBody) {
-                            	
-                                if (err) { 
-                                    console.error('err', err); 
-                                }
+						if (res.success === false) {
+							if (res.compileProblem) {
+								console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', res.compileProblem);
+							} 
+							if (res.exceptionMessage) {
+								console.log('\x1b[36m', '>>' ,'\x1b[0m Exception Message', res.exceptionMessage);
+							} 
 
-                                var allLoggingStatments = [];
+							if (res.exceptionStackTrace) {
+								console.log('\x1b[36m', '>>' ,'\x1b[0m Exception StackTrace', res.exceptionStackTrace);
+							}
+						}
 
-                                logBody.split("\n").forEach(function(line) {
-                                    var isDebug = line.indexOf('USER_DEBUG');
+						if (shouldDebug) {
+							self.vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
+								
+	                            self.vlocity.jsForceConnection.request("/services/data/v37.0/tooling/sobjects/ApexLog/" + res.records[0].Id + "/Body/", function(err, logBody) {
+	                            	
+	                                if (err) { 
+	                                    console.error('err', err); 
+	                                }
 
-                                    if (isDebug > -1) {
-                                       console.log(line);
-                                    }
-                                });
+	                                var allLoggingStatments = [];
 
-                                if (callback) {
-									callback();
-								} else {
-									return Promise.resolve();
-								}
-                            });
-	                    });
-					} else {
-						if (callback) {
-							callback();
+	                                logBody.split("\n").forEach(function(line) {
+	                                    var isDebug = line.indexOf('USER_DEBUG');
+
+	                                    if (isDebug > -1) {
+	                                       console.log(line);
+	                                    }
+	                                });
+
+	                                if (callback) {
+										callback();
+									} else {
+										return resolve();
+									}
+	                            });
+		                    });
 						} else {
-							return Promise.resolve();
+							resolve();
 						}
-					}
-				});				
-			});
+					});				
+				});
+		    }).then(function(){
+		    	if (callback) {
+		    		callback();
+		    	}
+		    });
 		} else {
 			return Promise.resolve();
 		}
@@ -350,6 +370,32 @@ DataPacksUtils.prototype.getDataPackHash = function(dataPack) {
 
 	return this.hashCode(stringify(clonedDataPackData));
 };
+
+DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
+
+	var totalRemaining = 0;
+	var successfulCount = 0;
+	var errorsCount = 0;
+
+	Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
+		if (jobInfo.currentStatus[dataPackKey] == 'Ready') {
+			totalRemaining++;
+		} else if (jobInfo.currentStatus[dataPackKey] == 'Header') {
+			totalRemaining++;
+		} else if (jobInfo.currentStatus[dataPackKey] == 'Success') {
+			successfulCount++;
+		} else if (jobInfo.currentStatus[dataPackKey] == 'Error') {
+			errorsCount++;
+		}
+	});
+
+	var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
+
+	console.log('\x1b[32m', 'Successful: ' + successfulCount + ' Errors: ' + errorsCount + ' Remaining: ' + totalRemaining + ' Elapsed Time: ' + Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's');
+};
+
+
+
 
 
 

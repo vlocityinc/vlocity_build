@@ -34,7 +34,7 @@ module.exports = function (grunt) {
 		try {
 		    queryDefinitions = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/QueryDefinitions.yaml', 'utf8'));
 		} catch (e) {
-		    
+		    //console.log(e);
 		}
 
 		var dataPackFolderExists;
@@ -47,7 +47,7 @@ module.exports = function (grunt) {
 
 	      			dataPacksJobsData[fileName].QueryDefinitions = queryDefinitions;
 	      		} catch (e1) { 
-	      			//console.log(e);
+	      			//console.log(e1);
 	      		}
 	    	});
 		} catch (e2) {
@@ -74,6 +74,18 @@ module.exports = function (grunt) {
 				}];
 			}
 
+            if (action == 'ExportSingle' && grunt.option('type') && grunt.option('id')) {
+                dataPacksJobsData[jobName].queries = null;
+                dataPacksJobsData[jobName].manifest = {};
+                dataPacksJobsData[jobName].manifest[grunt.option('type')] = [ grunt.option('id') ];
+
+                if (grunt.option('depth') != null) {
+                     dataPacksJobsData[jobName].maxDepth = parseInt(grunt.option('depth'));
+                }
+
+                action = 'Export';
+            }
+            
 	    	vlocity.datapacksjob.runJob(dataPacksJobsData, jobName, action,
 	    		function(result) {
 	    			grunt.log.ok('DataPacks Job Success - ' + action + ' - ' + jobName);
@@ -99,8 +111,7 @@ module.exports = function (grunt) {
 	    }
 	}
 
-	function runTaskForAllJobFiles(taskName, callback)
-	{
+	function runTaskForAllJobFiles(taskName, callback) {
         var dataPacksJobsData = {};
 
         var properties = grunt.config.get('properties');
@@ -141,7 +152,7 @@ module.exports = function (grunt) {
 	            }, true);
 	        })
 	    } catch (e) {
-	    	console.log('No DataPacksJob Folder Found: ' + dataPacksJobFolder);
+	    	console.log('Job Failed With Exception: ' + e.stack);
 	    }
 	}
 
@@ -162,6 +173,15 @@ module.exports = function (grunt) {
 		  	done();
 		});
 	});
+
+    grunt.registerTask('packExportSingle', 'Export a Single DataPack for this Job', function() {
+        
+        var done = this.async();
+
+        dataPacksJob('ExportSingle', grunt.option('job'), function() {
+            done();
+        });
+    });
 
 	grunt.registerTask('packBuildFile', 'Run a DataPacks Job', function() {
 		

@@ -46,15 +46,22 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo)
 
     var nextImport;
 
+    var currentDataPackKeysInImport = {};
+
     do {
         
-        nextImport = self.getNextImport(importPath, Object.keys(jobInfo.currentStatus), jobInfo.singleFile === true, jobInfo);
+        nextImport = self.getNextImport(importPath, Object.keys(jobInfo.currentStatus), jobInfo.singleFile === true, jobInfo, currentDataPackKeysInImport);
 
         if (nextImport) {
+            currentDataPackKeysInImport[nextImport.VlocityDataPackKey] = true;
             dataPackImport.dataPacks.push(nextImport);
-        }   
+          
+            if (!jobInfo.singleFile && self.vlocity.datapacksutils.isSoloDeploy(nextImport.VlocityDataPackType)) {
+                break;
+            }
+        }
 
-    } while (nextImport && (jobInfo.singleFile || (stringify(dataPackImport).length < maxImportSize &&  dataPackImport.dataPacks.length < maxImportCount)))
+    } while (nextImport && (jobInfo.singleFile || (stringify(dataPackImport).length < maxImportSize && dataPackImport.dataPacks.length < maxImportCount)))
 
     return dataPackImport.dataPacks.length > 0 ? dataPackImport : null;  
 };
@@ -105,12 +112,18 @@ DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath, jobInfo, dataPack
 };
 
 DataPacksBuilder.prototype.getDataPackLabel = function(dataPackTypeDir, dataPackName) {
-    var allFiles = this.vlocity.datapacksutils.getFiles(dataPackTypeDir + '/' + dataPackName);
-    for (var i = 0; i < allFiles.length; i++) {
-        if (allFiles[i].indexOf('_DataPack.json') != -1) {
-           return allFiles[i].substr(0, allFiles[i].indexOf('_DataPack.json'));
+    try {
+            var allFiles = this.vlocity.datapacksutils.getFiles(dataPackTypeDir + '/' + dataPackName);
+        for (var i = 0; i < allFiles.length; i++) {
+            if (allFiles[i].indexOf('_DataPack.json') != -1) {
+               return allFiles[i].substr(0, allFiles[i].indexOf('_DataPack.json'));
+            }
         }
+    } catch (e) {
+        // Means file deleted
     }
+
+    return null;
 };
 
 DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifest, jobInfo) {
@@ -189,104 +202,149 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
             });
         }
     });
+
     var hasMissingEntries = false;
+
     Object.keys(self.pendingFromManifest).forEach(function(key) {
         if (self.pendingFromManifest[key].length > 0) {
             hasMissingEntries = true;
         }
     });
+
     if (hasMissingEntries) {
         console.error("Unmatched but required files:\n" + stringify(self.pendingFromManifest, null, 2));
     }
 };
 
-DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, singleFile, jobInfo) {
+DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, singleFile, jobInfo, currentDataPackKeysInImport) {
     var self = this;
 
-    var nextImport;
+    for (var i = 0; i < dataPackKeys.length; i++) {
+        
+        var dataPackKey = dataPackKeys[i];
 
-    dataPackKeys.forEach(function(dataPackKey) {
+        if (jobInfo.currentStatus[dataPackKey] == 'Ready' || (jobInfo.currentStatus[dataPackKey] == 'Header' && !jobInfo.headersOnly)) {
+            try {
 
-        if (!nextImport) {
-            if (jobInfo.currentStatus[dataPackKey] == 'Ready') {
-                try {
-                    var typeIndex = dataPackKey.indexOf('/');
-                    var dataPackType = dataPackKey.substr(0, typeIndex);
-                    var dataNameIndex = dataPackKey.lastIndexOf('/')+1;
-                    var dataPackName = dataPackKey.substr(dataNameIndex);
-                    var dataPackLabel = self.getDataPackLabel(importPath + '/' + dataPackType, dataPackName);
+                var typeIndex = dataPackKey.indexOf('/');
+                var dataPackType = dataPackKey.substr(0, typeIndex);
+                var dataNameIndex = dataPackKey.lastIndexOf('/')+1;
+                var dataPackName = dataPackKey.substr(dataNameIndex);
+                var dataPackLabel = self.getDataPackLabel(importPath + '/' + dataPackType, dataPackName);
 
-                    var fullPathToFiles = importPath + '/' + dataPackKey;
-                    var parentData = self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_ParentKeys.json'];
-                    
-                    var needsParents = false;
+                var fullPathToFiles = importPath + '/' + dataPackKey;
+                var parentData;
 
-                    if (parentData) {
-                        parentData = JSON.parse(parentData);
-
-                        if (!singleFile) {
-                            parentData.forEach(function(parentKey) {
-                                if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Ready') {
-                                    needsParents = true;
-                                }
-                            });
-
-                            if (needsParents) {
-                                return;
-                            }
-                        }
+                if (!jobInfo.singleFile) {
+                    if (self.vlocity.datapacksutils.isSoloDeploy(dataPackType) && Object.keys(currentDataPackKeysInImport).length != 0) {
+                        continue;
                     }
 
-                    nextImport = {
-                        VlocityDataPackKey: dataPackKey,
-                        VlocityDataPackType: dataPackType,
-                        VlocityDataPackParents: parentData,
-                        VlocityDataPackStatus: 'Success',
-                        VlocityDataPackIsIncluded: true,
-                        VlocityDataPackName: dataPackName,
-                        VlocityDataPackData: {
-                            VlocityDataPackKey: dataPackKey,
-                            VlocityDataPackType: dataPackType,
-                            VlocityDataPackIsIncluded: true
-                        }
+                    if (jobInfo.supportParallel && !self.vlocity.datapacksutils.isAllowParallel(dataPackType)) {
+                        continue;
                     }
-
-                    var dataPackDataMetadata = JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackLabel + '_DataPack.json'])
-
-                    var sobjectDataField = dataPackDataMetadata.VlocityRecordSObjectType;
-
-                    // Always an Array in Actualy Data Model
-                    var dataPackImportBuilt = self.buildFromFiles(dataPackDataMetadata, fullPathToFiles, dataPackType, sobjectDataField);
-
-                    if (dataPackImportBuilt[0] != null && dataPackImportBuilt[0].VlocityDataPackType == 'SObject') {
-                        sobjectDataField = dataPackImportBuilt[0].VlocityRecordSObjectType;
-                    }
-
-                    nextImport.VlocityDataPackData[sobjectDataField] = dataPackImportBuilt;
-
-                    jobInfo.currentStatus[dataPackKey] = 'Added';
-
-                    var nextImportHash = self.vlocity.datapacksutils.getDataPackHash(nextImport);
-
-                    fs.outputFileSync('vlocity-deploy-temp/hashedAtImport.json', stringify(nextImport, { space: 4 }), 'utf8');
-
-                    if (jobInfo.hashOfDataPacksExport && jobInfo.hashOfDataPacksExport[dataPackKey] == nextImportHash) {
-                        nextImport = null;
-                        jobInfo.currentStatus[dataPackKey] = 'Skipped';
-                        console.log('\x1b[31m', 'Skipping Deploy - No Changes >>' ,'\x1b[0m', dataPackKey);
-                    } else {
-                        console.log('\x1b[31m', 'Adding to Deploy >>' ,'\x1b[0m', dataPackKey);
-                    }
-                } catch (e) {
-                    console.log('\x1b[31m', 'Error Formatting Deploy >>' ,'\x1b[0m', dataPackKey, e);
-                    throw e;
                 }
 
+                if (!dataPackLabel) {
+                    jobInfo.currentStatus[dataPackKey] = 'Error';
+                    continue;
+                }
+
+                if (jobInfo.defaultMaxParallel > 1 && !jobInfo.supportParallel && self.vlocity.datapacksutils.isAllowParallel(dataPackType)) {
+                    jobInfo.supportParallelAgain = true;
+                }
+
+                // Headers only accounts for potential circular references by only uploading the parent record
+                if (!jobInfo.headersOnly) {
+                   parentData = self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_ParentKeys.json'];
+                } else if (!self.vlocity.datapacksutils.isAllowHeadersOnly(dataPackType)) {
+
+                    continue;
+                }
+
+                var needsParents = false;
+
+                if (parentData) {
+
+                    parentData = JSON.parse(parentData);
+
+                    if (!singleFile) {
+                        parentData.forEach(function(parentKey) {
+                            if (jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] != null && !(jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Success' || jobInfo.currentStatus[parentKey.replace(/\s+/g, "-")] == 'Header') && currentDataPackKeysInImport[parentKey.replace(/\s+/g, "-")] != true) {
+                                needsParents = true;
+                            }
+                        });
+
+                        if (needsParents) {
+                            continue;
+                        }
+                    }
+                }
+
+                var nextImport = {
+                    VlocityDataPackKey: dataPackKey,
+                    VlocityDataPackType: dataPackType,
+                    VlocityDataPackParents: parentData,
+                    VlocityDataPackStatus: 'Success',
+                    VlocityDataPackIsIncluded: true,
+                    VlocityDataPackName: dataPackName,
+                    VlocityDataPackData: {
+                        VlocityDataPackKey: dataPackKey,
+                        VlocityDataPackType: dataPackType,
+                        VlocityDataPackIsIncluded: true
+                    }
+                }
+
+                var dataPackDataMetadata = JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackLabel + '_DataPack.json'])
+
+                var sobjectDataField = dataPackDataMetadata.VlocityRecordSObjectType;
+
+                // Always an Array in Actualy Data Model
+                var dataPackImportBuilt = self.buildFromFiles(dataPackDataMetadata, fullPathToFiles, dataPackType, sobjectDataField);
+
+                if (dataPackImportBuilt[0] != null && dataPackImportBuilt[0].VlocityDataPackType == 'SObject') {
+                    sobjectDataField = dataPackImportBuilt[0].VlocityRecordSObjectType;
+                }
+
+                if (jobInfo.headersOnly) {
+                    Object.keys(dataPackImportBuilt[0]).forEach(function(key) {
+                        if (Array.isArray(dataPackImportBuilt[0][key])) {
+                            console.log('removing', key);
+                            dataPackImportBuilt[0][key] = [];
+                        }
+                    });
+                }
+
+                nextImport.VlocityDataPackData[sobjectDataField] = dataPackImportBuilt;
+
+                if (jobInfo.headersOnly) {
+                    jobInfo.currentStatus[dataPackKey] = 'Header';
+                } else {
+                    jobInfo.currentStatus[dataPackKey] = 'Added';
+                }
+
+                var nextImportHash = self.vlocity.datapacksutils.getDataPackHash(nextImport);
+
+                //fs.outputFileSync('vlocity-deploy-temp/hashedAtImport.json', stringify(nextImport, { space: 4 }), 'utf8');
+
+                if (jobInfo.hashOfDataPacksExport && jobInfo.hashOfDataPacksExport[dataPackKey] == nextImportHash) {
+                    jobInfo.currentStatus[dataPackKey] = 'Skipped';
+                    console.log('\x1b[31m', 'Skipping Deploy - No Changes >>' ,'\x1b[0m', fullPathToFiles + '/ - ' + dataPackLabel);
+
+                    continue;
+                } else {
+                    console.log('\x1b[31m', 'Adding to Deploy >>' ,'\x1b[0m', fullPathToFiles + '/ - ' + dataPackLabel);
+                }
+
+                return nextImport;
+            } catch (e) {
+                console.log('\x1b[31m', 'Error Formatting Deploy >>' ,'\x1b[0m', dataPackKey, e.stack);
+                throw e;
             }
         }
-    });
+    }
 
-    return nextImport;
+    return null;
 };
 
 DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPathToFiles, dataPackType, currentDataField) {
@@ -333,8 +391,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
 
                         var filename = fullPathToFiles + "/" + dataPackData[field];
 
-                        if (self.allFileDataMap[filename]) {    
-
+                        if (self.allFileDataMap[filename]) {
                             if (fileType == 'list' || fileType == 'object') {
                                 dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename]), fullPathToFiles, dataPackType, field);
                             } else {
