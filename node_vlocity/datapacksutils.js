@@ -2,6 +2,10 @@ var fs = require("fs-extra");
 var path  = require('path');
 var stringify = require('json-stable-stringify');
 
+// use consts for setting the namespace prefix so that we easily can reference it later on in this file
+const namespacePrefix = 'vlocity_namespace';
+const namespaceFieldPrefix = '%' + namespacePrefix + '%__';
+
 var DataPacksUtils = module.exports = function(vlocity) {
 	this.vlocity = vlocity || {};
 
@@ -30,11 +34,12 @@ DataPacksUtils.prototype.isValidSObject = function(dataPackType, SObjectType) {
 }
 
 DataPacksUtils.prototype.getWithoutNamespace = function(field) {
-	return field.substring(field.indexOf('%vlocity_namespace%__') + 21);
+	var nspos = field.indexOf(namespaceFieldPrefix);
+	return nspos != -1 ? field.substring(nspos + namespaceFieldPrefix.length) : field;
 }
 
 DataPacksUtils.prototype.getWithNamespace = function(field) {
-	return '%vlocity_namespace%__' + field;
+	return namespaceFieldPrefix + field;
 }
 
 DataPacksUtils.prototype.getDataField = function(dataPackData) {
@@ -207,144 +212,72 @@ DataPacksUtils.prototype.isInManifest = function(dataPackData, manifest) {
 	return false;
 }
 
-DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData, shouldDebug, callback) {
-	var self = this;
+DataPacksUtils.prototype.loadApex = function(projectPath, filePath, currentContextData) {
+	console.log('Loading APEX code from: ' +  projectPath + '/' + filePath);
 
-	console.log('Executing runApex: ' + projectPath + ' -- ' + filePath);
-	if (projectPath && filePath) {
-		var apexFileName;
+	if (this.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
+		var apexFileName = projectPath + '/' + filePath;
+	} else if (this.vlocity.datapacksutils.fileExists('apex/' + filePath)) {
+		var apexFileName = 'apex/' + filePath;
+	} else {
+		return Promise.reject('The specified file \'' +filePath+ '\' does not exist.');
+	}
 
-		if (self.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
-			apexFileName = projectPath + '/' + filePath;
-		} else if (self.vlocity.datapacksutils.fileExists('apex/' + filePath)) {
-			apexFileName = 'apex/' + filePath;
+	if (apexFileName) {
+		var apexFileData = fs.readFileSync(apexFileName, 'utf8');
+		var includes = apexFileData.match(/\/\/include(.*?);/g);
+		var includePromises = [];
+
+		if (includes) {
+			var srcdir = path.dirname(apexFileName);
+			for (var i = 0; i < includes.length; i++) {
+				var replacement = includes[i];
+				var className = replacement.replace("//include ", "").replace(";", "");				
+				includePromises.push(
+					this.loadApex(srcdir, className, currentContextData).then((includedFileData) => {
+						apexFileData = apexFileData.replace(replacement, includedFileData);
+						return apexFileData;
+					}
+				));			
+			}
 		}
 
-		if (apexFileName) {
-			var apexFileData = fs.readFileSync(apexFileName, 'utf8');
-
-			var includedClasses = apexFileData.match(/\/\/include(.*?);/g);
-
-			if (includedClasses) {
-				var srcdir = path.dirname(apexFileName);
-
-				for (var i = 0; i < includedClasses.length; i++) {
-
-					var className = includedClasses[i].replace("//include ", "").replace(";", "");
-
-					var includedFileData = fs.readFileSync(srcdir + '/' + className, 'utf8');
-
-					apexFileData = apexFileData.replace(includedClasses[i], includedFileData);
-				}		
-			}
-
+		return Promise.all(includePromises).then(() => {
 			if (currentContextData) {
 				apexFileData = apexFileData.replace(/CURRENT_DATA_PACKS_CONTEXT_DATA/g, JSON.stringify(currentContextData));
 			}
-
-			apexFileData = apexFileData.replace(/%vlocity_namespace%/g, this.vlocity.namespace);
-			apexFileData = apexFileData.replace(/vlocity_namespace/g, this.vlocity.namespace);
-
-			var thirtyMinutesLater = new Date();
-            thirtyMinutesLater.setMinutes(thirtyMinutesLater.getMinutes() + 30);
-            var thirtyMinutesLaterString = thirtyMinutesLater.toISOString();
-
-    		return new Promise(function(resolve, reject) {
-
-    			if (shouldDebug) {
-	    			self.vlocity.jsForceConnection.tooling.sobject('DebugLevel').find({ DeveloperName: "SFDC_DevConsole" }).execute(function(err, debugLevel) {
-
-	    				if (debugLevel[0].Id) {
-				            self.vlocity.jsForceConnection.tooling.sobject('TraceFlag').create({
-				                TracedEntityId: self.vlocity.jsForceConnection.userInfo.id,
-				                DebugLevelId: debugLevel[0].Id,
-				                ExpirationDate: thirtyMinutesLaterString,
-				                LogType: 'DEVELOPER_LOG'
-				            }, function(err, res) {
-				                resolve();
-				            });
-				        } else {
-				        	console.log('\x1b[36m', '>>' ,'\x1b[0 No Logging Level called: SFDC_DevConsole');
-				        	resolve();
-				        }
-			        });
-			    } else {
-			    	resolve();
-			    }
-		    })
-		    .then(function() {
-		    	return new Promise(function(resolve, reject) {
-			    	if (apexFileData.length > 32000)
-			    	{
-			    		console.log('\x1b[36m', '>>' ,'\x1b[o File Data Length: ' + apexFileData.length + ' is too large for a single Anonymous Apex call. Please use the preStepApex or remove the CURRENT_DATA_PACKS_CONTEXT_DATA variable from your Apex classes for preJobApex.');
-			    		return reject();
-			    	}
-
-			    	console.log('Executing executeAnonymous: ', apexFileData);
-
-					self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, function(err, res) {
-
-						console.log('Executing res: ', res, err);
-						if (res == null) {
-							console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', err);
-						}
-
-						if (res.success === false) {
-							if (res.compileProblem) {
-								console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', res.compileProblem);
-							} 
-							if (res.exceptionMessage) {
-								console.log('\x1b[36m', '>>' ,'\x1b[0m Exception Message', res.exceptionMessage);
-							} 
-
-							if (res.exceptionStackTrace) {
-								console.log('\x1b[36m', '>>' ,'\x1b[0m Exception StackTrace', res.exceptionStackTrace);
-							}
-						}
-
-						if (shouldDebug) {
-							self.vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
-								
-	                            self.vlocity.jsForceConnection.request("/services/data/v37.0/tooling/sobjects/ApexLog/" + res.records[0].Id + "/Body/", function(err, logBody) {
-	                            	
-	                                if (err) { 
-	                                    console.error('err', err); 
-	                                }
-
-	                                var allLoggingStatments = [];
-
-	                                logBody.split("\n").forEach(function(line) {
-	                                    var isDebug = line.indexOf('USER_DEBUG');
-
-	                                    if (isDebug > -1) {
-	                                       console.log(line);
-	                                    }
-	                                });
-
-	                                if (callback) {
-										callback();
-									} else {
-										return resolve();
-									}
-	                            });
-		                    });
-						} else {
-							resolve();
-						}
-					});				
-				});
-		    }).then(function(){
-		    	if (callback) {
-		    		callback();
-		    	}
-		    });
-		} else {
-			return Promise.resolve();
-		}
+			return apexFileData
+				.replace(/%vlocity_namespace%/g, this.vlocity.namespace)
+				.replace(/vlocity_namespace/g, this.vlocity.namespace);
+		});
 	} else {
-		return Promise.resolve();
+		return Promise.reject('ProjectPath or filePath arguments passed as null or undefined.');		
 	}
 }
+
+DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {	
+	return this
+		.loadApex(projectPath, filePath, currentContextData)
+		.then((apexFileData) => { 
+			return new Promise((resolve, reject) => {
+				this.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, (err, res) => {
+					if (err) return reject(err);
+					if (res.success === true) return resolve(true);
+					if (res.compileProblem) {
+						console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Compilation Error:', res.compileProblem);
+					} 
+					if (res.exceptionMessage) {
+						console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception Message:', res.exceptionMessage);
+					}
+					if (res.exceptionStackTrace) {
+						console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception StackTrace:', res.exceptionStackTrace);
+					}
+					return reject(res.compileProblem || res.exceptionMessage || 'APEX code failed to execute but no exception message was provided');
+				});
+			});
+		});
+};
+
 
 DataPacksUtils.prototype.hashCode = function(toHash) {
  	var hash = 0, i, chr;
@@ -393,13 +326,3 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
 
 	console.log('\x1b[32m', 'Successful: ' + successfulCount + ' Errors: ' + errorsCount + ' Remaining: ' + totalRemaining + ' Elapsed Time: ' + Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's');
 };
-
-
-
-
-
-
-
-
-
-

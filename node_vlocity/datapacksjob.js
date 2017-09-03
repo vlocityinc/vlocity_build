@@ -77,7 +77,7 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
     			self.vlocity.datapacksbuilder.initializeImportStatus(jobInfo.projectPath + '/' + jobInfo.expansionPath, jobInfo.manifest, jobInfo);
     		}
 
-    		self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], jobInfo.preDeployDataSummary, jobInfo.shouldDebug).then(resolve);
+    		self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], jobInfo.preDeployDataSummary).then(resolve);
     	} else {
     		return Promise.resolve();
     	}
@@ -98,7 +98,7 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
 	.then(function(jobStatus) {
 		
     	if (!jobStatus.hasError && jobInfo.postJobApex && jobInfo.postJobApex[action]) {
-			return self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.postJobApex[action], jobInfo.postDeployResults, jobInfo.shouldDebug);
+			return self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.postJobApex[action], jobInfo.postDeployResults);
     	} else {
     		return Promise.resolve(jobStatus);
     	}
@@ -605,7 +605,7 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 					currentStepData.push(jobInfo.allDeployDataSummary[dataPack.VlocityDataPackKey]);
 				});
 
-	    		self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preStepApex.Deploy, currentStepData, jobInfo.shouldDebug).then(resolve());
+	    		self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preStepApex.Deploy, currentStepData).then(resolve());
     		} else {
     			resolve();
     		}
@@ -739,7 +739,7 @@ DataPacksJob.prototype.runStepApex = function(projectPath, stepSettings, apexDat
 
 		async.eachSeries(Object.keys(runApexByType), function(apexClass, callback) {
 
-			self.vlocity.datapacksutils.runApex(projectPath, apexClass, runApexByType[apexClass], shouldDebug).then(callback);
+			self.vlocity.datapacksutils.runApex(projectPath, apexClass, runApexByType[apexClass]).then(callback);
 		}, function(err, result) {
 			onComplete();
 		});

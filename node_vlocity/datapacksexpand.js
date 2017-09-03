@@ -40,7 +40,7 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         if (key.indexOf('#') == 0) {
             filename += key.substring(1);
         } else if (dataPackData[key] && typeof dataPackData[key] === "string") {
-             filename += unidecode(dataPackData[key].replace(/\//g, "-"));
+            filename += unidecode(dataPackData[key].replace(/\//g, "-"));
         }
     });
 
@@ -52,7 +52,10 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         }
     }
 
-    return filename;
+    // fields can contain the Vlocity namespace placeholder
+    // we remove the namespace placeholder from files names to make them
+    // more readable
+    return filename.replace(/%vlocity_namespace%__/g,"");
 };
 
 DataPacksExpand.prototype.getDataPackName = function(dataPackType, sObjectType, dataPackData) {
@@ -372,49 +375,50 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
         if ((!options.manifestOnly || self.utils.isInManifest(dataPackData.VlocityDataPackData, options.manifest))) {
 
             var dataField = self.utils.getDataField(dataPackData);
+            if (!dataField)
+                return;
 
-            if (dataField) {
+            var dataPackDataChildern = dataPackData.VlocityDataPackData[dataField];
+            if (!dataPackDataChildern)
+                return;
 
-                var dataPackDataChild = dataPackData.VlocityDataPackData[dataField];
+            dataPackDataChildern.forEach((dataPackDataChild) => {
+                // Top level is always an array with 1 element -- not always true
+                //dataPackDataChild = dataPackDataChild[0];
 
-                if (dataPackDataChild) {
+                var parentName = self.getDataPackFolder(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
+                var dataPackName = self.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
 
-                    // Top level is always an array with 1 element
-                    dataPackDataChild = dataPackDataChild[0];
+                var allParentKeys = [];
 
-                    var parentName = self.getDataPackFolder(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
+                // Load parent key data if doing a maxDepth != -1 to not lose parent keys
+                if (options.maxDepth && options.maxDepth != -1 && dataPackData.VlocityDepthFromPrimary != 0) {
+                    var parentFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_ParentKeys", "json");
 
-                    var dataPackName = self.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
+                    try {
+                        allParentKeys = JSON.parse(fs.readFileSync(fullFilePath, { "encoding": "utf8" }));
+                    } catch (e) {
 
-                    var allParentKeys = [];
-
-                    // Load parent key data if doing a maxDepth != -1 to not lose parent keys
-                    if (options.maxDepth && options.maxDepth != -1 && dataPackData.VlocityDepthFromPrimary != 0) {
-                        var parentFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_ParentKeys", "json");
-
-                        try {
-                            allParentKeys = JSON.parse(fs.readFileSync(fullFilePath, { "encoding": "utf8" }));
-                        } catch (e) {
-
-                        }
                     }
+                }
                     
-                    if (!isPagination) {
-                        fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
-                    }
+                if (!isPagination) {
+                    fs.emptyDirSync(this.generateFolderPath(dataPackType, parentName));
+                }
 
-                    if (dataPackData.VlocityDataPackParents && dataPackData.VlocityDataPackParents.length > 0) {
-                        dataPackData.VlocityDataPackParents.forEach(function(parentKey) {
-                            if (options.vlocityKeysToNewNamesMap[parentKey]) {
+                if (dataPackData.VlocityDataPackParents && dataPackData.VlocityDataPackParents.length > 0) {
+                    dataPackData.VlocityDataPackParents.forEach(function(parentKey) {
+                        if (options.vlocityKeysToNewNamesMap[parentKey]) {
 
-                                if (allParentKeys.indexOf(options.vlocityKeysToNewNamesMap[parentKey]) == -1) {
-                                    allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
-                                }
+                            if (allParentKeys.indexOf(options.vlocityKeysToNewNamesMap[parentKey]) == -1) {
+                                allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
                             }
-                        });
+                        }
+                    });
 
-                        if (allParentKeys.length > 0) {
-                            self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys","json", allParentKeys, isPagination);
+                    dataPackData.VlocityDataPackParents.forEach(function (parentKey) {
+                        if (options.vlocityKeysToNewNamesMap[parentKey]) {
+                            allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
                         }
 
                         var parentFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_ParentKeys", "json");
@@ -424,25 +428,29 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
                         } else {   
                             options.vlocityAllParentFiles[parentFileNameFull].concat(dataPackData.VlocityDataPackParents);  
                         }
+                    });
+
+                    if (allParentKeys.length > 0) {
+                        self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys", "json", allParentKeys, isPagination);
                     }
-
-                    if (dataPackData.VlocityDataPackAllRelationships) {
-                        var allRels = {};
-
-                        Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function(relKey) {
-                            if (options.vlocityKeysToNewNamesMap[relKey]) {
-                                allRels[options.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];
-                            }
-                        });
-
-                        if (Object.keys(allRels).length > 0) {
-                            self.writeFile(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json", allRels, isPagination);
-                        }
-                    }
-
-                    self.processDataPackData(dataPackType, parentName, null, dataPackDataChild, isPagination);
                 }
-            }
+
+                if (dataPackData.VlocityDataPackAllRelationships) {
+                    var allRels = {};
+
+                    Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function (relKey) {
+                        if (options.vlocityKeysToNewNamesMap[relKey]) {
+                            allRels[options.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];
+                        }
+                    });
+
+                    if (Object.keys(allRels).length > 0) {
+                        self.writeFile(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json", allRels, isPagination);
+                    }
+                }
+
+                self.processDataPackData(dataPackType, parentName, null, dataPackDataChild, isPagination);
+            });            
         }
     }
 }
@@ -582,7 +590,7 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
             fileData = stringify(fileData, { space: 4 });
         } else {
             try {
-                fileData = stringify(JSON.parse(fileData), { space: 4 });
+                fileData = stringify(JSON.parse(fileData.replace("&quot;", "\"")), { space: 4 });
             } catch (e) {
                 console.log("Error: " + filename + "." + fileType, e);
             }

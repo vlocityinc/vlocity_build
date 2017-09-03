@@ -1,7 +1,6 @@
 
 'use strict';
 var loadProperties = require('./grunt/loadProperties.js');
-
 var tasksToLoad = [ 'dataPacksJob' ];
 
 module.exports = function(grunt) {

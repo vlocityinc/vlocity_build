@@ -1,19 +1,20 @@
 var request = require('request');
 var yaml = require('js-yaml');
 var fs = require('fs-extra');
+var path = require('path');
+var notifier = require('node-notifier');
 
 var node_vlocity = require('../node_vlocity/vlocity.js');
 
-var notify = require('grunt-notify/lib/notify-lib');
-
 module.exports = function (grunt) {
 
-    var dataPacksJobFolder = './dataPacksJobs';
+    var dataPacksJobFolder = './dataPacksJobs';	
 
 	function dataPacksJob(action, jobName, callback, skipUpload) {
 
 	  	var properties = grunt.config.get('properties');
-	  	
+		var jobStartTime = Date.now();
+
 	  	var vlocity = new node_vlocity({
           username: properties['sf.username'], 
           password: properties['sf.password'], 
@@ -88,22 +89,28 @@ module.exports = function (grunt) {
             
 	    	vlocity.datapacksjob.runJob(dataPacksJobsData, jobName, action,
 	    		function(result) {
-	    			grunt.log.ok('DataPacks Job Success - ' + action + ' - ' + jobName);
-	 
-					notify({
-			            title: 'DataPacks',
-			            message: 'Success - ' + jobName
-			          });
-                    callback();
-		    	},
+					notifier.notify({
+			            title: 'Vlocity deployment tools',
+						message: 'Success - ' + jobName + '\n'+
+								 'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',						
+						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
+						sound: true
+					}, function (err, response) {
+						grunt.log.ok('DataPacks Job Success - ' + action + ' - ' + jobName);
+						callback(result);
+					});
+				},						
 		    	function(result) {
-			    	grunt.log.error('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + result.errorMessage);
-
-			    	notify({
-			            title: 'DataPacks',
-			            message: 'Failed - ' + jobName
-			         });
-                    callback(result);
+					notifier.notify({
+			            title: 'Vlocity deployment tools',
+						message: 'Failed - ' + jobName + '\n'+
+								 'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',						
+						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
+						sound: true
+					}, function (err, response) {
+						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + (result.errorMessage || result));
+						callback(result);
+					});
 			}, skipUpload);
 	    } else {
 	    	grunt.log.error('DataPacks Job Not Found - ' + jobName);
@@ -113,7 +120,6 @@ module.exports = function (grunt) {
 
 	function runTaskForAllJobFiles(taskName, callback) {
         var dataPacksJobsData = {};
-
         var properties = grunt.config.get('properties');
 
 		if (properties['vlocity.dataPacksJobFolder']) {
