@@ -195,69 +195,70 @@ DataPacksUtils.prototype.isInManifest = function(dataPackData, manifest) {
 	return false;
 }
 
-DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {
-	var self = this;
+DataPacksUtils.prototype.loadApex = function(projectPath, filePath, currentContextData) {
+	console.log('Loading APEX code from: ' +  projectPath + '/' + filePath);
 
-	console.log('Executing runApex: ' + projectPath + ' -- ' + filePath);
-	if (projectPath && filePath) {			
-		var apexFileName;
+	if (this.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
+		var apexFileName = projectPath + '/' + filePath;
+	} else if (this.vlocity.datapacksutils.fileExists('apex/' + filePath)) {
+		var apexFileName = 'apex/' + filePath;
+	} else {
+		return Promise.reject('The specified file \'' +filePath+ '\' does not exist.');
+	}
 
-		if (self.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
-			apexFileName = projectPath + '/' + filePath;
-		} else if (self.vlocity.datapacksutils.fileExists('apex/' + filePath)) {
-			apexFileName = 'apex/' + filePath;
+	if (apexFileName) {
+		var apexFileData = fs.readFileSync(apexFileName, 'utf8');
+		var includes = apexFileData.match(/\/\/include(.*?);/g);
+		var includePromises = [];
+
+		if (includes) {
+			var srcdir = path.dirname(apexFileName);
+			for (var i = 0; i < includes.length; i++) {
+				var replacement = includes[i];
+				var className = replacement.replace("//include ", "").replace(";", "");				
+				includePromises.push(
+					this.loadApex(srcdir, className, currentContextData).then((includedFileData) => {
+						apexFileData = apexFileData.replace(replacement, includedFileData);
+						return apexFileData;
+					}
+				));			
+			}
 		}
 
-		if (apexFileName) {
-			var apexFileData = fs.readFileSync(apexFileName, 'utf8');
-
-			var includedClasses = apexFileData.match(/\/\/include(.*?);/g);
-
-			if (includedClasses) {
-				var srcdir = path.dirname(apexFileName);
-
-				for (var i = 0; i < includedClasses.length; i++) {
-
-					var className = includedClasses[i].replace("//include ", "").replace(";", "");
-
-					var includedFileData = fs.readFileSync(srcdir+'/'+className, 'utf8');
-
-					apexFileData = apexFileData.replace(includedClasses[i], includedFileData);
-				}		
-			}
-
+		return Promise.all(includePromises).then(() => {
 			if (currentContextData) {
 				apexFileData = apexFileData.replace(/CURRENT_DATA_PACKS_CONTEXT_DATA/g, JSON.stringify(currentContextData));
 			}
+			return apexFileData
+				.replace(/%vlocity_namespace%/g, this.vlocity.namespace)
+				.replace(/vlocity_namespace/g, this.vlocity.namespace);
+		});
+	} else {
+		return Promise.reject('ProjectPath or filePath arguments passed as null or undefined.');		
+	}
+}
 
-			apexFileData = apexFileData.replace(/%vlocity_namespace%/g, this.vlocity.namespace);
-			apexFileData = apexFileData.replace(/vlocity_namespace/g, this.vlocity.namespace);
-
-			return self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, function(err, res) {
-
-				if (res.success === false) {
+DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {	
+	return this
+		.loadApex(projectPath, filePath, currentContextData)
+		.then((apexFileData) => { 
+			return new Promise((resolve, reject) => {
+				this.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, (err, res) => {
+					if (err) return reject(err);
+					if (res.success === true) return resolve(true);
 					if (res.compileProblem) {
-						console.log('\x1b[36m', '>>' ,'\x1b[0m Compilation Error', res.compileProblem);
+						console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Compilation Error:', res.compileProblem);
 					} 
 					if (res.exceptionMessage) {
-						console.log('\x1b[36m', '>>' ,'\x1b[0m Exception Message', res.exceptionMessage);
-					} 
-
-					if (res.exceptionStackTrace) {
-						console.log('\x1b[36m', '>>' ,'\x1b[0m Exception StackTrace', res.exceptionStackTrace);
+						console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception Message:', res.exceptionMessage);
 					}
-
-					return Promise.resolve(true);
-				} else {
-					return Promise.resolve(true);
-				}				
+					if (res.exceptionStackTrace) {
+						console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception StackTrace:', res.exceptionStackTrace);
+					}
+					return reject(res.compileProblem || res.exceptionMessage || 'APEX code failed to execute but no exception message was provided');
+				});
 			});
-		} else {
-			return Promise.resolve(true);
-		}
-	} else {
-		return Promise.resolve(true);
-	}
+		});
 }
 
 

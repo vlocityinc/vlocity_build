@@ -359,18 +359,26 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
     return dataPackDataArray;
 };
 
-DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
-    var compilerBacklogSize = this.compileQueue.length;    
-    if(compilerBacklogSize == 0) {
-        return onComplete({
-            compileCount: 0, 
-            hasErrors: false
-        });
-    }
+DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {    
+    // lcoals we will use to track the progress
     var compileCount = 0;
     var errors = [];
-    while (this.compileQueue.length > 0) {
-        var job = this.compileQueue.pop();
+    
+    // Sass.js compiler is a bit funcky and the callbacks
+    // are not garantueed to be called in the correct order
+    // this causes issue and therefor we do not want to compile files in parallel 
+    // this compileNext function takes care of that by calling itself recusrively
+    var compileNext = (job) => {
+        if (!job) {
+            if (this.vlocity.verbose && (compileCount > 0 || errors.length > 0)) {
+                console.log('\x1b[31m', 'Compilation done >>' ,'\x1b[0m', 'compiled', compileCount, 'files with', errors.length, 'errors.');
+            }
+            return onComplete({ 
+                compileCount: compileCount,
+                hasErrors: errors.length > 0, 
+                errors: errors
+            });
+        }
 
         if (this.vlocity.verbose) {
             console.log('\x1b[31m', 'Start compilation of >>' ,'\x1b[0m', job.filename);
@@ -385,20 +393,14 @@ DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
                 job.callback(null, compiledResult);
                 compileCount++;
             }
-            
-            if(--compilerBacklogSize == 0) {
-                if (this.vlocity.verbose) {
-                    console.log('\x1b[31m', 'Compilation done >>' ,'\x1b[0m', 'compiled', compileCount, 'files with', errors.length, 'errors.');
-                }
-                onComplete({ 
-                    compileCount: compileCount,
-                    hasErrors: errors.length > 0, 
-                    errors: errors
-                });
-            }
+            compileNext(this.compileQueue.pop());
         });
-    }
+    };
+
+    // kick it off!
+    compileNext(this.compileQueue.pop());
 };
+
 
 /** 
  * recusive async function that loops through a list of paths trying to read a file and returns the data 
@@ -453,7 +455,7 @@ DataPacksBuilder.prototype.compile = function(lang, source, options, cb) {
                     cb(error, null);
                 } else {
                     cb(null, result.text);
-                }                
+                }
             });
         } return;
         default: {       
