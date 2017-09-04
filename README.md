@@ -66,7 +66,7 @@ The supported DataPacks actions for grunt are as follow:
 `packBuildFile`: Build a DataPacks Directory into a DataPack file of  
 `packExpandFile`: Create a DataPack Directory from a previosuly exported file
 `packExportSingle`: Export a Single DataPack by Id
-`packContinue`: Continues a job that failed do to an error
+`packContinue`: Continues a job that failed due to an error
 `packRetry`: Continues a Job retrying all deploy errors or re-running all export queries
 
 
@@ -166,6 +166,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000
 | defaultMaxParallel | The number of parallel processes to use for export | Integer | 1
 | exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
+| continueAfterError | Don't end grunt job on error | Boolean | false |
 
 ##### DataPacks API
 | Option | Description | Type  | Default |
