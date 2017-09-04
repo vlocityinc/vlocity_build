@@ -320,7 +320,6 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                 if (jobInfo.headersOnly) {
                     Object.keys(dataPackImportBuilt[0]).forEach(function(key) {
                         if (Array.isArray(dataPackImportBuilt[0][key])) {
-                            console.log('removing', key);
                             dataPackImportBuilt[0][key] = [];
                         }
                     });
@@ -334,22 +333,13 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     jobInfo.currentStatus[dataPackKey] = 'Added';
                 }
 
-                var nextImportHash = self.vlocity.datapacksutils.getDataPackHash(nextImport);
-
-                //fs.outputFileSync('vlocity-deploy-temp/hashedAtImport.json', stringify(nextImport, { space: 4 }), 'utf8');
-
-                if (jobInfo.hashOfDataPacksExport && jobInfo.hashOfDataPacksExport[dataPackKey] == nextImportHash) {
-                    jobInfo.currentStatus[dataPackKey] = 'Skipped';
-                    console.log('\x1b[31m', 'Skipping Deploy - No Changes >>' ,'\x1b[0m', fullPathToFiles + '/ - ' + dataPackLabel);
-
-                    continue;
-                } else {
-                    console.log('\x1b[31m', 'Adding to Deploy >>' ,'\x1b[0m', fullPathToFiles + '/ - ' + dataPackLabel);
-                }
+                
+                console.log('\x1b[32m', 'Adding to ' + (jobInfo.singleFile ? 'File' : 'Deploy') + ' >>', '\x1b[0m', nextImport.VlocityDataPackType + ' - ' + nextImport.VlocityDataPackName);
+               
 
                 return nextImport;
             } catch (e) {
-                console.log('\x1b[31m', 'Error Formatting Deploy >>' ,'\x1b[0m', dataPackKey, e.stack);
+                console.log('\x1b[31m', 'Error Formatting Deploy >>','\x1b[0m', dataPackKey, e.stack);
                 throw e;
             }
         }
@@ -383,10 +373,8 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                     var fileNames = dataPackData[field];
                     var fileType = self.dataPacksExpandedDefinition[dataPackType][currentDataField][field];
 
-                    console.log('Test For Field Data: ', dataFieldDef);
-
                     // Check on This idea
-                    if (fieldData == 'object' && Array.isArray(fileNames)) {
+                    if (fileType == 'object' && Array.isArray(fileNames)) {
 
                         var allDataPackFileData = [];
 
@@ -409,10 +397,11 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                             if (fileType == 'list' || fileType == 'object') {
                                 dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename]), fullPathToFiles, dataPackType, field);
                             } else {
-                                if (self.compileOnBuild && fieldData.CompiledField) { 
+                                if (self.compileOnBuild && fileType.CompiledField) { 
+
                                     // these options will be passed to the importer function 
                                     var importerOptions = {
-                                        // collect paths to look for imported/inclyded files
+                                        // collect paths to look for imported/included files
                                         includePaths: self.vlocity.datapacksutils.getDirectories(fullPathToFiles + "/..").map(function(dir) {
                                             return path.normalize(fullPathToFiles + "/../" + dir + "/");
                                         })
@@ -421,7 +410,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                     self.compileQueue.push({
                                         filename: filename,
                                         status: null,
-                                        language: fieldData.FileType,
+                                        language: fileType.FileType,
                                         source: self.allFileDataMap[filename],
                                         options: {
                                             // this is options that is passed to the compiler
@@ -431,7 +420,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                             if (error) {
                                                 return console.log('\x1b[31m', 'Failed to compile SCSS for >>' ,'\x1b[0m', filename, '\n', error.message);
                                             }
-                                            dataPackData[fieldData.CompiledField] = compiledResult;
+                                            dataPackData[fileType.CompiledField] = compiledResult;
                                         }
                                     });
                                     // save source into datapack to ensure the uncompiled data also gets deployed

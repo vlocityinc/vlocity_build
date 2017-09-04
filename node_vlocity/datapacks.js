@@ -177,9 +177,10 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 			if (result && result.Total > 0) {
                 if (dataPackData.processType == "Export" 
                     && dataPackData.processData
+                    && (!dataPackData.processData.maxDepth 
+                        || dataPackData.processData.maxDepth == -1)
                     && dataPackData.processData.exportPacksMaxSize 
                     && result.Finished > dataPackData.processData.exportPacksMaxSize) {
-
                         console.log('Setting Complete');
                     result.Status = "Complete";
                 }

@@ -662,13 +662,13 @@
         "%vlocity_namespace%__VlocityState__c": {}
     },
     "VlocityUILayout": {
-        "SoloDeploy": true,
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocityUILayout__c": {
             "%vlocity_namespace%__Definition__c": "json"
         }
     },
     "VlocityUITemplate": {
-        "SoloDeploy": true,
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocityUITemplate__c": {
             "%vlocity_namespace%__CSS__c": "css",
             "%vlocity_namespace%__CustomJavascript__c": "js",

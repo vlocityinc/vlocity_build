@@ -590,9 +590,9 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
             fileData = stringify(fileData, { space: 4 });
         } else {
             try {
-                fileData = stringify(JSON.parse(fileData.replace("&quot;", "\"")), { space: 4 });
+                fileData = stringify(JSON.parse(fileData), { space: 4 });
             } catch (e) {
-                console.log("Error: " + filename + "." + fileType, e);
+                console.log('\x1b[31m', "Error", '\x1b[0m ', filename + "." + fileType, e);
             }
         }
     }
@@ -602,7 +602,10 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
     }
 
     fs.outputFileSync(fullFilePath, fileData, { "encoding": encoding });
-    console.log(fullFilePath + " file created");
+
+    if (fullFilePath.indexOf('_DataPack') > -1 || self.vlocity.verbose) {
+         console.log('\x1b[32m', 'Creating file:', '\x1b[0m', fullFilePath);
+    }
 
     return filename.replace(/\s+/g, "-") + "." + fileType;
 };

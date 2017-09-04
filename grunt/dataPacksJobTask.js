@@ -243,11 +243,20 @@ module.exports = function (grunt) {
         });
     });
 
-    grunt.registerTask('packGetDiffsAndDeploy', 'Run a DataPacks Job', function() {
+    grunt.registerTask('packGetDiffsAndDeploy', 'Run a DataPacks Job that Exports all Diffs then Deploys only the Changed DataPacks', function() {
         
         var done = this.async();        
 
         dataPacksJob('GetDiffsAndDeploy', grunt.option('job'), function() {
+            done();
+        });
+    });
+
+    grunt.registerTask('packRetry', 'Continue Running a DataPacks Job Resetting Errors to Ready', function() {
+        
+        var done = this.async();        
+
+        dataPacksJob('Retry', grunt.option('job'), function() {
             done();
         });
     });

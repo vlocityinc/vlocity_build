@@ -12,6 +12,16 @@ var DataPacksUtils = module.exports = function(vlocity) {
 	this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
 };
 
+DataPacksUtils.prototype.updateExpandedDefinition = function(expandedDefinition) {
+
+	var self = this;
+	Object.keys(expandedDefinition).forEach(function(dataPackType) {
+		Object.keys(expandedDefinition[dataPackType]).forEach(function(setting) {
+			self.dataPacksExpandedDefinition[dataPackType][setting] = expandedDefinition[dataPackType][setting];
+		});
+	});
+};
+
 DataPacksUtils.prototype.getSourceKeyDefinitionFields = function(SObjectType) {
 
 	if (this.dataPacksExpandedDefinition.SourceKeyDefinitions[SObjectType]) {
@@ -255,12 +265,13 @@ DataPacksUtils.prototype.loadApex = function(projectPath, filePath, currentConte
 	}
 }
 
-DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {	
+DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {
 	return this
 		.loadApex(projectPath, filePath, currentContextData)
 		.then((apexFileData) => { 
 			return new Promise((resolve, reject) => {
 				this.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, (err, res) => {
+
 					if (err) return reject(err);
 					if (res.success === true) return resolve(true);
 					if (res.compileProblem) {
@@ -321,6 +332,12 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
 			errorsCount++;
 		}
 	});
+
+	if (jobInfo.extendedManifest) {
+		Object.keys(jobInfo.extendedManifest).forEach(function(dataPackType) {
+			totalRemaining += jobInfo.extendedManifest[dataPackType].length;
+		});
+	}
 
 	var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
 
