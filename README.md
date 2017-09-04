@@ -165,6 +165,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000
 | defaultMaxParallel | The number of parallel processes to use for export | Integer | 1
+| exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
 
 ##### DataPacks API
 | Option | Description | Type  | Default |
