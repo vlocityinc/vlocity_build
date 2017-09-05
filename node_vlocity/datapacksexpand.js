@@ -620,7 +620,7 @@ DataPacksExpand.prototype.expandFile = function(targetPath, expandFile, options)
     }
 };
 
-DataPacksExpand.prototype.expand = function(targetPath, dataPackData, options) {
+DataPacksExpand.prototype.expand = function(targetPath, dataPackData, options, onComplete) {
     var self = this;
     self.compileOnBuild = options.compileOnBuild;
     self.targetPath = targetPath;
@@ -646,4 +646,6 @@ DataPacksExpand.prototype.expand = function(targetPath, dataPackData, options) {
             }
         });
     }
+
+    onComplete();
 };
