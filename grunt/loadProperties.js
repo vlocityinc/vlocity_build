@@ -8,6 +8,10 @@ var properties = require ('properties');
 module.exports = function(grunt) {
   var basedir = process.env.PWD;
 
+  if (!basedir) {
+    basedir = process.cwd();
+  }
+
   function loadProperties(file, returnNullOnFail) {
     try {
       if (fs.statSync(file)) {
