@@ -13,6 +13,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 More Info: http://brew.sh/  
 
 #### Install Node.js  
+Download and Install the Current Version at:
 https://nodejs.org/
 
 Use the following commands: 
@@ -26,14 +27,18 @@ export NVM_DIR="$HOME/.nvm"
 nvm install v4.3  
 nvm use 4.3  
 npm rebuild node-sass  
+npm install -g grunt-cli
 ```
 
 Windows Instructions
 ------------
 #### Install Node.js 
-http://blog.teamtreehouse.com/install-node-js-npm-windows
+Download and Install the Current Version at:
+https://nodejs.org/
 
 #### Install Node Version Manager for Windows 
+
+Download the latest nvm-setup.zip at:
 https://github.com/coreybutler/nvm-windows/releases
 
 Use the following commands: 
@@ -41,6 +46,7 @@ Use the following commands:
 nvm install v4.3  
 nvm use 4.3  
 npm rebuild node-sass  
+npm install -g grunt-cli
 ```
 
 Project Setup 
