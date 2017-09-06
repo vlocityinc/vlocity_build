@@ -173,7 +173,7 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
 				console.log('\x1b[32m', 'Back to Ready');
 
 				Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
-					if (jobInfo.currentStatus[dataPackKey] == 'Error') {
+					if (jobInfo.currentStatus[dataPackKey] == 'Error' || jobInfo.currentStatus[dataPackKey] == 'Header') {
 						jobInfo.currentStatus[dataPackKey] = 'Ready';
 					};
 				});
@@ -728,6 +728,8 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 						console.log('\x1b[31m', 'Returning to DataPack Upload');
 
 						jobInfo.headersOnly = false;
+						jobInfo.headersOnlyDidNotHelp = true;
+
 						self.deployJob(jobInfo, onComplete);
 					} else {
 						jobInfo.hasError = true;
@@ -735,11 +737,13 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 						onComplete(jobInfo);
 					}
 				} else {
-					jobInfo.headersOnly = true;
-
-					console.log('\x1b[31m', 'Circular Reference found - Uploading Only Root Objects');
-
-					self.deployJob(jobInfo, onComplete);
+					if (jobInfo.headersOnlyDidNotHelp) {
+						onComplete(jobInfo);
+					} else {
+						jobInfo.headersOnly = true;
+						console.log('\x1b[31m', 'Circular Reference found - Uploading Only Root Objects');
+						self.deployJob(jobInfo, onComplete);
+					}
 				}
 			} else {
 				onComplete(jobInfo);
@@ -782,6 +786,11 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 
 									if (dataPack.VlocityDataPackStatus == 'Success') {
 
+										// Stop an endless loop of headers
+										if (jobInfo.headersOnly) {
+											jobInfo.headersOnlyDidNotHelp = false;
+										}
+
 										console.log('\x1b[32m', 'Deploy Success >>', '\x1b[0m', dataPack.VlocityDataPackType + ' ' + dataPack.VlocityDataPackName + '  ' + (jobInfo.headersOnly ? 'Headers Only' : ''));
 
 										if (jobInfo.headersOnly) {
@@ -822,12 +831,12 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 												jobInfo.activationStatus[dataPackId] = 'Success';
 												resolve();
 											}, function(error) {
-											jobInfo.activationStatus[dataPackId] = 'Error';
+												jobInfo.activationStatus[dataPackId] = 'Error';
+												jobInfo.hasError = true;
 
-											self.vlocity.datapacks.getErrors(dataPackId, function(errors) {
-												jobInfo.errors = jobInfo.errors.concat(errors);
+												jobInfo.errors.push('Activation Error: ' + error.Message)
+												console.log('\x1b[31m', 'Activation Error', '\x1b[0m', error);
 												resolve();
-											});
 										});
 									} else {
 										resolve();

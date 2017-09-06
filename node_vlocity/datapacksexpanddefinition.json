@@ -241,6 +241,7 @@
         "%vlocity_namespace%__ManualQueue__c": {}
     },
     "ObjectClass": {
+        "AllowHeadersOnly": true,
         "SupportParallel": true,
         "%vlocity_namespace%__ObjectClass__c": {
             "FolderName": [

@@ -174,20 +174,27 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 				console.log('Result', result);
 			}
 
-			if (result && result.Total > 0) {
-                if (dataPackData.processType == "Export" 
-                    && dataPackData.processData
-                    && (!dataPackData.processData.maxDepth 
-                        || dataPackData.processData.maxDepth == -1)
-                    && dataPackData.processData.exportPacksMaxSize 
-                    && result.Finished > dataPackData.processData.exportPacksMaxSize) {
-                        console.log('Setting Complete');
-                    result.Status = "Complete";
+			if (result) {
+                if (result.Total > 0) {
+                    if (dataPackData.processType == "Export" 
+                        && dataPackData.processData
+                        && (!dataPackData.processData.maxDepth 
+                            || dataPackData.processData.maxDepth == -1)
+                        && dataPackData.processData.exportPacksMaxSize 
+                        && result.Finished > dataPackData.processData.exportPacksMaxSize) {
+                        result.Status = "Complete";
+                    }
+
+    				if (result.Async && result.Total == result.Finished) {
+    					result.Finished--;
+    				}
                 }
 
-				if (result.Async && result.Total == result.Finished) {
-					result.Finished--;
-				}
+                if (result.activationSuccess) {
+                    result.activationSuccess.forEach(function(activatedEntity) {
+                        console.log('\x1b[32m', 'Activated >> ', '\x1b[0m', activatedEntity.VlocityDataPackKey); 
+                    });
+                }
 			}
 			
 			if (err) { 
