@@ -150,6 +150,8 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
 					jobInfo.extendedManifest = {};
 				}
 
+				jobInfo.currentStatus = {};
+
 				Object.keys(jobInfo.manifest).forEach(function(dataPackType) {
 
 					if (jobInfo.extendedManifest[dataPackType] == null) {
@@ -179,7 +181,11 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
 				});
 			}
 		}
-	
+
+		if (action == 'Retry') {
+			jobInfo.errors = [];
+		}
+
 		action = jobInfo.jobAction;
 	}
 
@@ -248,7 +254,7 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
 
 		}, function(err, result) {
 
-			console.log('\x1b[32m', 'Query Total:', '\x1b[0m', totalFound);
+			console.log('\x1b[32m', 'Query Total >>', '\x1b[0m', totalFound);
 			onComplete(jobInfo);
 		});
 	} else {
@@ -447,7 +453,7 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 
 										console.log('\x1b[36m', errorMessage);
 
-										jobInfo.errors.push(errorMessage);									
+										jobInfo.errors.push(errorMessage);			
 									}
 								});
 							}
@@ -665,10 +671,6 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 		jobInfo.errors = [];
 	}
 
-	if (jobInfo.allErrors == null) {
-		jobInfo.allErrors = [];
-	}
-
 	if (jobInfo.startTime == null) {
 		jobInfo.startTime = Date.now();
 	}
@@ -710,9 +712,9 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 
 			Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
 				if (jobInfo.currentStatus[dataPackKey] == 'Ready') {
-					notDeployed.push(dataPackKey);
+					notDeployed.push('Not Deployed >> ' + dataPackKey);
 				} else if (jobInfo.currentStatus[dataPackKey] == 'Header') {
-					notDeployed.push(dataPackKey);
+					notDeployed.push('Not Deployed >> ' + dataPackKey);
 					headers.push(dataPackKey);
 				}
 			});
@@ -733,17 +735,27 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 						self.deployJob(jobInfo, onComplete);
 					} else {
 						jobInfo.hasError = true;
-						jobInfo.errorMessage = 'Not Deployed: \n' + notDeployed.join('\n');
+
+						jobInfo.errorMessage = jobInfo.errorMessage + '\n' + notDeployed.join('\n');
+						
 						onComplete(jobInfo);
 					}
-				} else {
+				} else if (jobInfo.supportHeadersOnly) {
 					if (jobInfo.headersOnlyDidNotHelp) {
+
+						jobInfo.hasError = true;
+
+						jobInfo.errorMessage = jobInfo.errorMessage + '\n' + notDeployed.join('\n');
+						
 						onComplete(jobInfo);
 					} else {
 						jobInfo.headersOnly = true;
+
 						console.log('\x1b[31m', 'Circular Reference found - Uploading Only Root Objects');
 						self.deployJob(jobInfo, onComplete);
 					}
+				} else {
+					onComplete(jobInfo);
 				}
 			} else {
 				onComplete(jobInfo);
@@ -806,13 +818,11 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 									} else if (dataPack.VlocityDataPackStatus == 'Error') {
 										jobInfo.hasError = true;
 
-										jobInfo.allErrors.push(dataPack.VlocityDataPackType + ' --- ' + dataPack.VlocityDataPackName + ' --- ' + dataPack.VlocityDataPackMessage);
+										var errorMessage = dataPack.VlocityDataPackType + ' --- ' + dataPack.VlocityDataPackName + ' --- ' + dataPack.VlocityDataPackMessage;
 
-										console.log('\x1b[31m', dataPack.VlocityDataPackType + ' --- ' + dataPack.VlocityDataPackName + ' --- ' + dataPack.VlocityDataPackMessage);
+										console.log('\x1b[31m', 'Deploy Error >>', '\x1b[0m', errorMessage);
 
-										self.vlocity.datapacks.getErrorsFromDataPack(dataPack, function(errors) {
-											jobInfo.errors = jobInfo.errors.concat(errors);
-										});										
+										jobInfo.errors.push('Deploy Error >> ' +errorMessage);
 									} else if (dataPack.VlocityDataPackStatus == 'Ignored') {
 										self.vlocity.datapacks.getErrorsFromDataPack(dataPack, function(errors) {
 											console.log('\x1b[31m', errors);
@@ -834,8 +844,8 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 												jobInfo.activationStatus[dataPackId] = 'Error';
 												jobInfo.hasError = true;
 
-												jobInfo.errors.push('Activation Error: ' + error.Message)
-												console.log('\x1b[31m', 'Activation Error', '\x1b[0m', error);
+												jobInfo.errors.push('Activation Error >> ' + error.Message)
+												console.log('\x1b[31m', 'Activation Error >>', '\x1b[0m', error);
 												resolve();
 										});
 									} else {

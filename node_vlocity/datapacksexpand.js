@@ -556,6 +556,10 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
                 }
             });
 
+            if (nameExtension == "_DataPack" && Object.keys(dataPackMetadata).length == 0) {
+                return;
+            }
+
             return this.writeFile(dataPackType, parentName, packName + nameExtension, fileType, dataPackMetadata, isPagination);
         }
     }

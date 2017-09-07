@@ -321,25 +321,41 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
 	var successfulCount = 0;
 	var errorsCount = 0;
 
-	Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
-		if (jobInfo.currentStatus[dataPackKey] == 'Ready') {
-			totalRemaining++;
-		} else if (jobInfo.currentStatus[dataPackKey] == 'Header') {
-			totalRemaining++;
-		} else if (jobInfo.currentStatus[dataPackKey] == 'Success') {
-			successfulCount++;
-		} else if (jobInfo.currentStatus[dataPackKey] == 'Error') {
-			errorsCount++;
-		}
-	});
-
-	if (jobInfo.extendedManifest) {
-		Object.keys(jobInfo.extendedManifest).forEach(function(dataPackType) {
-			totalRemaining += jobInfo.extendedManifest[dataPackType].length;
+	if (jobInfo.jobAction == 'Deploy') {
+		Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
+			if (jobInfo.currentStatus[dataPackKey] == 'Ready' 
+				|| jobInfo.currentStatus[dataPackKey] == 'Header') {
+				totalRemaining++;
+			} else if (jobInfo.currentStatus[dataPackKey] == 'Success') {
+				successfulCount++;
+			} else if (jobInfo.currentStatus[dataPackKey] == 'Error') {
+				errorsCount++;
+			}
 		});
+	} else if (jobInfo.jobAction == 'Export') {
+
+		Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
+			if (jobInfo.currentStatus[dataPackKey] == 'Error') {
+				errorsCount++;
+			}
+		});
+
+		Object.keys(jobInfo.alreadyExportedIdsByType).forEach(function(dataPackType) {
+			successfulCount += jobInfo.alreadyExportedIdsByType[dataPackType].length;
+		});
+
+		if (jobInfo.extendedManifest) {
+			Object.keys(jobInfo.extendedManifest).forEach(function(dataPackType) {
+				totalRemaining += jobInfo.extendedManifest[dataPackType].length;
+			});
+		}
 	}
 
 	var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
 
 	console.log('\x1b[32m', 'Successful: ' + successfulCount + ' Errors: ' + errorsCount + ' Remaining: ' + totalRemaining + ' Elapsed Time: ' + Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's');
+
+	if (jobInfo.hasError) {
+		jobInfo.errorMessage = jobInfo.errors.join('\n');
+	}
 };

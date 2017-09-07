@@ -108,7 +108,7 @@ module.exports = function (grunt) {
 						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
 						sound: true
 					}, function (err, response) {
-						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + (result.errorMessage || result));
+						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + ' Errors: \n' + result.errorMessage);
 						callback(result);
 					});
 			}, skipUpload);
