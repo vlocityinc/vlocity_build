@@ -35,7 +35,7 @@ module.exports = function (grunt) {
 		try {
 		    queryDefinitions = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/QueryDefinitions.yaml', 'utf8'));
 		} catch (e) {
-		    
+		    //console.log(e);
 		}
 
 		var dataPackFolderExists;
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
 
 	      			dataPacksJobsData[fileName].QueryDefinitions = queryDefinitions;
 	      		} catch (e1) { 
-	      			//console.log(e);
+	      			//console.log(e1);
 	      		}
 	    	});
 		} catch (e2) {
@@ -75,6 +75,18 @@ module.exports = function (grunt) {
 				}];
 			}
 
+            if (action == 'ExportSingle' && grunt.option('type') && grunt.option('id')) {
+                dataPacksJobsData[jobName].queries = null;
+                dataPacksJobsData[jobName].manifest = {};
+                dataPacksJobsData[jobName].manifest[grunt.option('type')] = [ grunt.option('id') ];
+
+                if (grunt.option('depth') != null) {
+                     dataPacksJobsData[jobName].maxDepth = parseInt(grunt.option('depth'));
+                }
+
+                action = 'Export';
+            }
+            
 	    	vlocity.datapacksjob.runJob(dataPacksJobsData, jobName, action,
 	    		function(result) {
 					notifier.notify({
@@ -96,7 +108,7 @@ module.exports = function (grunt) {
 						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
 						sound: true
 					}, function (err, response) {
-						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + ' - ' + (result.errorMessage || result));
+						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + ' Errors: \n' + result.errorMessage);
 						callback(result);
 					});
 			}, skipUpload);
@@ -106,8 +118,7 @@ module.exports = function (grunt) {
 	    }
 	}
 
-	function runTaskForAllJobFiles(taskName, callback)
-	{
+	function runTaskForAllJobFiles(taskName, callback) {
         var dataPacksJobsData = {};
         var properties = grunt.config.get('properties');
 
@@ -147,7 +158,7 @@ module.exports = function (grunt) {
 	            }, true);
 	        })
 	    } catch (e) {
-	    	console.log('No DataPacksJob Folder Found: ' + dataPacksJobFolder);
+	    	console.log('Job Failed With Exception: ' + e.stack);
 	    }
 	}
 
@@ -168,6 +179,15 @@ module.exports = function (grunt) {
 		  	done();
 		});
 	});
+
+    grunt.registerTask('packExportSingle', 'Export a Single DataPack for this Job', function() {
+        
+        var done = this.async();
+
+        dataPacksJob('ExportSingle', grunt.option('job'), function() {
+            done();
+        });
+    });
 
 	grunt.registerTask('packBuildFile', 'Run a DataPacks Job', function() {
 		
@@ -214,6 +234,33 @@ module.exports = function (grunt) {
 		});
 	});
 
+    grunt.registerTask('packGetDiffs', 'Run a DataPacks Job', function() {
+        
+        var done = this.async();        
+
+        dataPacksJob('GetDiffs', grunt.option('job'), function() {
+            done();
+        });
+    });
+
+    grunt.registerTask('packGetDiffsAndDeploy', 'Run a DataPacks Job that Exports all Diffs then Deploys only the Changed DataPacks', function() {
+        
+        var done = this.async();        
+
+        dataPacksJob('GetDiffsAndDeploy', grunt.option('job'), function() {
+            done();
+        });
+    });
+
+    grunt.registerTask('packRetry', 'Continue Running a DataPacks Job Resetting Errors to Ready', function() {
+        
+        var done = this.async();        
+
+        dataPacksJob('Retry', grunt.option('job'), function() {
+            done();
+        });
+    });
+
 	grunt.registerTask('packContinue', 'Run a DataPacks Job', function() {
 		
 		var done = this.async();		
@@ -222,6 +269,71 @@ module.exports = function (grunt) {
 		  	done();
 		});
 	});
+
+    grunt.registerTask('runApex', 'Run a DataPacks Job', function() {
+        var self = this;
+
+        var done = this.async();
+
+        var properties = grunt.config.get('properties');
+        
+        var vlocity = new node_vlocity({
+          username: properties['sf.username'], 
+          password: properties['sf.password'], 
+          vlocityNamespace: properties['vlocity.namespace'],
+          verbose: grunt.option('verbose'),
+          loginUrl: properties['sf.loginUrl']
+        });
+
+        vlocity.checkLogin(function(res) {
+            vlocity.jsForceConnection.tooling.sobject('DebugLevel').find({ DeveloperName: "SFDC_DevConsole" }).execute(function(err, debugLevel) {
+
+                var thirtyMinutesLater = new Date();
+                thirtyMinutesLater.setMinutes(thirtyMinutesLater.getMinutes() + 30);
+                var thirtyMinutesLaterString = thirtyMinutesLater.toISOString();
+
+                vlocity.jsForceConnection.tooling.sobject('TraceFlag').create({
+                    TracedEntityId: vlocity.jsForceConnection.userInfo.id,
+                    DebugLevelId: debugLevel[0].Id,
+                    ExpirationDate: thirtyMinutesLaterString,
+                    LogType: 'DEVELOPER_LOG'
+                }, function(err, res) {
+                    console.log(res);
+
+                    if (err) { 
+                        console.error(err); 
+                    }
+        
+                    vlocity.datapacksutils.runApex('.', 'test.cls', {}, function() {
+
+                        vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
+
+                            vlocity.jsForceConnection.request("/services/data/v37.0/tooling/sobjects/ApexLog/" + res.records[0].Id + "/Body/", function(err, logBody) {
+
+                                if (err) { 
+                                    console.error('err', err); 
+                                }
+
+                                var allLoggingStatments = [];
+
+                                logBody.split("\n").forEach(function(line) {
+                                    var vPerfIndex = line.indexOf('VPERF');
+
+                                    if (vPerfIndex > -1) {
+                                        allLoggingStatments.push(line);
+                                    }
+                                });
+
+                                console.log(allLoggingStatments);
+
+                                done();  
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 
   	return dataPacksJob;
 };

@@ -6,6 +6,7 @@
         ]
     },
     "Attachment": {
+        "SupportParallel": true,
         "Attachment": {
             "Body": {
                 "FileExt": "Type",
@@ -14,9 +15,11 @@
         }
     },
     "AttributeAssignmentRule": {
+        "SupportParallel": true,
         "%vlocity_namespace%__AttributeAssignmentRule__c": {}
     },
     "AttributeCategory": {
+        "SupportParallel": true,
         "%vlocity_namespace%__AttributeCategory__c": {
             "%vlocity_namespace%__Attribute__c": "list",
             "FolderName": [
@@ -33,6 +36,7 @@
         }
     },
     "CalculationMatrix": {
+        "SupportParallel": true,
         "%vlocity_namespace%__CalculationMatrixRow__c": {
             "FileName": [
                 "#Rows"
@@ -56,6 +60,7 @@
         }
     },
     "CalculationProcedure": {
+        "SupportParallel": true,
         "%vlocity_namespace%__CalculationProcedureStep__c": {
             "FileName": [
                 "#Steps"
@@ -71,10 +76,35 @@
             "%vlocity_namespace%__CalculationProcedureVersion__c": "object"
         }
     },
-     "ContractType": {
+    "ContextAction": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__ContextAction__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
+    "ContextDimension": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__ContextDimension__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
+    "ContextScope": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__ContextScope__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
+    "ContractType": {
         "%vlocity_namespace%__ContractType__c": {}
     },
     "DataRaptor": {
+        "SupportParallel": true,
         "%vlocity_namespace%__DRBundle__c": {
             "%vlocity_namespace%__DRMapItem__c": "list",
             "%vlocity_namespace%__InputJson__c": {
@@ -94,7 +124,10 @@
             ],
             "SortFields": [
                 "%vlocity_namespace%__DomainObjectCreationOrder__c",
-                "%vlocity_namespace%__InterfaceObjectLookupOrder__c"
+                "%vlocity_namespace%__InterfaceObjectLookupOrder__c",
+                "%vlocity_namespace%__DomainObjectAPIName__c",
+                "%vlocity_namespace%__DomainObjectFieldAPIName__c",
+                "%vlocity_namespace%__InterfaceFieldAPIName__c"
             ]
         }
     },
@@ -120,6 +153,7 @@
         ]
     },
     "Document": {
+        "SupportParallel": true,
         "Document": {
             "Body": {
                 "FileExt": "Type",
@@ -134,6 +168,7 @@
         "%vlocity_namespace%__DocumentTemplate__c": {}
     },
     "EntityFilter": {
+        "SupportParallel": true,
         "%vlocity_namespace%__EntityFilterCondition__c": {
             "FileName": [
                 "#EntityFilterConditions"
@@ -158,14 +193,63 @@
             ]
         }
     },
+    "IntegrationProcedure": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__Element__c": {
+            "FileName": [
+                "#Elements"
+            ],
+            "FilterFields": [
+                "%vlocity_namespace%__OmniScriptVersion__c"
+            ],
+            "JsonFields": [
+                "%vlocity_namespace%__PropertySet__c"
+            ],
+            "SortFields": [
+                "%vlocity_namespace%__Level__c",
+                "%vlocity_namespace%__Order__c"
+            ]
+        },
+        "%vlocity_namespace%__OmniScript__c": {
+            "%vlocity_namespace%__Element__c": "list",
+            "%vlocity_namespace%__PropertySet__c": {
+                "FileName": [
+                    "#PropertySet"
+                ]
+            },
+            "FileName": [
+                "%vlocity_namespace%__Type__c",
+                "%vlocity_namespace%__SubType__c"
+            ],
+            "FilterFields": [
+                "%vlocity_namespace%__Version__c"
+            ],
+            "FolderName": [
+                "%vlocity_namespace%__Type__c",
+                "%vlocity_namespace%__SubType__c"
+            ]
+        }
+    },
     "ItemImplementation": {
+        "SupportParallel": true,
         "%vlocity_namespace%__ItemImplementation__c": {}
     },
     "ManualQueue": {
+        "SupportParallel": true,
         "%vlocity_namespace%__ManualQueue__c": {}
     },
     "ObjectClass": {
+        "AllowHeadersOnly": true,
+        "SupportParallel": true,
         "%vlocity_namespace%__ObjectClass__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
+    "ObjectContextRule": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__ObjectRuleAssignment__c": {
             "FolderName": [
                 "%vlocity_namespace%__GlobalKey__c"
             ]
@@ -179,9 +263,13 @@
         }
     },
     "OmniScript": {
+        "SupportParallel": true,
         "%vlocity_namespace%__Element__c": {
             "FileName": [
                 "#Elements"
+            ],
+            "FilterFields": [
+                "%vlocity_namespace%__OmniScriptVersion__c"
             ],
             "JsonFields": [
                 "%vlocity_namespace%__PropertySet__c"
@@ -210,12 +298,15 @@
                 ],
                 "FileType": "html"
             },
-            "FolderName": [
+            "FileName": [
                 "%vlocity_namespace%__Type__c",
                 "%vlocity_namespace%__SubType__c",
                 "%vlocity_namespace%__Language__c"
             ],
-            "FileName": [
+            "FilterFields": [
+                "%vlocity_namespace%__Version__c"
+            ],
+            "FolderName": [
                 "%vlocity_namespace%__Type__c",
                 "%vlocity_namespace%__SubType__c",
                 "%vlocity_namespace%__Language__c"
@@ -223,13 +314,23 @@
         }
     },
     "OrchestrationDependencyDefinition": {
+        "SupportParallel": true,
         "%vlocity_namespace%__OrchestrationDependencyDefinition__c": {}
     },
     "OrchestrationItemDefinition": {
+        "SupportParallel": true,
         "%vlocity_namespace%__OrchestrationItemDefinition__c": {}
     },
     "OrchestrationPlanDefinition": {
+        "SupportParallel": true,
         "%vlocity_namespace%__OrchestrationPlanDefinition__c": {}
+    },
+    "PriceList": {
+        "%vlocity_namespace%__PriceList__c": {
+            "FolderName": [
+                "%vlocity_namespace%__Code__c"
+            ]
+        }
     },
     "Pricebook2": {
         "Pricebook2": {
@@ -250,7 +351,16 @@
             ]
         }
     },
+    "PricingVariable": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__PricingVariable__c": {
+            "FolderName": [
+                "%vlocity_namespace%__Code__c"
+            ]
+        }
+    },
     "Product2": {
+        "AllowHeadersOnly": true,
         "%vlocity_namespace%__AttributeAssignment__c": {
             "FileName": [
                 "#AttributeAssignments"
@@ -338,7 +448,15 @@
             ]
         }
     },
+    "Promotion": {
+        "%vlocity_namespace%__Promotion__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
     "Rule": {
+        "SupportParallel": true,
         "%vlocity_namespace%__RuleAction__c": {
             "FileName": [
                 "#RuleActions"
@@ -371,6 +489,19 @@
         "%vlocity_namespace%__Attribute__c": [
             "%vlocity_namespace%__Code__c"
         ],
+        "%vlocity_namespace%__CalculationProcedureVersion__c": [
+            "%vlocity_namespace%__VersionNumber__c",
+            "%vlocity_namespace%__CalculationProcedureId__c"
+        ],
+        "%vlocity_namespace%__ContextAction__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__ContextDimension__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__ContextScope__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
         "%vlocity_namespace%__DRMapItem__c": [
             "%vlocity_namespace%__MapId__c"
         ],
@@ -387,10 +518,30 @@
         "%vlocity_namespace%__ObjectLayout__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
+        "%vlocity_namespace%__ObjectRuleAssignment__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
         "%vlocity_namespace%__OmniScript__c": [
             "%vlocity_namespace%__Type__c",
             "%vlocity_namespace%__SubType__c",
             "%vlocity_namespace%__Language__c"
+        ],
+        "%vlocity_namespace%__PicklistValue__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__Picklist__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__PriceListEntry__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],"%vlocity_namespace%__PricingElement__c":[
+             "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__PriceList__c": [
+            "%vlocity_namespace%__Code__c"
+        ],
+        "%vlocity_namespace%__PricingVariable__c": [
+            "%vlocity_namespace%__Code__c"
         ],
         "%vlocity_namespace%__ProductChildItem__c": [
             "%vlocity_namespace%__GlobalKey__c"
@@ -398,14 +549,21 @@
         "%vlocity_namespace%__ProductRelationship__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
-        "%vlocity_namespace%__Rule__c": [
-            "%vlocity_namespace%__GlobalKey__c"
+        "%vlocity_namespace%__PromotionItem__c": [
+            "%vlocity_namespace%__PromotionId__c",
+            "%vlocity_namespace%__ProductId__c"
         ],
         "%vlocity_namespace%__Promotion__c": [
             "%vlocity_namespace%__GlobalKey__c"
         ],
-        "%vlocity_namespace%__PromotionItem__c": [
-            "Unique_Code__c"
+        "%vlocity_namespace%__Rule__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__VlocityFunctionArgument__c": [
+            "%vlocity_namespace%__GlobalKey__c"
+        ],
+        "%vlocity_namespace%__VlocityFunction__c": [
+            "%vlocity_namespace%__GlobalKey__c"
         ],
         "Product2": [
             "%vlocity_namespace%__GlobalKey__c"
@@ -418,7 +576,24 @@
     "System": {
         "%vlocity_namespace%__System__c": {}
     },
+    "TimePlan": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__TimePlan__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
+    "TimePolicy": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__TimePolicy__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
     "UIFacet": {
+        "SupportParallel": true,
         "%vlocity_namespace%__UIFacet__c": {
             "FolderName": [
                 "%vlocity_namespace%__GlobalKey__c"
@@ -426,6 +601,7 @@
         }
     },
     "UISection": {
+        "SupportParallel": true,
         "%vlocity_namespace%__UISection__c": {
             "FolderName": [
                 "%vlocity_namespace%__GlobalKey__c"
@@ -433,23 +609,41 @@
         }
     },
     "VlocityAction": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocityAction__c": {}
     },
-     "VlocityAttachment": {
+    "VlocityAttachment": {
         "%vlocity_namespace%__VlocityAttachment__c": {}
     },
     "VlocityCard": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocityCard__c": {
             "%vlocity_namespace%__Definition__c": "json"
         }
     },
+    "VlocityFunction": {
+        "SupportParallel": true,
+        "%vlocity_namespace%__VlocityFunction__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
+    },
     "VlocityPicklist": {
-        "%vlocity_namespace%__Picklist__c": {}
+        "SupportParallel": true,
+        "AllowHeadersOnly": true,
+        "%vlocity_namespace%__Picklist__c": {
+            "FolderName": [
+                "%vlocity_namespace%__GlobalKey__c"
+            ]
+        }
     },
     "VlocitySearchWidgetSetup": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocitySearchWidgetSetup__c": {}
     },
     "VlocityStateModel": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocityStateModel__c": {
             "%vlocity_namespace%__VlocityState__c": "list",
             "FileName": [
@@ -463,11 +657,13 @@
         "%vlocity_namespace%__VlocityState__c": {}
     },
     "VlocityUILayout": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocityUILayout__c": {
             "%vlocity_namespace%__Definition__c": "json"
         }
     },
     "VlocityUITemplate": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VlocityUITemplate__c": {
             "%vlocity_namespace%__CSS__c": "css",
             "%vlocity_namespace%__CustomJavascript__c": "js",
@@ -487,24 +683,11 @@
         }
     },
     "VqMachine": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VqMachine__c": {}
     },
     "VqResource": {
+        "SupportParallel": true,
         "%vlocity_namespace%__VqResource__c": {}
-    },
-    "TimePolicy": {
-        "%vlocity_namespace%__TimePolicy__c": {}
-    },
-    "TimePlan": {
-        "%vlocity_namespace%__TimePlan__c": {}
-    },
-    "PricingVariable": {
-        "%vlocity_namespace%__PricingVariable__c": {}
-    },
-    "Promotion": {
-        "%vlocity_namespace%__Promotion__c": {}
-    },
-    "PriceList": {
-        "%vlocity_namespace%__PriceList__c": {}
     }
 }
