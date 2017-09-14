@@ -1,53 +1,20 @@
 Install
 -----------
-#### Install Apache Ant
-http://ant.apache.org/manual/install.html  
-
-Mac Instructions
-------------
- 
-#### Install Homebrew
-```bash 
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-More Info: http://brew.sh/  
 
 #### Install Node.js  
 Download and Install the Current Version at:
 https://nodejs.org/
 
-Use the following commands: 
-```bash 
-brew install nvm  
+This project now supports Node Version 8+.
 
-mkdir ~/.nvm  
-export NVM_DIR="$HOME/.nvm"  
-. "$(brew --prefix nvm)/nvm.sh"  
-
-nvm install v4.3  
-nvm use 4.3  
-npm rebuild node-sass  
+Inside the Git repository you have cloned run the following commands:
+```bash   
 npm install -g grunt-cli
+npm install
 ```
 
-Windows Instructions
-------------
-#### Install Node.js 
-Download and Install the Current Version at:
-https://nodejs.org/
-
-#### Install Node Version Manager for Windows 
-
-Download the latest nvm-setup.zip at:
-https://github.com/coreybutler/nvm-windows/releases
-
-Use the following commands: 
-```bash 
-nvm install v4.3  
-nvm use 4.3  
-npm rebuild node-sass  
-npm install -g grunt-cli
-```
+#### Install Apache Ant (Optional)
+http://ant.apache.org/manual/install.html 
 
 Project Setup 
 ------------
@@ -90,6 +57,7 @@ By default ANT will use the build.properties file, however the build file can be
 ```bash
 ant -propertyfile MY_ORG.properties packExport
 ```
+
 DataPack Job Files
 ------------
 The files defining Jobs can be placed in the dataPacksJobs folder or in the folder for your project. They are YAML files which specify what will happen when the job is run. They are similar to a Salesforce package.xml file, however they also contain additional options for the job when it is run. 
@@ -135,7 +103,7 @@ exportBuildFile: exportFile/exportFile.json
 ```
 
 ##### BuildFile  
-This specifiec a File to create from the DataPack Directory
+This specifies a File to create from the DataPack Directory
 ```yaml
 buildFile: staticresources/CampaignBaseTemplates.resource 
 ```
@@ -166,7 +134,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
 | compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
-| manifestOnly      | If true, an Export job will only save items specifically listed in the manifest      |   Boolean | false |
+| manifestOnly | If true, an Export job will only save items specifically listed in the manifest |   Boolean | false |
 | delete | Delete the VlocityDataPack__c file on finish   |    Boolean | true |
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000

@@ -57,8 +57,7 @@
         },
         "%vlocity_namespace%__CalculationMatrix__c": {
             "%vlocity_namespace%__CalculationMatrixVersion__c": "object"
-        },
-        "ExportGroupSize": 1
+        }
     },
     "CalculationProcedure": {
         "SupportParallel": true,
@@ -75,8 +74,7 @@
         },
         "%vlocity_namespace%__CalculationProcedure__c": {
             "%vlocity_namespace%__CalculationProcedureVersion__c": "object"
-        },
-        "ExportGroupSize": 1
+        }
     },
     "ContextAction": {
         "SupportParallel": true,
@@ -258,7 +256,6 @@
         }
     },
     "ObjectLayout": {
-        "SupportParallel": true,
         "%vlocity_namespace%__ObjectLayout__c": {
             "FolderName": [
                 "%vlocity_namespace%__GlobalKey__c"
@@ -329,7 +326,6 @@
         "%vlocity_namespace%__OrchestrationPlanDefinition__c": {}
     },
     "PriceList": {
-        "ExportGroupSize": 1,
         "%vlocity_namespace%__PriceList__c": {
             "FolderName": [
                 "%vlocity_namespace%__Code__c"
@@ -337,7 +333,6 @@
         }
     },
     "Pricebook2": {
-        "ExportGroupSize": 1,
         "Pricebook2": {
             "%vlocity_namespace%__CustomJavaScript__c": {
                 "FileName": [
@@ -413,7 +408,6 @@
                 "%vlocity_namespace%__GlobalKey__c"
             ]
         },
-        "ExportGroupSize": 1,
         "PricebookEntry": {
             "FileName": [
                 "#StandardPricebookEntry"

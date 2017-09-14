@@ -15,7 +15,8 @@ var SUPPORTED_JOB_KEY_TO_OPTION_MAP = {
 	version: 'version', 
 	source: 'source',
 	alreadyExportedKeys: 'alreadyExportedKeys',
-	exportPacksMaxSize: 'exportPacksMaxSize'
+	exportPacksMaxSize: 'exportPacksMaxSize',
+	useVlocityTriggers: 'useVlocityTriggers'
 };
 
 var MAX_PER_GROUP = 5;
@@ -142,8 +143,6 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
 		jobInfo.headersOnly = false;
 		
 		if (jobInfo.jobAction == 'Export') {
-			self.vlocity.datapacksexpand.refreshAllParentKeys(jobInfo);	
-
 			if (action == 'Retry') {
 
 				if (!jobInfo.extendedManifest) {
@@ -507,7 +506,6 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 		console.log('\x1b[32m', 'Export Series Finished');
 
 		self.vlocity.datapacksutils.printJobStatus(jobInfo);
-		self.vlocity.datapacksexpand.refreshAllParentKeys(jobInfo);
 
 		if ((!jobInfo.hasError || jobInfo.continueAfterError) && Object.keys(jobInfo.extendedManifest).length > 0) {
 			console.log('\x1b[32m', 'Chaining Job - Total Exports', '\x1b[0m', Object.keys(jobInfo.extendedManifest).length);
@@ -519,6 +517,7 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 
 			self.exportFromManifest(jobInfo, onComplete);
 		} else {
+			self.vlocity.datapacksexpand.refreshAllParentKeys(jobInfo);
 			fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
 
 			onComplete(jobInfo);
