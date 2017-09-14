@@ -35,12 +35,12 @@ The supported DataPacks actions for grunt are as follow:
 
 `packExport`: Export from a Salesforce org into a DataPack Directory  
 `packDeploy`: Deploy all contents of a DataPacks Directory  
-`packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org
-`packBuildFile`: Build a DataPacks Directory into a DataPack file of  
-`packExpandFile`: Create a DataPack Directory from a previosuly exported file
-`packExportSingle`: Export a Single DataPack by Id
-`packContinue`: Continues a job that failed due to an error
-`packRetry`: Continues a Job retrying all deploy errors or re-running all export queries
+`packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org  
+`packBuildFile`: Build a DataPacks Directory into a DataPack file  
+`packExpandFile`: Create a DataPack Directory from a previosuly exported file  
+`packExportSingle`: Export a Single DataPack by Id  
+`packContinue`: Continues a job that failed due to an error  
+`packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
 
 
 Grunt commands follow the sytax:  
@@ -227,13 +227,11 @@ for (Object obj : dataSetObjects)
 ```
 The token CURRENT_DATA_PACKS_CONTEXT_DATA will be replaced with JSON data and converted into a List<Map<String, Object>> with data depending on the type of setting and type of job being run.
 
-#### PreJobApex Replacement Format
-Pre Job Apex is what runs before the Job.
+#### PreJobApex
+Pre Job Apex can run Anonymous Apex before the DataPack Job starts. While it is possible to use the CURRENT_DATA_PACKS_CONTEXT_DATA described above, for large projects it will be over the 32000 character limit for Anonymous Apex. 
 
 #### preJobApex vs preStepApex
-Anonymous Apex has a total character limit of 32000 characters. Therefore, large projects cannot successfully run preJobApex against the entire project. Instead, preStepApex will send only the DataPack context data for the currently running API call. 
-
-For Deploys, this means that instead of Deactivating all Templates and Layouts for an entire project before beginning a full deploy, using the same provided DeactivateTemplatesAndLayouts.cls as preStepApex, the target Salesforce Org will be minimally impacted as each Template or Card will only be Deactivated while it is being deployed. Best when combined with the maximumDeployCount of 1. 
+preStepApex will send only the DataPack context data for the currently running API call. For Deploys, this means that instead of Deactivating all Templates and Layouts for an entire project before beginning a full deploy, using the same provided DeactivateTemplatesAndLayouts.cls as preStepApex, the target Salesforce Org will be minimally impacted as each Template or Card will only be Deactivated while it is being deployed. Best when combined with the maximumDeployCount of 1. 
 
 Currently preStepApex is only supported for Deploy, but additional job types and postStepApex functionality will follow in time.
 
