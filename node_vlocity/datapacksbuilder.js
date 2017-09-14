@@ -19,8 +19,8 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
      var self = this;
     
     if (self.vlocity.verbose) {
-		console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', importPath, jobInfo.manifest, jobInfo);
-	}
+        console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', importPath, jobInfo.manifest, jobInfo);
+    }
     
     var dataPackImport = JSON.parse(fs.readFileSync(path.join(__dirname, 'defaultdatapack.json'), 'utf8'));
 
@@ -72,7 +72,7 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
     self.compileQueuedData(result => {
         if(result.hasErrors) {            
             jobInfo.hasError = true;
-	    	jobInfo.errorMessage = result.errors.join('\n');
+            jobInfo.errorMessage = result.errors.join('\n');
         }
         onComplete(dataPackImport.dataPacks.length > 0 ? dataPackImport : null);
     });
