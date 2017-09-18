@@ -197,7 +197,8 @@
         "SupportParallel": true,
         "%vlocity_namespace%__Element__c": {
             "FileName": [
-                "#Elements"
+                "#Element",
+                "Name"
             ],
             "FilterFields": [
                 "%vlocity_namespace%__OmniScriptVersion__c"
@@ -206,12 +207,11 @@
                 "%vlocity_namespace%__PropertySet__c"
             ],
             "SortFields": [
-                "%vlocity_namespace%__Level__c",
-                "%vlocity_namespace%__Order__c"
+                "Name"
             ]
         },
         "%vlocity_namespace%__OmniScript__c": {
-            "%vlocity_namespace%__Element__c": "list",
+            "%vlocity_namespace%__Element__c": "object",
             "%vlocity_namespace%__PropertySet__c": {
                 "FileName": [
                     "#PropertySet"
@@ -266,7 +266,8 @@
         "SupportParallel": true,
         "%vlocity_namespace%__Element__c": {
             "FileName": [
-                "#Elements"
+                "#Element",
+                "Name"
             ],
             "FilterFields": [
                 "%vlocity_namespace%__OmniScriptVersion__c"
@@ -275,8 +276,7 @@
                 "%vlocity_namespace%__PropertySet__c"
             ],
             "SortFields": [
-                "%vlocity_namespace%__Level__c",
-                "%vlocity_namespace%__Order__c"
+                "Name"
             ]
         },
         "%vlocity_namespace%__OmniScript__c": {
@@ -286,7 +286,7 @@
                 ],
                 "FileType": "js"
             },
-            "%vlocity_namespace%__Element__c": "list",
+            "%vlocity_namespace%__Element__c": "object",
             "%vlocity_namespace%__PropertySet__c": {
                 "FileName": [
                     "#PropertySet"

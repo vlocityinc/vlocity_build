@@ -307,7 +307,7 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
         jobInfo.startTime = Date.now();
     }
 
-    if (jobInfo.exportBuildFile && !jobInfo.addedToExportBuildFile) {
+    if (!jobInfo.addedToExportBuildFile) {
         jobInfo.addedToExportBuildFile = [];
         self.vlocity.datapacksexportbuildfile.resetExportBuildFile(jobInfo);
     }
@@ -357,9 +357,13 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
                     maxForType = MAX_PER_GROUP;
                 }
 
+                if (dataPackType == 'SObject' && jobInfo.toExportGroups.length > 1) {
+                    addToExtendedManifest = true;
+                }
+
                 if (!addToExtendedManifest && jobInfo.toExportGroups[jobInfo.toExportGroups.length - 1].length >= maxForType) {
 
-                    if (jobInfo.toExportGroups.length < seriesGroupMax) {
+                    if (jobInfo.toExportGroups.length < seriesGroupMax && dataPackType != 'SObject') {
                         jobInfo.toExportGroups.push([]);
                     } else {
                         addToExtendedManifest = true;
@@ -472,13 +476,11 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
                                     }
                                 });
                             }
-                            
+
+                            self.vlocity.datapacksexportbuildfile.addToExportBuildFile(jobInfo, JSON.parse(stringify(dataPackData, { space: 4 })));
+
                             if (jobInfo.expansionPath) {
                                 self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPackData, jobInfo, function() {
-
-                                    if (jobInfo.exportBuildFile) {
-                                        self.vlocity.datapacksexportbuildfile.addToExportBuildFile(jobInfo, dataPackData);
-                                    }
 
                                     if (jobInfo.delete != false) {
                                         self.vlocity.datapacks.delete(result.VlocityDataPackId, self.getOptionsFromJobInfo(jobInfo), function() { callback(); }, function() { callback(); });
@@ -487,9 +489,6 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
                                     }
                                 });
                             } else {
-                                if (jobInfo.exportBuildFile) {
-                                    self.vlocity.datapacksexportbuildfile.addToExportBuildFile(jobInfo, dataPackData);
-                                }
 
                                 if (jobInfo.delete != false) {
                                     self.vlocity.datapacks.delete(result.VlocityDataPackId, self.getOptionsFromJobInfo(jobInfo), function() { callback(); }, function() { callback(); });
@@ -517,10 +516,18 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 
             self.exportFromManifest(jobInfo, onComplete);
         } else {
-            self.vlocity.datapacksexpand.refreshAllParentKeys(jobInfo);
             fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
+            var savedFormat = [];
 
-            onComplete(jobInfo);
+            Object.keys(self.vlocity.datapacksexportbuildfile.currentExportFileData).forEach(function(dataPackId) {
+                savedFormat.push(self.vlocity.datapacksexportbuildfile.currentExportFileData[dataPackId]);
+            });
+
+            var dataPacksToExpand = JSON.parse(stringify({ dataPacks: savedFormat }));
+
+            self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPacksToExpand, jobInfo, function() {
+                onComplete(jobInfo);       
+            });
         }
     }); 
 };

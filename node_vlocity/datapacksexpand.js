@@ -392,7 +392,7 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
                 var allParentKeys = [];
 
                 // Load parent key data if doing a maxDepth != -1 to not lose parent keys
-                if (options.maxDepth && options.maxDepth != -1 && dataPackData.VlocityDepthFromPrimary != 0) {
+                if (options.maxDepth != null && options.maxDepth >= 0 && dataPackData.VlocityDepthFromPrimary != 0) {
                     var parentFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_ParentKeys", "json");
 
                     try {
@@ -417,10 +417,6 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
                     });
 
                     dataPackData.VlocityDataPackParents.forEach(function (parentKey) {
-                        if (options.vlocityKeysToNewNamesMap[parentKey]) {
-                            allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
-                        }
-
                         var parentFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_ParentKeys", "json");
                         
                         if (!options.vlocityAllParentFiles[parentFileNameFull]) {
@@ -431,6 +427,7 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
                     });
 
                     if (allParentKeys.length > 0) {
+                        allParentKeys.sort();
                         self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys", "json", allParentKeys, isPagination);
                     }
                 }
@@ -519,6 +516,8 @@ DataPacksExpand.prototype.processDataPackData = function(dataPackType, parentNam
                                 expansionData.forEach(function(childInList) {
                                     listExpansion.push(self.processDataPackData(dataPackType, parentName, packName, childInList, isPagination));
                                 });
+
+                                listExpansion.sort();
 
                                 if (expansionData.length == 1) {
                                     dataPackMetadata[sobjectField] = listExpansion[0];
