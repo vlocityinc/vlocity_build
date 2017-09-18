@@ -215,7 +215,7 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
 
         var totalFound = 0;
 
-        async.each(jobInfo.queries, function(queryData, callback) {
+        async.eachSeries(jobInfo.queries, function(queryData, callback) {
 
             if (!jobInfo.manifest[queryData.VlocityDataPackType]) {
                 jobInfo.manifest[queryData.VlocityDataPackType] = [];
