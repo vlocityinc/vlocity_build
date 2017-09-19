@@ -32,6 +32,9 @@
             ],
             "SortFields": [
                 "%vlocity_namespace%__Code__c"
+            ],
+            "FilterFields" : [
+                "%vlocity_namespace%__AutoCode__c"
             ]
         }
     },
@@ -125,9 +128,11 @@
             "SortFields": [
                 "%vlocity_namespace%__DomainObjectCreationOrder__c",
                 "%vlocity_namespace%__InterfaceObjectLookupOrder__c",
+                "%vlocity_namespace%__FormulaOrder__c",
                 "%vlocity_namespace%__DomainObjectAPIName__c",
                 "%vlocity_namespace%__DomainObjectFieldAPIName__c",
-                "%vlocity_namespace%__InterfaceFieldAPIName__c"
+                "%vlocity_namespace%__InterfaceFieldAPIName__c",
+                "%vlocity_namespace%__MapId__c"
             ]
         }
     },
@@ -347,7 +352,8 @@
                 "#PricebookEntries"
             ],
             "SortFields": [
-                "Name"
+                "Name",
+                "Product2.%vlocity_namespace%__GlobalKey__c"
             ]
         }
     },

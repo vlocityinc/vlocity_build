@@ -270,8 +270,11 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, dataPackKey
                         dataPackDataChild = dataPackDataChild[0];
 
                         parentName = self.getDataPackFolder(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
+                        var generatedKey = dataPackType + "/" + parentName;
+                        options.vlocityKeysToNewNamesMap[currentData.VlocityDataPackKey] = generatedKey;
 
-                        options.vlocityKeysToNewNamesMap[currentData.VlocityDataPackKey] = dataPackType + "/" + parentName;
+                        // make sure we don't overwrite keys later
+                        options.vlocityKeysToNewNamesMap[generatedKey] = generatedKey;
                     }
 
                     dataPackKey = dataPackType + "/" + parentName;
@@ -302,6 +305,12 @@ DataPacksExpand.prototype.updateSourceKeysInDataPack = function(currentData, dat
 
             if (currentData.VlocityRecordSObjectType) {
 
+                if (currentData.VlocityDataPackType == 'VlocityLookupMatchingKeyObject' 
+                    && currentData.VlocityMatchingRecordSourceKey) {
+                        currentData.VlocityLookupRecordSourceKey = currentData.VlocityMatchingRecordSourceKey;
+                        delete currentData.VlocityMatchingRecordSourceKey;
+                }
+
                 // This only applies to the actual object
                 if (currentData.VlocityLookupRecordSourceKey && !options.vlocityRecordSourceKeyMap[currentData.VlocityLookupRecordSourceKey]) {
                     var keyFields = self.utils.getSourceKeyDefinitionFields(currentData.VlocityRecordSObjectType);
@@ -319,11 +328,9 @@ DataPacksExpand.prototype.updateSourceKeysInDataPack = function(currentData, dat
                         }
                     });
 
-                    if (!addedSourceKeyField) {
-                        newSourceKey = currentData.VlocityRecordSObjectType + "/" + currentData.Name;
+                    if (addedSourceKeyField) {
+                        currentData.VlocityLookupRecordSourceKey = newSourceKey;
                     }
-
-                    currentData.VlocityLookupRecordSourceKey = newSourceKey;
                 }
             }
 
@@ -337,32 +344,6 @@ DataPacksExpand.prototype.updateSourceKeysInDataPack = function(currentData, dat
             });
         }
     }
-}
-
-DataPacksExpand.prototype.refreshAllParentKeys = function(options) {
-
-    Object.keys(options.vlocityAllParentFiles).forEach(function(parentFileNameFull) {
-
-        var allParentKeys = [];
-
-        try {
-            allParentKeys = JSON.parse(fs.readFileSync(parentFileNameFull, { "encoding": "utf8" }));
-        } catch (e) {
-
-        }
-
-        options.vlocityAllParentFiles[parentFileNameFull].forEach(function(parentKey) {
-             
-             if (options.vlocityKeysToNewNamesMap[parentKey]) {
-
-                if (allParentKeys.indexOf(options.vlocityKeysToNewNamesMap[parentKey]) == -1) {
-                     allParentKeys.push(options.vlocityKeysToNewNamesMap[parentKey]);
-                }
-            }
-
-            fs.outputFileSync(parentFileNameFull, stringify(allParentKeys, { space: 4 }), { "encoding": "utf8" });
-        });
-    });
 }
 
 DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPagination) {
@@ -390,13 +371,23 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
                 var dataPackName = self.getDataPackName(dataPackType, dataPackDataChild.VlocityRecordSObjectType, dataPackDataChild);
 
                 var allParentKeys = [];
+                var allRels = {};
 
                 // Load parent key data if doing a maxDepth != -1 to not lose parent keys
                 if (options.maxDepth != null && options.maxDepth >= 0 && dataPackData.VlocityDepthFromPrimary != 0) {
                     var parentFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_ParentKeys", "json");
 
                     try {
-                        allParentKeys = JSON.parse(fs.readFileSync(fullFilePath, { "encoding": "utf8" }));
+                        allParentKeys = JSON.parse(fs.readFileSync(parentFileNameFull, { "encoding": "utf8" }));
+                    } catch (e) {
+
+                    }
+
+                    var relFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_AllRelationshipKeys", "json");
+
+                    try {
+                        allRels = JSON.parse(fs.readFileSync(relFileNameFull, { "encoding": "utf8" }));
+                        dataPackData.VlocityDataPackAllRelationships = allRels;
                     } catch (e) {
 
                     }
@@ -416,25 +407,14 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, options, isPa
                         }
                     });
 
-                    dataPackData.VlocityDataPackParents.forEach(function (parentKey) {
-                        var parentFileNameFull = self.generateFilepath(dataPackType, parentName, dataPackName + "_ParentKeys", "json");
-                        
-                        if (!options.vlocityAllParentFiles[parentFileNameFull]) {
-                            options.vlocityAllParentFiles[parentFileNameFull] = dataPackData.VlocityDataPackParents;
-                        } else {   
-                            options.vlocityAllParentFiles[parentFileNameFull].concat(dataPackData.VlocityDataPackParents);  
-                        }
-                    });
-
                     if (allParentKeys.length > 0) {
                         allParentKeys.sort();
                         self.writeFile(dataPackType, parentName, dataPackName + "_ParentKeys", "json", allParentKeys, isPagination);
                     }
                 }
 
-                if (dataPackData.VlocityDataPackAllRelationships) {
-                    var allRels = {};
-
+                if (options.useAllRelationships !== false && dataPackData.VlocityDataPackAllRelationships) {
+                   
                     Object.keys(dataPackData.VlocityDataPackAllRelationships).forEach(function (relKey) {
                         if (options.vlocityKeysToNewNamesMap[relKey]) {
                             allRels[options.vlocityKeysToNewNamesMap[relKey]] = dataPackData.VlocityDataPackAllRelationships[relKey];

@@ -10,6 +10,8 @@ var DataPacksUtils = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
 
     this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
+
+    this.runJavaScriptModules = {};
 };
 
 DataPacksUtils.prototype.updateExpandedDefinition = function(expandedDefinition) {
@@ -287,6 +289,17 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
                 });
             });
         });
+};
+
+DataPacksUtils.prototype.runJavaScript = function(projectPath, filePath, currentContextData) {
+
+    var pathToRun = path.join(projectPath, filePath);
+
+    if (!this.runJavaScriptModules[pathToRun]) {
+        this.runJavaScriptModules[pathToRun] = require(path.join(projectPath, filePath));
+    }
+
+    this.runJavaScriptModules[pathToRun](currentContextData);
 };
 
 

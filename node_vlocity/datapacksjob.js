@@ -202,6 +202,8 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
         self.getExportDiffs(jobInfo, onComplete);
     } else if (action == 'GetDiffsAndDeploy') {
         self.getExportDiffsAndDeploy(jobInfo, onComplete);
+    } else if (action == 'JavaScript') {
+        self.reExpandAllFilesAndRunJavaScript(jobInfo, onComplete);
     } else {
         console.log('\x1b[31m', 'Bad Job Info', jobInfo);
     }
@@ -297,10 +299,6 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
 
     if (jobInfo.vlocityRecordSourceKeyMap == null) {
         jobInfo.vlocityRecordSourceKeyMap = {};
-    }
-
-    if (jobInfo.vlocityAllParentFiles == null) {
-        jobInfo.vlocityAllParentFiles = {};
     }
 
     if (jobInfo.startTime == null) {
@@ -1068,6 +1066,51 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
                     self.runJobWithInfo(jobInfo, 'Deploy', onComplete, onComplete, false);
                 }
             });
+        });
+    });
+}
+
+DataPacksJob.prototype.reExpandAllFilesAndRunJavaScript = function(jobInfo, onComplete) {
+    var self = this;
+
+    if (jobInfo.vlocityKeysToNewNamesMap == null) {
+        jobInfo.vlocityKeysToNewNamesMap = {};
+    }
+
+    if (jobInfo.vlocityRecordSourceKeyMap == null) {
+        jobInfo.vlocityRecordSourceKeyMap = {};
+    }
+
+    var fullDataPath = jobInfo.projectPath;
+
+    jobInfo.singleFile = true;
+    jobInfo.maxDepth = 0;
+
+    if (self.vlocity.verbose) {
+        console.log('\x1b[31m', 'Getting DataPacks >>', '\x1b[0m', fullDataPath, jobInfo.manifest, jobInfo);
+    }
+
+    self.vlocity.datapacksbuilder.buildImport(fullDataPath, jobInfo.manifest, jobInfo, function(dataJson) { 
+
+        dataJson.dataPacks.forEach(function(dataPack) {
+             if (jobInfo.javascript && jobInfo.javascript[dataPack.VlocityDataPackType]) {
+
+                var jsFiles;
+
+                if (typeof jobInfo.javascript[dataPack.VlocityDataPackType] == 'string') {
+                    jsFiles = [jobInfo.javascript[dataPack.VlocityDataPackType]];
+                } else {
+                    jsFiles = jobInfo.javascript[dataPack.VlocityDataPackType];
+                }
+
+                jsFiles.forEach(function(file) {
+                    self.vlocity.datapacksutils.runJavaScript('../javascript', file, dataPack);
+                });                 
+             }
+        });
+ 
+        self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataJson, jobInfo, function() {
+                onComplete(jobInfo);
         });
     });
 }

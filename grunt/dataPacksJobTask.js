@@ -270,6 +270,14 @@ module.exports = function (grunt) {
 		});
 	});
 
+    grunt.registerTask('runJavaScript', 'Run JavaScript', function() {
+        var done = this.async();        
+
+        dataPacksJob('JavaScript', grunt.option('job'), function() {
+            done();
+        });
+    });
+
     grunt.registerTask('runApex', 'Run a DataPacks Job', function() {
         var self = this;
 
