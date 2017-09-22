@@ -131,7 +131,7 @@ module.exports = function (grunt) {
 	        fs.readdirSync(dataPacksJobFolder).filter(function(file) {
 	            try {
 	                var fileName = file.substr(0,file.indexOf('.'));
-	                if (!/ReadMe-Example|QueryDefinitions/.test(fileName)) {
+	                if (!/QueryDefinitions/.test(fileName)) {
 	     				dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));;
 	                }
 	            } catch (e) {

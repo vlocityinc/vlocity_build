@@ -40,13 +40,13 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         if (key.indexOf('#') == 0) {
             filename += key.substring(1);
         } else if (dataPackData[key] && typeof dataPackData[key] === "string") {
-            filename += unidecode(dataPackData[key].replace(/\//g, "-"));
+            filename += unidecode(dataPackData[key].replace(/\/|:/g, "-"));
         }
     });
 
     if (filename == "") {
         if (dataPackData.Name && typeof dataPackData.Name === "string") {
-            filename += unidecode(dataPackData.Name.replace(/\//g, "-"));
+            filename += unidecode(dataPackData.Name.replace(/\/|:/g, "-"));
         } else {
             filename = null;
         }

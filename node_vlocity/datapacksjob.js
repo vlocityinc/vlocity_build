@@ -143,6 +143,8 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
         jobInfo.headersOnly = false;
         
         if (jobInfo.jobAction == 'Export') {
+            self.vlocity.datapacksexportbuildfile.loadExportBuildFile(jobInfo);
+            
             if (action == 'Retry') {
 
                 if (!jobInfo.extendedManifest) {
@@ -517,15 +519,20 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
             fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
             var savedFormat = [];
 
-            Object.keys(self.vlocity.datapacksexportbuildfile.currentExportFileData).forEach(function(dataPackId) {
-                savedFormat.push(self.vlocity.datapacksexportbuildfile.currentExportFileData[dataPackId]);
-            });
+            if (self.vlocity.datapacksexportbuildfile.currentExportFileData) {
 
-            var dataPacksToExpand = JSON.parse(stringify({ dataPacks: savedFormat }));
+                Object.keys(self.vlocity.datapacksexportbuildfile.currentExportFileData).forEach(function(dataPackId) {
+                    savedFormat.push(self.vlocity.datapacksexportbuildfile.currentExportFileData[dataPackId]);
+                });
 
-            self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPacksToExpand, jobInfo, function() {
-                onComplete(jobInfo);       
-            });
+                var dataPacksToExpand = JSON.parse(stringify({ dataPacks: savedFormat }));
+
+                self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataPacksToExpand, jobInfo, function() {
+                    onComplete(jobInfo);       
+                });
+            } else {
+                onComplete(jobInfo);
+            }
         }
     }); 
 };
