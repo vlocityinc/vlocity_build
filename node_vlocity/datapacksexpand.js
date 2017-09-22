@@ -14,15 +14,19 @@ var DataPacksExpand = module.exports = function(vlocity) {
 DataPacksExpand.prototype.generateFolderPath = function(dataPackType, parentName) {
     var self = this;
     //Replace spaces with dash (-) to have a valid file name for cards
-    var validParentName = parentName.replace(/\s+/g, "-");
+    var validParentName = self.generateFolderOrFilename(parentName);
     return self.targetPath + "/" + dataPackType + "/" + validParentName + "/";
 };
+
+DataPacksExpand.prototype.generateFolderOrFilename = function(filename) {
+    return unidecode(filename.replace(/%vlocity_namespace%__/g,"").replace(/[^A-Za-z0-9_\-\.]/g, "-"));
+}
 
 //Generate the full file path
 DataPacksExpand.prototype.generateFilepath = function(dataPackType, parentName, filename, extension) {
     var self = this;
-    //Replace spaces with dash (-) to have a valid file name for cards
-    var validFileName = filename.replace(/\s+/g, "-");
+  
+    var validFileName = self.generateFolderOrFilename(filename);
     return self.generateFolderPath(dataPackType, parentName) + validFileName + "." + extension;
 };
 
@@ -40,13 +44,13 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
         if (key.indexOf('#') == 0) {
             filename += key.substring(1);
         } else if (dataPackData[key] && typeof dataPackData[key] === "string") {
-            filename += unidecode(dataPackData[key].replace(/\/|:/g, "-"));
+            filename += dataPackData[key];
         }
     });
 
     if (filename == "") {
         if (dataPackData.Name && typeof dataPackData.Name === "string") {
-            filename += unidecode(dataPackData.Name.replace(/\/|:/g, "-"));
+            filename += dataPackData.Name;
         } else {
             filename = null;
         }
@@ -55,7 +59,7 @@ DataPacksExpand.prototype.getNameWithFields = function(nameFields, dataPackData)
     // fields can contain the Vlocity namespace placeholder
     // we remove the namespace placeholder from files names to make them
     // more readable
-    return filename.replace(/%vlocity_namespace%__/g,"");
+    return filename;
 };
 
 DataPacksExpand.prototype.getDataPackName = function(dataPackType, sObjectType, dataPackData) {
@@ -99,6 +103,8 @@ DataPacksExpand.prototype.processList = function(dataPackType, parentName, filen
         } else {
             packName = dataPackName;
         }
+
+
 
         return self.writeFile(dataPackType, parentName, packName, fileType, listData, isPagination);
     }
@@ -590,7 +596,7 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
          console.log('\x1b[32m', 'Creating file:', '\x1b[0m', fullFilePath);
     }
 
-    return filename.replace(/\s+/g, "-") + "." + fileType;
+    return self.generateFolderOrFilename(filename) + "." + fileType;
 };
 
 DataPacksExpand.prototype.expandFile = function(targetPath, expandFile, options) {

@@ -94,12 +94,13 @@ DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath, jobInfo, dataPack
         if (!self.allFileDataMap) {
             self.allFileDataMap = {};
         }
-       
-        self.allFileDataMap[srcpath + '/' + filename] = fs.readFileSync(srcpath + '/' + filename, encoding);
+
+        var filemapkey = (srcpath + '/' + filename).toLowerCase();
+        self.allFileDataMap[filemapkey] = fs.readFileSync(srcpath + '/' + filename, encoding);
 
         if (filename.indexOf('_DataPack') != -1) {
 
-            var jsonData = JSON.parse(self.allFileDataMap[srcpath + '/' + filename]);
+            var jsonData = JSON.parse(self.allFileDataMap[filemapkey]);
             var apexImportData = {};
 
             self.vlocity.datapacksutils.getApexImportDataKeys(jsonData.VlocityRecordSObjectType).forEach(function(field) {
@@ -267,7 +268,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
 
                 // Headers only accounts for potential circular references by only uploading the parent record
                 if (!jobInfo.headersOnly) {
-                   parentData = self.allFileDataMap[ fullPathToFiles + '/' + dataPackLabel + '_ParentKeys.json'];
+                   parentData = self.allFileDataMap[ (fullPathToFiles + '/' + dataPackLabel + '_ParentKeys.json').toLowerCase()];
                 } else if (!self.vlocity.datapacksutils.isAllowHeadersOnly(dataPackType)) {
 
                     continue;
@@ -305,8 +306,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                         VlocityDataPackIsIncluded: true
                     }
                 }
-
-                var dataPackDataMetadata = JSON.parse(self.allFileDataMap[fullPathToFiles + '/' + dataPackLabel + '_DataPack.json'])
+                var dataPackDataMetadata = JSON.parse(self.allFileDataMap[ (fullPathToFiles + '/' + dataPackLabel + '_DataPack.json').toLowerCase() ]);
 
                 var sobjectDataField = dataPackDataMetadata.VlocityRecordSObjectType;
 
@@ -381,8 +381,8 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                         fileNames.forEach(function(fileInArray) {
                             var fileInArray = fullPathToFiles + "/" + fileInArray;
 
-                            if (self.allFileDataMap[fileInArray]) {
-                                 allDataPackFileData = allDataPackFileData.concat(self.buildFromFiles(JSON.parse(self.allFileDataMap[fileInArray]), fullPathToFiles, dataPackType, field));
+                            if (self.allFileDataMap[fileInArray.toLowerCase()]) {
+                                 allDataPackFileData = allDataPackFileData.concat(self.buildFromFiles(JSON.parse(self.allFileDataMap[fileInArray.toLowerCase()]), fullPathToFiles, dataPackType, field));
                             } else {
                                 console.log('\x1b[31m', 'File Does Not Exist >>' ,'\x1b[0m', fileInArray);
                             }
@@ -393,9 +393,9 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
 
                         var filename = fullPathToFiles + "/" + dataPackData[field];
 
-                        if (self.allFileDataMap[filename]) {
+                        if (self.allFileDataMap[filename.toLowerCase()]) {
                             if (fileType == 'list' || fileType == 'object') {
-                                dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename]), fullPathToFiles, dataPackType, field);
+                                dataPackData[field] = self.buildFromFiles(JSON.parse(self.allFileDataMap[filename.toLowerCase()]), fullPathToFiles, dataPackType, field);
                             } else {
                                 if (self.compileOnBuild && fileType.CompiledField) { 
 
@@ -411,7 +411,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                         filename: filename,
                                         status: null,
                                         language: fileType.FileType,
-                                        source: self.allFileDataMap[filename],
+                                        source: self.allFileDataMap[filename.toLowerCase()],
                                         options: {
                                             // this is options that is passed to the compiler
                                             importer: importerOptions
@@ -424,11 +424,11 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                         }
                                     });
                                     // save source into datapack to ensure the uncompiled data also gets deployed
-                                    dataPackData[field] = self.allFileDataMap[filename];
+                                    dataPackData[field] = self.allFileDataMap[filename.toLowerCase()];
                                 } else if (!self.compileOnBuild || 
                                            !self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields ||
                                             self.dataPacksExpandedDefinition[dataPackType][currentDataField].CompiledFields.indexOf(field) == -1) {
-                                    dataPackData[field] = self.allFileDataMap[filename];
+                                    dataPackData[field] = self.allFileDataMap[filename.toLowerCase()];
                                 }
                             }
                         } 
