@@ -19,7 +19,7 @@ DataPacksExpand.prototype.generateFolderPath = function(dataPackType, parentName
 };
 
 DataPacksExpand.prototype.generateFolderOrFilename = function(filename) {
-    return unidecode(filename.replace(/%vlocity_namespace%__/g,"").replace(/[^A-Za-z0-9_\-\.]/g, "-"));
+    return unidecode(filename).replace(/%vlocity_namespace%__/g,"").replace(/[^A-Za-z0-9_\-\.]/g, "-");
 }
 
 //Generate the full file path
