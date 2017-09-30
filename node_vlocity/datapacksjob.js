@@ -82,7 +82,7 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
                 self.vlocity.datapacksbuilder.initializeImportStatus(jobInfo.projectPath + '/' + jobInfo.expansionPath, jobInfo.manifest, jobInfo);
             }
 
-            self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], jobInfo.preDeployDataSummary).then(resolve);
+            return self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.preJobApex[action], jobInfo.preDeployDataSummary);
         } else {
             return Promise.resolve();
         }
