@@ -58,10 +58,12 @@ DataPacksExportBuildFile.prototype.addToExportBuildFile = function(jobInfo, data
                 copiedDataPack.VlocityDataPackAllRelationships = {};
             }
 
-            if (!self.currentExportFileData[copiedDataPack.VlocityDataPackData.Id]) {
-                self.currentExportFileData[copiedDataPack.VlocityDataPackData.Id] = copiedDataPack;
+            var dataPackUniqueInfo = copiedDataPack.VlocityDataPackData.Id ? copiedDataPack.VlocityDataPackData.Id : copiedDataPack.VlocityDataPackKey;
+
+            if (!self.currentExportFileData[dataPackUniqueInfo]) {
+                self.currentExportFileData[dataPackUniqueInfo] = copiedDataPack;
             } else {
-                var existingDataPack = self.currentExportFileData[copiedDataPack.VlocityDataPackData.Id];
+                var existingDataPack = self.currentExportFileData[dataPackUniqueInfo];
 
                 copiedDataPack.VlocityDataPackParents.forEach(function(parentKey) {
                     if (existingDataPack.VlocityDataPackParents.indexOf(parentKey) == -1) {

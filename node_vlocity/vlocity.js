@@ -14,13 +14,17 @@ var Vlocity = module.exports = function(options) {
     this.password = options.password;
 
     this.namespace = options.vlocityNamespace;
+    this.namespacePrefix = this.namespace ? this.namespace + '__' : '';
     this.verbose = !!options.verbose;
+
     if (this.verbose) {
         console.log('Verbose mode enabled');
     }
+
     this.jsForceConnection = new jsforce.Connection({
         loginUrl: options.loginUrl ? options.loginUrl : 'https://login.salesforce.com'
     });
+
     this.isLoggedIn = false;
 
     this.datapacksutils = new datapacksutils(this);

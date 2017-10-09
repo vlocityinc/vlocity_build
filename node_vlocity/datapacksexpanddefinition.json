@@ -1,142 +1,755 @@
 {
-    "ApexImportDataKeys": {
-        "Product2": [
-            "Name",
-            "%vlocity_namespace%__GlobalKey__c"
-        ]
-    },
-    "Attachment": {
-        "SupportParallel": true,
-        "Attachment": {
-            "Body": {
-                "FileExt": "Type",
-                "FileType": "base64"
-            }
-        }
-    },
-    "AttributeAssignmentRule": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__AttributeAssignmentRule__c": {}
-    },
-    "AttributeCategory": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__AttributeCategory__c": {
-            "%vlocity_namespace%__Attribute__c": "list",
-            "FolderName": [
-                "%vlocity_namespace%__Code__c"
-            ]
-        },
-        "%vlocity_namespace%__Attribute__c": {
-            "FileName": [
-                "#Attributes"
-            ],
-            "SortFields": [
-                "%vlocity_namespace%__Code__c"
-            ],
-            "FilterFields" : [
-                "%vlocity_namespace%__AutoCode__c"
-            ]
-        }
-    },
-    "CalculationMatrix": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__CalculationMatrixRow__c": {
-            "FileName": [
-                "#Rows"
-            ],
-            "JsonFields": [
-                "%vlocity_namespace%__InputData__c",
-                "%vlocity_namespace%__OutputData__c"
-            ],
-            "SortFields": [
-                "%vlocity_namespace%__InputData__c"
-            ]
-        },
-        "%vlocity_namespace%__CalculationMatrixVersion__c": {
-            "%vlocity_namespace%__CalculationMatrixRow__c": "list",
-            "FileName": [
-                "#Version"
-            ]
-        },
-        "%vlocity_namespace%__CalculationMatrix__c": {
-            "%vlocity_namespace%__CalculationMatrixVersion__c": "object"
-        }
-    },
-    "CalculationProcedure": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__CalculationProcedureStep__c": {
-            "FileName": [
-                "#Steps"
-            ]
-        },
-        "%vlocity_namespace%__CalculationProcedureVersion__c": {
-            "%vlocity_namespace%__CalculationProcedureStep__c": "list",
-            "FileName": [
-                "#Version"
-            ]
-        },
-        "%vlocity_namespace%__CalculationProcedure__c": {
-            "%vlocity_namespace%__CalculationProcedureVersion__c": "object"
-        }
-    },
-    "ContextAction": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__ContextAction__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "ContextDimension": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__ContextDimension__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "ContextScope": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__ContextScope__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "ContractType": {
-        "%vlocity_namespace%__ContractType__c": {}
-    },
-    "DataRaptor": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__DRBundle__c": {
-            "%vlocity_namespace%__DRMapItem__c": "list",
-            "%vlocity_namespace%__InputJson__c": {
+    "DataPacks": {
+        "IntegrationProcedure": {
+            "OmniScript__c": {
+                "CustomJavaScript__c": {
+                    "FileName": [
+                        "_SampleInput"
+                    ],
+                    "FileType": "json"
+                },
                 "FileName": [
-                    "#InputJson"
+                    "Type__c",
+                    "SubType__c"
+                ],
+                "FolderName": [
+                    "Type__c",
+                    "SubType__c"
+                ],
+                "UnhashableFields": [
+                    "CustomJavaScript__c"
+                ]
+            }
+        },
+        "ObjectClass": {
+            "HeadersOnly": true,
+            "SupportParallel": false
+        },
+        "ObjectLayout": {
+            "DoNotExpand": true,
+            "SupportParallel": false
+        },
+        "PriceList": {
+            "HeadersOnly": true,
+            "SupportParallel": false
+        },
+        "Pricebook2": {
+            "HeadersOnly": "All",
+            "SupportParallel": false
+        },
+        "Product2": {
+            "HeadersOnly": true,
+            "PricebookEntry": {
+                "ListFileName": [
+                    "_StandardPricebookEntry"
                 ]
             },
-            "%vlocity_namespace%__TargetOutJson__c": {
-                "FileName": [
-                    "#TargetOutJson"
-                ]
-            }
+            "SupportParallel": false
         },
-        "%vlocity_namespace%__DRMapItem__c": {
-            "FileName": [
-                "#Mappings"
-            ],
-            "SortFields": [
-                "%vlocity_namespace%__DomainObjectCreationOrder__c",
-                "%vlocity_namespace%__InterfaceObjectLookupOrder__c",
-                "%vlocity_namespace%__FormulaOrder__c",
-                "%vlocity_namespace%__DomainObjectAPIName__c",
-                "%vlocity_namespace%__DomainObjectFieldAPIName__c",
-                "%vlocity_namespace%__InterfaceFieldAPIName__c",
-                "%vlocity_namespace%__MapId__c"
-            ]
+        "ProductChildItem": {
+            "ProductChildItem__c": {
+                "FolderName": [
+                    "Name",
+                    "ParentProductId__r.Name",
+                    "ChildProductId__r.Name"
+                ]
+            },
+            "SupportParallel": false
+        },
+        "Promotion": {
+            "SupportParallel": false
+        },
+        "SObject": {
+            "HeadersOnly": "Identical",
+            "SupportParallel": false
+        },
+        "VlocityAttachment": {
+            "SupportParallel": false
         }
     },
-    "DefaultValues": {
+    "DataPacksDefault": {
+        "HeadersOnly": false,
+        "SupportParallel": true
+    },
+    "SObjects": {
+        "Attachment": {
+            "Body": {
+                "FileExt": "null",
+                "FilePrefix": "File",
+                "FileType": "base64"
+            },
+            "FolderName": [
+                "ParentId",
+                "Name"
+            ],
+            "SourceKeyDefinition": [
+                "ParentId",
+                "Name"
+            ]
+        },
+        "AttributeAssignmentRule__c": {
+            "SourceKeyGenerationFields": [
+                "AttributeId__c",
+                "Service__c",
+                "Type__c"
+            ]
+        },
+        "AttributeAssignment__c": {
+            "FilterFields": [
+                "ObjectLink__c"
+            ],
+            "JsonFields": [
+                "ValidValuesData__c"
+            ],
+            "SourceKeyDefinition": [
+                "AttributeId__c",
+                "ObjectId__c"
+            ]
+        },
+        "AttributeBinding__c": {
+            "NonUnique": true
+        },
+        "AttributeCategory__c": {
+            "FolderName": [
+                "Code__c"
+            ],
+            "SourceKeyDefinition": [
+                "Code__c"
+            ]
+        },
+        "Attribute__c": {
+            "FilterFields": [
+                "AutoCode__c"
+            ],
+            "SortFields": [
+                "Code__c"
+            ],
+            "SourceKeyDefinition": [
+                "Code__c"
+            ]
+        },
+        "CalculationMatrixRow__c": {
+            "JsonFields": [
+                "InputData__c",
+                "OutputData__c"
+            ],
+            "ListFileName": [
+                "_Rows"
+            ],
+            "NonUnique": true,
+            "SortFields": [
+                "InputData__c"
+            ]
+        },
+        "CalculationMatrixVersion__c": {
+            "FileName": [
+                "_Version"
+            ]
+        },
+        "CalculationMatrix__c": {
+            "CalculationMatrixVersion__c": "object",
+            "SourceKeyDefinition": [
+                "Name"
+            ]
+        },
+        "CalculationProcedureStep__c": {
+            "FilterFields": [
+                "Name"
+            ],
+            "JSONFields": [
+                "CalculationFormulaTags__c",
+                "OutputJSON__c",
+                "Input__c",
+                "CalculationFormulaTags__c",
+                "ConditionalInputDisplayData__c"
+            ],
+            "ListFileName": [
+                "_Steps"
+            ],
+            "NonUnique": true,
+            "SortFields": [
+                "Sequence__c"
+            ]
+        },
+        "CalculationProcedureVersion__c": {
+            "FileName": [
+                "_Version"
+            ],
+            "JSONFields": [
+                "Constants__c",
+                "Variables__c"
+            ],
+            "SourceKeyDefinition": [
+                "VersionNumber__c",
+                "CalculationProcedureId__c"
+            ]
+        },
+        "CalculationProcedure__c": {
+            "CalculationProcedureVersion__c": "object",
+            "SourceKeyDefinition": [
+                "Name"
+            ]
+        },
+        "ContextAction__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ContextDimension__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ContextMapping__c": {
+            "NonUnique": true
+        },
+        "ContextScope__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ContractType__c": {},
+        "DRBundle__c": {
+            "InputJson__c": {
+                "FileName": [
+                    "_InputJson"
+                ]
+            },
+            "SampleInputJSON__c": {
+                "FileName": [
+                    "_SampleInputJson"
+                ]
+            },
+            "SampleInputXML__c": {
+                "FileName": [
+                    "_SampleInputXML"
+                ],
+                "FileType": "xml"
+            },
+            "SourceKeyDefinition": [
+                "Name"
+            ],
+            "TargetOutJson__c": {
+                "FileName": [
+                    "_TargetOutJson"
+                ]
+            },
+            "TargetOutXml__c": {
+                "FileName": [
+                    "_TargetOutXml"
+                ],
+                "FileType": "xml"
+            },
+            "UnhashableFields": [
+                "InputJson__c",
+                "InputXml__c",
+                "SampleInputJSON__c",
+                "SampleInputXML__c",
+                "SampleInputRows__c",
+                "TargetOutJson__c",
+                "TargetOutXml__c"
+            ]
+        },
+        "DRMapItem__c": {
+            "ListFileName": [
+                "_Mappings"
+            ],
+            "NonUnique": true,
+            "SortFields": [
+                "DomainObjectCreationOrder__c",
+                "InterfaceObjectLookupOrder__c",
+                "DomainObjectAPIName__c",
+                "DomainObjectFieldAPIName__c",
+                "InterfaceFieldAPIName__c",
+                "MapId__c"
+            ],
+            "SourceKeyDefinition": [
+                "MapId__c"
+            ]
+        },
+        "Document": {
+            "Body": {
+                "FileExt": "Type",
+                "FilePrefix": "File",
+                "FileType": "base64"
+            },
+            "FolderName": [
+                "DeveloperName"
+            ]
+        },
+        "DocumentClause__c": {},
+        "DocumentTemplate__c": {},
+        "Element__c": {
+            "FileName": [
+                "_Element",
+                "Name"
+            ],
+            "FilterFields": [
+                "OmniScriptVersion__c"
+            ],
+            "JsonFields": [
+                "PropertySet__c"
+            ],
+            "RemoveNullValues": true,
+            "SortFields": [
+                "Level__c",
+                "Order__c"
+            ],
+            "SourceKeyDefinition": [
+                "Name"
+            ]
+        },
+        "EntityFilterCondition__c": {
+            "NonUnique": true,
+            "ReplacementFields": {
+                "Name": "_AutoGenerated"
+            },
+            "SortFields": [
+                "Index__c"
+            ]
+        },
+        "EntityFilterMember__c": {
+            "NonUnique": true,
+            "ReplacementFields": {
+                "Name": "_AutoGenerated"
+            },
+            "SortFields": [
+                "Index__c"
+            ]
+        },
+        "EntityFilter__c": {
+            "FolderName": [
+                "Name"
+            ],
+            "SourceKeyDefinition": [
+                "Name"
+            ]
+        },
+        "ItemImplementation__c": {},
+        "ManualQueue__c": {},
+        "ObjectClass__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ObjectElement__c": {
+            "SortFields": [
+                "Sequence__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ObjectFacet__c": {
+            "SortFields": [
+                "Sequence__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ObjectFieldAttribute__c": {
+            "NonUnique": true,
+            "ReplacementFields": {
+                "Name": "GlobalKey__c"
+            },
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ObjectLayout__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ObjectRuleAssignment__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ObjectSection__c": {
+            "ReplacementFields": {
+                "Name": "GlobalKey__c"
+            },
+            "SortFields": [
+                "Sequence__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "OmniScript__c": {
+            "CustomJavaScript__c": {
+                "FileName": [
+                    "_JavaScript"
+                ],
+                "FileType": "js"
+            },
+            "Element__c": "object",
+            "FileName": [
+                "Type__c",
+                "SubType__c",
+                "Language__c"
+            ],
+            "FilterFields": [
+                "Version__c"
+            ],
+            "FolderName": [
+                "Type__c",
+                "SubType__c",
+                "Language__c"
+            ],
+            "PropertySet__c": {
+                "FileName": [
+                    "_PropertySet"
+                ]
+            },
+            "RemoveNullValues": true,
+            "SourceKeyDefinition": [
+                "Type__c",
+                "SubType__c",
+                "Language__c"
+            ],
+            "TestHTMLTemplates__c": {
+                "FileName": [
+                    "_HTMLTemplates"
+                ],
+                "FileType": "html"
+            }
+        },
+        "OrchestrationDependencyDefinition__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "OrchestrationItemDefinition__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "OrchestrationPlanDefinition__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "OverrideDefinition__c": {
+            "FilterFields": [
+                "ProductHierarchyPath__c",
+                "GlobalKey__c"
+            ],
+            "NonUnique": true,
+            "ReplacementFields": {
+                "Name": "_OverrideDefinition"
+            }
+        },
+        "PicklistValue__c": {
+            "ListFileName": [
+                "_Values"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "Picklist__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "PriceListEntry__c": {
+            "ReplacementFields": {
+                "Name": "GlobalKey__c"
+            },
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "PriceList__c": {
+            "FolderName": [
+                "Code__c"
+            ],
+            "SourceKeyDefinition": [
+                "Code__c"
+            ]
+        },
+        "Pricebook2": {
+            "CustomJavaScript__c": {
+                "FileName": [
+                    "_JavaScript"
+                ],
+                "FileType": "js"
+            }
+        },
+        "PricebookEntry": {
+            "SortFields": [
+                "VlocityRecordSourceKey"
+            ],
+            "SourceKeyDefinition": [
+                "Pricebook2Id",
+                "Product2Id"
+            ]
+        },
+        "PricingElement__c": {
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "PricingVariableBinding__c": {
+            "NonUnique": true
+        },
+        "PricingVariable__c": {
+            "FolderName": [
+                "Code__c"
+            ],
+            "SourceKeyDefinition": [
+                "Code__c"
+            ]
+        },
+        "Product2": {
+            "FilterFields": [
+                "JSONAttribute__c"
+            ],
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "JsonFields": [
+                "CategoryData__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ],
+            "UnhashableFields": [
+                "JSONAttribute__c",
+                "CategoryData__c"
+            ]
+        },
+        "ProductAvailability__c": {
+            "NonUnique": true
+        },
+        "ProductChildItem__c": {
+            "SortFields": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ],
+            "UnhashableFields": [
+                "Name"
+            ]
+        },
+        "ProductConfigurationProcedure__c": {
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "ProductEligibility__c": {
+            "NonUnique": true
+        },
+        "ProductRelationship__c": {
+            "SortFields": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "PromotionItem__c": {
+            "SourceKeyDefinition": [
+                "PromotionId__c",
+                "ProductId__c"
+            ]
+        },
+        "Promotion__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "RecordType": {
+            "SourceKeyDefinition": [
+                "SobjectType",
+                "DeveloperName"
+            ]
+        },
+        "RuleAction__c": {
+            "NonUnique": true,
+            "ReplacementFields": {
+                "Name": "_AutoGenerated"
+            },
+            "SortFields": [
+                "Index__c"
+            ]
+        },
+        "RuleAssignment__c": {
+            "NonUnique": true
+        },
+        "RuleFilter__c": {
+            "NonUnique": true,
+            "ReplacementFields": {
+                "Name": "_AutoGenerated"
+            },
+            "SortFields": [
+                "Index__c"
+            ]
+        },
+        "RuleVariable__c": {
+            "NonUnique": true,
+            "ReplacementFields": {
+                "Name": "_AutoGenerated"
+            },
+            "SortFields": [
+                "Index__c"
+            ]
+        },
+        "Rule__c": {
+            "FolderName": [
+                "Name"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "TimePlan__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "TimePolicy__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "UIFacet__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "UISection__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "VlocityAction__c": {
+            "FilterFields": [
+                "IsActive__c"
+            ]
+        },
+        "VlocityAttachment__c": {},
+        "VlocityCard__c": {
+            "Definition__c": "json",
+            "FilterFields": [
+                "IsActive__c"
+            ],
+            "UnhashableFields": [
+                "Author__c",
+                "GlobalKey__c"
+            ]
+        },
+        "VlocityFunctionArgument__c": {
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "VlocityFunction__c": {
+            "FolderName": [
+                "GlobalKey__c"
+            ],
+            "SourceKeyDefinition": [
+                "GlobalKey__c"
+            ]
+        },
+        "VlocitySearchWidgetSetup__c": {},
+        "VlocityStateModel__c": {
+            "FileName": [
+                "_v",
+                "VersionNumber__c"
+            ]
+        },
+        "VlocityStateTransition__c": {
+            "NonUnique": true
+        },
+        "VlocityState__c": {},
+        "VlocityUILayout__c": {
+            "Definition__c": "json",
+            "FilterFields": [
+                "Active__c"
+            ],
+            "UnhashableFields": [
+                "Author__c",
+                "GlobalKey__c"
+            ]
+        },
+        "VlocityUITemplate__c": {
+            "CSS__c": "css",
+            "CompiledFields": [
+                "CSS__c"
+            ],
+            "CustomJavascript__c": "js",
+            "FilterFields": [
+                "Active__c"
+            ],
+            "HTML__c": "html",
+            "SampleJson__c": {
+                "FileName": [
+                    "_Sample"
+                ]
+            },
+            "Sass__c": {
+                "CompiledField": "CSS__c",
+                "FileType": "scss"
+            },
+            "UnhashableFields": [
+                "SampleJson__c",
+                "Author__c"
+            ]
+        },
+        "VqMachine__c": {},
+        "VqResource__c": {}
+    },
+    "SObjectsDefault": {
         "FileName": [
             "Name"
         ],
@@ -150,550 +763,15 @@
         "FolderName": [
             "Name"
         ],
+        "ReplacementFields": {},
         "SortFields": [
+            "Hash"
+        ],
+        "SourceKeyDefinition": [
             "Name"
         ],
-        "SourceKeyFields": [
-            "Name"
+        "SourceKeyGenerationFields": [
+            "VlocityRecordSourceKey"
         ]
-    },
-    "Document": {
-        "SupportParallel": true,
-        "Document": {
-            "Body": {
-                "FileExt": "Type",
-                "FileType": "base64"
-            }
-        }
-    },
-    "DocumentClause": {
-        "%vlocity_namespace%__DocumentClause__c": {}
-    },
-    "DocumentTemplate": {
-        "%vlocity_namespace%__DocumentTemplate__c": {}
-    },
-    "EntityFilter": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__EntityFilterCondition__c": {
-            "FileName": [
-                "#EntityFilterConditions"
-            ],
-            "SortFields": [
-                "Name"
-            ]
-        },
-        "%vlocity_namespace%__EntityFilterMember__c": {
-            "FileName": [
-                "#EntityFilterMembers"
-            ],
-            "SortFields": [
-                "%vlocity_namespace%__Index__c"
-            ]
-        },
-        "%vlocity_namespace%__EntityFilter__c": {
-            "%vlocity_namespace%__EntityFilterCondition__c": "list",
-            "%vlocity_namespace%__EntityFilterMember__c": "list",
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "IntegrationProcedure": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__Element__c": {
-            "FileName": [
-                "#Element",
-                "Name"
-            ],
-            "FilterFields": [
-                "%vlocity_namespace%__OmniScriptVersion__c"
-            ],
-            "JsonFields": [
-                "%vlocity_namespace%__PropertySet__c"
-            ],
-            "SortFields": [
-                "Name"
-            ]
-        },
-        "%vlocity_namespace%__OmniScript__c": {
-            "%vlocity_namespace%__Element__c": "object",
-            "%vlocity_namespace%__PropertySet__c": {
-                "FileName": [
-                    "#PropertySet"
-                ]
-            },
-            "FileName": [
-                "%vlocity_namespace%__Type__c",
-                "%vlocity_namespace%__SubType__c"
-            ],
-            "FilterFields": [
-                "%vlocity_namespace%__Version__c"
-            ],
-            "FolderName": [
-                "%vlocity_namespace%__Type__c",
-                "%vlocity_namespace%__SubType__c"
-            ]
-        }
-    },
-    "ItemImplementation": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__ItemImplementation__c": {}
-    },
-    "ManualQueue": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__ManualQueue__c": {}
-    },
-    "ObjectClass": {
-        "AllowHeadersOnly": true,
-        "SupportParallel": true,
-        "%vlocity_namespace%__ObjectClass__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "ObjectContextRule": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__ObjectRuleAssignment__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "ObjectLayout": {
-        "%vlocity_namespace%__ObjectLayout__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "OmniScript": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__Element__c": {
-            "FileName": [
-                "#Element",
-                "Name"
-            ],
-            "FilterFields": [
-                "%vlocity_namespace%__OmniScriptVersion__c"
-            ],
-            "JsonFields": [
-                "%vlocity_namespace%__PropertySet__c"
-            ],
-            "SortFields": [
-                "Name"
-            ]
-        },
-        "%vlocity_namespace%__OmniScript__c": {
-            "%vlocity_namespace%__CustomJavaScript__c": {
-                "FileName": [
-                    "#JavaScript"
-                ],
-                "FileType": "js"
-            },
-            "%vlocity_namespace%__Element__c": "object",
-            "%vlocity_namespace%__PropertySet__c": {
-                "FileName": [
-                    "#PropertySet"
-                ]
-            },
-            "%vlocity_namespace%__TestHTMLTemplates__c": {
-                "FileName": [
-                    "#HTMLTemplates"
-                ],
-                "FileType": "html"
-            },
-            "FileName": [
-                "%vlocity_namespace%__Type__c",
-                "%vlocity_namespace%__SubType__c",
-                "%vlocity_namespace%__Language__c"
-            ],
-            "FilterFields": [
-                "%vlocity_namespace%__Version__c"
-            ],
-            "FolderName": [
-                "%vlocity_namespace%__Type__c",
-                "%vlocity_namespace%__SubType__c",
-                "%vlocity_namespace%__Language__c"
-            ]
-        }
-    },
-    "OrchestrationDependencyDefinition": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__OrchestrationDependencyDefinition__c": {}
-    },
-    "OrchestrationItemDefinition": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__OrchestrationItemDefinition__c": {}
-    },
-    "OrchestrationPlanDefinition": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__OrchestrationPlanDefinition__c": {}
-    },
-    "PriceList": {
-        "%vlocity_namespace%__PriceList__c": {
-            "FolderName": [
-                "%vlocity_namespace%__Code__c"
-            ]
-        }
-    },
-    "Pricebook2": {
-        "Pricebook2": {
-            "%vlocity_namespace%__CustomJavaScript__c": {
-                "FileName": [
-                    "#JavaScript"
-                ],
-                "FileType": "js"
-            },
-            "PricebookEntry": "list"
-        },
-        "PricebookEntry": {
-            "FileName": [
-                "#PricebookEntries"
-            ],
-            "SortFields": [
-                "Name",
-                "Product2.%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "PricingVariable": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__PricingVariable__c": {
-            "FolderName": [
-                "%vlocity_namespace%__Code__c"
-            ]
-        }
-    },
-    "Product2": {
-        "AllowHeadersOnly": true,
-        "%vlocity_namespace%__AttributeAssignment__c": {
-            "FileName": [
-                "#AttributeAssignments"
-            ],
-            "FilterFields": [
-                "%vlocity_namespace%__ObjectLink__c"
-            ],
-            "JsonFields": [
-                "%vlocity_namespace%__ValidValuesData__c"
-            ]
-        },
-        "%vlocity_namespace%__OverrideDefinition__c": {
-            "FileName": [
-                "#OverrideDefinitions"
-            ]
-        },
-        "%vlocity_namespace%__ProductAvailability__c": {
-            "FileName": [
-                "#ProductAvailabilities"
-            ]
-        },
-        "%vlocity_namespace%__ProductChildItem__c": {
-            "FileName": [
-                "#ProductChildItems"
-            ],
-            "SortFields": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        },
-        "%vlocity_namespace%__ProductConfigurationProcedure__c": {
-            "FileName": [
-                "#ProductConfigurationProcedures"
-            ]
-        },
-        "%vlocity_namespace%__ProductEligibility__c": {
-            "FileName": [
-                "#ProductEligibilities"
-            ]
-        },
-        "%vlocity_namespace%__ProductRelationship__c": {
-            "FileName": [
-                "#ProductRelationships"
-            ],
-            "SortFields": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        },
-        "PricebookEntry": {
-            "FileName": [
-                "#StandardPricebookEntry"
-            ],
-            "SortFields": [
-                "CurrencyIsoCode"
-            ]
-        },
-        "Product2": {
-            "%vlocity_namespace%__AttributeAssignment__c": "list",
-            "%vlocity_namespace%__JSONAttribute__c": {
-                "FileName": [
-                    "#JSONAttributes"
-                ],
-                "FileType": "json"
-            },
-            "%vlocity_namespace%__OverrideDefinition__c": "list",
-            "%vlocity_namespace%__ProductAvailability__c": "list",
-            "%vlocity_namespace%__ProductChildItem__c": "list",
-            "%vlocity_namespace%__ProductConfigurationProcedure__c": "list",
-            "%vlocity_namespace%__ProductEligibility__c": "list",
-            "%vlocity_namespace%__ProductRelationship__c": "list",
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ],
-            "JsonFields": [
-                "%vlocity_namespace%__CategoryData__c"
-            ],
-            "PricebookEntry": "list"
-        }
-    },
-    "ProductChildItem": {
-        "%vlocity_namespace%__ProductChildItem__c": {
-            "FolderName": [
-                "Name",
-                "%vlocity_namespace%__ParentProductId__r.Name",
-                "%vlocity_namespace%__ChildProductId__r.Name"
-            ]
-        }
-    },
-    "Promotion": {
-        "%vlocity_namespace%__Promotion__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "Rule": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__RuleAction__c": {
-            "FileName": [
-                "#RuleActions"
-            ]
-        },
-        "%vlocity_namespace%__RuleFilter__c": {
-            "FileName": [
-                "#RuleFilters"
-            ]
-        },
-        "%vlocity_namespace%__RuleVariable__c": {
-            "FileName": [
-                "#RuleVariables"
-            ]
-        },
-        "%vlocity_namespace%__Rule__c": {
-            "%vlocity_namespace%__RuleAction__c": "list",
-            "%vlocity_namespace%__RuleFilter__c": "list",
-            "%vlocity_namespace%__RuleVariable__c": "list",
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "SObject": {},
-    "SourceKeyDefinitions": {
-        "%vlocity_namespace%__AttributeCategory__c": [
-            "%vlocity_namespace%__Code__c"
-        ],
-        "%vlocity_namespace%__Attribute__c": [
-            "%vlocity_namespace%__Code__c"
-        ],
-        "%vlocity_namespace%__CalculationProcedureVersion__c": [
-            "%vlocity_namespace%__VersionNumber__c",
-            "%vlocity_namespace%__CalculationProcedureId__c"
-        ],
-        "%vlocity_namespace%__ContextAction__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__ContextDimension__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__ContextScope__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__DRMapItem__c": [
-            "%vlocity_namespace%__MapId__c"
-        ],
-        "%vlocity_namespace%__Element__c": [
-            "%vlocity_namespace%__OmniScriptId__c",
-            "Name"
-        ],
-        "%vlocity_namespace%__EntityFilter__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__ObjectClass__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__ObjectLayout__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__ObjectRuleAssignment__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__OmniScript__c": [
-            "%vlocity_namespace%__Type__c",
-            "%vlocity_namespace%__SubType__c",
-            "%vlocity_namespace%__Language__c"
-        ],
-        "%vlocity_namespace%__PicklistValue__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__Picklist__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__PriceListEntry__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],"%vlocity_namespace%__PricingElement__c":[
-             "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__PriceList__c": [
-            "%vlocity_namespace%__Code__c"
-        ],
-        "%vlocity_namespace%__PricingVariable__c": [
-            "%vlocity_namespace%__Code__c"
-        ],
-        "%vlocity_namespace%__ProductChildItem__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__ProductRelationship__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__PromotionItem__c": [
-            "%vlocity_namespace%__PromotionId__c",
-            "%vlocity_namespace%__ProductId__c"
-        ],
-        "%vlocity_namespace%__Promotion__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__Rule__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__VlocityFunctionArgument__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "%vlocity_namespace%__VlocityFunction__c": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "Product2": [
-            "%vlocity_namespace%__GlobalKey__c"
-        ],
-        "RecordType": [
-            "SobjectType",
-            "DeveloperName"
-        ]
-    },
-    "System": {
-        "%vlocity_namespace%__System__c": {}
-    },
-    "TimePlan": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__TimePlan__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "TimePolicy": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__TimePolicy__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "UIFacet": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__UIFacet__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "UISection": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__UISection__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "VlocityAction": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VlocityAction__c": {}
-    },
-    "VlocityAttachment": {
-        "%vlocity_namespace%__VlocityAttachment__c": {}
-    },
-    "VlocityCard": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VlocityCard__c": {
-            "%vlocity_namespace%__Definition__c": "json"
-        }
-    },
-    "VlocityFunction": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VlocityFunction__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "VlocityPicklist": {
-        "SupportParallel": true,
-        "AllowHeadersOnly": true,
-        "%vlocity_namespace%__Picklist__c": {
-            "FolderName": [
-                "%vlocity_namespace%__GlobalKey__c"
-            ]
-        }
-    },
-    "VlocitySearchWidgetSetup": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VlocitySearchWidgetSetup__c": {}
-    },
-    "VlocityStateModel": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VlocityStateModel__c": {
-            "%vlocity_namespace%__VlocityState__c": "list",
-            "FileName": [
-                "#v",
-                "%vlocity_namespace%__VersionNumber__c"
-            ],
-            "JsonFields": [
-                "%vlocity_namespace%__VlocityStateTransition__c"
-            ]
-        },
-        "%vlocity_namespace%__VlocityState__c": {}
-    },
-    "VlocityUILayout": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VlocityUILayout__c": {
-            "%vlocity_namespace%__Definition__c": "json"
-        }
-    },
-    "VlocityUITemplate": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VlocityUITemplate__c": {
-            "%vlocity_namespace%__CSS__c": "css",
-            "%vlocity_namespace%__CustomJavascript__c": "js",
-            "%vlocity_namespace%__HTML__c": "html",
-            "%vlocity_namespace%__SampleJson__c": {
-                "FileName": [
-                    "#Sample"
-                ]
-            },
-            "%vlocity_namespace%__Sass__c": {
-                "CompiledField": "%vlocity_namespace%__CSS__c",
-                "FileType": "scss"
-            },
-            "CompiledFields": [
-                "%vlocity_namespace%__CSS__c"
-            ]
-        }
-    },
-    "VqMachine": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VqMachine__c": {}
-    },
-    "VqResource": {
-        "SupportParallel": true,
-        "%vlocity_namespace%__VqResource__c": {}
     }
 }

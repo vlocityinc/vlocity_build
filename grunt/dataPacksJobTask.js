@@ -43,12 +43,14 @@ module.exports = function (grunt) {
 		try {
 	      	fs.readdirSync(dataPacksJobFolder).filter(function(file) {
 	      		try {
-	      			var fileName = file.substr(0,file.indexOf('.'));
-	      			dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
+                    if (file.indexOf('.yaml') != -1) {
+    	      			var fileName = file.substr(0, file.indexOf('.'));
+    	      			dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
 
-	      			dataPacksJobsData[fileName].QueryDefinitions = queryDefinitions;
-	      		} catch (e1) { 
-	      			//console.log(e1);
+    	      			dataPacksJobsData[fileName].QueryDefinitions = queryDefinitions;
+                    }
+	      		} catch (jobError) { 
+	      			console.log('Error loading Job File ' + file, jobError);
 	      		}
 	    	});
 		} catch (e2) {
@@ -80,11 +82,11 @@ module.exports = function (grunt) {
                 dataPacksJobsData[jobName].manifest = {};
                 dataPacksJobsData[jobName].manifest[grunt.option('type')] = [ grunt.option('id') ];
 
-                if (grunt.option('depth') != null) {
-                     dataPacksJobsData[jobName].maxDepth = parseInt(grunt.option('depth'));
-                }
-
                 action = 'Export';
+            }
+
+            if (grunt.option('depth') != null) {
+                    dataPacksJobsData[jobName].maxDepth = parseInt(grunt.option('depth'));
             }
             
 	    	vlocity.datapacksjob.runJob(dataPacksJobsData, jobName, action,
@@ -108,7 +110,7 @@ module.exports = function (grunt) {
 						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
 						sound: true
 					}, function (err, response) {
-						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + ' Errors: \n' + result.errorMessage);
+						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + '\nErrors:\n' + result.errorMessage);
 						callback(result);
 					});
 			}, skipUpload);
@@ -274,6 +276,14 @@ module.exports = function (grunt) {
         var done = this.async();        
 
         dataPacksJob('JavaScript', grunt.option('job'), function() {
+            done();
+        });
+    });
+
+    grunt.registerTask('runJS', 'Run JavaScript', function() {
+        var done = this.async();        
+
+        dataPacksJob('JS', grunt.option('job'), function() {
             done();
         });
     });

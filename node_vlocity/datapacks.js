@@ -12,6 +12,14 @@ var DataPacks = module.exports = function(vlocity) {
     }
 };
 
+DataPacks.prototype.ignoreActivationErrors = function(dataPackId, callback) {
+    var dataPackObj = { Id: dataPackId };
+
+    dataPackObj[this.vlocity.namespacePrefix + 'ActivationStatus__c'] = "";
+
+    this.vlocity.jsForceConnection.sobject(this.vlocity.namespacePrefix + 'VlocityDataPack__c').update(dataPackObj, callback);
+}
+
 DataPacks.prototype.getAllDataPacks = function(callback) {
     var self = this;
 
@@ -26,7 +34,7 @@ DataPacks.prototype.getAllDataPacks = function(callback) {
 DataPacks.prototype.getDataPackData = function(dataPackId, callback) {
     var self = this;
 
-    self.vlocity.checkLogin(function(){
+    self.vlocity.checkLogin(function() {
         self.vlocity.jsForceConnection.apex.get(self.dataPacksEndpoint+dataPackId, function(err, res) {
             if (err) { throw err; }
 
@@ -164,6 +172,8 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
         });
     }
 
+    var dataPackId = dataPackData.processData.VlocityDataPackId;
+
     self.vlocity.checkLogin(function() {
         self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint, dataPackData, function(err, result) {
             if (typeof result == "string") {
@@ -192,13 +202,16 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 
                 if (result.activationSuccess) {
                     result.activationSuccess.forEach(function(activatedEntity) {
-                        console.log('\x1b[32m', 'Activated >> ', '\x1b[0m', activatedEntity.VlocityDataPackKey); 
+                        console.log('\x1b[32m', 'Activated >>', '\x1b[0m', activatedEntity.VlocityDataPackKey);
                     });
                 }
             }
             
             if (err) { 
-                console.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', err);
+                console.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', dataPackId, err);
+
+                // Need to hook this in an interesting way
+                var packError = { VlocityDataPackId: dataPackId, AllErrorMessage: err };
                 
                 if (onError) onError(err);
                 else if (onSuccess) onSuccess(err);
