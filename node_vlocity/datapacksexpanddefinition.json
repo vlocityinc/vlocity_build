@@ -72,7 +72,7 @@
     "DataPacksDefault": {
         "HeadersOnly": false,
         "SupportParallel": true,
-        "PaginationSize": 1000
+        "PaginationSize": 1500
     },
     "SObjects": {
         "Attachment": {

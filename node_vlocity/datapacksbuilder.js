@@ -9,8 +9,6 @@ var UTF8_EXTENSIONS = [ "css", "json", "yaml", "scss", "html", "js"];
 
 var DEFAULT_MAX_DEPLOY_COUNT = 50;
 
-var DEFAULT_MAX_PAGINATION = 1500;
-
 var DataPacksBuilder = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
 
@@ -103,8 +101,6 @@ DataPacksBuilder.prototype.needsPagination = function(dataPackData, jobInfo) {
 
     var paginationLimit = this.vlocity.datapacksutils.getPaginationSize(dataPackData.VlocityDataPackType);
 
-    console.log('paginationLimit', paginationLimit);
-
     return this.countRecords(dataPackData) > paginationLimit;
 };
 
@@ -177,12 +173,9 @@ DataPacksBuilder.prototype.paginateDataPack = function(dataPackData, jobInfo) {
         }
     });
 
-
     if (currentCount != 0) {
         paginatedDataPacksFinal.push(paginatedDataPack);
     }
-
-    console.log(stringify(paginatedDataPacksFinal).length + ' ' + currentCount);
 
     return paginatedDataPacksFinal;
 }
