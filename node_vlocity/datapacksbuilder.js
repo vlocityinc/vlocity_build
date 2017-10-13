@@ -9,6 +9,8 @@ var UTF8_EXTENSIONS = [ "css", "json", "yaml", "scss", "html", "js"];
 
 var DEFAULT_MAX_DEPLOY_COUNT = 50;
 
+var DEFAULT_MAX_PAGINATION = 1500;
+
 var DataPacksBuilder = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
 
@@ -61,19 +63,32 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
     var currentDataPackKeysInImport = {};
 
     do {
-        
         nextImport = self.getNextImport(importPath, Object.keys(jobInfo.currentStatus), jobInfo.singleFile === true, jobInfo, currentDataPackKeysInImport);
 
         if (nextImport) {
-            currentDataPackKeysInImport[nextImport.VlocityDataPackKey] = true;
-            dataPackImport.dataPacks.push(nextImport);
-  
-            if (!jobInfo.singleFile && Object.keys(currentDataPackKeysInImport).length == self.vlocity.datapacksutils.getMaxDeploy(nextImport.VlocityDataPackType)) {
+
+            if (Object.keys(currentDataPackKeysInImport).length > 1 && stringify(nextImport).length > maxImportSize) {
+
+                jobInfo.currentStatus[nextImport.VlocityDataPackKey] = 'Ready';
                 break;
+            } else {
+                if (self.needsPagination(nextImport)) {
+                    dataPackImport.dataPacks = dataPackImport.dataPacks.concat(self.paginateDataPack(nextImport));
+                } else {
+                    dataPackImport.dataPacks.push(nextImport);
+                }
+
+                currentDataPackKeysInImport[nextImport.VlocityDataPackKey] = true;
+                
+                if (!jobInfo.singleFile && Object.keys(currentDataPackKeysInImport).length == self.vlocity.datapacksutils.getMaxDeploy(nextImport.VlocityDataPackType)) {
+                    break;
+                }
             }
         }
 
     } while (nextImport && (jobInfo.singleFile || (stringify(dataPackImport).length < maxImportSize && dataPackImport.dataPacks.length < maxImportCount)))
+
+    //fs.outputFileSync('./vlocity-temp/currentDeploy.json', stringify(dataPackImport, { space: 4 }), 'utf8');
 
     self.compileQueuedData(result => {
         if(result.hasErrors) {            
@@ -82,6 +97,124 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
         }
         onComplete(dataPackImport.dataPacks.length > 0 ? dataPackImport : null);
     });
+};
+
+DataPacksBuilder.prototype.needsPagination = function(dataPackData, jobInfo) {
+
+    var paginationLimit = this.vlocity.datapacksutils.getPaginationSize(dataPackData.VlocityDataPackType);
+
+    console.log('paginationLimit', paginationLimit);
+
+    return this.countRecords(dataPackData) > paginationLimit;
+};
+
+DataPacksBuilder.prototype.paginateDataPack = function(dataPackData, jobInfo) {
+    var self = this;
+    var paginatedDataPacksFinal = [];
+
+    var dataField = self.vlocity.datapacksutils.getDataField(dataPackData);
+
+    var dataPackBase = JSON.parse(stringify(dataPackData));
+
+    if (!dataPackBase.VlocityDataPackParents) {
+        dataPackBase.VlocityDataPackParents = [];
+    }
+
+    // Remove all but top level Data
+    Object.keys(dataPackBase.VlocityDataPackData[dataField][0]).forEach(function(keyField) {
+        if (Array.isArray(dataPackBase.VlocityDataPackData[dataField][0][keyField])) {
+            delete dataPackBase.VlocityDataPackData[dataField][0][keyField];
+        }
+    });
+
+    dataPackBase = stringify(dataPackBase);
+
+    var paginatedDataPack = JSON.parse(dataPackBase);
+  
+    var dataPackParent = dataPackData.VlocityDataPackData[dataField][0];
+
+    var paginationLimit = this.vlocity.datapacksutils.getPaginationSize(dataPackData.VlocityDataPackType);
+    var currentCount = 0;
+    
+    Object.keys(dataPackParent).forEach(function(keyField) {
+
+        if (Array.isArray(dataPackParent[keyField])) {
+
+            var recordsCounts = self.countRecords(dataPackParent[keyField]);
+
+            if (recordsCounts > 0) {
+
+                dataPackParent[keyField].forEach(function(childRecord) {
+                    var thisRecordCount = self.countRecords(childRecord);
+
+                    if (currentCount != 0 && (currentCount + thisRecordCount) > paginationLimit) {
+                        var currentDataPackKey = paginatedDataPack.VlocityDataPackKey;
+
+                        paginatedDataPacksFinal.push(paginatedDataPack);
+                        paginatedDataPack = JSON.parse(dataPackBase);
+
+                        paginatedDataPack.VlocityPreviousPageKey = currentDataPackKey;
+                        paginatedDataPack.VlocityDataPackKey = paginatedDataPack.VlocityDataPackKey + '|Page|' + paginatedDataPacksFinal.length;
+                        paginatedDataPack.VlocityDataPackRelationshipType = 'Pagination';
+
+                        paginatedDataPack.VlocityDataPackData.VlocityPreviousPageKey = currentDataPackKey;
+                        paginatedDataPack.VlocityDataPackData.VlocityDataPackKey = paginatedDataPack.VlocityDataPackKey;
+
+                        paginatedDataPack.VlocityDataPackData.VlocityDataPackRelationshipType = 'Pagination';
+                       
+                        currentCount = 0;
+                    }
+
+                    if (!paginatedDataPack.VlocityDataPackData[dataField][0][keyField]) {
+                        paginatedDataPack.VlocityDataPackData[dataField][0][keyField] = [];
+                    }
+                   
+                    paginatedDataPack.VlocityDataPackData[dataField][0][keyField].push(childRecord);
+
+                    currentCount += thisRecordCount;
+                });
+            }
+        }
+    });
+
+
+    if (currentCount != 0) {
+        paginatedDataPacksFinal.push(paginatedDataPack);
+    }
+
+    console.log(stringify(paginatedDataPacksFinal).length + ' ' + currentCount);
+
+    return paginatedDataPacksFinal;
+}
+
+DataPacksBuilder.prototype.countRecords = function(dataPackData) {
+    var self = this;
+
+    var count = 0;
+
+    if (dataPackData.VlocityDataPackData) {
+        var dataPackType = dataPackData.VlocityDataPackType;
+
+        var dataField = self.vlocity.datapacksutils.getDataField(dataPackData);
+
+        if (dataField) {
+            count += self.countRecords(dataPackData.VlocityDataPackData[dataField][0]);
+        }
+    } else { 
+        if (Array.isArray(dataPackData)) {
+            dataPackData.forEach(function(childData) {
+                count += self.countRecords(childData);
+            });
+        } else if (dataPackData.VlocityDataPackType == 'SObject') {
+
+            Object.keys(dataPackData).forEach(function(key) {
+                count += self.countRecords(dataPackData[key]);
+            });
+            count++;
+        }
+    }
+
+    return count;
 };
 
 DataPacksBuilder.prototype.loadFilesAtPath = function(srcpath, jobInfo, dataPackKey) {
@@ -333,7 +466,8 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                         VlocityDataPackKey: dataPackKey,
                         VlocityDataPackType: dataPackType,
                         VlocityDataPackIsIncluded: true
-                    }
+                    },
+                    VlocityDataPackRelationshipType: 'Primary'
                 }
 
                 var dataPackDataMetadata = JSON.parse(self.allFileDataMap[ (fullPathToFiles + '/' + dataPackLabel + '_DataPack.json').toLowerCase() ]);

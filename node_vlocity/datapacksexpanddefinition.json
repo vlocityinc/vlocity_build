@@ -31,11 +31,13 @@
         },
         "PriceList": {
             "HeadersOnly": true,
-            "SupportParallel": false
+            "SupportParallel": false,
+            "PaginationSize": 300
         },
         "Pricebook2": {
             "HeadersOnly": "All",
-            "SupportParallel": false
+            "SupportParallel": false,
+            "PaginationSize": 500
         },
         "Product2": {
             "HeadersOnly": true,
@@ -69,7 +71,8 @@
     },
     "DataPacksDefault": {
         "HeadersOnly": false,
-        "SupportParallel": true
+        "SupportParallel": true,
+        "PaginationSize": 1000
     },
     "SObjects": {
         "Attachment": {

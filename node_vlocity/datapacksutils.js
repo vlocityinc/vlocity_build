@@ -135,6 +135,10 @@ DataPacksUtils.prototype.isNonUnique = function(dataPackType, SObjectType) {
     return this.getExpandedDefinition(dataPackType, SObjectType, "NonUnique");
 }
 
+DataPacksUtils.prototype.getPaginationSize = function(dataPackType, SObjectType) {
+    return this.getExpandedDefinition(dataPackType, null, "PaginationSize");
+}
+
 DataPacksUtils.prototype.isRemoveNullValues = function(dataPackType, SObjectType) {
     return this.getExpandedDefinition(dataPackType, SObjectType, "RemoveNullValues");
 }
