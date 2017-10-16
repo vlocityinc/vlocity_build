@@ -1,0 +1,60 @@
+projectPath: ../myproject
+expansionPath: datapacks
+buildFile: staticresources/AllDataPacks.resource
+preStepApex:
+  Deploy: 
+    VlocityUITemplate: DeactivateTemplatesAndLayouts.cls
+    VlocityUILayout: DeactivateTemplatesAndLayouts.cls
+postStepApex:
+  Deploy: 
+    Product2: EPCProductJSONUpdate.cls      
+queries:
+  - VlocityDataPackType: DataRaptor
+    query: Select Id from %vlocity_namespace%__DRBundle__c
+  - VlocityDataPackType: VlocityUILayout 
+    query: Select Id from %vlocity_namespace%__VlocityUILayout__c Where %vlocity_namespace%__Active__c = true
+  - VlocityDataPackType: VlocityAction
+    query: SELECT Id FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c = true
+  - VlocityDataPackType: VlocityUITemplate
+    query: SELECT Id FROM %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c = true
+  - VlocityDataPackType: OmniScript
+    query: Select Id from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
+  - VlocityDataPackType: IntegrationProcedure
+    query: Select Id from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true
+  - VlocityDataPackType: VlocityPicklist
+    query: Select Id from %vlocity_namespace%__Picklist__c
+  - VlocityDataPackType: AttributeCategory
+    query: Select Id from %vlocity_namespace%__AttributeCategory__c
+  - VlocityDataPackType: VlocityFunction
+    query: Select Id from %vlocity_namespace%__VlocityFunction__c
+  - VlocityDataPackType: UIFacet
+    query: Select Id from %vlocity_namespace%__UIFacet__c
+  - VlocityDataPackType: UISection
+    query: Select Id from %vlocity_namespace%__UISection__c
+  - VlocityDataPackType: ObjectLayout
+    query: Select Id from %vlocity_namespace%__ObjectLayout__c
+  - VlocityDataPackType: ObjectClass
+    query: Select Id from %vlocity_namespace%__ObjectClass__c
+  - VlocityDataPackType: Promotion
+    query: Select Id from %vlocity_namespace%__Promotion__c
+  - VlocityDataPackType: Pricebook2 
+    query: Select Id from Pricebook2
+  - VlocityDataPackType: EntityFilter
+    query: Select Id from %vlocity_namespace%__EntityFilter__c
+  - VlocityDataPackType: Rule
+    query: Select Id from %vlocity_namespace%__Rule__c
+  - VlocityDataPackType: PriceList
+    query: Select Id from %vlocity_namespace%__PriceList__c
+  - VlocityDataPackType: PricingVariable
+    query: Select Id from %vlocity_namespace%__PricingVariable__c  
+delete: true
+activate: true
+compileOnBuild: true
+maxDepth: -1
+continueAfterError: true
+defaultMaxParallel: 10
+exportPacksMaxSize: 10
+useAllRelationships: false
+addSourceKeys: true
+supportHeadersOnly: true
+supportForceDeploy: true

@@ -2,12 +2,14 @@ Install
 -----------
 
 #### Install Node.js  
-Download and Install the Current Version at:
-https://nodejs.org/
+Download and Install the *Current Version* at:  
+https://nodejs.org/  
 
-This project now supports Node Version 8+.
+This project recommends Node Version 8+ and will not work with Node Version 6.  
 
-Inside the Git repository you have cloned run the following commands:
+Use `node -v` to find out which version you are on.  
+
+Inside the Git repository you have cloned run the following commands:  
 ```bash   
 npm install -g grunt-cli
 npm install
@@ -58,9 +60,97 @@ By default ANT will use the build.properties file, however the build file can be
 ant -propertyfile MY_ORG.properties packExport
 ```
 
-DataPack Job Files
+Setting up the Job File
 ------------
-The files defining Jobs can be placed in the dataPacksJobs folder or in the folder for your project. They are YAML files which specify what will happen when the job is run. They are similar to a Salesforce package.xml file, however they also contain additional options for the job when it is run. 
+The files defining Jobs can be placed in the dataPacksJobs folder or in the folder for your project. They are YAML files which specify what will happen when the job is run. They are similar to a Salesforce package.xml file, however they also contain additional options for the job when it is run.  
+
+#### dataPacksJobs/Example.yaml  
+```yaml
+projectPath: ../myproject 
+expansionPath: datapacks
+queries: 
+  - VlocityDataPackType: DataRaptor 
+    query: Select Id from %vlocity_namespace%__DRBundle__c LIMIT 1
+```
+
+This file would be run with the following command:  
+```bash
+grunt -job Example packExport
+```
+
+It will Export a single DataRaptor and write it to a Local File:  
+```
+ Creating file:  ../myproject/datapacks/DataRaptor/CreateAccount/CreateAccount_DataPack.json
+```
+
+#### dataPacksJobs/LargeExample.yaml
+
+This is a much more complex example file with all the currently recommended default settings. It includes running Anonymous Apex code before and after certain deploy steps. The details of each setting are explained later on in this documentation.
+```yaml
+projectPath: ../myproject
+expansionPath: datapacks
+buildFile: staticresources/AllDataPacks.resource
+preStepApex:
+  Deploy: 
+    VlocityUITemplate: DeactivateTemplatesAndLayouts.cls
+    VlocityUILayout: DeactivateTemplatesAndLayouts.cls
+postStepApex:
+  Deploy: 
+    Product2: EPCProductJSONUpdate.cls      
+queries:
+  - VlocityDataPackType: DataRaptor
+    query: Select Id from %vlocity_namespace%__DRBundle__c
+  - VlocityDataPackType: VlocityUILayout 
+    query: Select Id from %vlocity_namespace%__VlocityUILayout__c Where %vlocity_namespace%__Active__c = true
+  - VlocityDataPackType: VlocityAction
+    query: SELECT Id FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c = true
+  - VlocityDataPackType: VlocityUITemplate
+    query: SELECT Id FROM %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c = true
+  - VlocityDataPackType: OmniScript
+    query: Select Id from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
+  - VlocityDataPackType: IntegrationProcedure
+    query: Select Id from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true
+  - VlocityDataPackType: VlocityPicklist
+    query: Select Id from %vlocity_namespace%__Picklist__c
+  - VlocityDataPackType: AttributeCategory
+    query: Select Id from %vlocity_namespace%__AttributeCategory__c
+  - VlocityDataPackType: VlocityFunction
+    query: Select Id from %vlocity_namespace%__VlocityFunction__c
+  - VlocityDataPackType: UIFacet
+    query: Select Id from %vlocity_namespace%__UIFacet__c
+  - VlocityDataPackType: UISection
+    query: Select Id from %vlocity_namespace%__UISection__c
+  - VlocityDataPackType: ObjectLayout
+    query: Select Id from %vlocity_namespace%__ObjectLayout__c
+  - VlocityDataPackType: ObjectClass
+    query: Select Id from %vlocity_namespace%__ObjectClass__c
+  - VlocityDataPackType: Promotion
+    query: Select Id from %vlocity_namespace%__Promotion__c
+  - VlocityDataPackType: Pricebook2 
+    query: Select Id from Pricebook2
+  - VlocityDataPackType: EntityFilter
+    query: Select Id from %vlocity_namespace%__EntityFilter__c
+  - VlocityDataPackType: Rule
+    query: Select Id from %vlocity_namespace%__Rule__c
+  - VlocityDataPackType: PriceList
+    query: Select Id from %vlocity_namespace%__PriceList__c
+  - VlocityDataPackType: PricingVariable
+    query: Select Id from %vlocity_namespace%__PricingVariable__c  
+delete: true
+activate: true
+compileOnBuild: true
+maxDepth: -1
+continueAfterError: true
+defaultMaxParallel: 10
+exportPacksMaxSize: 10
+useAllRelationships: false
+addSourceKeys: true
+supportHeadersOnly: true
+supportForceDeploy: true
+```
+
+DataPack Job Files Additional Details
+------------
 
 **For a full example file with notes see dataPacksJobs/ReadMe-Example.yaml**
 
@@ -141,6 +231,10 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | defaultMaxParallel | The number of parallel processes to use for export | Integer | 1
 | exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
 | continueAfterError | Don't end grunt job on error | Boolean | false |
+| supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
+| supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
+| addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
+| useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
 
 ##### DataPacks API
 | Option | Description | Type  | Default |
