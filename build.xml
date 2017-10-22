@@ -96,6 +96,12 @@
 		<sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" retrieveTarget="${basedir}/${sf.sourcedir}" unpackaged="${basedir}/${sf.sourcedir}/package.xml" />
     </target>
 
+    <target name="salesforceRetrieveAll">
+        <echo> ${sf.username} - ${basedir}/${sf.sourcedir}</echo>
+        <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" maxPoll="${sf.maxPoll}" retrieveTarget="./vlocity-temp/allMetadata" unpackaged="./lib/all_meta_data.xml" />
+    </target>
+
+
     <target name="salesforceRetrievePackage">
         <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${serverurl}" maxPoll="${maxPoll}" retrieveTarget="${basedir}/${sf.sourcedir}" packageNames="${packageNames}"/>
     </target>

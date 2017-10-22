@@ -6,8 +6,7 @@ var stringify = require('json-stable-stringify');
 var unidecode = require('unidecode'); 
 
 var DataPacksExpand = module.exports = function(vlocity) {
-    var self = this;
-    self.vlocity = vlocity || {};
+    this.vlocity = vlocity || {};
 };
 
 DataPacksExpand.prototype.generateFolderPath = function(dataPackType, parentName) {
@@ -156,6 +155,14 @@ DataPacksExpand.prototype.listSortBy = function(obj1, obj2, fieldsArray, fieldsA
 
     if (!obj2Data) {
         obj2Data = null;
+    }
+
+    if (obj1Data == null && obj2Data != null) {
+        return 1;
+    }
+
+    if (obj1Data != null && obj2Data == null) {
+        return -1;
     }
 
     if (obj1Data < obj2Data) {

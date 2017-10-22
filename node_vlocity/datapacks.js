@@ -176,6 +176,7 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 
     self.vlocity.checkLogin(function() {
         self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint, dataPackData, function(err, result) {
+            
             if (typeof result == "string") {
                 result = JSON.parse(result);
             }

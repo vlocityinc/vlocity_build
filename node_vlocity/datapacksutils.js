@@ -20,7 +20,19 @@ var DataPacksUtils = module.exports = function(vlocity) {
 
     this.startTime = new Date().toISOString();
     this.alreadyWrittenLogs = [];
+    this.perfTimers = {}
 };
+
+DataPacksUtils.prototype.perfTimer = function(key) {
+
+    if (this.perfTimers[key]) {
+        console.log('Elapsed: ' + key, Date.now() - this.perfTimers[key]);
+
+        delete this.perfTimers[key];
+    } else {
+        this.perfTimers[key] = Date.now();
+    }
+}
 
 DataPacksUtils.prototype.updateExpandedDefinitionNamespace = function(currentData) {
 
@@ -309,6 +321,8 @@ DataPacksUtils.prototype.isInManifest = function(dataPackData, manifest) {
 }
 
 DataPacksUtils.prototype.loadApex = function(projectPath, filePath, currentContextData) {
+    var self = this;
+
     console.log('Loading APEX code from: ' +  projectPath + '/' + filePath);
 
     if (this.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
@@ -339,9 +353,13 @@ DataPacksUtils.prototype.loadApex = function(projectPath, filePath, currentConte
         }
 
         return Promise.all(includePromises).then(() => {
-            if (currentContextData) {
-                apexFileData = apexFileData.replace(/CURRENT_DATA_PACKS_CONTEXT_DATA/g, JSON.stringify(currentContextData));
+
+            if (!currentContextData) {
+                currentContextData = [];
             }
+
+            apexFileData = apexFileData.replace(/CURRENT_DATA_PACKS_CONTEXT_DATA/g, JSON.stringify(currentContextData));
+            
             return apexFileData
                 .replace(/%vlocity_namespace%/g, this.vlocity.namespace)
                 .replace(/vlocity_namespace/g, this.vlocity.namespace);
@@ -352,14 +370,16 @@ DataPacksUtils.prototype.loadApex = function(projectPath, filePath, currentConte
 }
 
 DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContextData) {
+    var self = this;
 
     return this
         .loadApex(projectPath, filePath, currentContextData)
         .then((apexFileData) => { 
             return new Promise((resolve, reject) => {
-                this.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, (err, res) => {
+                self.vlocity.jsForceConnection.tooling.executeAnonymous(apexFileData, (err, res) => {
 
                     if (err) return reject(err);
+
                     if (res.success === true) return resolve(true);
                     if (res.compileProblem) {
                         console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Compilation Error:', res.compileProblem);
@@ -370,6 +390,7 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
                     if (res.exceptionStackTrace) {
                         console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception StackTrace:', res.exceptionStackTrace);
                     }
+
                     return reject(res.compileProblem || res.exceptionMessage || 'APEX code failed to execute but no exception message was provided');
                 });
             });
@@ -377,6 +398,7 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
 };
 
 DataPacksUtils.prototype.runJavaScript = function(projectPath, filePath, currentContextData, callback) {
+    var self = this;
 
     var pathToRun = path.join(projectPath, filePath);
 
@@ -509,9 +531,15 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
     var successfulCount = 0;
     var errorsCount = 0;
 
+    if (!jobInfo.currentStatus) {
+        return;
+    }
+
     Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
         if (jobInfo.currentStatus[dataPackKey] == 'Ready' 
-                || jobInfo.currentStatus[dataPackKey] == 'Header' || jobInfo.currentStatus[dataPackKey] == 'Added') {
+            || jobInfo.currentStatus[dataPackKey] == 'Header' 
+            || jobInfo.currentStatus[dataPackKey] == 'Added'
+            || jobInfo.currentStatus[dataPackKey] == 'ReadySeparated') {
                 totalRemaining++;
         } else if (jobInfo.currentStatus[dataPackKey] == 'Error') {
             errorsCount++;
@@ -527,6 +555,22 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
     }
 
     var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
+
+    if (jobInfo.headersOnly) {
+        console.log('\x1b[36m', 'Uploading Only Parent Objects');
+    }
+
+    if (jobInfo.supportParallel) {
+        console.log('\x1b[36m', 'Parallel Processing >>', '\x1b[0m', 'Off');
+    }
+
+    if (jobInfo.forceDeploy) {
+        console.log('\x1b[36m', 'Force Deploy >>', '\x1b[0m', 'On');
+    }
+
+    if (jobInfo.ignoreAllParents) {
+        console.log('\x1b[36m', 'Ignoring Parents');
+    }
 
     console.log('\x1b[36m', 'Current Status >>', '\x1b[0m', jobInfo.jobAction);
     console.log('\x1b[32m', 'Successful >>', '\x1b[0m', successfulCount);

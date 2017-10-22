@@ -268,8 +268,9 @@
             ],
             "NonUnique": true,
             "SortFields": [
-                "DomainObjectCreationOrder__c",
                 "InterfaceObjectLookupOrder__c",
+                "FilterGroup__c",
+                "DomainObjectCreationOrder__c",
                 "DomainObjectAPIName__c",
                 "DomainObjectFieldAPIName__c",
                 "InterfaceFieldAPIName__c",

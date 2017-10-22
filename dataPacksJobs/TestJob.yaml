@@ -1,0 +1,24 @@
+projectPath: ./test
+expansionPath: testJobRunning
+buildFile: testJobRunning/testBuildFile.resource
+queries: 
+  - VlocityDataPackType: VlocityUITemplate
+    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'testpack-%' AND %vlocity_namespace%__Active__c = true
+delete: true 
+activate: true 
+compileOnBuild: true
+preJobApex:
+  Deploy: TestJob.cls
+preStepApex:
+  Deploy: TestJob.cls
+postStepApex:
+  Deploy: TestJob.cls
+postJobApex:
+  Deploy: TestJob.cls
+defaultMaxParallel: 10
+supportHeadersOnly: true
+supportForceDeploy: true
+OverrideSettings:
+  DataPacks:
+    VlocityUITemplate:
+      HeadersOnly: true

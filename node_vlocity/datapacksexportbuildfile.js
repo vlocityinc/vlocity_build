@@ -6,8 +6,7 @@ var stringify = require('json-stable-stringify');
 var unidecode = require('unidecode'); 
 
 var DataPacksExportBuildFile = module.exports = function(vlocity) {
-    var self = this;
-    self.vlocity = vlocity || {};
+    this.vlocity = vlocity || {};
 };
 
 DataPacksExportBuildFile.prototype.resetExportBuildFile = function(jobInfo) {
@@ -20,7 +19,7 @@ DataPacksExportBuildFile.prototype.setFilename = function(jobInfo) {
     if (jobInfo.exportBuildFile) {
         this.filename = jobInfo.projectPath + '/' + jobInfo.exportBuildFile;
     } else {
-        this.filename = path.join(__dirname, "../vlocity-deploy-temp/allExportedDataPacks.json");
+        this.filename = path.join(__dirname, "../vlocity-temp/allExportedDataPacks.json");
     }
 };
 

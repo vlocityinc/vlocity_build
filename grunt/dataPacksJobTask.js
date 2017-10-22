@@ -3,6 +3,7 @@ var yaml = require('js-yaml');
 var fs = require('fs-extra');
 var path = require('path');
 var notifier = require('node-notifier');
+var async = require('async');
 
 var node_vlocity = require('../node_vlocity/vlocity.js');
 
@@ -10,7 +11,7 @@ module.exports = function (grunt) {
 
     var dataPacksJobFolder = './dataPacksJobs';	
 
-	function dataPacksJob(action, jobName, callback, skipUpload) {
+	function dataPacksJob(action, jobName, callback) {
 
 	  	var properties = grunt.config.get('properties');
 		var jobStartTime = Date.now();
@@ -110,10 +111,10 @@ module.exports = function (grunt) {
 						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
 						sound: true
 					}, function (err, response) {
-						grunt.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + '\nErrors:\n' + result.errorMessage);
+						grunt.fail.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + '\nErrors:\n' + result.errorMessage);
 						callback(result);
 					});
-			}, skipUpload);
+			});
 	    } else {
 	    	grunt.log.error('DataPacks Job Not Found - ' + jobName);
             callback(jobName);
@@ -272,6 +273,69 @@ module.exports = function (grunt) {
 		});
 	});
 
+    grunt.registerTask('runTestJob', 'Run a DataPacks Job', function() {
+        
+        var done = this.async();
+
+        fs.removeSync('./test/testJobRunning');
+        fs.copySync('./test/testJobData', './test/testJobRunning');
+
+        var commands = ['Deploy', 
+                        'GetDiffs',
+                        'Export', 
+                        'GetDiffsAndDeploy', 
+                        'BuildFile',
+                        'JavaScript' ];
+
+        if (grunt.option('test')) {
+            commands = [ grunt.option('test') ];
+        }
+
+        var allElapsed = {};
+
+        async.eachSeries(commands, function(command, callback) {
+
+            grunt.log.ok('Testing: ' + command);
+            var currentTime = Date.now();
+
+            dataPacksJob(command, 'TestJob', function(jobInfo) {
+                var hasErrors = false;
+
+                if (!jobInfo.currentStatus || Object.keys(jobInfo.currentStatus).length == 0) {
+                    grunt.log.error('No Status Found');
+                    hasErrors = true;
+                } else {
+                    Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
+                        if (command == 'BuildFile' || command =='JavaScript') {
+                            if (jobInfo.currentStatus[dataPackKey] != 'Added') {
+                                grunt.log.error(dataPackKey, jobInfo.currentStatus[dataPackKey]);
+                                hasErrors = true;
+                            }
+                        } else if (jobInfo.currentStatus[dataPackKey] != 'Success'){
+                            grunt.log.error(dataPackKey, jobInfo.currentStatus[dataPackKey]);
+                            hasErrors = true;
+                        }
+                    });
+                }
+
+                if (jobInfo.hasErrors || hasErrors) {
+                    grunt.fail.fatal('Test Failed');
+                }
+
+                allElapsed[command] = Math.floor((Date.now() - currentTime) / 1000);
+
+                callback();
+            });
+        }, function(err, result) {
+
+            commands.forEach(function(command) {
+                grunt.log.ok(command + ': ' + allElapsed[command] + 's');
+            });
+            
+            done();
+        });
+    });
+
     grunt.registerTask('runJavaScript', 'Run JavaScript', function() {
         var done = this.async();        
 
@@ -280,11 +344,49 @@ module.exports = function (grunt) {
         });
     });
 
-    grunt.registerTask('runJS', 'Run JavaScript', function() {
-        var done = this.async();        
+    grunt.registerTask('packUpdateSettings', 'Run JavaScript', function() {
+        var done = this.async();
 
-        dataPacksJob('JS', grunt.option('job'), function() {
-            done();
+        var properties = grunt.config.get('properties');
+        
+        var vlocity = new node_vlocity({
+          username: properties['sf.username'], 
+          password: properties['sf.password'], 
+          vlocityNamespace: properties['vlocity.namespace'],
+          verbose: grunt.option('verbose'),
+          loginUrl: properties['sf.loginUrl']
+        });
+
+        var dataPacksJobsData = {
+            UpdateSettings: {
+              projectPath: './DataPackSettings',
+              delete: true,
+              defaultMaxParallel: 10
+            }
+          };
+
+        vlocity.datapacksjob.runJob(dataPacksJobsData, 'UpdateSettings', action,
+                function(result) {
+                    notifier.notify({
+                        title: 'Vlocity deployment tools',
+                        message: 'Configuration Updated',                      
+                        icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
+                        sound: true
+                    }, function (err, response) {
+                        grunt.log.ok('Configuration Updated');
+                        callback(result);
+                    });
+                },                      
+                function(result) {
+                    notifier.notify({
+                        title: 'Vlocity deployment tools',
+                        message: 'Configuration Update Failed',                      
+                        icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
+                        sound: true
+                    }, function (err, response) {
+                        grunt.fatal('Configuration Update Failed \nErrors:\n' + result.errorMessage);
+                        callback(result);
+                    });
         });
     });
 
