@@ -20,15 +20,15 @@ DataPacksExpand.prototype.generateFolderPath = function(dataPackType, parentName
 
 DataPacksExpand.prototype.generateFolderOrFilename = function(filename, extension) {
 
-    var santizedFilename = unidecode(filename).replace(/%vlocity_namespace%__/g,"").replace(/[^A-Za-z0-9_\-\.]/g, "-");
+    var sanitizedFilename = unidecode(filename).replace(/%vlocity_namespace%__/g,"").replace(/[^A-Za-z0-9_\-\.]/g, "-");
 
     if (extension 
         && extension != "base64" 
         && !this.vlocity.datapacksutils.endsWith(filename, "." + extension)) {
-        santizedFilename += "." + extension;
+        sanitizedFilename += "." + extension;
     }
 
-    return santizedFilename;
+    return sanitizedFilename;
 }
 
 //Generate the full file path
@@ -805,7 +805,7 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
     fs.outputFileSync(fullFilePath, fileData, { "encoding": encoding });
 
     if (fullFilePath.indexOf('_DataPack') > -1 || self.vlocity.verbose) {
-         console.log('\x1b[32m', 'Creating file:', '\x1b[0m', fullFilePath);
+         console.log('\x1b[32m', 'Creating file >>', '\x1b[0m', fullFilePath);
     }
 
     return self.generateFolderOrFilename(filename, fileType);

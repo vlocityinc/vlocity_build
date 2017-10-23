@@ -121,7 +121,7 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
         }
     })
     .then(function() {
-        
+
         self.vlocity.datapacksutils.printJobStatus(jobInfo);
 
         if (!jobInfo.hasError) {
@@ -197,8 +197,10 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
                 console.log('\x1b[32m', 'Back to Ready');
 
                 Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
-                    if (jobInfo.currentStatus[dataPackKey] != 'Success') {
-                        jobInfo.currentStatus[dataPackKey] = 'Ready';
+
+                    if (jobInfo.currentStatus[dataPackKey] != 'Success' 
+                        && jobInfo.currentStatus[dataPackKey] != 'Ready') {
+                        jobInfo.currentStatus[dataPackKey] = 'ReadySeparate';
                     };
                 });
             }
@@ -248,7 +250,8 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
 
             var query = queryData.query.replace(/%vlocity_namespace%/g, self.vlocity.namespace);
 
-            console.log('\x1b[36m', 'Running Query >>', '\x1b[0m', query);
+            console.log('\x1b[36m', 'VlocityDataPackType >>', '\x1b[0m', queryData.VlocityDataPackType);
+            console.log('\x1b[36m', 'Query >>', '\x1b[0m', query);
 
             var thisQuery = self.vlocity.jsForceConnection.query(query)
                 .on("record", function(record) {
@@ -259,12 +262,18 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
                     }
                 })
                 .on("end", function() {
-                    console.log('\x1b[36m', 'Query Total Found >>', '\x1b[0m', thisQuery.totalFetched);
+                    console.log('\x1b[36m', 'Records >>', '\x1b[0m', thisQuery.totalFetched);
 
                     callback();
                 })
                 .on("error", function(err) {
-                    console.log('\x1b[31m', 'Query result had error >>', '\x1b[0m', err);
+
+                    if (jobInfo.ignoreQueryErrors) {
+                        console.log('\x1b[31m', 'Ignoring Query Error >> ', '\x1b[0m', queryData.VlocityDataPackType);
+                        callback();
+                    } else {
+                        console.log('\x1b[31m', 'Query Error >>', '\x1b[0m', err);
+                    }
                 })
                 .run({ autoFetch : true, maxFetch : 10000 });
 
@@ -340,6 +349,8 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
         seriesGroupMax = jobInfo.defaultMaxParallel;
     }
 
+    jobInfo.supportParallel = jobInfo.defaultMaxParallel > 1;
+
     fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
 
     var addToExtendedManifest = false;
@@ -412,7 +423,7 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
                 return false;
             }
 
-            console.log('\x1b[32m', 'Exporting', '\x1b[0m ', dataPack.VlocityDataPackType + ' ' + (dataPack.VlocityDataPackName ? dataPack.VlocityDataPackName : dataPack.Id));
+            console.log('\x1b[32m', 'Exporting >>', '\x1b[0m ', dataPack.VlocityDataPackType + ' ' + (dataPack.VlocityDataPackName ? dataPack.VlocityDataPackName : dataPack.Id));
 
             return true;
         });
@@ -747,7 +758,6 @@ DataPacksJob.prototype.activateAll = function(dataPackData, jobInfo, onComplete,
                 if (shouldRetry) {
                     self.vlocity.datapacks.ignoreActivationErrors(dataPackData.dataPackId, function() {
 
-                        console.log('attempts', attempts);
                         self.activateAll(dataPackData, jobInfo, onComplete, attempts+1);
                     });   
                 } else {

@@ -86,6 +86,13 @@ module.exports = function (grunt) {
                 action = 'Export';
             }
 
+            if (action == 'ExportAllDefault' && queryDefinitions) {
+                dataPacksJobsData[jobName].queries = Object.keys(queryDefinitions);
+                dataPacksJobsData[jobName].ignoreQueryErrors = true;
+
+                action = 'Export';
+            }
+
             if (grunt.option('depth') != null) {
                     dataPacksJobsData[jobName].maxDepth = parseInt(grunt.option('depth'));
             }
@@ -173,6 +180,15 @@ module.exports = function (grunt) {
 		  	done();
 		});
 	});
+
+    grunt.registerTask('packExportAllDefault', 'Run a DataPacks Job', function() {
+        
+        var done = this.async();
+
+        dataPacksJob('ExportAllDefault', grunt.option('job'), function() {
+            done();
+        });
+    });
 
 	grunt.registerTask('packExport', 'Run a DataPacks Job', function() {
 		
@@ -331,6 +347,8 @@ module.exports = function (grunt) {
             commands.forEach(function(command) {
                 grunt.log.ok(command + ': ' + allElapsed[command] + 's');
             });
+
+            fs.removeSync('./test/testJobRunning');
             
             done();
         });

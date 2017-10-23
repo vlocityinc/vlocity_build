@@ -539,7 +539,7 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
         if (jobInfo.currentStatus[dataPackKey] == 'Ready' 
             || jobInfo.currentStatus[dataPackKey] == 'Header' 
             || jobInfo.currentStatus[dataPackKey] == 'Added'
-            || jobInfo.currentStatus[dataPackKey] == 'ReadySeparated') {
+            || jobInfo.currentStatus[dataPackKey] == 'ReadySeparate') {
                 totalRemaining++;
         } else if (jobInfo.currentStatus[dataPackKey] == 'Error') {
             errorsCount++;
@@ -560,8 +560,8 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
         console.log('\x1b[36m', 'Uploading Only Parent Objects');
     }
 
-    if (jobInfo.supportParallel) {
-        console.log('\x1b[36m', 'Parallel Processing >>', '\x1b[0m', 'Off');
+    if (!jobInfo.supportParallel) {
+        console.log('\x1b[36m', 'Parallel Processing >>','\x1b[0m', 'Off');
     }
 
     if (jobInfo.forceDeploy) {

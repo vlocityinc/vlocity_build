@@ -148,7 +148,6 @@ DataPacks.prototype.getErrorsFromDataPack = function(dataPackData, callback) {
     callback(errors);
 }
 
-
 DataPacks.prototype.getErrors = function(dataPackId, callback) {
     var self = this;
 
