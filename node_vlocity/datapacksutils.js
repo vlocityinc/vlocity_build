@@ -499,7 +499,7 @@ DataPacksUtils.prototype.removeUnhashableFields = function(dataPackType, dataPac
     }
 }
 
-DataPacksUtils.prototype.getDataPackHash = function(dataPack, jobInfo) {
+DataPacksUtils.prototype.getDataPackHashable = function(dataPack, jobInfo) {
 
     var clonedDataPackData = JSON.parse(stringify(dataPack));
 
@@ -517,8 +517,7 @@ DataPacksUtils.prototype.getDataPackHash = function(dataPack, jobInfo) {
 
     this.removeUnhashableFields(clonedDataPackData.VlocityDataPackType, clonedDataPackData.VlocityDataPackData[dataField][0]);
 
-    return stringify(clonedDataPackData);
-    return this.hashCode(stringify(clonedDataPackData));
+    return clonedDataPackData;
 };
 
 DataPacksUtils.prototype.endsWith = function(str, suffix) {

@@ -1155,9 +1155,9 @@ DataPacksJob.prototype.checkDiffs = function(jobInfo, currentLocalFileData, targ
 
     currentLocalFileData.dataPacks.forEach(function(dataPack) {
 
-        var dataPackHash = self.vlocity.datapacksutils.getDataPackHash(dataPack, jobInfo);
+        var dataPackHash = self.vlocity.datapacksutils.getDataPackHashable(dataPack, jobInfo);
 
-        if (targetOrgRecordsHash[dataPack.VlocityDataPackKey] == dataPackHash) {
+        if (stringify(targetOrgRecordsHash[dataPack.VlocityDataPackKey]) == stringify(dataPackHash)) {
             jobInfo.currentStatus[dataPack.VlocityDataPackKey] = 'Success';
             totalUnchanged++;          
         } else {
@@ -1165,8 +1165,8 @@ DataPacksJob.prototype.checkDiffs = function(jobInfo, currentLocalFileData, targ
 
             if (targetOrgRecordsHash[dataPack.VlocityDataPackKey]) {
 
-                currentFiles.push(JSON.parse(dataPackHash));
-                exportedFiles.push(JSON.parse(targetOrgRecordsHash[dataPack.VlocityDataPackKey]));
+                currentFiles.push(dataPackHash);
+                exportedFiles.push(targetOrgRecordsHash[dataPack.VlocityDataPackKey]);
 
                 console.log('\x1b[33m', 'Changes Found >>', '\x1b[0m', dataPack.VlocityDataPackKey + ' - ' + dataPack.VlocityDataPackName);
                 totalDiffs++;
@@ -1182,8 +1182,8 @@ DataPacksJob.prototype.checkDiffs = function(jobInfo, currentLocalFileData, targ
     console.log('\x1b[36m', 'Diffs >>', '\x1b[0m', totalDiffs);
     console.log('\x1b[36m', 'New >>', '\x1b[0m', totalNew);
 
-    fs.outputFileSync('./vlocity-temp/localFolderFiles.json', stringify(currentFiles, { space: 4 }));
-    fs.outputFileSync('./vlocity-temp/targetOrgFiles.json', stringify(exportedFiles, { space: 4 }));             
+    fs.outputFileSync('./vlocity-temp/diffs/localFolderFiles.json', stringify(currentFiles, { space: 4 }));
+    fs.outputFileSync('./vlocity-temp/diffs/targetOrgFiles.json', stringify(exportedFiles, { space: 4 }));
 }
 
 DataPacksJob.prototype.getExportDiffs = function(jobInfo, onComplete) {
@@ -1200,7 +1200,7 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
         jobInfo.savedProjectPath = jobInfo.projectPath;
     }
 
-    jobInfo.projectPath = './vlocity-temp';
+    jobInfo.projectPath = './vlocity-temp/diffs';
 
     var targetOrgRecordsHash = {};
     
@@ -1220,12 +1220,12 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
 
                 currentFileData.dataPacks.forEach(function(dataPack) {
                     // Iterate over this and hash each individual 1 as JSON
-                    targetOrgRecordsHash[dataPack.VlocityDataPackKey] = self.vlocity.datapacksutils.getDataPackHash(dataPack, jobInfo);
+                    targetOrgRecordsHash[dataPack.VlocityDataPackKey] = self.vlocity.datapacksutils.getDataPackHashable(dataPack, jobInfo);
                 });
             }
 
             jobInfo.projectPath = jobInfo.savedProjectPath;
-            
+
             fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
 
             jobInfo.currentStatus = {};

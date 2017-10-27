@@ -1,6 +1,6 @@
-projectPath: ../myproject 
-expansionPath: datapacks
-buildFile: staticresources/MyDataPack.json
+projectPath: ./example_vlocity_build
+expansionPath: .
+buildFile: AllDataPacks.json
 queries: 
   - VlocityDataPackType: DataRaptor 
     query: Select Id from %vlocity_namespace%__DRBundle__c LIMIT 1

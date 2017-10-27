@@ -8,9 +8,6 @@ module.exports = function(grunt) {
 
   var properties = loadProperties(grunt);
 
-  // Load grunt tasks automatically
-  require('load-grunt-tasks')(grunt, {pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']});
-
   grunt.initConfig({
     properties: properties
   });
@@ -22,5 +19,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask("build-js", [ ]);
+  grunt.registerTask('default', 'There is no Default task defined for this Project', function() {
+    console.log('Use','\x1b[32m', 'grunt --help', '\x1b[0m', 'to see a full list of commands');
+  });
 };

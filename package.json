@@ -1,5 +1,5 @@
 {
-  "name": "vloc_release",
+  "name": "vlocity_build",
   "version": "1.0.0",
   "description": "",
   "main": "Gruntfile.js",
@@ -13,26 +13,23 @@
     "type": "git",
     "url": "https://github.com/vlocityinc/vlocity_build.git"
   },
-  "author": "build@vlocity.com",
+  "author": "arutland@vlocity.com",
   "license": "MIT",
-  "engine": "node == 4.3.0",
+  "engines": {
+    "node": "8.5.0"
+  },
   "dependencies": {
-    "async": "2.4.1",
-    "compass-mixins": "0.12.10",
-    "fs": "0.0.2",
-    "fs-extra": "3.0.1",
+    "async": "2.5.0",
+    "fs-extra": "4.0.2",
     "grunt": "0.4.5",
-    "grunt-cli": "0.1.13",
-    "js-yaml": "3.8.4",
+    "grunt-cli": "1.2.0",
+    "js-yaml": "3.10.0",
     "jsforce": "1.8.0",
     "json-stable-stringify": "1.0.1",
-    "load-grunt-tasks": "3.4.0",
     "lodash": "4.17.4",
-    "node-notifier": "^5.1.2",
-    "progress": "^2.0.0",
+    "node-notifier": "5.1.2",
     "properties": "1.2.1",
-    "request": "2.81.0",
-    "sass.js": "^0.10.6",
+    "sass.js": "0.10.6",
     "unidecode": "0.1.8"
   }
 }

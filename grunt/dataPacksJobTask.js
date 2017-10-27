@@ -171,35 +171,17 @@ module.exports = function (grunt) {
 	    	console.log('Job Failed With Exception: ' + e.stack);
 	    }
 	}
-
-	grunt.registerTask('packDeploy', 'Run a DataPacks Job', function() {
-		
-		var done = this.async();		
-
-		dataPacksJob('Deploy', grunt.option('job'), function() {
-		  	done();
-		});
-	});
-
-    grunt.registerTask('packExportAllDefault', 'Run a DataPacks Job', function() {
+	
+    grunt.registerTask('packExport', 'Export all DataPacks', function() {
         
         var done = this.async();
 
-        dataPacksJob('ExportAllDefault', grunt.option('job'), function() {
+        dataPacksJob('Export', grunt.option('job'), function() {
             done();
         });
     });
 
-	grunt.registerTask('packExport', 'Run a DataPacks Job', function() {
-		
-		var done = this.async();
-
-		dataPacksJob('Export', grunt.option('job'), function() {
-		  	done();
-		});
-	});
-
-    grunt.registerTask('packExportSingle', 'Export a Single DataPack for this Job', function() {
+    grunt.registerTask('packExportSingle', 'Export a Single DataPack', function() {
         
         var done = this.async();
 
@@ -208,52 +190,43 @@ module.exports = function (grunt) {
         });
     });
 
-	grunt.registerTask('packBuildFile', 'Run a DataPacks Job', function() {
-		
-		var done = this.async();		
+    grunt.registerTask('packExportAllDefault', 'Export All DataPack Types defined in QueryDefinitions', function() {
+        
+        var done = this.async();
 
-		dataPacksJob('BuildFile', grunt.option('job'), function() {
-		  	done();
-		});
-	});
+        dataPacksJob('ExportAllDefault', grunt.option('job'), function() {
+            done();
+        });
+    });
 
-	grunt.registerTask('packAllExport', 'Run a DataPacks Job', function() {
+    grunt.registerTask('packAllExport', 'Run Export for all Jobs in vlocity.dataPacksJobFolder', function() {
         
         var done = this.async();
 
         runTaskForAllJobFiles('Export', function() {
-        	done();
+            done();
         });
     });
 
-    grunt.registerTask('packAllDeploy', 'Run a DataPacks Job', function() {
+	grunt.registerTask('packDeploy', 'Deploy all DataPacks', function() {
+        
+        var done = this.async();        
+
+        dataPacksJob('Deploy', grunt.option('job'), function() {
+            done();
+        });
+    });
+
+    grunt.registerTask('packAllDeploy', 'Run Deploy for all Jobs in vlocity.dataPacksJobFolder', function() {
         
         var done = this.async();
 
         runTaskForAllJobFiles('Deploy', function() {
-        	done();
+            done();
         });
     });
 
-    grunt.registerTask('packAllBuildFiles', 'Run a DataPacks Job', function() {
-        
-        var done = this.async();
-
-        runTaskForAllJobFiles('BuildFile', function() {
-        	done();
-        });
-    });
-
-	grunt.registerTask('packExpandFile', 'Run a DataPacks Job', function() {
-		
-		var done = this.async();		
-
-		dataPacksJob('ExpandFile', grunt.option('job'), function() {
-		  	done();
-		});
-	});
-
-    grunt.registerTask('packGetDiffs', 'Run a DataPacks Job', function() {
+    grunt.registerTask('packGetDiffs', 'Find all Diffs in Org Compared to Local Files', function() {
         
         var done = this.async();        
 
@@ -262,7 +235,7 @@ module.exports = function (grunt) {
         });
     });
 
-    grunt.registerTask('packGetDiffsAndDeploy', 'Run a DataPacks Job that Exports all Diffs then Deploys only the Changed DataPacks', function() {
+    grunt.registerTask('packGetDiffsAndDeploy', 'Find all Diffs then Deploy only the Changed DataPacks', function() {
         
         var done = this.async();        
 
@@ -271,6 +244,24 @@ module.exports = function (grunt) {
         });
     });
 
+	grunt.registerTask('packBuildFile', 'Build a DataPack File from all DataPacks', function() {
+		
+		var done = this.async();		
+
+		dataPacksJob('BuildFile', grunt.option('job'), function() {
+		  	done();
+		});
+	});
+
+    grunt.registerTask('packAllBuildFiles', 'Build a DataPack File for all Jobs in vlocity.dataPacksJobFolder', function() {
+        
+        var done = this.async();
+
+        runTaskForAllJobFiles('BuildFile', function() {
+            done();
+        });
+    });
+   
     grunt.registerTask('packRetry', 'Continue Running a DataPacks Job Resetting Errors to Ready', function() {
         
         var done = this.async();        
@@ -280,7 +271,7 @@ module.exports = function (grunt) {
         });
     });
 
-	grunt.registerTask('packContinue', 'Run a DataPacks Job', function() {
+	grunt.registerTask('packContinue', 'Continue a DataPack Job', function() {
 		
 		var done = this.async();		
 
@@ -289,7 +280,7 @@ module.exports = function (grunt) {
 		});
 	});
 
-    grunt.registerTask('runTestJob', 'Run a DataPacks Job', function() {
+    grunt.registerTask('runTestJob', 'Test of Primary Commands - Makes real changes to the Org', function() {
         
         var done = this.async();
 
@@ -354,7 +345,7 @@ module.exports = function (grunt) {
         });
     });
 
-    grunt.registerTask('runJavaScript', 'Run JavaScript', function() {
+    grunt.registerTask('runJavaScript', 'Run JavaScript on all DataPacks in the Project then recreate the files', function() {
         var done = this.async();        
 
         dataPacksJob('JavaScript', grunt.option('job'), function() {
@@ -362,7 +353,7 @@ module.exports = function (grunt) {
         });
     });
 
-    grunt.registerTask('packUpdateSettings', 'Run JavaScript', function() {
+    grunt.registerTask('packUpdateSettings', 'Update the DataPack Settings in your Org', function() {
         var done = this.async();
 
         var properties = grunt.config.get('properties');
@@ -377,13 +368,15 @@ module.exports = function (grunt) {
 
         var dataPacksJobsData = {
             UpdateSettings: {
+
               projectPath: './DataPackSettings',
               delete: true,
-              defaultMaxParallel: 10
+              defaultMaxParallel: 10,
+              preJobApex: { Deploy: 'ResetDataPackMappings.cls' }
             }
           };
 
-        vlocity.datapacksjob.runJob(dataPacksJobsData, 'UpdateSettings', action,
+        vlocity.datapacksjob.runJob(dataPacksJobsData, 'UpdateSettings', 'Deploy',
                 function(result) {
                     notifier.notify({
                         title: 'Vlocity deployment tools',
@@ -392,7 +385,7 @@ module.exports = function (grunt) {
                         sound: true
                     }, function (err, response) {
                         grunt.log.ok('Configuration Updated');
-                        callback(result);
+                        done();
                     });
                 },                      
                 function(result) {
@@ -403,12 +396,12 @@ module.exports = function (grunt) {
                         sound: true
                     }, function (err, response) {
                         grunt.fatal('Configuration Update Failed \nErrors:\n' + result.errorMessage);
-                        callback(result);
+                        done();
                     });
         });
     });
 
-    grunt.registerTask('runApex', 'Run a DataPacks Job', function() {
+    grunt.registerTask('runApex', 'Run Anonymous Apex specified by option -apex', function() {
         var self = this;
 
         var done = this.async();
@@ -441,8 +434,17 @@ module.exports = function (grunt) {
                     if (err) { 
                         console.error(err); 
                     }
+
+                    var apexClass = grunt.option('apex');
+
+                    var folder = './apex';
+
+                    if (grunt.option('folder')) {
+                        folder = grunt.option('folder');
+                    }
         
-                    vlocity.datapacksutils.runApex('.', 'test.cls', {}, function() {
+                    return vlocity.datapacksutils.runApex(folder, apexClass, {})
+                    .then(function(result) { 
 
                         vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
 

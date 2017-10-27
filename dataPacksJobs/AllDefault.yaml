@@ -1,0 +1,63 @@
+projectPath: ./example_vlocity_build
+expansionPath: .
+buildFile: AllDataPacks.json
+preStepApex:
+  Deploy: 
+    VlocityUITemplate: DeactivateTemplatesAndLayouts.cls
+    VlocityUILayout: DeactivateTemplatesAndLayouts.cls
+postStepApex:
+  Deploy: 
+    Product2: EPCProductJSONUpdate.cls      
+queries:
+  - AttributeAssignmentRule
+  - AttributeCategory
+  - CalculationMatrix
+  - ContextAction
+  - ContextDimension
+  - ContextScope
+  - ContractType
+  - DataRaptor
+  - DocumentClause
+  - DocumentTemplate
+  - EntityFilter
+  - IntegrationProcedure
+  - ItemImplementation
+  - ManualQueue
+  - ObjectClass
+  - ObjectContextRule
+  - ObjectLayout
+  - OmniScript
+  - OrchestrationDependencyDefinition
+  - OrchestrationItemDefinition
+  - OrchestrationPlanDefinition
+  - PriceList
+  - Pricebook2
+  - PricingVariable
+  - Promotion
+  - QueryBuilder
+  - Rule
+  - StoryObjectConfiguration
+  - System
+  - TimePlan
+  - TimePolicy
+  - UIFacet
+  - UISection
+  - VlocityAction
+  - VlocityFunction
+  - VlocityPicklist
+  - VlocitySearchWidgetSetup
+  - VlocityStateModel
+  - VlocityUILayout
+  - VlocityUITemplate
+  - VqMachine
+  - VqResource
+delete: true
+activate: true
+compileOnBuild: true
+maxDepth: -1
+continueAfterError: true
+defaultMaxParallel: 10
+exportPacksMaxSize: 10
+useAllRelationships: false
+supportHeadersOnly: true
+supportForceDeploy: true
