@@ -1,4 +1,3 @@
-var request = require("request");
 var yaml = require("js-yaml");
 var fs = require("fs-extra");
 var path  = require("path");
