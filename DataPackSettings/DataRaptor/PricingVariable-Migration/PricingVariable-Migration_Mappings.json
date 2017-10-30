@@ -21,7 +21,7 @@
         "%vlocity_namespace%__FilterGroup__c": 1,
         "%vlocity_namespace%__FilterOperator__c": "=",
         "%vlocity_namespace%__FilterValue__c": "%vlocity_namespace%__PricingVariable__c:Id",
-        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__PricingVariable__c",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__PricingVariableId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__PricingVariableBinding__c",
         "%vlocity_namespace%__MapId__c": "PricingVariable Migration1",

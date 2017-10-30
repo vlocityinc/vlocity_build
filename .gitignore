@@ -3,3 +3,6 @@ dataPacksJobs/local.yaml
 node_modules/
 vlocity-deploy-temp/
 vlocity-temp/
+example_vlocity_build/
+logs/
+test/testJobRunning/

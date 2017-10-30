@@ -17,7 +17,7 @@ DataPacksExportBuildFile.prototype.resetExportBuildFile = function(jobInfo) {
 DataPacksExportBuildFile.prototype.setFilename = function(jobInfo) {
 
     if (jobInfo.exportBuildFile) {
-        this.filename = jobInfo.projectPath + '/' + jobInfo.exportBuildFile;
+        this.filename = path.join(jobInfo.projectPath, jobInfo.exportBuildFile);
     } else {
         this.filename = path.join(__dirname, "../vlocity-temp/allExportedDataPacks.json");
     }
@@ -36,6 +36,20 @@ DataPacksExportBuildFile.prototype.loadExportBuildFile = function(jobInfo) {
         } catch (e) {
             this.currentExportFileData = {};
         }
+    }
+}
+
+DataPacksExportBuildFile.prototype.saveFile = function() {
+    var self = this;
+
+    var savedFormat = [];
+
+    if (self.currentExportFileData) {
+        Object.keys(self.currentExportFileData).forEach(function(dataPackId) {
+            savedFormat.push(self.currentExportFileData[dataPackId]);
+        });
+
+        fs.outputFileSync(self.filename, stringify(savedFormat, { space: 4 }), 'utf8');
     }
 }
 
@@ -76,12 +90,4 @@ DataPacksExportBuildFile.prototype.addToExportBuildFile = function(jobInfo, data
             }
         }
     });
-
-    var savedFormat = [];
-
-    Object.keys(self.currentExportFileData).forEach(function(dataPackId) {
-        savedFormat.push(self.currentExportFileData[dataPackId]);
-    });
-
-    fs.outputFileSync(self.filename, stringify(savedFormat, { space: 4 }), 'utf8');
 };

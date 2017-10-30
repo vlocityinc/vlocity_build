@@ -1,4 +1,7 @@
 {
+    "GuaranteedParentKeys": [
+        "Pricebook2/Standard Price Book"
+    ],
     "DataPacks": {
         "IntegrationProcedure": {
             "OmniScript__c": {
@@ -475,6 +478,11 @@
             "SourceKeyDefinition": [
                 "Name",
                 "OrchestrationPlanDefinitionId__c"
+            ],
+            "MatchingSourceKeyDefinition": [
+                "Name",
+                "_%vlocity_namespace%__OrchestrationPlanDefinition__c",
+                "OrchestrationPlanDefinitionId__r.Name"
             ]
         },
         "OrchestrationPlanDefinition__c": {
@@ -810,7 +818,7 @@
             "Name"
         ],
         "SourceKeyGenerationFields": [
-            "VlocityRecordSourceKey"
+            
         ]
     }
 }

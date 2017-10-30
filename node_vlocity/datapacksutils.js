@@ -58,8 +58,28 @@ DataPacksUtils.prototype.updateExpandedDefinitionNamespace = function(currentDat
         return replacedObject;
     } else {
 
-        if (typeof currentData === 'string' && currentData.indexOf(namespaceFieldPrefix) == -1 && currentData.indexOf('__c') > 0) {
-            return namespaceFieldPrefix + currentData;
+        if (typeof currentData === 'string') {
+
+            if (currentData.indexOf(namespaceFieldPrefix) == -1 && currentData.indexOf('.') > 0) {
+
+                var finalString = '';
+
+                currentData.split('.').forEach(function(field) {
+
+                    if (finalString != '') {
+                        finalString += '.';
+                    }
+
+                    if (field.indexOf('__c') > 0 || field.indexOf('__r') > 0) {
+                        finalString += namespaceFieldPrefix + field;
+                    } else {
+                        finalString += field;
+                    }
+                });
+                return finalString;
+            } else if (currentData.indexOf(namespaceFieldPrefix) == -1 && currentData.indexOf('__c') > 0) {
+                return namespaceFieldPrefix + currentData;
+            }
         }
 
         return currentData;
@@ -127,6 +147,10 @@ DataPacksUtils.prototype.getSourceKeyDefinitionFields = function(SObjectType) {
     return this.getExpandedDefinition(null, SObjectType, "SourceKeyDefinition");
 }
 
+DataPacksUtils.prototype.getMatchingSourceKeyDefinitionFields = function(SObjectType) {
+    return this.getExpandedDefinition(null, SObjectType, "MatchingSourceKeyDefinition");
+}
+
 DataPacksUtils.prototype.getFolderName = function(dataPackType, SObjectType) {
     return this.getExpandedDefinition(dataPackType, SObjectType, "FolderName");
 }
@@ -173,6 +197,14 @@ DataPacksUtils.prototype.getHeadersOnly = function(dataPackType) {
 
 DataPacksUtils.prototype.getExportGroupSizeForType = function(dataPackType) {
     return this.getExpandedDefinition(dataPackType, null, "ExportGroupSize");
+}
+
+DataPacksUtils.prototype.isGuaranteedParentKey = function(parentKey) {
+
+    return (this.overrideExpandedDefinitions 
+        && this.overrideExpandedDefinitions.GuaranteedParentKeys 
+        && this.overrideExpandedDefinitions.GuaranteedParentKeys.indexOf(parentKey) != -1) 
+        || this.dataPacksExpandedDefinition.GuaranteedParentKeys.indexOf(parentKey) != -1;
 }
 
 DataPacksUtils.prototype.getApexImportDataKeys = function(SObjectType) {
@@ -271,15 +303,23 @@ DataPacksUtils.prototype.getAllSObjectIds = function(currentData, currentIdsOnly
 };
 
 DataPacksUtils.prototype.getDirectories = function(srcpath) {
-    return fs.readdirSync(srcpath).filter(function(file) {
-        return fs.statSync(path.join(srcpath, file)).isDirectory() && fs.readdirSync(path.join(srcpath, file)).length > 0;
-    });
+    try {
+        return fs.readdirSync(srcpath).filter(function(file) {
+            return fs.statSync(path.join(srcpath, file)).isDirectory() && fs.readdirSync(path.join(srcpath, file)).length > 0;
+        });
+    } catch(e) {
+        return [];
+    }
 };
 
 DataPacksUtils.prototype.getFiles = function(srcpath) {
-    return fs.readdirSync(srcpath).filter(function(file) {
-        return fs.statSync(path.join(srcpath, file)).isFile();
-    });
+    try {
+        return fs.readdirSync(srcpath).filter(function(file) {
+            return fs.statSync(path.join(srcpath, file)).isFile();
+        });
+    } catch(e) {
+        return [];
+    }
 };
 
 DataPacksUtils.prototype.fileExists = function(srcpath) {
@@ -290,6 +330,76 @@ DataPacksUtils.prototype.fileExists = function(srcpath) {
     }
     
     return true;
+}
+
+DataPacksUtils.prototype.getParents = function(jobInfo, currentData, dataPackKey) {
+    var self = this;
+
+    if (currentData) {
+        if (currentData.VlocityDataPackData) {
+            var dataField = self.vlocity.datapacksutils.getDataField(currentData);
+
+            if (dataField) {
+                currentData.VlocityDataPackData[dataField].forEach(function(sobjectData) {
+                    if (jobInfo.allParents.indexOf(currentData.VlocityDataPackKey) == -1) {
+                        jobInfo.allParents.push(currentData.VlocityDataPackKey);
+                    }
+                    
+                    self.getParents(jobInfo, sobjectData, currentData.VlocityDataPackKey);
+                });
+            }
+        } else { 
+           
+            if (Array.isArray(currentData)) {
+                currentData.forEach(function(childData) {
+                    self.getParents(jobInfo, childData, dataPackKey);
+                });
+
+            } else {       
+            
+                if (currentData.VlocityDataPackType != 'VlocityLookupMatchingKeyObject' && currentData.VlocityDataPackType != 'VlocityMatchingKeyObject') {
+
+                    // Make as Array because can Export Multiple Keys due to the way dependencies are exported
+                    if (!jobInfo.sourceKeysByParent[currentData.VlocityRecordSourceKey]) {
+                        jobInfo.sourceKeysByParent[currentData.VlocityRecordSourceKey] = [];
+                    }
+
+                    if (jobInfo.sourceKeysByParent[currentData.VlocityRecordSourceKey].indexOf(dataPackKey) == -1) {
+                        jobInfo.sourceKeysByParent[currentData.VlocityRecordSourceKey].push(dataPackKey);
+                    }
+
+                    Object.keys(currentData).forEach(function(key) {
+                        if (Array.isArray(currentData[key])) {
+                            self.getParents(jobInfo, currentData[key], dataPackKey);
+                        }
+                    }); 
+                }
+            }
+        }
+    }
+}
+
+DataPacksUtils.prototype.initializeFromProject = function(jobInfo) {
+    var self = this;
+
+    if (!self.fileExists(jobInfo.projectPath)) {
+        return;
+    }
+
+    var jobInfoTemp = JSON.parse(stringify(jobInfo));
+
+    jobInfoTemp.singleFile = true;
+    jobInfoTemp.noStatus = true;
+
+    self.vlocity.datapacksbuilder.buildImport(jobInfo.projectPath, null, jobInfoTemp, function(dataJson) { 
+        jobInfo.singleFile = false;
+
+        if (dataJson && dataJson.dataPacks) {
+            dataJson.dataPacks.forEach(function(dataPack) {
+                self.getParents(jobInfo, dataPack);
+            });
+        }
+    });
 }
 
 DataPacksUtils.prototype.isInManifest = function(dataPackData, manifest) {
@@ -500,12 +610,13 @@ DataPacksUtils.prototype.removeUnhashableFields = function(dataPackType, dataPac
 }
 
 DataPacksUtils.prototype.getDataPackHashable = function(dataPack, jobInfo) {
+    var self = this;
 
     var clonedDataPackData = JSON.parse(stringify(dataPack));
 
     var beforePreprocess = stringify(dataPack);
 
-    this.vlocity.datapacksexpand.preprocessDataPack(clonedDataPackData, jobInfo);
+    self.vlocity.datapacksexpand.preprocessDataPack(clonedDataPackData, jobInfo);
 
     var afterPreprocess = stringify(clonedDataPackData);
 
@@ -513,9 +624,11 @@ DataPacksUtils.prototype.getDataPackHashable = function(dataPack, jobInfo) {
     clonedDataPackData.VlocityDataPackParents = null;
     clonedDataPackData.VlocityDataPackAllRelationships = null;
 
-    var dataField = this.getDataField(clonedDataPackData);
+    var dataField = self.getDataField(clonedDataPackData);
 
-    this.removeUnhashableFields(clonedDataPackData.VlocityDataPackType, clonedDataPackData.VlocityDataPackData[dataField][0]);
+    clonedDataPackData.VlocityDataPackType, clonedDataPackData.VlocityDataPackData[dataField].forEach(function(sobjectData) {
+        self.removeUnhashableFields(clonedDataPackData.VlocityDataPackType, sobjectData);
+    });
 
     return clonedDataPackData;
 };
