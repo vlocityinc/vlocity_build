@@ -33,6 +33,7 @@ queries:
   - PriceList
   - Pricebook2
   - PricingVariable
+  - Product2
   - Promotion
   - QueryBuilder
   - Rule

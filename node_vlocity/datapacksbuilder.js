@@ -461,7 +461,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                             var beforeSlash = parentKey.substring(0, slashIndex);
                             var afterSlash = parentKey.substring(slashIndex+1);
 
-                            var parentKeyForStatus = beforeSlash + '/' + self.vlocity.datapacksexpand.generateFolderOrFilename(afterSlash);
+                            var parentKeyForStatus = beforeSlash + '/' + afterSlash;
 
                             if (jobInfo.currentStatus[parentKeyForStatus] != null 
                                 && !(jobInfo.currentStatus[parentKeyForStatus] == 'Success' 

@@ -76,6 +76,9 @@ Pricebook2:
 PricingVariable:
   VlocityDataPackType: PricingVariable
   query: Select Id from %vlocity_namespace%__PricingVariable__c
+Product2:   
+  VlocityDataPackType: Product2
+  query: Select Id from Product2
 Promotion:
   VlocityDataPackType: Promotion
   query: Select Id from %vlocity_namespace%__Promotion__c
