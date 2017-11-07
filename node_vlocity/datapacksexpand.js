@@ -468,6 +468,10 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, jobInfo) {
 
                 jobInfo.vlocityKeysToNewNamesMap[currentData.VlocityDataPackKey] = generatedKey;
 
+                if (currentData.Name) {
+                    jobInfo.generatedKeysToNames[generatedKey] = currentData.Name;
+                }
+
                 // make sure we don't overwrite keys later
                 jobInfo.vlocityKeysToNewNamesMap[generatedKey] = generatedKey;
 

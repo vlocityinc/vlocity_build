@@ -176,15 +176,32 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
     self.vlocity.checkLogin(function() {
         self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint, dataPackData, function(err, result) {
             
-            if (typeof result == "string") {
-                result = JSON.parse(result);
-            }
+            if (err) { 
+                if (dataPackData.isRetry) {
+                    console.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', dataPackId, err);
+                    
+                    if (onError) onError(err);
+                    else if (onSuccess) onSuccess(err);
+                    else throw err;
+                } else {
+                     console.error('\x1b[31m', 'RETRYING FOR ERROR >>' ,'\x1b[0m', dataPackId, err);
 
-            if (self.vlocity.verbose) { 
-                console.log('Result', result);
-            }
+                    self.vlocity.isLoggedIn = false;
+                    dataPackData.isRetry = true;
 
-            if (result) {
+                    setTimeout(function() { self.runDataPackProcess(dataPackData, options, onSuccess, onError); }, 1000);
+                }
+            } else {
+                dataPackData.isRetry = false;
+
+                if (typeof result == "string") {
+                   result = JSON.parse(result);
+                }
+
+                if (self.vlocity.verbose) { 
+                    console.log('Result', result);
+                }
+
                 if (result.Total > 0) {
                     if (dataPackData.processType == "Export" 
                         && dataPackData.processData
@@ -205,29 +222,26 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
                         console.log('\x1b[32m', 'Activated >>', '\x1b[0m', activatedEntity.VlocityDataPackKey);
                     });
                 }
-            }
-            
-            if (err) { 
-                console.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', dataPackId, err);
 
-                // Need to hook this in an interesting way
-                var packError = { VlocityDataPackId: dataPackId, AllErrorMessage: err };
-                
-                if (onError) onError(err);
-                else if (onSuccess) onSuccess(err);
-                else throw err;
-            } else if (/(Ready|InProgress)/.test(result.Status)) {
-                dataPackData.processData = result;
-                
-                setTimeout(function() { self.runDataPackProcess(dataPackData, options, onSuccess, onError); }, result.Async ? 3000 : 1);
-            } else if (/(Complete|Deleted)/.test(result.Status)) {
+                if (result.activationError) {
+                    result.activationError.forEach(function(activatedEntity) {
+                        console.log('\x1b[31m', 'Activation Error >>', '\x1b[0m', activatedEntity.VlocityDataPackKey, '---', activatedEntity.ActivationMessage);
+                    });
+                }
+                 
+                if (/(Ready|InProgress)/.test(result.Status)) {
+                    dataPackData.processData = result;
+                    
+                    setTimeout(function() { self.runDataPackProcess(dataPackData, options, onSuccess, onError); }, result.Async ? 3000 : 1);
+                } else if (/(Complete|Deleted)/.test(result.Status)) {
 
-                if (onSuccess) onSuccess(result);
-                else console.log(result);
-            } else if (/Error/.test(result.Status)) {
-                if (onError) onError(result);
-                else if (onSuccess) onSuccess(result);
-                else console.log(result);
+                    if (onSuccess) onSuccess(result);
+                    else console.log(result);
+                } else if (/Error/.test(result.Status)) {
+                    if (onError) onError(result);
+                    else if (onSuccess) onSuccess(result);
+                    else console.log(result);
+                }
             }
         });
     });

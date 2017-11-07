@@ -69,10 +69,6 @@ DataPacksJob.prototype.runJob = function(jobData, jobName, action, onSuccess, on
 DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onError) {
     var self = this;
 
-    if (!jobInfo.startTime) {
-        jobInfo.startTime = Date.now();
-    }
-
     // Will not continue a single DataPack, but will continue when there are breaks in the job
     if (action == 'Continue' || action == 'Retry') {
         Object.assign(jobInfo, JSON.parse(fs.readFileSync(CURRENT_INFO_FILE, 'utf8')));
@@ -134,6 +130,14 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
         action = jobInfo.jobAction;
     }
 
+    if (jobInfo.startTime == null) {
+        jobInfo.startTime = Date.now();
+    }
+
+    if (!jobInfo.logName) {
+        jobInfo.logName = self.vlocity.datapacksexpand.generateFolderOrFilename(jobInfo.jobName + '-' + new Date(Date.now()).toISOString() + '-' + jobInfo.jobAction, 'yaml');
+    }
+
     // Initialize all that need it
     if (jobInfo.extendedManifest == null) {
         jobInfo.extendedManifest = {};
@@ -167,9 +171,6 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
         jobInfo.vlocityRecordSourceKeyMap = {};
     }
 
-    if (jobInfo.startTime == null) {
-        jobInfo.startTime = Date.now();
-    }
 
     if (!jobInfo.addedToExportBuildFile) {
         jobInfo.addedToExportBuildFile = [];
@@ -182,6 +183,10 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
 
     if (!jobInfo.VlocityDataPackIds) {
         jobInfo.VlocityDataPackIds = {};
+    }
+
+    if (!jobInfo.generatedKeysToNames) {
+        jobInfo.generatedKeysToNames = {};
     }
 
     jobInfo.supportParallel = jobInfo.defaultMaxParallel > 1;
@@ -296,6 +301,9 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
         var totalFound = 0;
 
         async.eachSeries(jobInfo.queries, function(queryData, callback) {
+            if (!queryData || !queryData.VlocityDataPackType) {
+                return callback();
+            }
 
             if (!jobInfo.manifest[queryData.VlocityDataPackType]) {
                 jobInfo.manifest[queryData.VlocityDataPackType] = [];
@@ -752,7 +760,7 @@ DataPacksJob.prototype.activateAll = function(dataPackData, jobInfo, onComplete,
 
                 dataPackData.dataPacks.forEach(function(dataPack) {
 
-                   if (dataPack.ActivationStatus == 'Ready' && dataPack.VlocityDataPackStatus == 'Success') {
+                    if (dataPack.ActivationStatus == 'Ready' && dataPack.VlocityDataPackStatus == 'Success') {
 
                         // If it is the only one in the deploy and it fails to activate it must be set to error. Otherwise retry the deploy and activation separate from others.
                         if (dataPackData.dataPacks.length == 1) {
@@ -766,6 +774,16 @@ DataPacksJob.prototype.activateAll = function(dataPackData, jobInfo, onComplete,
                             shouldRetry = true;
                         } else {
                             jobInfo.currentStatus[dataPack.VlocityDataPackKey] = 'ReadySeparate';
+                        }
+                    } else if (dataPack.ActivationStatus == 'Error') {
+
+                        var message = 'Activation Error >> ' +  dataPack.VlocityDataPackKey + ' --- ' + dataPack.ActivationMessage;
+
+                        jobInfo.hasError = true;
+                        jobInfo.currentStatus[dataPack.VlocityDataPackKey] = 'Error';
+
+                        if (jobInfo.errors.indexOf(message) == -1) {
+                            jobInfo.errors.push(message);
                         }
                     }
                 });

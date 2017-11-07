@@ -133,6 +133,10 @@
 		<runDataPackJob packCommand="packDeploy" job="${vlocity.dataPackJob}" />
 	</target>
 
+    <target name="runTestJob" description="">
+        <runDataPackJob packCommand="runTestJob" job="TestJob" />
+    </target>
+
 	<macrodef name="runDataPackJob" >
 		<attribute name="packCommand" />
 		<attribute name="job" />
@@ -142,7 +146,11 @@
 					<echo> ------------------------------------------- </echo>
 					<echo> ------------------------------------------- </echo>
 					<echo> Running - @{packCommand} - @{job}</echo>
-						<exec executable="${basedir}/bin/run-grunt" dir="${basedir}">
+                        <exec executable="npm" dir="${basedir}">
+                            <arg value="install" />
+                        </exec>
+						<exec executable="node" dir="${basedir}">
+                            <arg value="./node_modules/grunt-cli/bin/grunt" />
 							<arg value="@{packCommand}"/>
 							<arg value="-job"/>
 							<arg value="@{job}"/>

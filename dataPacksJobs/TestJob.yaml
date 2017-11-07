@@ -3,14 +3,16 @@ expansionPath: testJobRunning
 buildFile: testJobRunning/testBuildFile.resource
 queries: 
   - VlocityDataPackType: VlocityUITemplate
-    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'testpack-%' AND %vlocity_namespace%__Active__c = true
+    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'datapacktest-%' AND %vlocity_namespace%__Active__c = true
+  - VlocityDataPackType: VlocityUILayout
+    query: Select Id from %vlocity_namespace%__VlocityUILayout__c where Name LIKE 'datapacktest-%'
 delete: true 
 activate: true 
 compileOnBuild: true
 preJobApex:
   Deploy: TestJob.cls
 preStepApex:
-  Deploy: TestJob.cls
+  Deploy: DeactivateTemplatesAndLayouts.cls
 postStepApex:
   Deploy: TestJob.cls
 postJobApex:

@@ -286,12 +286,14 @@ module.exports = function (grunt) {
         fs.removeSync('./test/testJobRunning');
         fs.copySync('./test/testJobData', './test/testJobRunning');
 
-        var commands = ['Deploy', 
-                        'GetDiffs',
-                        'Export', 
-                        'GetDiffsAndDeploy', 
-                        'BuildFile',
-                        'JavaScript' ];
+        var commands = [
+                            'Deploy', 
+                            'GetDiffs',
+                            'Export', 
+                            'GetDiffsAndDeploy', 
+                            'BuildFile',
+                            'JavaScript' 
+                        ];
 
         if (grunt.option('test')) {
             commands = [ grunt.option('test') ];

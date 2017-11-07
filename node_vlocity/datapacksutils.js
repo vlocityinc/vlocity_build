@@ -2,6 +2,7 @@ var fs = require("fs-extra");
 var path  = require('path');
 var stringify = require('json-stable-stringify');
 var async = require('async');
+var yaml = require('js-yaml');
 
 // use consts for setting the namespace prefix so that we easily can reference it later on in this file
 const namespacePrefix = 'vlocity_namespace';
@@ -647,16 +648,48 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
         return;
     }
 
-    Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
+    var keysByStatus = {};
+    
+    Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) { 
+
+        var status = jobInfo.currentStatus[dataPackKey];
         if (jobInfo.currentStatus[dataPackKey] == 'Ready' 
             || jobInfo.currentStatus[dataPackKey] == 'Header' 
             || jobInfo.currentStatus[dataPackKey] == 'Added'
             || jobInfo.currentStatus[dataPackKey] == 'ReadySeparate') {
+            status = 'Remaining';
                 totalRemaining++;
         } else if (jobInfo.currentStatus[dataPackKey] == 'Error') {
             errorsCount++;
         } else if (jobInfo.currentStatus[dataPackKey] == 'Success') {
             successfulCount++;
+        }
+
+        if (!keysByStatus[status]) {
+            keysByStatus[status] = {};
+        }
+
+        // For Exports
+        var keyForStatus = jobInfo.vlocityKeysToNewNamesMap[dataPackKey] ? jobInfo.vlocityKeysToNewNamesMap[dataPackKey] : dataPackKey;
+
+        if (keyForStatus.indexOf('/') != -1) {
+
+            var slashIndex = keyForStatus.indexOf('/');
+            var beforeSlash = keyForStatus.substring(0, slashIndex);
+            var afterSlash = keyForStatus.substring(slashIndex+1);
+
+            if (!keysByStatus[status][beforeSlash]) {
+                keysByStatus[status][beforeSlash] = [];
+            }
+            var dataPackName = jobInfo.generatedKeysToNames[keyForStatus];
+
+            if (dataPackName && afterSlash.indexOf(dataPackName) == -1) {
+                afterSlash = dataPackName + ' - ' + afterSlash;
+            }
+
+            if (keysByStatus[status][beforeSlash].indexOf(afterSlash) == -1) {
+                keysByStatus[status][beforeSlash].push(afterSlash);
+            }
         }
     });
 
@@ -692,5 +725,26 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
 
     if (jobInfo.hasError) {
         jobInfo.errorMessage = jobInfo.errors.join('\n');
+    }
+
+    Object.keys(keysByStatus).forEach(function(statusKey) {
+        Object.keys(keysByStatus[statusKey]).forEach(function(typeKey) {
+            keysByStatus[statusKey][typeKey].sort();
+        });
+    });
+
+    var logInfo = {
+        Job: jobInfo.jobName,
+        Action: jobInfo.jobAction,
+        ProjectPath: jobInfo.projectPath,
+        TotalTime: Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's',
+        Errors: jobInfo.errors,
+        Status: keysByStatus
+    };
+
+    try {
+        fs.outputFileSync(path.join('logs', jobInfo.logName), yaml.dump(logInfo, { lineWidth: 1000 }));
+    } catch (e) {
+        console.log(e);
     }
 };

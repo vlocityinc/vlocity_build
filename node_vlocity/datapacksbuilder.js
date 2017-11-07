@@ -322,6 +322,10 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
                                 jobInfo.currentStatus[generatedDataPackKey] = 'Ready';
                             }
 
+                            if (sobjectData.Name) {
+                                jobInfo.generatedKeysToNames[generatedDataPackKey] = sobjectData.Name;
+                            }
+
                             if (jobInfo.allParents.indexOf(generatedDataPackKey) == -1) {
                                 jobInfo.allParents.push(generatedDataPackKey);
                             }
