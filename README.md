@@ -66,10 +66,11 @@ grunt packExport
 ```
 
 All commands support the following primary options:
+
 | Option | Default | Description  | 
 | ------ |----- | ------------- | 
-| propertyfile | build.properties | The propertyfile used |
-| job | none | The Job File used to define the project | 
+| propertyfile | build.properties | The propertyfile used |  
+| job |  | The Job File used to define the project | 
 
 You can use these properties with the following syntax
 ```bash
