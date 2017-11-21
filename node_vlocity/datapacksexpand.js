@@ -295,7 +295,16 @@ DataPacksExpand.prototype.getSourceKeyData = function(currentData, jobInfo) {
                 if (objectSourceData == null || objectSourceData == "") {
                     missingSourceKey = true;
                 } else if (typeof objectSourceData === "object") {
-                    newSourceKey += "/" + self.getSourceKeyData(objectSourceData, jobInfo).VlocityRecordSourceKeyNew;
+
+                    if (objectSourceData.VlocityMatchingRecordSourceKey && jobInfo.vlocityRecordSourceKeyMap[objectSourceData.VlocityMatchingRecordSourceKey]) {
+                        newSourceKey += "/" + jobInfo.vlocityRecordSourceKeyMap[objectSourceData.VlocityMatchingRecordSourceKey].VlocityRecordSourceKeyNew;
+                    } else if (objectSourceData.VlocityLookupRecordSourceKey && jobInfo.vlocityRecordSourceKeyMap[objectSourceData.VlocityLookupRecordSourceKey]) {
+
+                        newSourceKey += "/" + jobInfo.vlocityRecordSourceKeyMap[objectSourceData.VlocityLookupRecordSourceKey].VlocityRecordSourceKeyNew;
+                    } else {
+                        newSourceKey += "/" + self.getSourceKeyData(objectSourceData, jobInfo).VlocityRecordSourceKeyNew;
+                    }
+                    
                     sourceKeyData[keyField] = JSON.parse(stringify(objectSourceData));
                 } else {
                     newSourceKey += "/" + objectSourceData;
@@ -305,7 +314,7 @@ DataPacksExpand.prototype.getSourceKeyData = function(currentData, jobInfo) {
         });
 
         if (!missingSourceKey) {
-           sourceKeyData.VlocityRecordSourceKeyNew = newSourceKey;
+            sourceKeyData.VlocityRecordSourceKeyNew = newSourceKey;
         }
     } 
     // This is Vlocity trick to help unique objects with GlobalKeys not already added to DataPacks metadata
@@ -412,8 +421,11 @@ DataPacksExpand.prototype.preprocessSObjects = function(currentData, dataPackTyp
 
                 if (currentData.VlocityDataPackType != 'VlocityLookupMatchingKeyObject' 
                     && currentData.VlocityDataPackType != 'VlocityMatchingKeyObject') {
-                    jobInfo.vlocityRecordSourceKeyMap[sourceKeyData.VlocityRecordSourceKeyOriginal] = sourceKeyData;
 
+                    if (sourceKeyData.VlocityRecordSourceKeyOriginal) {
+                        jobInfo.vlocityRecordSourceKeyMap[sourceKeyData.VlocityRecordSourceKeyOriginal] = sourceKeyData;
+                    }
+                    
                     if (currentId) {
                         jobInfo.vlocityRecordSourceKeyMap[currentId] = sourceKeyData;
                         jobInfo.vlocityRecordSourceKeyMap[sourceKeyData.VlocityRecordSourceKeyOriginal] = sourceKeyData;
@@ -425,10 +437,14 @@ DataPacksExpand.prototype.preprocessSObjects = function(currentData, dataPackTyp
                             self.preprocessSObjects(currentData[sobjectField], dataPackType, jobInfo, parentKeys);
                         }
                     });
-                } else if (currentData.VlocityLookupRecordSourceKey) {
+                } else if (currentData.VlocityLookupRecordSourceKey
+                    || currentData.VlocityMatchingRecordSourceKey) {
+
+                    var sKey = currentData.VlocityLookupRecordSourceKey ? currentData.VlocityLookupRecordSourceKey : currentData.VlocityMatchingRecordSourceKey;
+
                     // Inject Parent Keys for consistency
-                    if (parentKeys.indexOf(currentData.VlocityLookupRecordSourceKey) == -1) {
-                        parentKeys.push(currentData.VlocityLookupRecordSourceKey);
+                    if (parentKeys.indexOf(sKey) == -1) {
+                        parentKeys.push(sKey);
 
                         if (sourceKeyData.VlocityRecordSourceKeyNew) {
                             parentKeys.push(sourceKeyData.VlocityRecordSourceKeyNew);
@@ -611,6 +627,8 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, jobInfo, isPa
     if (dataPackData.VlocityDataPackData) {
 
         var dataPackType = dataPackData.VlocityDataPackType;
+        var dataPackKey = dataPackData.VlocityDataPackKey;
+
         if ((!jobInfo.manifestOnly || self.vlocity.datapacksutils.isInManifest(dataPackData.VlocityDataPackData, jobInfo.manifest))) {
 
             var dataField = self.vlocity.datapacksutils.getDataField(dataPackData);
@@ -652,7 +670,10 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, jobInfo, isPa
                     }
 
                     dataPackData.VlocityDataPackParents.forEach(function(parentKey) {
-                        if (jobInfo.sourceKeysByParent[parentKey]) {
+
+                        if (jobInfo.allParents.indexOf(parentKey) != -1) {
+                            allParentKeys.push(parentKey);
+                        } else if (jobInfo.sourceKeysByParent[parentKey]) {
                             jobInfo.sourceKeysByParent[parentKey].forEach(function(ultimateParent) {
                                 allParentKeys.push(ultimateParent);
                             });
@@ -666,9 +687,14 @@ DataPacksExpand.prototype.processDataPack = function(dataPackData, jobInfo, isPa
 
                     var finalParentKeys = [];
 
+                    var localFileKey = dataPackType + "/" + parentName;
+
                     allParentKeys.forEach(function(parentKey) {
 
-                        if (!self.vlocity.datapacksutils.isGuaranteedParentKey(parentKey) 
+                        if (localFileKey != parentKey
+                            && dataPackKey != parentKey 
+                            && parentKey.indexOf('|Page|') == -1
+                            && !self.vlocity.datapacksutils.isGuaranteedParentKey(parentKey) 
                             && finalParentKeys.indexOf(parentKey) == -1 
                             && (jobInfo.allParents.indexOf(parentKey) != -1
                             || jobInfo.allParents.indexOf(self.sanitizeDataPackKey(parentKey)) != -1)) {
@@ -906,7 +932,7 @@ DataPacksExpand.prototype.expandFile = function(targetPath, expandFile, jobInfo)
     try {
         self.expand(targetPath, JSON.parse(fs.readFileSync(expandFile, 'utf8')), jobInfo);
     } catch (e) {
-        console.log("Invalid DataPackFile " + expandFile + ' ' + e.message);
+        console.log('Invalid DataPackFile ' + expandFile + ' ' + e.message);
     }
 };
 

@@ -137,7 +137,7 @@
     },
     {
         "%vlocity_namespace%__ConfigurationAttribute__c": "OmniScript",
-        "%vlocity_namespace%__ConfigurationCategory__c": "Sibling",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Parent",
         "%vlocity_namespace%__ConfigurationGroup__c": "Reusable Omniscript",
         "%vlocity_namespace%__ConfigurationKey__c": "Sub Type",
         "%vlocity_namespace%__ConfigurationProcess__c": "Export",
@@ -154,7 +154,7 @@
     },
     {
         "%vlocity_namespace%__ConfigurationAttribute__c": "OmniScript",
-        "%vlocity_namespace%__ConfigurationCategory__c": "Sibling",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Parent",
         "%vlocity_namespace%__ConfigurationGroup__c": "Reusable Omniscript",
         "%vlocity_namespace%__ConfigurationKey__c": "Language",
         "%vlocity_namespace%__ConfigurationProcess__c": "Export",
@@ -659,7 +659,7 @@
     },
     {
         "%vlocity_namespace%__ConfigurationAttribute__c": "OmniScript",
-        "%vlocity_namespace%__ConfigurationCategory__c": "Sibling",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Parent",
         "%vlocity_namespace%__ConfigurationGroup__c": "Reusable Omniscript",
         "%vlocity_namespace%__ConfigurationKey__c": "Type",
         "%vlocity_namespace%__ConfigurationProcess__c": "Export",

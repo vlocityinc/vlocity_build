@@ -8,34 +8,57 @@ var node_vlocity = require('../node_vlocity/vlocity.js');
 
 module.exports = function (grunt) {
 
-    var dataPacksJobFolder = './dataPacksJobs';	
+    function getVlocity() {
+        var properties = grunt.config.get('properties');
+        var jobStartTime = Date.now();
 
-	function dataPacksJob(action, jobName, callback) {
+        var username = grunt.option('sf.username') ? grunt.option('sf.username') : properties['sf.username'];
 
-	  	var properties = grunt.config.get('properties');
-		var jobStartTime = Date.now();
+        var password = grunt.option('sf.password') ? grunt.option('sf.password') : properties['sf.password'];
 
-	  	var vlocity = new node_vlocity({
-          username: properties['sf.username'], 
-          password: properties['sf.password'], 
-          vlocityNamespace: properties['vlocity.namespace'],
-          verbose: grunt.option('verbose'),
-          loginUrl: properties['sf.loginUrl']
-      	});
+        var namespace = grunt.option('vlocity.namespace') ? grunt.option('vlocity.namespace') : properties['vlocity.namespace'];
 
-      	grunt.log.writeln('DataPacks Job Started - ' + jobName + ' Org: ' + properties['sf.username']);
+        var loginUrl = grunt.option('sf.loginUrl') ? grunt.option('sf.loginUrl') : properties['sf.loginUrl'];
 
-      	if (properties['vlocity.dataPacksJobFolder']) {
-      		dataPacksJobFolder = properties['vlocity.dataPacksJobFolder'];
-      	}
-      	
+        var sessionId = grunt.option('sf.sessionId') ? grunt.option('sf.sessionId') : properties['sf.sessionId'];
+
+        var instanceUrl = grunt.option('sf.instanceUrl') ? grunt.option('sf.instanceUrl') : properties['sf.instanceUrl'];
+
+        var vlocity = new node_vlocity({
+          username: username, 
+          password: password, 
+          vlocityNamespace: namespace,
+          loginUrl: loginUrl,
+          sessionId: sessionId,
+          instanceUrl: instanceUrl,
+          verbose: grunt.option('verbose')
+        });
+
+        return vlocity;
+    }
+
+	function dataPacksJob(action, jobName, callback, testData) {
+        var jobStartTime = Date.now();
+
+        var vlocity = getVlocity();
+
+        var properties = grunt.config.get('properties');
+
+        var dataPacksJobFolder = grunt.option('vlocity.dataPacksJobFolder') ? grunt.option('vlocity.dataPacksJobFolder') : properties['vlocity.dataPacksJobFolder'];
+
+        if (!dataPacksJobFolder || testData) {
+            dataPacksJobFolder = './dataPacksJobs'; 
+        }
+
+      	grunt.log.writeln('DataPacks Job Started - ' + jobName + ' Org: ' + vlocity.username);
+
       	var dataPacksJobsData = {};
       	var queryDefinitions;
 
 		try {
-		    queryDefinitions = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/QueryDefinitions.yaml', 'utf8'));
+		    queryDefinitions = yaml.safeLoad(fs.readFileSync('./dataPacksJobs/QueryDefinitions.yaml', 'utf8'));
 		} catch (e) {
-		    //console.log(e);
+		    console.log(e);
 		}
 
 		var dataPackFolderExists;
@@ -46,7 +69,7 @@ module.exports = function (grunt) {
                     if (file.indexOf('.yaml') != -1) {
     	      			var fileName = file.substr(0, file.indexOf('.'));
     	      			dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
-
+                        
     	      			dataPacksJobsData[fileName].QueryDefinitions = queryDefinitions;
                     }
 	      		} catch (jobError) { 
@@ -57,74 +80,94 @@ module.exports = function (grunt) {
 			console.log('No DataPacksJob Folder Found: ' + dataPacksJobFolder);
 		}
 
-	    if (dataPacksJobsData[jobName]) {
-		    if (dataPacksJobsData[jobName].projectPath && properties[dataPacksJobsData[jobName].projectPath]) {
-		    	dataPacksJobsData[jobName].projectPath = properties[dataPacksJobsData[jobName].projectPath];
-		    }
+        try {
+    	    if (dataPacksJobsData[jobName]) {
+                // This allows specifying a path as a property
+    		    if (dataPacksJobsData[jobName].projectPath && properties[dataPacksJobsData[jobName].projectPath]) {
+    		    	dataPacksJobsData[jobName].projectPath = properties[dataPacksJobsData[jobName].projectPath];
+    		    }
 
-		    if (dataPacksJobsData[jobName].projectPath) {
-		    	dataPacksJobsData[jobName].projectPath = grunt.template.process(dataPacksJobsData[jobName].projectPath, {data: properties});
-		    }
+    		    if (dataPacksJobsData[jobName].projectPath) {
+    		    	dataPacksJobsData[jobName].projectPath = grunt.template.process(dataPacksJobsData[jobName].projectPath, {data: properties});
+    		    }
 
-		    if (!dataPacksJobsData[jobName].projectPath) {
-		    	dataPacksJobsData[jobName].projectPath = dataPacksJobFolder;
-		    }
+    		    if (!dataPacksJobsData[jobName].projectPath) {
+    		    	dataPacksJobsData[jobName].projectPath = dataPacksJobFolder;
+    		    }
 
-			if (grunt.option('query') && grunt.option('type')) {
-				dataPacksJobsData[jobName].queries = [{
-					query: grunt.option('query'),
-	      			VlocityDataPackType: grunt.option('type')
-				}];
-			}
+    			if (grunt.option('query') && grunt.option('type')) {
+    				dataPacksJobsData[jobName].queries = [{
+    					query: grunt.option('query'),
+    	      			VlocityDataPackType: grunt.option('type')
+    				}];
+    			}
 
-            if (action == 'ExportSingle' && grunt.option('type') && grunt.option('id')) {
-                dataPacksJobsData[jobName].queries = null;
-                dataPacksJobsData[jobName].manifest = {};
-                dataPacksJobsData[jobName].manifest[grunt.option('type')] = [ grunt.option('id') ];
+                if (action == 'ExportSingle') {
 
-                action = 'Export';
-            }
+                    var dataPackType;
+                    var dataPackId;
 
-            if (action == 'ExportAllDefault' && queryDefinitions) {
-                dataPacksJobsData[jobName].queries = Object.keys(queryDefinitions);
-                dataPacksJobsData[jobName].ignoreQueryErrors = true;
+                    if (grunt.option('type') && grunt.option('id')) {
+                        dataPackType = grunt.option('type');
+                        dataPackId = grunt.option('id');
+                    } else if (testData) {
+                        dataPackType = testData.dataPackType;
+                        dataPackId = testData.dataPackId;
+                    } else {
+                        console.log('No Export Data Specified');
+                        return callback(jobName);
+                    }
 
-                action = 'Export';
-            }
+                    dataPacksJobsData[jobName].queries = null;
+                    dataPacksJobsData[jobName].manifest = {};
+                    dataPacksJobsData[jobName].manifest[dataPackType] = [ dataPackId ];
 
-            if (grunt.option('depth') != null) {
+                    action = 'Export';
+                }
+
+                if (action == 'ExportAllDefault' && queryDefinitions) {
+                    dataPacksJobsData[jobName].queries = Object.keys(queryDefinitions);
+                    dataPacksJobsData[jobName].ignoreQueryErrors = true;
+
+                    action = 'Export';
+                }
+
+                if (grunt.option('depth') != null) {
                     dataPacksJobsData[jobName].maxDepth = parseInt(grunt.option('depth'));
-            }
-            
-	    	vlocity.datapacksjob.runJob(dataPacksJobsData, jobName, action,
-	    		function(result) {
-					notifier.notify({
-			            title: 'Vlocity deployment tools',
-						message: 'Success - ' + jobName + '\n'+
-								 'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',						
-						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
-						sound: true
-					}, function (err, response) {
-						grunt.log.ok('DataPacks Job Success - ' + action + ' - ' + jobName);
-						callback(result);
-					});
-				},						
-		    	function(result) {
-					notifier.notify({
-			            title: 'Vlocity deployment tools',
-						message: 'Failed - ' + jobName + '\n'+
-								 'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',						
-						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
-						sound: true
-					}, function (err, response) {
-						grunt.fail.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + '\nErrors:\n' + result.errorMessage);
-						callback(result);
-					});
-			});
-	    } else {
-	    	grunt.log.error('DataPacks Job Not Found - ' + jobName);
-            callback(jobName);
-	    }
+                }
+                
+    	    	vlocity.datapacksjob.runJob(dataPacksJobsData, jobName, action,
+    	    		function(result) {
+    					notifier.notify({
+    			            title: 'Vlocity deployment tools',
+    						message: 'Success - ' + jobName + '\n'+
+    								 'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',						
+    						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
+    						sound: true
+    					}, function (err, response) {
+    						grunt.log.ok('DataPacks Job Success - ' + action + ' - ' + jobName);
+    						callback(result);
+    					});
+    				},						
+    		    	function(result) {
+    					notifier.notify({
+    			            title: 'Vlocity deployment tools',
+    						message: 'Failed - ' + jobName + '\n'+
+    								 'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',						
+    						icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
+    						sound: true
+    					}, function (err, response) {
+    						grunt.fail.fatal('DataPacks Job Failed - ' + action + ' - ' + jobName + '\nErrors:\n' + result.errorMessage);
+    						callback(result);
+    					});
+    			});
+    	    } else {
+    	    	grunt.log.error('DataPacks Job Not Found - ' + jobName);
+                callback(jobName);
+    	    }
+        } catch (e) {
+            console.log(e)
+        }
 	}
 
 	function runTaskForAllJobFiles(taskName, callback) {
@@ -289,7 +332,8 @@ module.exports = function (grunt) {
         var commands = [
                             'Deploy', 
                             'GetDiffs',
-                            'Export', 
+                            'Export',
+                            'ExportSingle',
                             'GetDiffsAndDeploy', 
                             'BuildFile',
                             'JavaScript' 
@@ -305,6 +349,8 @@ module.exports = function (grunt) {
 
             grunt.log.ok('Testing: ' + command);
             var currentTime = Date.now();
+
+            var testData = { dataPackType: 'VlocityUILayout', dataPackId: 'datapacktest-layout' };
 
             dataPacksJob(command, 'TestJob', function(jobInfo) {
                 var hasErrors = false;
@@ -333,7 +379,7 @@ module.exports = function (grunt) {
                 allElapsed[command] = Math.floor((Date.now() - currentTime) / 1000);
 
                 callback();
-            });
+            }, testData);
         }, function(err, result) {
 
             commands.forEach(function(command) {
@@ -357,15 +403,7 @@ module.exports = function (grunt) {
     grunt.registerTask('packUpdateSettings', 'Update the DataPack Settings in your Org', function() {
         var done = this.async();
 
-        var properties = grunt.config.get('properties');
-        
-        var vlocity = new node_vlocity({
-          username: properties['sf.username'], 
-          password: properties['sf.password'], 
-          vlocityNamespace: properties['vlocity.namespace'],
-          verbose: grunt.option('verbose'),
-          loginUrl: properties['sf.loginUrl']
-        });
+        var vlocity = getVlocity();
 
         var dataPacksJobsData = {
             UpdateSettings: {
@@ -407,71 +445,22 @@ module.exports = function (grunt) {
 
         var done = this.async();
 
-        var properties = grunt.config.get('properties');
-        
-        var vlocity = new node_vlocity({
-          username: properties['sf.username'], 
-          password: properties['sf.password'], 
-          vlocityNamespace: properties['vlocity.namespace'],
-          verbose: grunt.option('verbose'),
-          loginUrl: properties['sf.loginUrl']
-        });
-
+        var vlocity = getVlocity();
+    
         vlocity.checkLogin(function(res) {
-            vlocity.jsForceConnection.tooling.sobject('DebugLevel').find({ DeveloperName: "SFDC_DevConsole" }).execute(function(err, debugLevel) {
 
-                var thirtyMinutesLater = new Date();
-                thirtyMinutesLater.setMinutes(thirtyMinutesLater.getMinutes() + 30);
-                var thirtyMinutesLaterString = thirtyMinutesLater.toISOString();
+            var apexClass = grunt.option('apex');
 
-                vlocity.jsForceConnection.tooling.sobject('TraceFlag').create({
-                    TracedEntityId: vlocity.jsForceConnection.userInfo.id,
-                    DebugLevelId: debugLevel[0].Id,
-                    ExpirationDate: thirtyMinutesLaterString,
-                    LogType: 'DEVELOPER_LOG'
-                }, function(err, res) {
-                    console.log(res);
+            var folder = './apex';
 
-                    if (err) { 
-                        console.error(err); 
-                    }
+            if (grunt.option('folder')) {
+                folder = grunt.option('folder');
+            }
 
-                    var apexClass = grunt.option('apex');
-
-                    var folder = './apex';
-
-                    if (grunt.option('folder')) {
-                        folder = grunt.option('folder');
-                    }
-        
-                    return vlocity.datapacksutils.runApex(folder, apexClass, {})
-                    .then(function(result) { 
-
-                        vlocity.jsForceConnection.query("Select Id from ApexLog where Operation LIKE '%executeAnonymous' ORDER BY Id DESC LIMIT 1", function(err, res) {
-
-                            vlocity.jsForceConnection.request("/services/data/v37.0/tooling/sobjects/ApexLog/" + res.records[0].Id + "/Body/", function(err, logBody) {
-
-                                if (err) { 
-                                    console.error('err', err); 
-                                }
-
-                                var allLoggingStatments = [];
-
-                                logBody.split("\n").forEach(function(line) {
-                                    var vPerfIndex = line.indexOf('VPERF');
-
-                                    if (vPerfIndex > -1) {
-                                        allLoggingStatments.push(line);
-                                    }
-                                });
-
-                                console.log(allLoggingStatments);
-
-                                done();  
-                            });
-                        });
-                    });
-                });
+            return vlocity.datapacksutils.runApex(folder, apexClass, [])
+            .then(function(result) { 
+                console.log('result', result);
+                done(); 
             });
         });
     });

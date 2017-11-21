@@ -90,6 +90,37 @@
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    }, 
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "%vlocity_namespace%__ObjectClass__c:%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__FilterGroup__c": 1,
+        "%vlocity_namespace%__FilterOperator__c": "!=",
+        "%vlocity_namespace%__FilterValue__c": "'$Vlocity.NULL'",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__AttributeId__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration51",
+        "Name": "Object Class Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore When Null",
+        "%vlocity_namespace%__ConfigurationProcess__c": "Import",
+        "%vlocity_namespace%__ConfigurationType__c": "Action",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__AttributeId__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
+        "%vlocity_namespace%__MapId__c": "Object Class Migration50",
+        "Name": "Object Class Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
         "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__AttributeAssignment__c",

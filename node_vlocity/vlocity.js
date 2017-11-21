@@ -15,13 +15,19 @@ var Vlocity = module.exports = function(options) {
     this.namespace = options.vlocityNamespace;
     this.namespacePrefix = this.namespace ? this.namespace + '__' : '';
     this.verbose = !!options.verbose;
+    this.sessionId = options.sessionId;
+    this.instanceUrl = options.instanceUrl;
+    this.accessToken = options.accessToken;
 
     if (this.verbose) {
         console.log('Verbose mode enabled');
     }
 
     this.jsForceConnection = new jsforce.Connection({
-        loginUrl: options.loginUrl ? options.loginUrl : 'https://login.salesforce.com'
+        loginUrl: options.loginUrl ? options.loginUrl : 'https://login.salesforce.com',
+        sessionId: this.sessionId,
+        instanceUrl: this.instanceUrl,
+        accessToken: this.accessToken
     });
 
     this.isLoggedIn = false;
@@ -36,8 +42,10 @@ var Vlocity = module.exports = function(options) {
 
 Vlocity.prototype.checkLogin = function(thenRun) {
     var self = this;
-    
-    if (!self.isLoggedIn) {
+
+    if (self.isLoggedIn || self.sessionId || self.accessToken) {
+        thenRun();
+    } else {
         self.jsForceConnection.login(self.username, self.password, function(err, res) {
             if (err) { 
                 console.error(err); 
@@ -47,7 +55,5 @@ Vlocity.prototype.checkLogin = function(thenRun) {
             self.isLoggedIn = true;
             thenRun();
         });
-    } else {
-        thenRun();
     }
 };

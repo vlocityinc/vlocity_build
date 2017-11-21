@@ -391,9 +391,9 @@ DataPacksUtils.prototype.initializeFromProject = function(jobInfo) {
 
     jobInfoTemp.singleFile = true;
     jobInfoTemp.noStatus = true;
+    jobInfoTemp.compileOnBuild = false;
 
     self.vlocity.datapacksbuilder.buildImport(jobInfo.projectPath, null, jobInfoTemp, function(dataJson) { 
-        jobInfo.singleFile = false;
 
         if (dataJson && dataJson.dataPacks) {
             dataJson.dataPacks.forEach(function(dataPack) {
@@ -638,6 +638,30 @@ DataPacksUtils.prototype.endsWith = function(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
+DataPacksUtils.prototype.countRemainingInManifest = function(jobInfo) {
+
+    jobInfo.exportRemaining = 0;
+
+    Object.keys(jobInfo.fullManifest).forEach(function(dataPackType) {
+
+        if (!jobInfo.alreadyExportedIdsByType[dataPackType]) {
+            jobInfo.alreadyExportedIdsByType[dataPackType] = [];
+        }
+
+        Object.keys(jobInfo.fullManifest[dataPackType]).forEach(function(dataPackKey) {
+
+            var dataPackId = jobInfo.fullManifest[dataPackType][dataPackKey].Id;
+
+            if (jobInfo.alreadyExportedIdsByType[dataPackType].indexOf(dataPackId) == -1
+                && jobInfo.alreadyExportedIdsByType[dataPackType].indexOf(dataPackKey) == -1
+                && jobInfo.alreadyExportedKeys.indexOf(dataPackKey) == -1
+                && jobInfo.currentStatus[dataPackKey] != 'Error') {
+                jobInfo.exportRemaining++;
+            }
+        });
+    });
+}
+
 DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
 
     var totalRemaining = 0;
@@ -693,10 +717,11 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
         }
     });
 
-    if (jobInfo.extendedManifest) {
-        Object.keys(jobInfo.extendedManifest).forEach(function(dataPackType) {
-            totalRemaining += jobInfo.extendedManifest[dataPackType].length;
-        });
+    if (jobInfo.jobAction == 'Export' 
+        || jobInfo.jobAction == 'GetDiffs'
+        || jobInfo.jobAction == 'GetDiffsAndDeploy') {
+        this.countRemainingInManifest(jobInfo);
+        totalRemaining = jobInfo.exportRemaining;
     }
 
     var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
@@ -727,8 +752,29 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
         jobInfo.errorMessage = jobInfo.errors.join('\n');
     }
 
+    var countByStatus = {};
+
     Object.keys(keysByStatus).forEach(function(statusKey) {
+        countByStatus[statusKey] = {};
+
         Object.keys(keysByStatus[statusKey]).forEach(function(typeKey) {
+            countByStatus[statusKey][typeKey] = keysByStatus[statusKey][typeKey].length;
+
+            if (jobInfo.fullStatus) {
+
+                var color = '\x1b[0m';
+
+                if (statusKey == 'Success') {
+                    color = '\x1b[32m';
+                } else if (statusKey == 'Error') {
+                    color = '\x1b[31m';
+                } else {
+                    color = '\x1b[33m';
+                }
+
+                console.log(color, typeKey, '-', statusKey, '>>', '\x1b[0m', keysByStatus[statusKey][typeKey].length);
+            }
+            
             keysByStatus[statusKey][typeKey].sort();
         });
     });
@@ -738,6 +784,7 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
         Action: jobInfo.jobAction,
         ProjectPath: jobInfo.projectPath,
         TotalTime: Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's',
+        Count: countByStatus,
         Errors: jobInfo.errors,
         Status: keysByStatus
     };

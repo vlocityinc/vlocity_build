@@ -1,7 +1,4 @@
 {
-    "GuaranteedParentKeys": [
-        "Pricebook2/Standard Price Book"
-    ],
     "DataPacks": {
         "IntegrationProcedure": {
             "OmniScript__c": {
@@ -77,6 +74,9 @@
         "PaginationSize": 1500,
         "SupportParallel": true
     },
+    "GuaranteedParentKeys": [
+        "Pricebook2/Standard Price Book"
+    ],
     "SObjects": {
         "Attachment": {
             "Body": {
@@ -318,7 +318,13 @@
                 "Order__c"
             ],
             "SourceKeyDefinition": [
+                "OmniScriptId__c",
                 "Name"
+            ]
+        },
+        "EntityFilterConditionArgument__c": {
+            "SortFields": [
+                "ArgumentSequence__c"
             ]
         },
         "EntityFilterCondition__c": {
@@ -327,11 +333,6 @@
             },
             "SortFields": [
                 "Index__c"
-            ]
-        },
-        "EntityFilterConditionArgument__c": {
-            "SortFields": [
-                "ArgumentSequence__c"
             ]
         },
         "EntityFilterMember__c": {
@@ -377,6 +378,9 @@
             ]
         },
         "ObjectFacet__c": {
+            "ReplacementFields": {
+                "Name": "GlobalKey__c"
+            },
             "SortFields": [
                 "Sequence__c"
             ],
@@ -460,14 +464,14 @@
             }
         },
         "OrchestrationDependencyDefinition__c": {
+            "FilterFields": [
+                "OrchestrationPlanDefinition__c"
+            ],
             "FolderName": [
                 "GlobalKey__c"
             ],
             "SourceKeyDefinition": [
                 "GlobalKey__c"
-            ],
-            "FilterFields": [
-                "OrchestrationPlanDefinition__c"
             ]
         },
         "OrchestrationItemDefinition__c": {
@@ -475,14 +479,14 @@
                 "Name",
                 "OrchestrationPlanDefinitionId__c"
             ],
-            "SourceKeyDefinition": [
-                "Name",
-                "OrchestrationPlanDefinitionId__c"
-            ],
             "MatchingSourceKeyDefinition": [
                 "Name",
                 "_%vlocity_namespace%__OrchestrationPlanDefinition__c",
                 "OrchestrationPlanDefinitionId__r.Name"
+            ],
+            "SourceKeyDefinition": [
+                "Name",
+                "OrchestrationPlanDefinitionId__c"
             ]
         },
         "OrchestrationPlanDefinition__c": {
@@ -682,6 +686,11 @@
             ]
         },
         "SystemInterface__c": {
+            "MatchingSourceKeyDefinition": [
+                "Name",
+                "_%vlocity_namespace%__System__c",
+                "SystemId__r.Name"
+            ],
             "SourceKeyDefinition": [
                 "Name",
                 "SystemId__c"
@@ -817,8 +826,6 @@
         "SourceKeyDefinition": [
             "Name"
         ],
-        "SourceKeyGenerationFields": [
-            
-        ]
+        "SourceKeyGenerationFields": []
     }
 }

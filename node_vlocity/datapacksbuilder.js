@@ -4,7 +4,7 @@ var fs = require('fs-extra');
 var sass = require('sass.js');
 var stringify = require('json-stable-stringify');
 
-var UTF8_EXTENSIONS = [ "css", "json", "yaml", "scss", "html", "js"];
+var UTF8_EXTENSIONS = [ "css", "json", "yaml", "scss", "html", "js", "xml"];
 
 var DEFAULT_MAX_DEPLOY_COUNT = 50;
 
@@ -73,7 +73,7 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
                 jobInfo.currentStatus[nextImport.VlocityDataPackKey] = 'Ready';
                 break;
             } else {
-                if (self.needsPagination(nextImport)) {
+                if (self.needsPagination(nextImport, jobInfo)) {
                     dataPackImport.dataPacks = dataPackImport.dataPacks.concat(self.paginateDataPack(nextImport, jobInfo));
                 } else {
                     dataPackImport.dataPacks.push(nextImport);
@@ -103,7 +103,7 @@ DataPacksBuilder.prototype.needsPagination = function(dataPackData, jobInfo) {
 
     var paginationLimit = this.vlocity.datapacksutils.getPaginationSize(dataPackData.VlocityDataPackType);
 
-    return this.countRecords(dataPackData) > paginationLimit;
+    return !jobInfo.disablePagination && this.countRecords(dataPackData) > paginationLimit;
 };
 
 DataPacksBuilder.prototype.paginateDataPack = function(dataPackData, jobInfo) {
@@ -160,7 +160,9 @@ DataPacksBuilder.prototype.paginateDataPack = function(dataPackData, jobInfo) {
 
                         paginatedDataPack.VlocityDataPackData.VlocityDataPackRelationshipType = 'Pagination';
 
-                        console.log('\x1b[32m', 'Adding to ' + (jobInfo.singleFile ? 'File' : 'Deploy') + ' >>', '\x1b[0m', paginatedDataPack.VlocityDataPackKey + ' - ' + paginatedDataPack.VlocityDataPackLabel, '\x1b[31m', jobInfo.headersOnly ? 'Headers Only' : '', jobInfo.forceDeploy ? 'Force Deploy' : '', '\x1b[0m');
+                        if (!jobInfo.noStatus) {
+                            console.log('\x1b[32m', 'Adding to ' + (jobInfo.singleFile ? 'File' : 'Deploy') + ' >>', '\x1b[0m', paginatedDataPack.VlocityDataPackKey + ' - ' + paginatedDataPack.VlocityDataPackLabel, '\x1b[31m', jobInfo.headersOnly ? 'Headers Only' : '', jobInfo.forceDeploy ? 'Force Deploy' : '', '\x1b[0m');
+                        }
                        
                         currentCount = 0;
                     }
@@ -452,7 +454,15 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
 
                 if (parentData) {
 
-                    parentData = JSON.parse(parentData);
+                    var parentDataList = [];
+
+                    JSON.parse(parentData).forEach(function(parentKey) {
+                        if (dataPackKey != parentKey) {
+                            parentDataList.push(parentKey);
+                        };
+                    });
+
+                    parentData = parentDataList;
 
                     if (!singleFile) {
                         parentData.forEach(function(parentKey) {
