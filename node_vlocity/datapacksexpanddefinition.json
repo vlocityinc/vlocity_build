@@ -1,6 +1,12 @@
 {
     "DataPacks": {
         "IntegrationProcedure": {
+            "DisplayName": [
+                "Type",
+                "Sub Type",
+                "Type__c",
+                "SubType__c"
+            ],
             "OmniScript__c": {
                 "CustomJavaScript__c": {
                     "FileName": [
@@ -28,6 +34,16 @@
         "ObjectLayout": {
             "DoNotExpand": true,
             "SupportParallel": false
+        },
+        "OmniScript": {
+            "DisplayName": [
+                "Type",
+                "Sub Type",
+                "Language",
+                "Type__c",
+                "SubType__c",
+                "Language__c"
+            ]
         },
         "PriceList": {
             "HeadersOnly": true,
@@ -70,6 +86,7 @@
         }
     },
     "DataPacksDefault": {
+        "DisplayName": [],
         "HeadersOnly": false,
         "PaginationSize": 1500,
         "SupportParallel": true
@@ -213,6 +230,9 @@
             ]
         },
         "ContextMapping__c": {
+            "FilterFields": [
+                "Name"
+            ],
             "NonUnique": true
         },
         "ContextScope__c": {
@@ -276,11 +296,7 @@
                 "DomainObjectCreationOrder__c",
                 "DomainObjectAPIName__c",
                 "DomainObjectFieldAPIName__c",
-                "InterfaceFieldAPIName__c",
-                "MapId__c"
-            ],
-            "SourceKeyDefinition": [
-                "MapId__c"
+                "InterfaceFieldAPIName__c"
             ]
         },
         "DecompositionRelationship__c": {
@@ -422,6 +438,10 @@
             ],
             "SourceKeyDefinition": [
                 "GlobalKey__c"
+            ],
+            "UnhashableFields": [
+                "GlobalKey__c",
+                "Name"
             ]
         },
         "OmniScript__c": {
@@ -580,8 +600,9 @@
         },
         "Product2": {
             "FilterFields": [
-                "JSONAttribute__c",
-                "ImageId__c"
+                "AttributeMetadata__c",
+                "ImageId__c",
+                "JSONAttribute__c"
             ],
             "FolderName": [
                 "GlobalKey__c"
@@ -657,6 +678,9 @@
             ]
         },
         "RuleAssignment__c": {
+            "FilterFields": [
+                "Name"
+            ],
             "NonUnique": true
         },
         "RuleFilter__c": {

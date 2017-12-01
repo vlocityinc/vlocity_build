@@ -1,9 +1,13 @@
 var fs = require('fs-extra');
 var async = require('async');
 var stringify = require('json-stable-stringify');
+var path = require('path');
 
 var DataPacksJob = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
+
+    CURRENT_INFO_FILE = path.join(this.vlocity.tempFolder, 'currentJobInfo.json');
+    RUN_JS_TEMP = path.join(this.vlocity.tempFolder, 'runJavaScriptTemp.json');
 };
 
 var SUPPORTED_JOB_KEY_TO_OPTION_MAP = {
@@ -20,8 +24,8 @@ var SUPPORTED_JOB_KEY_TO_OPTION_MAP = {
 };
 
 var MAX_PER_GROUP = 5;
-var CURRENT_INFO_FILE = 'vlocity-temp/currentJobInfo.json';
-var RUN_JS_TEMP = 'vlocity-temp/runJavaScriptTemp.json';
+var CURRENT_INFO_FILE;
+var RUN_JS_TEMP;
 
 DataPacksJob.prototype.getOptionsFromJobInfo = function(jobInfo) {
     var options = {};
@@ -107,6 +111,14 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
 
                 Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
 
+                    if (jobInfo.resetOnRetry) {
+                        jobInfo.resetOnRetry.forEach(function(typeToReset) {
+                            if (dataPackKey.indexOf(typeToReset) == 0) {
+                                jobInfo.currentStatus[dataPackKey] = 'ReadySeparate';
+                            }
+                        });
+                    }
+
                     if (jobInfo.currentStatus[dataPackKey] != 'Success' 
                         && jobInfo.currentStatus[dataPackKey] != 'Ready') {
                         jobInfo.currentStatus[dataPackKey] = 'ReadySeparate';
@@ -186,6 +198,22 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
     })
     .then(function() {
 
+        if (!jobInfo.ranPreJobJavaScript && jobInfo.preJobJavaScript && jobInfo.preJobJavaScript[action]) {
+
+            console.log('\x1b[36m', '>> Running Pre Job JavaScript', '\x1b[0m');
+            
+            jobInfo.ranPreJobJavaScript = true;
+
+            self.vlocity.datapacksutils.runJavaScript(jobInfo.projectPath, jobInfo.preJobJavaScript[action], jobInfo, null, 
+                function() {
+                    Promise.resolve();
+            });
+        } else {
+            return Promise.resolve();
+        }
+    })
+    .then(function() {
+
         if (!jobInfo.ranPreJobApex && jobInfo.preJobApex && jobInfo.preJobApex[action]) {
 
             // Builds the JSON Array sent to Anon Apex that gets run before deploy
@@ -226,6 +254,19 @@ DataPacksJob.prototype.runJobWithInfo = function(jobInfo, action, onSuccess, onE
             return self.vlocity.datapacksutils.runApex(jobInfo.projectPath, jobInfo.postJobApex[action], jobInfo.postDeployResults)
             .then(function() {
                 return Promise.resolve();
+            });
+        } else {
+            return Promise.resolve();
+        }
+    })
+    .then(function() {
+        
+        if ((!jobInfo.hasError || jobInfo.continueAfterError) && jobInfo.postJobJavaScript && jobInfo.postJobJavaScript[action]) {
+
+            console.log('\x1b[36m', '>> Running Post Job JavaScript', '\x1b[0m');
+            self.vlocity.datapacksutils.runJavaScript(jobInfo.projectPath, jobInfo.postJobJavaScript[action], jobInfo, null, 
+                function() {
+                    Promise.resolve();
             });
         } else {
             return Promise.resolve();
@@ -276,6 +317,8 @@ DataPacksJob.prototype.doRunJob = function(jobInfo, action, onComplete) {
         //self.installBaseDataPacks(jobInfo, onComplete);
     } else if (action == 'JavaScript') {
         self.reExpandAllFilesAndRunJavaScript(jobInfo, onComplete);
+    } else if (action == 'Apex') {
+        self.runApex(jobInfo, onComplete);
     } else {
         console.log('\x1b[31m', 'Bad Job Info', jobInfo);
     }
@@ -313,9 +356,12 @@ DataPacksJob.prototype.buildManifestFromQueries = function(jobInfo, onComplete) 
 
             var thisQuery = self.vlocity.jsForceConnection.query(query)
                 .on("record", function(record) {
-                    
+
+                    delete record.attributes;
+                    record.VlocityDataPackType = queryData.VlocityDataPackType;
+
                     if (!jobInfo.fullManifest[queryData.VlocityDataPackType][record.Id]) {
-                        jobInfo.fullManifest[queryData.VlocityDataPackType][record.Id] = { Id: record.Id, VlocityDataPackType: queryData.VlocityDataPackType };
+                        jobInfo.fullManifest[queryData.VlocityDataPackType][record.Id] = record;
                         totalFound++;
                     }
                 })
@@ -469,7 +515,7 @@ DataPacksJob.prototype.exportFromManifest = function(jobInfo, onComplete) {
                 return false;
             }
 
-            console.log('\x1b[32m', 'Exporting >>', '\x1b[0m ', dataPack.VlocityDataPackType + ' ' + (dataPack.VlocityDataPackName ? dataPack.VlocityDataPackName : dataPack.Id));
+            console.log('\x1b[32m', 'Exporting >>', '\x1b[0m ', dataPack.VlocityDataPackType + ' ' + self.vlocity.datapacksutils.getDisplayName(dataPack));
 
             return true;
         });
@@ -806,6 +852,8 @@ DataPacksJob.prototype.activateAll = function(dataPackData, jobInfo, onComplete,
 
                         if (jobInfo.errors.indexOf(message) == -1) {
                             jobInfo.errors.push(message);
+
+                            console.log('\x1b[31m', 'Activation Error >>', '\x1b[0m', dataPack.VlocityDataPackKey, dataPack.ActivationMessage);
                         }
                     }
                 });
@@ -859,8 +907,6 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
 
             fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
 
-            //self.vlocity.datapacksutils.printJobStatus(jobInfo);
-
             Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
                 if (jobInfo.currentStatus[dataPackKey] == 'Ready' || jobInfo.currentStatus[dataPackKey] == 'ReadySeparate') {
                     notDeployed.push('Not Deployed >> ' + dataPackKey);
@@ -895,16 +941,19 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
                         onComplete(jobInfo);
                     }
                 } else if (jobInfo.forceDeploy) {
-                    if (!jobInfo.ignoreAllParents) {
-                        
-                        jobInfo.ignoreAllParents = true;
-                        self.deployJob(jobInfo, onComplete);
-                    } else {
-                        jobInfo.hasError = true;
-                        jobInfo.errors = jobInfo.errors.concat(notDeployed);
-
-                        onComplete(jobInfo);
+                    if (jobInfo.notDeployedCount == notDeployed.length) {
+                        if (!jobInfo.ignoreAllParents) {
+                            jobInfo.ignoreAllParents = true;
+                        } else {
+                            jobInfo.hasError = true;
+                            jobInfo.errors = jobInfo.errors.concat(notDeployed);
+                                
+                            return onComplete(jobInfo);
+                        }
                     }
+
+                    jobInfo.notDeployedCount = notDeployed.length;
+                    self.deployJob(jobInfo, onComplete);
                 } else if (jobInfo.supportHeadersOnly || jobInfo.supportForceDeploy) {
 
                     if (!jobInfo.supportHeadersOnly) {
@@ -1079,8 +1128,6 @@ DataPacksJob.prototype.deployJob = function(jobInfo, onComplete) {
                     });
                 });
             }, function(err, result) {
-                //self.vlocity.datapacksutils.printJobStatus(jobInfo);
-
                 var stillRemaining = 0;
 
                 Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
@@ -1187,6 +1234,10 @@ DataPacksJob.prototype.checkDiffs = function(jobInfo, currentLocalFileData, targ
     var totalDiffs = 0;
     var totalNew = 0;
 
+    if (!currentLocalFileData.dataPacks) {
+        currentLocalFileData.dataPacks = [];
+    }
+
     currentLocalFileData.dataPacks.forEach(function(dataPack) {
 
         var dataPackHash = self.vlocity.datapacksutils.getDataPackHashable(dataPack, jobInfo);
@@ -1217,8 +1268,8 @@ DataPacksJob.prototype.checkDiffs = function(jobInfo, currentLocalFileData, targ
     console.log('\x1b[36m', 'Diffs >>', '\x1b[0m', totalDiffs);
     console.log('\x1b[36m', 'New >>', '\x1b[0m', totalNew);
 
-    fs.outputFileSync('./vlocity-temp/diffs/localFolderFiles.json', stringify(currentFiles, { space: 4 }));
-    fs.outputFileSync('./vlocity-temp/diffs/targetOrgFiles.json', stringify(exportedFiles, { space: 4 }));
+    fs.outputFileSync(path.join(this.vlocity.tempFolder, 'diffs/localFolderFiles.json'), stringify(currentFiles, { space: 4 }));
+    fs.outputFileSync(path.join(this.vlocity.tempFolder, 'diffs/targetOrgFiles.json'), stringify(exportedFiles, { space: 4 }));
 }
 
 DataPacksJob.prototype.getExportDiffs = function(jobInfo, onComplete) {
@@ -1235,7 +1286,9 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
         jobInfo.savedProjectPath = jobInfo.projectPath;
     }
 
-    jobInfo.projectPath = './vlocity-temp/diffs';
+    jobInfo.projectPath = path.join(this.vlocity.tempFolder, 'diffs');
+
+    fs.removeSync(path.join(this.vlocity.tempFolder, 'diffs'));
 
     var targetOrgRecordsHash = {};
     
@@ -1270,6 +1323,7 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
             jobInfo.resetFileData = true;
             jobInfo.VlocityDataPackIds = [];
             jobInfo.singleFile = true;
+            jobInfo.toExportGroups = null;
 
             self.vlocity.datapacksbuilder.buildImport(jobInfo.projectPath, jobInfo.manifest, jobInfo, function(checkDiffsFile) { 
 
@@ -1280,11 +1334,13 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
                 jobInfo.hasError = false;
                 jobInfo.errorMessage = '';
                 jobInfo.false = false;
+                jobInfo.singleFile = false;
+                jobInfo.jobAction = 'Deploy';
 
                 if (jobInfo.cancelDeploy) {
                     onComplete(jobInfo);
                 } else {
-                    self.runJobWithInfo(jobInfo, 'Deploy', onComplete, onComplete);
+                    self.runJobWithInfo(jobInfo, jobInfo.jobAction, onComplete, onComplete);
                 }
             });
         });
@@ -1294,46 +1350,55 @@ DataPacksJob.prototype.getExportDiffsAndDeploy = function(jobInfo, onComplete) {
 DataPacksJob.prototype.reExpandAllFilesAndRunJavaScript = function(jobInfo, onComplete) {
     var self = this;
 
-    var fullDataPath = jobInfo.projectPath;
+    if (typeof jobInfo.javascript == 'string') {
+        self.vlocity.datapacksutils.runJavaScript(jobInfo.projectPath, jobInfo.javascript, null, jobInfo, onComplete);
+    } else {
+        var fullDataPath = jobInfo.projectPath;
 
-    jobInfo.singleFile = true;
-    jobInfo.disablePagination = true;
-    jobInfo.compileOnBuild = false;
-    jobInfo.fullStatus = true;
+        jobInfo.singleFile = true;
+        jobInfo.disablePagination = true;
+        jobInfo.compileOnBuild = false;
+        jobInfo.fullStatus = true;
 
-    if (self.vlocity.verbose) {
-        console.log('\x1b[31m', 'Getting DataPacks >>', '\x1b[0m', fullDataPath, jobInfo.manifest, jobInfo);
+        if (self.vlocity.verbose) {
+            console.log('\x1b[31m', 'Getting DataPacks >>', '\x1b[0m', fullDataPath, jobInfo.manifest, jobInfo);
+        }
+
+        self.vlocity.datapacksbuilder.buildImport(fullDataPath, jobInfo.manifest, jobInfo, function(dataJson) { 
+
+            dataJson.dataPacks.forEach(function(dataPack) {
+                 if (jobInfo.javascript && jobInfo.javascript[dataPack.VlocityDataPackType]) {
+
+                    var jsFiles;
+
+                    if (typeof jobInfo.javascript[dataPack.VlocityDataPackType] == 'string') {
+                        jsFiles = [jobInfo.javascript[dataPack.VlocityDataPackType]];
+                    } else {
+                        jsFiles = jobInfo.javascript[dataPack.VlocityDataPackType];
+                    }
+
+                    jsFiles.forEach(function(file) {
+                        self.vlocity.datapacksutils.runJavaScript(jobInfo.projectPath, file, dataPack, jobInfo);
+                    });                 
+                 }
+            });
+
+            fs.outputFileSync(RUN_JS_TEMP, stringify(dataJson, { space: 4 }), 'utf8');
+
+            self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataJson, jobInfo, function() {
+
+                fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
+                onComplete(jobInfo);
+            });
+        });
     }
-
-    self.vlocity.datapacksbuilder.buildImport(fullDataPath, jobInfo.manifest, jobInfo, function(dataJson) { 
-
-        dataJson.dataPacks.forEach(function(dataPack) {
-             if (jobInfo.javascript && jobInfo.javascript[dataPack.VlocityDataPackType]) {
-
-                var jsFiles;
-
-                if (typeof jobInfo.javascript[dataPack.VlocityDataPackType] == 'string') {
-                    jsFiles = [jobInfo.javascript[dataPack.VlocityDataPackType]];
-                } else {
-                    jsFiles = jobInfo.javascript[dataPack.VlocityDataPackType];
-                }
-
-                jsFiles.forEach(function(file) {
-                    self.vlocity.datapacksutils.runJavaScript('../javascript', file, dataPack);
-                });                 
-             }
-        });
-
-        fs.outputFileSync(RUN_JS_TEMP, stringify(dataJson, { space: 4 }), 'utf8');
-
-        self.vlocity.datapacksexpand.expand(jobInfo.projectPath + '/' + jobInfo.expansionPath, dataJson, jobInfo, function() {
-
-            fs.outputFileSync(CURRENT_INFO_FILE, stringify(jobInfo, { space: 4 }), 'utf8');
-            onComplete(jobInfo);
-
-        });
-    });
 }
 
+DataPacksJob.prototype.runApex = function(jobInfo, onComplete) {
+    var self = this;
+    console.log('\x1b[36m', '>> Running Apex', '\x1b[0m');
 
-
+    self.vlocity.datapacksutils.runApex(jobInfo.folder, jobInfo.apex, []).then(function() {
+        onComplete(jobInfo); 
+    });
+}

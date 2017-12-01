@@ -5,6 +5,7 @@ var datapacksexpand = require('./datapacksexpand');
 var datapacksbuilder = require('./datapacksbuilder');
 var datapacksutils = require('./datapacksutils');
 var datapacksexportbuildfile = require('./datapacksexportbuildfile');
+var nopt = require('nopt');
 
 var Vlocity = module.exports = function(options) {
     options = options || {};
@@ -18,6 +19,8 @@ var Vlocity = module.exports = function(options) {
     this.sessionId = options.sessionId;
     this.instanceUrl = options.instanceUrl;
     this.accessToken = options.accessToken;
+
+    this.tempFolder = './vlocity-temp';
 
     if (this.verbose) {
         console.log('Verbose mode enabled');
@@ -40,11 +43,11 @@ var Vlocity = module.exports = function(options) {
     this.datapacksexportbuildfile = new datapacksexportbuildfile(this);
 };
 
-Vlocity.prototype.checkLogin = function(thenRun) {
+Vlocity.prototype.checkLogin = function(callback) {
     var self = this;
 
     if (self.isLoggedIn || self.sessionId || self.accessToken) {
-        thenRun();
+        callback();
     } else {
         self.jsForceConnection.login(self.username, self.password, function(err, res) {
             if (err) { 
@@ -53,7 +56,7 @@ Vlocity.prototype.checkLogin = function(thenRun) {
             }
             
             self.isLoggedIn = true;
-            thenRun();
+            callback();
         });
     }
 };

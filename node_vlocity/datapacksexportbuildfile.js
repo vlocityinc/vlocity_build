@@ -18,7 +18,7 @@ DataPacksExportBuildFile.prototype.setFilename = function(jobInfo) {
     if (jobInfo.exportBuildFile) {
         this.filename = path.join(jobInfo.projectPath, jobInfo.exportBuildFile);
     } else {
-        this.filename = path.join(__dirname, "../vlocity-temp/allExportedDataPacks.json");
+        this.filename = path.join(this.vlocity.tempFolder, "allExportedDataPacks.json");
     }
 };
 

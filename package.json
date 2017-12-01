@@ -28,6 +28,7 @@
     "json-stable-stringify": "1.0.1",
     "lodash": "4.17.4",
     "node-notifier": "5.1.2",
+    "nopt": "^4.0.1",
     "properties": "1.2.1",
     "sass.js": "0.10.6",
     "unidecode": "0.1.8"

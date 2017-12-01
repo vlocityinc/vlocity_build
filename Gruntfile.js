@@ -1,25 +1,25 @@
-
 'use strict';
-var loadProperties = require('./grunt/loadProperties.js');
-var tasksToLoad = [ 'dataPacksJob' ];
 
+var vlocitycli = require('./node_vlocity/vlocitycli.js');
 module.exports = function(grunt) {
-  grunt.log.oklns("Vlocity Build Tools");
+    grunt.log.oklns("Vlocity Build Tools");
 
-  var properties = loadProperties(grunt);
+    Object.keys(VLOCITY_COMMANDLINE_COMMANDS).forEach(function(task) {
 
-  grunt.initConfig({
-    properties: properties
-  });
+        grunt.registerTask(task, VLOCITY_COMMANDLINE_COMMANDS[task].description, function() {
+            var done = this.async();
 
-  tasksToLoad.forEach(function(taskName) {
-    var config = require('./grunt/' + taskName + 'Task.js')(grunt);
-    if (config) {
-      grunt.config.merge(config);
-    }
-  });
+            new vlocitycli().runCLI([task], function(result) {
+                grunt.log.ok(result);
+                done();
+            }, function(result) {
+                grunt.fatal(result);
+                done();
+            });
+        });
+    });
 
-  grunt.registerTask('default', 'There is no Default task defined for this Project', function() {
-    console.log('Use','\x1b[32m', 'grunt --help', '\x1b[0m', 'to see a full list of commands');
-  });
+    grunt.registerTask('default', 'There is no Default task defined for this Project', function() {
+        console.log('Use', '\x1b[32m', 'grunt --help', '\x1b[0m', 'to see a full list of commands');
+    });
 };

@@ -164,6 +164,10 @@ DataPacksUtils.prototype.getJsonFields = function(dataPackType, SObjectType) {
     return this.getExpandedDefinition(dataPackType, SObjectType, "JsonFields");
 }
 
+DataPacksUtils.prototype.getHashFields = function(dataPackType, SObjectType) {
+    return this.getExpandedDefinition(dataPackType, SObjectType, "HashFields");
+}
+
 DataPacksUtils.prototype.getReplacementFields = function(dataPackType, SObjectType) {
     return this.getExpandedDefinition(dataPackType, SObjectType, "ReplacementFields");
 }
@@ -508,16 +512,22 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
         });
 };
 
-DataPacksUtils.prototype.runJavaScript = function(projectPath, filePath, currentContextData, callback) {
+DataPacksUtils.prototype.runJavaScript = function(projectPath, filePath, currentContextData, jobInfo, callback) {
     var self = this;
 
     var pathToRun = path.join(projectPath, filePath);
 
-    if (!this.runJavaScriptModules[pathToRun]) {
-        this.runJavaScriptModules[pathToRun] = require(path.join(projectPath, filePath));
+    var defaultJSPath = path.resolve(path.join('javascript', filePath));
+
+    if (!this.fileExists(pathToRun) && this.fileExists(defaultJSPath)) {
+        pathToRun = defaultJSPath;
     }
 
-    this.runJavaScriptModules[pathToRun](currentContextData, callback);
+    if (!this.runJavaScriptModules[pathToRun]) {
+        this.runJavaScriptModules[pathToRun] = require(pathToRun);
+    }
+
+    this.runJavaScriptModules[pathToRun](this.vlocity, currentContextData,jobInfo, callback);
 };
 
 DataPacksUtils.prototype.hashCode = function(toHash) {
@@ -608,6 +618,37 @@ DataPacksUtils.prototype.removeUnhashableFields = function(dataPackType, dataPac
             }
         });
     }
+}
+
+DataPacksUtils.prototype.getDisplayName = function(dataPack) {
+    var name = '';
+    var self = this;
+
+    self.getExpandedDefinition(dataPack.VlocityDataPackType, null, "DisplayName").forEach(function(field) {
+
+        field = field.replace(/%vlocity_namespace%/g, self.vlocity.namespace);
+
+        if (dataPack[field]) {
+            if (name) {
+                name += ' ';
+            }
+
+            name += dataPack[field] ;
+        }
+    });
+
+    if (!name && dataPack.Name) {
+        name = dataPack.Name;
+    }
+
+    if (dataPack.Id) {
+        if (name) {
+            name += ' ';
+        }
+        name += dataPack.Id;
+    }
+
+    return name;
 }
 
 DataPacksUtils.prototype.getDataPackHashable = function(dataPack, jobInfo) {
