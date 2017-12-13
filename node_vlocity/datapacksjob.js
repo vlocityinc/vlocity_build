@@ -10,7 +10,7 @@ var DataPacksJob = module.exports = function(vlocity) {
     CURRENT_INFO_FILE = path.join(this.vlocity.tempFolder, 'currentJobInfo.json');
     RUN_JS_TEMP = path.join(this.vlocity.tempFolder, 'runJavaScriptTemp.json');
     this.defaultJobSettings = yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'defaultjobsettings.yaml'), 'utf8'));
-    this.queryDefinitions = yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'querydefinitions.yaml'), 'utf8'));
+    this.queryDefinitions = yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'querydefinition.yaml'), 'utf8'));
 };
 
 var SUPPORTED_JOB_KEY_TO_OPTION_MAP = {
