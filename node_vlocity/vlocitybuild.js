@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var vlocity = require('./vlocitycli.js');
 
 function oncomplete(result) {

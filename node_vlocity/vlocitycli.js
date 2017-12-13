@@ -6,6 +6,7 @@ var nopt = require('nopt');
 var vlocity = require('./vlocity.js');
 var notifier = require('node-notifier');
 var properties = require('properties');
+var stringify = require('json-stable-stringify');
 
 var VLOCITY_COMMANDLINE_OPTIONS ={
     "activate": Boolean,
@@ -39,7 +40,12 @@ var VLOCITY_COMMANDLINE_OPTIONS ={
     "verbose": Boolean,
     "vlocity.dataPacksJobFolder": String,
     "vlocity.namespace": String,
-    "ignoreJobFailures": Boolean
+    "ignoreJobFailures": Boolean,
+    "json": Boolean,
+    "manifest": String,
+    "queryAll": Boolean,
+    "stack": Boolean,
+    "json-test": Boolean
 };
 
 var JOB_OPTIONS = [ 
@@ -58,7 +64,8 @@ var JOB_OPTIONS = [
 var VLOCITY_COMMANDLINE_OPTIONS_SHORTHAND = {
     "depth": [ "-maxDepth" ],
     "js": [ "-javascript" ],
-    "ijf": [ "-ignoreJobFailures" ]
+    "ijf": [ "-ignoreJobFailures" ],
+    "all": [ "-queryAll" ]
 };
 
 VLOCITY_COMMANDLINE_COMMANDS = {
@@ -102,6 +109,10 @@ VLOCITY_COMMANDLINE_COMMANDS = {
         action: 'Continue',
         description: 'Continue a DataPack Job'
     },
+    packGetAllAvailableExports: {
+        action: 'GetAllAvailableExports',
+        description: 'Get list of all DataPacks that can be exported'
+    },
     runJavaScript: {
         action: 'JavaScript',
         description: 'Run JavaScript on all DataPacks in the Project then recreate the files'
@@ -109,14 +120,22 @@ VLOCITY_COMMANDLINE_COMMANDS = {
     runTestJob: {
         action: 'runTestJob',
         description: 'Test all commands in the Vlocity Build Project'
+    }, 
+    help: {
+        action: 'help',
+        description: 'Get all commands for Vlocity Build'
     }
 };
 
 VlocityCLI = module.exports = function () {
     this.commandLineOptions = {};
     this.properties = {};
-
-    this.queryDefinitions = yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'QueryDefinitions.yaml'), 'utf8'));
+    this.isJsonCLI = false;
+    this.basedir = process.env.PWD;
+    
+    if (!this.basedir) {
+        this.basedir = process.cwd();
+    }
 
     return this;
 }
@@ -125,31 +144,77 @@ VlocityCLI.prototype.optionOrProperty = function(key) {
     return this.commandLineOptions[key] ? this.commandLineOptions[key] : this.properties[key];
 }
 
+VlocityCLI.prototype.formatResponseCLI = function(response, e) {
+    var self = this;
+
+    // { "status": "", "message":"", "result":"", data: {}, action: "" }
+    if (self.isJsonCLI) {
+        // First 2 account for issues in the CLI Runner
+        if (e && e.message) {
+            return stringify({ status: 'error', message: self.stack ? e.stack : e.message, result: e }); 
+        } else if (typeof response == 'string') {
+            return stringify({ message: response, status: 'error', result: null }); 
+        } else {
+            return stringify(response);
+        }
+    } else if (e && e.message) {
+        return self.stack ? e.stack : e.message;
+    } else if (typeof response == 'string') {
+        return response;
+    }
+
+    if (response.message && response.action) {
+        return response.action + ' ' + response.status + ':\n' + response.message;
+    }
+
+    return response;
+}
+
 VlocityCLI.prototype.runCLI = function(commands, success, error) {
     var self = this;
 
+    self.cliSuccess = success;
+    self.cliError = error;
+
     self.commandLineOptions = nopt(VLOCITY_COMMANDLINE_OPTIONS, VLOCITY_COMMANDLINE_OPTIONS_SHORTHAND, process.argv, 2);
 
-    if (self.commandLineOptions.help) {
+    var commands = commands || self.commandLineOptions.argv.remain;
+    
+    self.isJsonCLI = self.optionOrProperty('json') || self.optionOrProperty('json-test') || false;
+
+    self.stack = self.optionOrProperty('stack');
+    
+    VlocityUtils.showLoggingStatements = !self.isJsonCLI || self.optionOrProperty('json-test');
+
+    if (self.commandLineOptions.help || commands[0] == 'help') {
+        VlocityUtils.log('All available commands:');
         Object.keys(VLOCITY_COMMANDLINE_COMMANDS).forEach(function(command) {  
-            console.log(command, '-', VLOCITY_COMMANDLINE_COMMANDS[command].description);
+            VlocityUtils.log(command, '-', VLOCITY_COMMANDLINE_COMMANDS[command].description);
         });
-
-        return;
+        if (self.isJsonCLI) {
+            return success(self.formatResponseCLI({ message: 'Commands', records: Object.values(VLOCITY_COMMANDLINE_COMMANDS), action: 'help', status: 'success' }));
+        } else {
+            return success('');
+        }
     }
 
-    var basedir = process.env.PWD;
+    // Check to see if Propertyfile
+    var propertyfile = self.optionOrProperty('propertyfile');
 
-    if (!basedir) {
-        basedir = process.cwd();
+    if (!propertyfile) {
+        try {
+            propertyfile = fs.statSync('build.properties');
+        } catch (e) {
+            //return false;
+        }
     }
 
-    var file = self.commandLineOptions.propertyfile ? self.commandLineOptions.propertyfile : 'build.properties';
-
-    try {
-        this.properties = properties.parse(fs.readFileSync(file, 'utf8'));
-    } catch (e) {
-        console.log('Could not load properties file from ' + file, e);
+    if (propertyfile) {
+        try {
+            self.properties = properties.parse(fs.readFileSync(propertyfile, 'utf8'));
+        } catch (e) {
+            return self.formatResponseCLI(null, { message: 'Could not load properties from file ' + propertyfile, stack: 'Could not load properties from file ' + propertyfile + '\n' + e.stack });
+        }
     }
 
     var jobName = self.optionOrProperty('job');
@@ -157,121 +222,120 @@ VlocityCLI.prototype.runCLI = function(commands, success, error) {
     if (!jobName) {
         jobName = self.optionOrProperty('vlocity.dataPackJob');
     }
+
+    if (jobName && jobName.indexOf('.yaml') != -1) {
+        jobName = jobName.substr(0, jobName.indexOf('.yaml'));
+    }
     
     var dataPacksJobFolder = self.optionOrProperty('vlocity.dataPacksJobFolder');
 
     if (!dataPacksJobFolder) {
-        dataPacksJobFolder = path.join(__dirname, '../dataPacksJobs');
+        dataPacksJobFolder = path.join(self.basedir, 'dataPacksJobs');
     }
 
     var dataPacksJobsData = {};
 
     var dataPackFolderExists;
 
+    var finalMessage = 'Finished';
+
     try {
         fs.readdirSync(dataPacksJobFolder).filter(function(file) {
+            	return path.extname(file).toLocaleLowerCase() == '.yaml';
+            }).filter(function(file) {
             try {
-                if (file.indexOf('.yaml') != -1) {
-                    var fileName = file.substr(0, file.indexOf('.'));
-                    dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
-                    
-                    dataPacksJobsData[fileName].QueryDefinitions = self.queryDefinitions;
-
-                    JOB_OPTIONS.forEach(function(key) { 
-                        if (key.indexOf('sf.') == -1 && self.commandLineOptions[key] != null) {
-                            dataPacksJobsData[fileName][key] = self.commandLineOptions[key];
-                        }
-                    });
-                }
-            } catch (jobError) { 
-                console.log('Error loading Job File ' + file, jobError);
+                var fileName = file.substr(0, file.indexOf('.'));
+                dataPacksJobsData[fileName] = yaml.safeLoad(fs.readFileSync(dataPacksJobFolder + '/' + file, 'utf8'));
+                
+                JOB_OPTIONS.forEach(function(key) { 
+                    if (key.indexOf('sf.') == -1 && self.commandLineOptions[key] != null) {
+                        dataPacksJobsData[fileName][key] = self.commandLineOptions[key];
+                    }
+                });
+            } catch (jobException) { 
+                VlocityUtils.log('Error loading Job File ' + file, jobException);
+                return error(self.formatResponseCLI(null, jobException)); 
             }
         });
-    } catch (e2) {
-        console.log('No DataPacksJob Folder Found: ' + dataPacksJobFolder);
+    } catch (e) {
+        VlocityUtils.log('No DataPacksJob Folder Found: ' + dataPacksJobFolder);
+        return error(self.formatResponseCLI(null, e)); 
     }
 
     var hasError = false;
 
-    var notifyError = function(result, callback) {
-        notifier.notify({
-            title: 'Vlocity deployment tools',
-            message: 'Failed - ' + jobName + ' - ' + result.jobAction + '\n'+
-                     'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)',                      
-            icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
-            sound: true
-        }, function (notifierError, response) {
-            if (notifierError) {
-                console.log(notifierError);
-            }
+    var notify = function(success, result) {
 
-            callback();
-        });
-    }
-
-    var notifySuccess = function(result, callback) {
-
-        var message = 'Success - ' + jobName + ' - ' + result.jobAction + '\n'+
-                     'Job executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)';
-
-        console.log(message);
-        notifier.notify({
-            title: 'Vlocity deployment tools',
-            message: message,                      
-            icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
-            sound: true
-        }, function (notifierError, response) {
-            if (notifierError) {
-                console.log(notifierError);
-            }
-            callback();
-        });
+        if (!self.isJsonCLI) {
+            var message = (success ? 'Success' : 'Failed') + ' - ' + result.jobName + ' - ' + result.originalAction + '\nJob executed in ' + ((Date.now() - jobStartTime)  / 1000).toFixed(0) + ' second(s)';
+            
+            notifier.notify({
+                title: 'Vlocity deployment tools',
+                message: message,                      
+                icon: path.join(__dirname, '..', 'images', 'toast-logo.png'), 
+                sound: true
+            }, function (notifierError, response) {
+            });
+        }
     }
 
     var jobStartTime = Date.now();
 
     var fatalErrors = [];
+    var finalResult;
 
-    var jobError = function(err) {
-        return 'DataPacks Job Failed - ' + err.jobAction + ' - ' + jobName + '\nErrors:\n' + err.errorMessage;
-    }
+    var commands = commands || self.commandLineOptions.argv.remain;
 
-    // If No Commands Passed in then run from Parsed Command Line
-    async.eachSeries(commands || self.commandLineOptions.argv.remain, function(command, callback) {
-        if (VLOCITY_COMMANDLINE_COMMANDS[command]) {
-            command = VLOCITY_COMMANDLINE_COMMANDS[command].action;
-        }
+    if (commands[0] == 'runTestJob') {
+        jobName = 'runTestJob';
 
-        if (command == 'runTestJob') {
-            self.runTestJob(dataPacksJobsData, 
+        self.runTestJob(dataPacksJobsData, 
+            function(result) {
+                notify(true, result);
+                success(self.formatResponseCLI(result));
+            },
+            function(result) {
+                notify(false, result);
+                error(self.formatResponseCLI(result));
+        });
+    } else {
+        // If No Commands Passed in then run from Parsed Command Line
+        async.eachSeries(commands, function(command, callback) {
+            if (VLOCITY_COMMANDLINE_COMMANDS[command]) {
+                command = VLOCITY_COMMANDLINE_COMMANDS[command].action;
+            } else {
+                finalResult = 'Command not found ' + command;
+            }
+
+            finalResult = null;
+
+            self.runJob(JSON.parse(JSON.stringify(dataPacksJobsData)), jobName, command, 
                 function(result) {
-                    notifySuccess(result, callback);
+                    finalResult = result;
+                    notify(true, result);
+                    callback();
                 },
                 function(result) {
-                    notifyError(result, callback);
-                });
-        } else {
-            self.runJob(JSON.parse(JSON.stringify(dataPacksJobsData)), jobName, command, function(result) {
-                    notifySuccess(result, callback);
-                },
-                function(result) {
+                    finalResult = result;
+
                     if (self.optionOrProperty('ignoreJobFailures')) {
-                        console.log(jobError(result));
-                        notifyError(result, callback);
+                        VlocityUtils.log(self.formatResponseCLI(result));
+                        notify(false, result);
+                        callback();
                     } else {
-                        notifyError(result, function() {
-                            callback(result);
-                        });
+                        notify(false, result);
+                        callback(result);
                     }
                 });
-        }
-    }, function(err, result) {
-        if (err) {
-            error(jobError(err));
-        } else {
-            success('Finished');
-        }
-    });
+            
+        }, function(err, result) {
+            if (err) {
+                error(self.formatResponseCLI(err));
+            } else {
+                success(self.formatResponseCLI(finalResult));
+            }
+        });
+    }
 }
 
 VlocityCLI.prototype.runJob = function(dataPacksJobsData, jobName, action, success, error) {
@@ -279,13 +343,13 @@ VlocityCLI.prototype.runJob = function(dataPacksJobsData, jobName, action, succe
     var self = this;
 
     if (!jobName) {
-        return error({ action: action, errorMessage: 'No Job Specified' });
+       return error({ action: action, errorMessage: 'No Job Specified' });
     }
 
     if (dataPacksJobsData[jobName]) {
 
         if (!dataPacksJobsData[jobName].projectPath) {
-            dataPacksJobsData[jobName].projectPath = dataPacksJobFolder;
+            dataPacksJobsData[jobName].projectPath = path.join(self.basedir, 'datapacks');
         }
 
         if (self.optionOrProperty('query') && self.optionOrProperty('type')) {
@@ -310,14 +374,12 @@ VlocityCLI.prototype.runJob = function(dataPacksJobsData, jobName, action, succe
             dataPacksJobsData[jobName].queries = null;
             dataPacksJobsData[jobName].manifest = {};
             dataPacksJobsData[jobName].manifest[dataPackType] = [ dataPackId ];
-
             action = 'Export';
         }
 
-        if (action == 'ExportAllDefault' && self.queryDefinitions) {
-            dataPacksJobsData[jobName].queries = Object.keys(self.queryDefinitions);
+        if (action == 'ExportAllDefault') {
+            dataPacksJobsData[jobName].queryAll = true;
             dataPacksJobsData[jobName].ignoreQueryErrors = true;
-
             action = 'Export';
         }
 
@@ -327,7 +389,6 @@ VlocityCLI.prototype.runJob = function(dataPacksJobsData, jobName, action, succe
 
         if (action == 'UpdateSettings') {
             action = 'Deploy';
-
             jobName = 'UpdateSettings';
             dataPacksJobsData = {
                 UpdateSettings: {
@@ -384,6 +445,8 @@ VlocityCLI.prototype.runTestJob = function(dataPacksJobsData, success, error) {
 
         var currentTime = Date.now();
 
+        VlocityUtils.log('\x1b[36m', 'Running TEST -', command);
+
         self.runJob(JSON.parse(JSON.stringify(dataPacksJobsData)), 'TestJob', command, function(jobInfo) {
             var hasErrors = false;
 
@@ -393,11 +456,11 @@ VlocityCLI.prototype.runTestJob = function(dataPacksJobsData, success, error) {
                 Object.keys(jobInfo.currentStatus).forEach(function(dataPackKey) {
                     if (command == 'BuildFile' || command =='JavaScript') {
                         if (jobInfo.currentStatus[dataPackKey] != 'Added') {
-                            console.log(dataPackKey, jobInfo.currentStatus[dataPackKey]);
+                            VlocityUtils.log(dataPackKey, jobInfo.currentStatus[dataPackKey]);
                             hasErrors = true;
                         }
                     } else if (jobInfo.currentStatus[dataPackKey] != 'Success'){
-                        console.log(dataPackKey, jobInfo.currentStatus[dataPackKey]);
+                        VlocityUtils.log(dataPackKey, jobInfo.currentStatus[dataPackKey]);
                         hasErrors = true;
                     }
                 });
@@ -414,12 +477,12 @@ VlocityCLI.prototype.runTestJob = function(dataPacksJobsData, success, error) {
     }, function(err, result) {
 
         commands.forEach(function(command) {
-            console.log(command + ': ' + allElapsed[command] + 's');
+            VlocityUtils.log(command + ': ' + allElapsed[command] + 's');
         });
 
         fs.removeSync('./test/testJobRunning');
         
-        success({jobAction: 'runAllTests' });
+        success({ jobAction: 'runTestJob' });
     });
 }
 

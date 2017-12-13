@@ -204,7 +204,7 @@ DataPacksExpand.prototype.processObjectEntry = function(dataPackType, dataPackDa
                 try {
                     dataPackData[field] = JSON.parse(dataPackData[field]);
                 } catch (e) {
-                    console.log(field, e);
+                    VlocityUtils.log(field, e);
                 }
             }
         });
@@ -248,7 +248,7 @@ DataPacksExpand.prototype.generateSourceKey = function(currentData, jobInfo) {
         generatedKey = stringify(hashableDataPack);
     }
 
-    return self.vlocity.datapacksutils.guid(generatedKey) + '-VLSK';
+    return self.vlocity.datapacksutils.guid(generatedKey);
 }
 
 DataPacksExpand.prototype.getSourceKeyData = function(currentData, jobInfo) {
@@ -281,8 +281,9 @@ DataPacksExpand.prototype.getSourceKeyData = function(currentData, jobInfo) {
         var missingSourceKey = false;
 
         sourceKeyFields.forEach(function(keyField) {
-
-            if (keyField.indexOf('_') == 0) {
+            if (keyField == "Hash") {
+                newSourceKey += "/" + self.generateSourceKey(currentData, jobInfo);
+            } else if (keyField.indexOf('_') == 0) {
                 newSourceKey += "/" + keyField.substring(1);
             } else {
                 if ((currentData[keyField] == null || currentData[keyField] == "") 
@@ -327,7 +328,7 @@ DataPacksExpand.prototype.getSourceKeyData = function(currentData, jobInfo) {
     return sourceKeyData;
 }
 
-DataPacksExpand.prototype.preprocessSObjects = function(currentData, dataPackType, jobInfo, parentKeys) {
+DataPacksExpand.prototype.preprocessSObjects = function(currentData, dataPackType, dataPackKey, jobInfo, parentKeys) {
 
     var self = this;
 
@@ -338,21 +339,23 @@ DataPacksExpand.prototype.preprocessSObjects = function(currentData, dataPackTyp
 
             if (dataField) {
                 currentData.VlocityDataPackData[dataField].forEach(function(sobjectData) {
-
-                    self.preprocessSObjects(sobjectData, dataPackType, jobInfo, parentKeys);
+                    self.preprocessSObjects(sobjectData, dataPackType, dataPackKey, jobInfo, parentKeys);
                 });
             }
-        } else { 
-   
+        } else {
+            
             if (Array.isArray(currentData)) {
 
                 self.sortList(currentData, dataPackType);
                 currentData.forEach(function(childData) {
-                    self.preprocessSObjects(childData, dataPackType, jobInfo, parentKeys);
+                    self.preprocessSObjects(childData, dataPackType, dataPackKey, jobInfo, parentKeys);
                 });
 
             } else {
 
+                //self.vlocity.datapacksutils.runValidationRules(currentData, dataPackType, dataPackKey, jobInfo) ;
+
+                // Remove all Fields with . in them like AttributeId__r.CategoryName__c
                 Object.keys(currentData).forEach(function(fieldKey) {
                     if (fieldKey.indexOf('.') != -1 && typeof currentData[fieldKey] === 'object') {
                         delete currentData[fieldKey];
@@ -434,7 +437,7 @@ DataPacksExpand.prototype.preprocessSObjects = function(currentData, dataPackTyp
 
                     Object.keys(currentData).forEach(function(sobjectField) {
                         if (typeof currentData[sobjectField] === "object") {
-                            self.preprocessSObjects(currentData[sobjectField], dataPackType, jobInfo, parentKeys);
+                            self.preprocessSObjects(currentData[sobjectField], dataPackType,currentData.VlocityDataPackKey, jobInfo, parentKeys);
                         }
                     });
                 } else if (currentData.VlocityLookupRecordSourceKey
@@ -477,7 +480,7 @@ DataPacksExpand.prototype.preprocessDataPack = function(currentData, jobInfo) {
         currentData.VlocityDataPackData[dataField].forEach(function(sobjectData) {
 
             if (sobjectData) {
-                self.preprocessSObjects(sobjectData, currentData.VlocityDataPackType, jobInfo, currentData.VlocityDataPackParents);
+                self.preprocessSObjects(sobjectData, currentData.VlocityDataPackType, currentData.VlocityDataPackKey, jobInfo, currentData.VlocityDataPackParents);
 
                 var parentName = self.getDataPackFolder(dataPackType, sobjectData.VlocityRecordSObjectType, sobjectData);
                 var generatedKey = dataPackType + "/" + parentName;
@@ -888,7 +891,7 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
                 });
             } 
         } catch (e) {
-            //console.log(e);
+            //VlocityUtils.log(e);
         }
     }
 
@@ -901,7 +904,7 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
                 fileData = stringify(JSON.parse(fileData.replace(/&amp;quot;/g, '').replace(/&quot;/g, '"')), { space: 4 });
             } catch (e) {
 
-                console.log('\x1b[31m', "Error", '\x1b[0m ', filename + "." + fileType, e);
+                VlocityUtils.log('\x1b[31m', "Error", '\x1b[0m ', filename + "." + fileType, e);
                 return fileData;
             }
         }
@@ -920,7 +923,7 @@ DataPacksExpand.prototype.writeFile = function(dataPackType, parentName, filenam
     fs.outputFileSync(fullFilePath, fileData, { "encoding": encoding });
 
     if (fullFilePath.indexOf('_DataPack') > -1 || self.vlocity.verbose) {
-         console.log('\x1b[32m', 'Creating file >>', '\x1b[0m', path.normalize(fullFilePath));
+         VlocityUtils.log('\x1b[32m', 'Creating file >>', '\x1b[0m', path.normalize(fullFilePath));
     }
 
     return self.generateFolderOrFilename(filename, fileType);
@@ -932,7 +935,7 @@ DataPacksExpand.prototype.expandFile = function(targetPath, expandFile, jobInfo)
     try {
         self.expand(targetPath, JSON.parse(fs.readFileSync(expandFile, 'utf8')), jobInfo);
     } catch (e) {
-        console.log('Invalid DataPackFile ' + expandFile + ' ' + e.message);
+        VlocityUtils.log('Invalid DataPackFile ', expandFile, e.message);
     }
 };
 

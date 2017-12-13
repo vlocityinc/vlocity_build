@@ -21,13 +21,13 @@ var DataPacksUtils = module.exports = function(vlocity) {
 
     this.startTime = new Date().toISOString();
     this.alreadyWrittenLogs = [];
-    this.perfTimers = {}
+    this.perfTimers = {};
 };
 
 DataPacksUtils.prototype.perfTimer = function(key) {
 
     if (this.perfTimers[key]) {
-        console.log('Elapsed: ' + key, Date.now() - this.perfTimers[key]);
+        VlocityUtils.log('Elapsed: ' + key, Date.now() - this.perfTimers[key]);
 
         delete this.perfTimers[key];
     } else {
@@ -438,7 +438,7 @@ DataPacksUtils.prototype.isInManifest = function(dataPackData, manifest) {
 DataPacksUtils.prototype.loadApex = function(projectPath, filePath, currentContextData) {
     var self = this;
 
-    console.log('Loading APEX code from: ' +  projectPath + '/' + filePath);
+    VlocityUtils.log('Loading APEX code from: ' +  projectPath + '/' + filePath);
 
     if (this.vlocity.datapacksutils.fileExists(projectPath + '/' + filePath)) {
         var apexFileName = projectPath + '/' + filePath;
@@ -497,13 +497,13 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
 
                     if (res.success === true) return resolve(true);
                     if (res.compileProblem) {
-                        console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Compilation Error:', res.compileProblem);
+                        VlocityUtils.log('\x1b[36m', '>>' ,'\x1b[0m APEX Compilation Error:', res.compileProblem);
                     } 
                     if (res.exceptionMessage) {
-                        console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception Message:', res.exceptionMessage);
+                        VlocityUtils.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception Message:', res.exceptionMessage);
                     }
                     if (res.exceptionStackTrace) {
-                        console.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception StackTrace:', res.exceptionStackTrace);
+                        VlocityUtils.log('\x1b[36m', '>>' ,'\x1b[0m APEX Exception StackTrace:', res.exceptionStackTrace);
                     }
 
                     return reject(res.compileProblem || res.exceptionMessage || 'APEX code failed to execute but no exception message was provided');
@@ -514,20 +514,21 @@ DataPacksUtils.prototype.runApex = function(projectPath, filePath, currentContex
 
 DataPacksUtils.prototype.runJavaScript = function(projectPath, filePath, currentContextData, jobInfo, callback) {
     var self = this;
-
+    
     var pathToRun = path.join(projectPath, filePath);
 
     var defaultJSPath = path.resolve(path.join('javascript', filePath));
 
-    if (!this.fileExists(pathToRun) && this.fileExists(defaultJSPath)) {
+    if (!self.fileExists(pathToRun) && self.fileExists(defaultJSPath)) {
         pathToRun = defaultJSPath;
     }
 
-    if (!this.runJavaScriptModules[pathToRun]) {
-        this.runJavaScriptModules[pathToRun] = require(pathToRun);
+    pathToRun = path.resolve(pathToRun);
+    if (!self.runJavaScriptModules[pathToRun]) {
+        self.runJavaScriptModules[pathToRun] = require(pathToRun);
     }
 
-    this.runJavaScriptModules[pathToRun](this.vlocity, currentContextData,jobInfo, callback);
+    self.runJavaScriptModules[pathToRun](self.vlocity, currentContextData, jobInfo, callback);
 };
 
 DataPacksUtils.prototype.hashCode = function(toHash) {
@@ -643,9 +644,10 @@ DataPacksUtils.prototype.getDisplayName = function(dataPack) {
 
     if (dataPack.Id) {
         if (name) {
-            name += ' ';
+            name += ' (' + dataPack.Id + ')';
+        } else {
+            name = dataPack.Id;
         }
-        name += dataPack.Id;
     }
 
     return name;
@@ -768,29 +770,33 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
     var elapsedTime = (Date.now() - jobInfo.startTime) / 1000;
 
     if (jobInfo.headersOnly) {
-        console.log('\x1b[36m', 'Uploading Only Parent Objects');
+        VlocityUtils.log('\x1b[36m', 'Uploading Only Parent Objects');
     }
 
     if (!jobInfo.supportParallel) {
-        console.log('\x1b[36m', 'Parallel Processing >>','\x1b[0m', 'Off');
+        VlocityUtils.log('\x1b[36m', 'Parallel Processing >>','\x1b[0m', 'Off');
     }
 
     if (jobInfo.forceDeploy) {
-        console.log('\x1b[36m', 'Force Deploy >>', '\x1b[0m', 'On');
+        VlocityUtils.log('\x1b[36m', 'Force Deploy >>', '\x1b[0m', 'On');
     }
 
     if (jobInfo.ignoreAllParents) {
-        console.log('\x1b[36m', 'Ignoring Parents');
+        VlocityUtils.log('\x1b[36m', 'Ignoring Parents');
     }
-
-    console.log('\x1b[36m', 'Current Status >>', '\x1b[0m', jobInfo.jobAction);
-    console.log('\x1b[32m', 'Successful >>', '\x1b[0m', successfulCount);
-    console.log('\x1b[31m', 'Errors >>', '\x1b[0m', errorsCount);
-    console.log('\x1b[33m', 'Remaining >>', '\x1b[0m', totalRemaining);
-    console.log('\x1b[36m', 'Elapsed Time >>', '\x1b[0m', Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's');
+    
+    if (jobInfo['sf.username']) {
+        VlocityUtils.log('\x1b[36m', 'Salesforce Org >>', '\x1b[0m', jobInfo[sf.username]);
+    }
+    
+    VlocityUtils.log('\x1b[36m', 'Current Status >>', '\x1b[0m', jobInfo.jobAction);
+    VlocityUtils.log('\x1b[32m', 'Successful >>', '\x1b[0m', successfulCount);
+    VlocityUtils.log('\x1b[31m', 'Errors >>', '\x1b[0m', errorsCount);
+    VlocityUtils.log('\x1b[33m', 'Remaining >>', '\x1b[0m', totalRemaining);
+    VlocityUtils.log('\x1b[36m', 'Elapsed Time >>', '\x1b[0m', Math.floor((elapsedTime / 60)) + 'm ' + Math.floor((elapsedTime % 60)) + 's');
 
     if (jobInfo.hasError) {
-        jobInfo.errorMessage = jobInfo.errors.join('\n');
+        jobInfo.errorMessage = jobInfo.errors.join('\n').replace(/%vlocity_namespace%/g, this.vlocity.namespace);
     }
 
     var countByStatus = {};
@@ -813,7 +819,7 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
                     color = '\x1b[33m';
                 }
 
-                console.log(color, typeKey, '-', statusKey, '>>', '\x1b[0m', keysByStatus[statusKey][typeKey].length);
+                VlocityUtils.log(color, typeKey, '-', statusKey, '>>', '\x1b[0m', keysByStatus[statusKey][typeKey].length);
             }
             
             keysByStatus[statusKey][typeKey].sort();
@@ -833,6 +839,6 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
     try {
         fs.outputFileSync(path.join('logs', jobInfo.logName), yaml.dump(logInfo, { lineWidth: 1000 }));
     } catch (e) {
-        console.log(e);
+        VlocityUtils.log(e);
     }
 };

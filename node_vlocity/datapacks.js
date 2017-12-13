@@ -175,16 +175,18 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 
     self.vlocity.checkLogin(function() {
         self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint, dataPackData, function(err, result) {
-            
             if (err) { 
+                err = { VlocityDataPackId: dataPackId, message: err.message.trim(), code: err.name };
+                
                 if (dataPackData.isRetry) {
-                    console.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', dataPackId, err);
+                    VlocityUtils.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', dataPackId, err.code, ':', err.message);
                     
                     if (onError) onError(err);
                     else if (onSuccess) onSuccess(err);
                     else throw err;
                 } else {
-                     console.error('\x1b[31m', 'RETRYING FOR ERROR >>' ,'\x1b[0m', dataPackId, err);
+                    
+                    VlocityUtils.error('\x1b[31m', 'RETRYING FOR ERROR >>' ,'\x1b[0m', dataPackId,  err.code + ':', err.message);
 
                     self.vlocity.isLoggedIn = false;
                     dataPackData.isRetry = true;
@@ -199,7 +201,7 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
                 }
 
                 if (self.vlocity.verbose) { 
-                    console.log('Result', result);
+                    VlocityUtils.log('Result', result);
                 }
 
                 if (result.Total > 0) {
@@ -219,13 +221,13 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
 
                 if (result.activationSuccess) {
                     result.activationSuccess.forEach(function(activatedEntity) {
-                        console.log('\x1b[32m', 'Activated >>', '\x1b[0m', activatedEntity.VlocityDataPackKey);
+                        VlocityUtils.log('\x1b[32m', 'Activated >>', '\x1b[0m', activatedEntity.VlocityDataPackKey);
                     });
                 }
 
                 if (result.activationError) {
                     result.activationError.forEach(function(activatedEntity) {
-                        console.log('\x1b[31m', 'Activation Error >>', '\x1b[0m', activatedEntity.VlocityDataPackKey, '---', activatedEntity.ActivationMessage);
+                        VlocityUtils.log('\x1b[31m', 'Activation Error >>', '\x1b[0m', activatedEntity.VlocityDataPackKey, '---', activatedEntity.ActivationMessage);
                     });
                 }
                  
@@ -236,11 +238,11 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
                 } else if (/(Complete|Deleted)/.test(result.Status)) {
 
                     if (onSuccess) onSuccess(result);
-                    else console.log(result);
+                    else VlocityUtils.log(result);
                 } else if (/Error/.test(result.Status)) {
                     if (onError) onError(result);
                     else if (onSuccess) onSuccess(result);
-                    else console.log(result);
+                    else VlocityUtils.log(result);
                 }
             }
         });

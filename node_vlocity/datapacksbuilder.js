@@ -20,7 +20,7 @@ DataPacksBuilder.prototype.buildImport = function(importPath, manifest, jobInfo,
     var self = this;
     
     if (self.vlocity.verbose) {
-        console.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', importPath, jobInfo.manifest, jobInfo);
+        VlocityUtils.log('\x1b[31m', 'buildImport >>' ,'\x1b[0m', importPath, jobInfo.manifest, jobInfo);
     }
 
     var dataPackImport = JSON.parse(this.defaultdatapack);
@@ -161,7 +161,7 @@ DataPacksBuilder.prototype.paginateDataPack = function(dataPackData, jobInfo) {
                         paginatedDataPack.VlocityDataPackData.VlocityDataPackRelationshipType = 'Pagination';
 
                         if (!jobInfo.noStatus) {
-                            console.log('\x1b[32m', 'Adding to ' + (jobInfo.singleFile ? 'File' : 'Deploy') + ' >>', '\x1b[0m', paginatedDataPack.VlocityDataPackKey + ' - ' + paginatedDataPack.VlocityDataPackLabel, '\x1b[31m', jobInfo.headersOnly ? 'Headers Only' : '', jobInfo.forceDeploy ? 'Force Deploy' : '', '\x1b[0m');
+                            VlocityUtils.log('\x1b[32m', 'Adding to ' + (jobInfo.singleFile ? 'File' : 'Deploy') + ' >>', '\x1b[0m', paginatedDataPack.VlocityDataPackKey + ' - ' + paginatedDataPack.VlocityDataPackLabel, '\x1b[31m', jobInfo.headersOnly ? 'Headers Only' : '', jobInfo.forceDeploy ? 'Force Deploy' : '', '\x1b[0m');
                         }
                        
                         currentCount = 0;
@@ -287,13 +287,13 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
     }
 
     if (!self.vlocity.datapacksutils.fileExists(importPath)) {
-         console.log('\x1b[32m', 'No Data At Path >>' ,'\x1b[0m', importPath);
+         VlocityUtils.log('\x1b[32m', 'No Data At Path >>' ,'\x1b[0m', importPath);
         return;
     }
 
     var importPaths = self.vlocity.datapacksutils.getDirectories(importPath);
     if (self.vlocity.verbose) {
-        console.log('\x1b[31m', 'Found import paths >>' ,'\x1b[0m', importPaths);
+        VlocityUtils.log('\x1b[31m', 'Found import paths >>' ,'\x1b[0m', importPaths);
     }
 
     importPaths.forEach(function(dataPackType) {
@@ -302,7 +302,7 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
         var allDataPacksOfType = self.vlocity.datapacksutils.getDirectories(dataPackTypeDir);
 
         if (self.vlocity.verbose) {
-            console.log('\x1b[31m', 'Found datapacks >>' ,'\x1b[0m', allDataPacksOfType);
+            VlocityUtils.log('\x1b[31m', 'Found datapacks >>' ,'\x1b[0m', allDataPacksOfType);
         }
 
         if (allDataPacksOfType) {
@@ -340,16 +340,8 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
                                 apexImportData[field] = sobjectData[field];
                             });
 
-                            if (jobInfo.preDeployDataSummary == null) {
-                                jobInfo.preDeployDataSummary = [];
-                            }
-
-                            if (jobInfo.allDeployDataSummary == null) {
-                                jobInfo.allDeployDataSummary = {};
-                            }
-
+                            apexImportData.VlocityRecordSourceKey = sobjectData.VlocityRecordSourceKey;
                             jobInfo.preDeployDataSummary.push(apexImportData);
-
                             jobInfo.allDeployDataSummary[generatedDataPackKey] = apexImportData;
 
                             if (Array.isArray(self.pendingFromManifest[dataPackType])) {
@@ -363,11 +355,11 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
                                 }
                             }
                         } else {
-                            console.error('\x1b[31m', 'Missing metadata file for _DataPack.json >> ', '\x1b[0m',  dataPackKey);
+                            VlocityUtils.error('\x1b[31m', 'Missing metadata file for _DataPack.json >> ', '\x1b[0m',  dataPackKey);
                         }
                     }
                 } catch (e) {
-                    console.error('\x1b[31m', 'Error whilst processing >>' ,'\x1b[0m', dataPackKey, e.stack);
+                    VlocityUtils.error('\x1b[31m', 'Error whilst processing >>' ,'\x1b[0m', dataPackKey, e.stack);
                 }
             });
         }
@@ -382,7 +374,7 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
     });
 
     if (hasMissingEntries) {
-        console.error("Unmatched but required files:\n" + stringify(self.pendingFromManifest, null, 2));
+        VlocityUtils.error("Unmatched but required files:\n" + stringify(self.pendingFromManifest, null, 2));
     }
 };
 
@@ -398,12 +390,14 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
             try {
 
                 var typeIndex = dataPackKey.indexOf('/');
-                var dataPackType = dataPackKey.substr(0, typeIndex);
-                var dataNameIndex = dataPackKey.lastIndexOf('/')+1;
-                var dataPackName = dataPackKey.substr(dataNameIndex);
-                var dataPackLabel = self.getDataPackLabel(importPath + '/' + dataPackType, self.vlocity.datapacksexpand.sanitizeDataPackKey(dataPackName));
 
-                var fullPathToFiles = path.join(importPath, dataPackType, self.vlocity.datapacksexpand.sanitizeDataPackKey(dataPackName));
+                var dataPackType = dataPackKey.substr(0, typeIndex);
+                var dataNameIndex = dataPackKey.indexOf(dataPackType + '/') + dataPackType.length + 1;
+                
+                var dataPackName = dataPackKey.substr(dataNameIndex);
+                var dataPackLabel = self.getDataPackLabel(importPath + '/' + dataPackType, self.vlocity.datapacksexpand.generateFolderOrFilename(dataPackName));
+
+                var fullPathToFiles = path.join(importPath, dataPackType, self.vlocity.datapacksexpand.generateFolderOrFilename(dataPackName));
                 var parentData;
 
                 var maxDeployCountForType = DEFAULT_MAX_DEPLOY_COUNT;
@@ -549,14 +543,14 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                 }
 
                 if (!jobInfo.noStatus) {
-                    console.log('\x1b[32m', 'Adding to ' + (jobInfo.singleFile ? 'File' : 'Deploy') + ' >>', '\x1b[0m', nextImport.VlocityDataPackKey + ' - ' + dataPackLabel, '\x1b[31m', jobInfo.headersOnly ? 'Headers Only' : '', jobInfo.forceDeploy ? 'Force Deploy' : '', '\x1b[0m');
+                    VlocityUtils.log('\x1b[32m', 'Adding to ' + (jobInfo.singleFile ? 'File' : 'Deploy') + ' >>', '\x1b[0m', nextImport.VlocityDataPackKey + ' - ' + dataPackLabel, '\x1b[31m', jobInfo.headersOnly ? 'Headers Only' : '', jobInfo.forceDeploy ? 'Force Deploy' : '', '\x1b[0m');
                 }
 
                 currentDataPackKeysInImport[dataPackKey] = true;
                 
                 return nextImport;
             } catch (e) {
-                console.log('\x1b[31m', 'Error Formatting Deploy >>','\x1b[0m', dataPackKey, e.stack);
+                VlocityUtils.log('\x1b[31m', 'Error Formatting Deploy >>','\x1b[0m', dataPackKey, e.stack);
                 throw e;
             }
         }
@@ -606,7 +600,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                         if (self.getFileData(fileInArray)) {
                              allDataPackFileData = allDataPackFileData.concat(self.buildFromFiles(JSON.parse(self.getFileData(fileInArray)), fullPathToFiles, dataPackType, field));
                         } else {
-                            console.log('\x1b[31m', 'File Does Not Exist >>' ,'\x1b[0m', fileInArray);
+                            VlocityUtils.log('\x1b[31m', 'File Does Not Exist >>' ,'\x1b[0m', fileInArray);
                         }
                     });
 
@@ -653,7 +647,7 @@ DataPacksBuilder.prototype.buildFromFiles = function(dataPackDataArray, fullPath
                                     },
                                     callback: function(error, compiledResult) {
                                         if (error) {
-                                            return console.log('\x1b[31m', 'Failed to compile SCSS for >>' ,'\x1b[0m', filename, '\n', error.message);
+                                            return VlocityUtils.log('\x1b[31m', 'Failed to compile SCSS for >>' ,'\x1b[0m', filename, '\n', error.message);
                                         }
                                         dataPackData[fileType.CompiledField] = compiledResult;
                                     }
@@ -710,7 +704,7 @@ DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
     var compileNext = (job) => {
         if (!job) {
             if (this.vlocity.verbose && (compileCount > 0 || errors.length > 0)) {
-                console.log('\x1b[31m', 'Compilation done >>' ,'\x1b[0m', 'compiled', compileCount, 'files with', errors.length, 'errors.');
+                VlocityUtils.log('\x1b[31m', 'Compilation done >>' ,'\x1b[0m', 'compiled', compileCount, 'files with', errors.length, 'errors.');
             }
             return onComplete({ 
                 compileCount: compileCount,
@@ -720,12 +714,12 @@ DataPacksBuilder.prototype.compileQueuedData = function(onComplete) {
         }
 
         if (this.vlocity.verbose) {
-            console.log('\x1b[31m', 'Start compilation of >>' ,'\x1b[0m', job.filename);
+            VlocityUtils.log('\x1b[31m', 'Start compilation of >>' ,'\x1b[0m', job.filename);
         }
 
         this.compile(job.language, job.source, job.options || {}, (error, compiledResult) => {
             if(error) {
-                console.log('\x1b[31m', error.message, '>>' ,'\x1b[0m', '\n');
+                VlocityUtils.log('\x1b[31m', error.message, '>>' ,'\x1b[0m', '\n');
                 job.callback(error, null);
                 errors.push(error);
             } else {

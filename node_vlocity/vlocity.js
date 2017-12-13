@@ -5,6 +5,8 @@ var datapacksexpand = require('./datapacksexpand');
 var datapacksbuilder = require('./datapacksbuilder');
 var datapacksutils = require('./datapacksutils');
 var datapacksexportbuildfile = require('./datapacksexportbuildfile');
+var vlocityutils = require('./vlocityutils.js');
+
 var nopt = require('nopt');
 
 var Vlocity = module.exports = function(options) {
@@ -13,7 +15,9 @@ var Vlocity = module.exports = function(options) {
     this.username = options.username;
     this.password = options.password;
 
-    this.namespace = options.vlocityNamespace;
+    this.namespace = options.vlocityNamespace ? options.vlocityNamespace : '';
+    VlocityUtils.namespace = this.namespace;
+
     this.namespacePrefix = this.namespace ? this.namespace + '__' : '';
     this.verbose = !!options.verbose;
     this.sessionId = options.sessionId;
@@ -23,7 +27,7 @@ var Vlocity = module.exports = function(options) {
     this.tempFolder = './vlocity-temp';
 
     if (this.verbose) {
-        console.log('Verbose mode enabled');
+        VlocityUtils.log('Verbose mode enabled');
     }
 
     this.jsForceConnection = new jsforce.Connection({
@@ -46,12 +50,13 @@ var Vlocity = module.exports = function(options) {
 Vlocity.prototype.checkLogin = function(callback) {
     var self = this;
 
-    if (self.isLoggedIn || self.sessionId || self.accessToken) {
+    if (self.isLoggedIn || self.sessionId || self.accessToken) {    
         callback();
     } else {
         self.jsForceConnection.login(self.username, self.password, function(err, res) {
+
             if (err) { 
-                console.error(err); 
+                VlocityUtils.error(err); 
                 return false; 
             }
             
