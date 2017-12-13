@@ -32,5 +32,6 @@
     "properties": "1.2.1",
     "sass.js": "0.10.6",
     "unidecode": "0.1.8"
-  }
+  },
+  "bin": "node_vlocity/vlocitybuild.js"
 }
