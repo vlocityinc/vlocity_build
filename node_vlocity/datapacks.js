@@ -4,13 +4,12 @@ var DATA_PACKS_REST_RESOURCE = "/v1/VlocityDataPacks/";
 
 var DataPacks = module.exports = function(vlocity) {
     this.vlocity = vlocity || {};
-
-    this.dataPacksEndpoint = DATA_PACKS_REST_RESOURCE;
-
-    if (this.vlocity.namespace) {
-        this.dataPacksEndpoint = '/' + this.vlocity.namespace + DATA_PACKS_REST_RESOURCE;
-    }
+    this.retried = [];
 };
+
+DataPacks.prototype.dataPacksEndpoint = function() {
+    return '/' + this.vlocity.namespace + DATA_PACKS_REST_RESOURCE;
+}
 
 DataPacks.prototype.ignoreActivationErrors = function(dataPackId, callback) {
     var dataPackObj = { Id: dataPackId };
@@ -24,7 +23,7 @@ DataPacks.prototype.getAllDataPacks = function(callback) {
     var self = this;
 
     self.vlocity.checkLogin(function(){
-        self.vlocity.jsForceConnection.apex.get(self.dataPacksEndpoint, function(err, res) {
+        self.vlocity.jsForceConnection.apex.get(self.dataPacksEndpoint(), function(err, res) {
             if (err) { throw err; }
                 callback(JSON.parse(res));
             });
@@ -35,7 +34,7 @@ DataPacks.prototype.getDataPackData = function(dataPackId, callback) {
     var self = this;
 
     self.vlocity.checkLogin(function() {
-        self.vlocity.jsForceConnection.apex.get(self.dataPacksEndpoint+dataPackId, function(err, res) {
+        self.vlocity.jsForceConnection.apex.get(self.dataPacksEndpoint() + dataPackId, function(err, res) {
             if (err) { throw err; }
 
             var dataPackData = JSON.parse(res);
@@ -94,7 +93,7 @@ DataPacks.prototype.getDataPackDataChunked = function(dataPackDataInfo, chunkRes
         } else {
 
             // Need to double encode the commas
-            var chunkedGetURL = self.dataPacksEndpoint+dataPackDataInfo.dataPackId + '?chunks=' + keysRemaining.join("%252C");
+            var chunkedGetURL = self.dataPacksEndpoint() + dataPackDataInfo.dataPackId + '?chunks=' + keysRemaining.join("%252C");
             
             self.vlocity.jsForceConnection.apex.get(chunkedGetURL, function(err, res) {
                 if (err) { throw err; }
@@ -152,7 +151,7 @@ DataPacks.prototype.getErrors = function(dataPackId, callback) {
     var self = this;
 
     self.vlocity.checkLogin(function(){
-        self.vlocity.jsForceConnection.apex.get(self.dataPacksEndpoint+dataPackId, function(err, res) {
+        self.vlocity.jsForceConnection.apex.get(self.dataPacksEndpoint() + dataPackId, function(err, res) {
             if (err) { throw err; }
 
             var dataPackData = JSON.parse(res);
@@ -174,28 +173,26 @@ DataPacks.prototype.runDataPackProcess = function(dataPackData, options, onSucce
     var dataPackId = dataPackData.processData.VlocityDataPackId;
 
     self.vlocity.checkLogin(function() {
-        self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint, dataPackData, function(err, result) {
+        self.vlocity.jsForceConnection.apex.post(self.dataPacksEndpoint(), dataPackData, function(err, result) {
             if (err) { 
-                err = { VlocityDataPackId: dataPackId, message: err.message.trim(), code: err.name };
+                err = { VlocityDataPackId: dataPackId, message: err.message.trim(), code: err.name, dataPackError: true };
                 
-                if (dataPackData.isRetry) {
+                if (dataPackId && self.retried.indexOf(dataPackId) == -1) {
+                    self.retried.push(dataPackId);
+
+                    VlocityUtils.error('\x1b[31m', 'RETRYING FOR ERROR >>' ,'\x1b[0m', dataPackId,  err.code + ':', err.message);
+                    
+                    self.vlocity.isLoggedIn = false;
+
+                    setTimeout(function() { self.runDataPackProcess(dataPackData, options, onSuccess, onError); }, 1000);
+                } else {
                     VlocityUtils.error('\x1b[31m', 'ERROR >>' ,'\x1b[0m', dataPackId, err.code, ':', err.message);
                     
                     if (onError) onError(err);
                     else if (onSuccess) onSuccess(err);
                     else throw err;
-                } else {
-                    
-                    VlocityUtils.error('\x1b[31m', 'RETRYING FOR ERROR >>' ,'\x1b[0m', dataPackId,  err.code + ':', err.message);
-
-                    self.vlocity.isLoggedIn = false;
-                    dataPackData.isRetry = true;
-
-                    setTimeout(function() { self.runDataPackProcess(dataPackData, options, onSuccess, onError); }, 1000);
                 }
             } else {
-                dataPackData.isRetry = false;
-
                 if (typeof result == "string") {
                    result = JSON.parse(result);
                 }

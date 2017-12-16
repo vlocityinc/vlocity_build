@@ -19,7 +19,7 @@ DataPacksExpand.prototype.generateFolderPath = function(dataPackType, parentName
 
 DataPacksExpand.prototype.generateFolderOrFilename = function(filename, extension) {
 
-    var sanitizedFilename = unidecode(filename).replace(/%vlocity_namespace%__/g,"").replace(/[^A-Za-z0-9_\-\.]/g, "-");
+    var sanitizedFilename = unidecode(filename).replace(/%vlocity_namespace%__/g,"").replace(/[^A-Za-z0-9_\-]/g, "-");
 
     if (extension 
         && extension != "base64" 
@@ -158,10 +158,14 @@ DataPacksExpand.prototype.listSortBy = function(obj1, obj2, fieldsArray, fieldsA
     // Handle cases where data is null vs empty string
     if (!obj1Data) {
         obj1Data = null;
+    } else if (typeof obj1Data == 'object') {
+        obj1Data = stringify(obj1Data)
     }
 
     if (!obj2Data) {
         obj2Data = null;
+    } else if (typeof obj2Data == 'object') {
+        obj2Data = stringify(obj2Data)
     }
 
     if (obj1Data == null && obj2Data != null) {

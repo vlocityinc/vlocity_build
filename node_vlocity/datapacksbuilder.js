@@ -354,8 +354,6 @@ DataPacksBuilder.prototype.initializeImportStatus = function(importPath, manifes
                                     self.pendingFromManifest[dataPackType].replace(dataPackName, '');
                                 }
                             }
-                        } else {
-                            VlocityUtils.error('\x1b[31m', 'Missing metadata file for _DataPack.json >> ', '\x1b[0m',  dataPackKey);
                         }
                     }
                 } catch (e) {
@@ -386,7 +384,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
         var dataPackKey = dataPackKeys[i];
 
 
-        if (jobInfo.currentStatus[dataPackKey] == 'Ready' || (jobInfo.currentStatus[dataPackKey] == 'ReadySeparate' && Object.keys(currentDataPackKeysInImport).length == 0) || (jobInfo.currentStatus[dataPackKey] == 'Header' && !jobInfo.headersOnly)) {
+        if (jobInfo.currentStatus[dataPackKey] == 'Ready' || (jobInfo.currentStatus[dataPackKey] == 'ReadySeparate' && Object.keys(currentDataPackKeysInImport).length == 0) || (jobInfo.currentStatus[dataPackKey] == 'Header' && !jobInfo.headersOnly && Object.keys(currentDataPackKeysInImport).length == 0)) {
             try {
 
                 var typeIndex = dataPackKey.indexOf('/');
@@ -503,7 +501,7 @@ DataPacksBuilder.prototype.getNextImport = function(importPath, dataPackKeys, si
                     VlocityDataPackRelationshipType: 'Primary'
                 }
 
-                if (jobInfo.currentStatus[dataPackKey] == 'ReadySeparate') {
+                if (jobInfo.currentStatus[dataPackKey] == 'ReadySeparate' || jobInfo.currentStatus[dataPackKey] == 'Header') {
                     nextImport.shouldBreakImportLoop = true;
                 }
 

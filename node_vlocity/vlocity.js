@@ -15,10 +15,6 @@ var Vlocity = module.exports = function(options) {
     this.username = options.username;
     this.password = options.password;
 
-    this.namespace = options.vlocityNamespace ? options.vlocityNamespace : '';
-    VlocityUtils.namespace = this.namespace;
-
-    this.namespacePrefix = this.namespace ? this.namespace + '__' : '';
     this.verbose = !!options.verbose;
     this.sessionId = options.sessionId;
     this.instanceUrl = options.instanceUrl;
@@ -28,6 +24,10 @@ var Vlocity = module.exports = function(options) {
 
     if (this.verbose) {
         VlocityUtils.log('Verbose mode enabled');
+    }
+
+    if (this.username) {
+        VlocityUtils.log('Org:', this.username);
     }
 
     this.jsForceConnection = new jsforce.Connection({
@@ -59,8 +59,32 @@ Vlocity.prototype.checkLogin = function(callback) {
                 VlocityUtils.error(err); 
                 return false; 
             }
-            
             self.isLoggedIn = true;
+
+            self.getNamespace(function(err, res) {
+                callback();
+            });  
+        });
+    }
+};
+
+Vlocity.prototype.getNamespace = function(callback) {
+    var self = this;
+
+    if (self.namespace) {    
+        callback();
+    } else {
+        self.jsForceConnection.query("Select Name, NamespacePrefix from ApexClass where Name = 'DRDataPackService'", function(err, result) {
+            if (err) { return console.error(err); }
+            self.namespace = result.records[0].NamespacePrefix;
+            VlocityUtils.namespace = self.namespace;
+            
+            self.namespacePrefix = self.namespace ? self.namespace + '__' : '';
+
+            if (self.namespace) {
+                self.datapacksutils.dataPacksExpandedDefinition = self.datapacksutils.updateExpandedDefinitionNamespace(self.datapacksutils.dataPacksExpandedDefinition);
+            }
+          
             callback();
         });
     }

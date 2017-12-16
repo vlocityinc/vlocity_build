@@ -13,10 +13,6 @@ var DataPacksUtils = module.exports = function(vlocity) {
 
     this.dataPacksExpandedDefinition = JSON.parse(fs.readFileSync(path.join(__dirname, "datapacksexpanddefinition.json"), 'utf8'));
 
-    if (this.vlocity.namespace) {
-        this.dataPacksExpandedDefinition = this.updateExpandedDefinitionNamespace(this.dataPacksExpandedDefinition);
-    }
-  
     this.runJavaScriptModules = {};
 
     this.startTime = new Date().toISOString();
@@ -691,14 +687,21 @@ DataPacksUtils.prototype.countRemainingInManifest = function(jobInfo) {
             jobInfo.alreadyExportedIdsByType[dataPackType] = [];
         }
 
+        if (!jobInfo.alreadyErroredIdsByType[dataPackType]) {
+            jobInfo.alreadyErroredIdsByType[dataPackType] = [];
+        }
+
         Object.keys(jobInfo.fullManifest[dataPackType]).forEach(function(dataPackKey) {
 
             var dataPackId = jobInfo.fullManifest[dataPackType][dataPackKey].Id;
 
             if (jobInfo.alreadyExportedIdsByType[dataPackType].indexOf(dataPackId) == -1
                 && jobInfo.alreadyExportedIdsByType[dataPackType].indexOf(dataPackKey) == -1
+                && jobInfo.alreadyErroredIdsByType[dataPackType].indexOf(dataPackId) == -1
                 && jobInfo.alreadyExportedKeys.indexOf(dataPackKey) == -1
                 && jobInfo.currentStatus[dataPackKey] != 'Error') {
+
+                    console.log(jobInfo.fullManifest[dataPackType][dataPackKey]);
                 jobInfo.exportRemaining++;
             }
         });
@@ -785,8 +788,8 @@ DataPacksUtils.prototype.printJobStatus = function(jobInfo) {
         VlocityUtils.log('\x1b[36m', 'Ignoring Parents');
     }
     
-    if (jobInfo['sf.username']) {
-        VlocityUtils.log('\x1b[36m', 'Salesforce Org >>', '\x1b[0m', jobInfo[sf.username]);
+    if (this.vlocity.username) {
+        VlocityUtils.log('\x1b[36m', 'Salesforce Org >>', '\x1b[0m', this.vlocity.username);
     }
     
     VlocityUtils.log('\x1b[36m', 'Current Status >>', '\x1b[0m', jobInfo.jobAction);

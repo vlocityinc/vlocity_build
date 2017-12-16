@@ -1,5 +1,4 @@
 projectPath: ./example_vlocity_build
-buildFile: exampleBuildFile.json
 queries: 
   - VlocityDataPackType: DataRaptor 
     query: Select Id from %vlocity_namespace%__DRBundle__c LIMIT 1
