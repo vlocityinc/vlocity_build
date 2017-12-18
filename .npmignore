@@ -9,3 +9,6 @@ node_modules/
 vlocity-temp/
 example_vlocity_build/
 test/testJobRunning/
+bin/
+build.xml
+build.properties

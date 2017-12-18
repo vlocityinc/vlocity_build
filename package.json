@@ -1,37 +1,58 @@
 {
-  "name": "vlocity",
-  "version": "1.1.0",
-  "description": "",
-  "main": "node_vlocity/vlocity.js",
-  "scripts": {
-    "packExport": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packExport",
-    "packDeploy": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packDeploy",
-    "packBuildFile": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packBuildFile",
-    "packExpandFile": "grunt --gruntfile=Gruntfile.js --base . --tasks=grunt packExpandFile"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vlocityinc/vlocity_build.git"
-  },
-  "author": "arutland@vlocity.com",
-  "license": "MIT",
-  "engines": {
-    "node": "8.5.0"
-  },
-  "dependencies": {
-    "async": "2.5.0",
-    "fs-extra": "4.0.2",
-    "grunt": "0.4.5",
-    "grunt-cli": "1.2.0",
-    "js-yaml": "3.10.0",
-    "jsforce": "1.8.0",
-    "json-stable-stringify": "1.0.1",
-    "lodash": "4.17.4",
-    "node-notifier": "5.1.2",
-    "nopt": "4.0.1",
-    "properties": "1.2.1",
-    "sass.js": "0.10.6",
-    "unidecode": "0.1.8"
-  },
-  "bin": "node_vlocity/vlocitybuild.js"
+    "author": "arutland@vlocity.com",
+    "bin": "lib/vlocitybuild.js",
+    "dependencies": {
+        "async": "2.5.0",
+        "fs-extra": "4.0.2",
+        "js-yaml": "3.10.0",
+        "jsforce": "1.8.0",
+        "json-stable-stringify": "1.0.1",
+        "node-notifier": "5.1.2",
+        "nopt": "4.0.1",
+        "properties": "1.2.1",
+        "sass.js": "0.10.6",
+        "unidecode": "0.1.8"
+    },
+    "description": "",
+    "devDependencies": {
+        "grunt": "0.4.5",
+        "grunt-cli": "1.2.0",
+        "pkg": "4.2.0"
+    },
+    "engines": {},
+    "license": "MIT",
+    "main": "lib/vlocity.js",
+    "name": "vlocity",
+    "pkg": {
+        "assets": [
+            "images/*",
+            "DataPackSettings/**/*",
+            "apex/*",
+            "test/**/*",
+            "javascript/*",
+            "lib/*.json",
+            "dataPacksJobs/*"
+        ],
+        "scripts": [
+            "lib/*.js"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vlocityinc/vlocity_build.git"
+    },
+    "scripts": {
+        "start": "vlocity help",
+        "packExport": "vlocity packExport -job DataPacksJob.yaml",
+        "packDeploy": "vlocity packDeploy -job DataPacksJob.yaml",
+        "packUpdateSettings": "vlocity packUpdateSettings",
+        "packGetDiffs": "vlocity packGetDiffs -job DataPacksJob.yaml",
+        "packGetDiffsAndDeploy": "vlocity packGetDiffsAndDeploy -job DataPacksJob.yaml",
+        "refreshVlocityBase": "vlocity refreshVlocityBase",
+        "runJavaScript": "vlocity runJavaScript -job DataPacksJob.yaml",
+        "test": "vlocity runTestJob",
+        "build": "pkg . --out-path ./bin"
+        
+    },
+    "version": "1.1.0"
 }

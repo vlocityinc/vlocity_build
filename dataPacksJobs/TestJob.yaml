@@ -15,9 +15,9 @@ postStepApex:
 postJobApex:
   Deploy: TestJob.cls
 preJobJavaScript:
-  Deploy: javascript/test.js
+  Deploy: ../test/javascript/test.js
 postJobJavaScript:
-  Deploy: javascript/test.js
+  Deploy: ../test/javascript/test.js
 OverrideSettings:
   DataPacks:
     VlocityUITemplate:

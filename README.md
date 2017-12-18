@@ -67,11 +67,11 @@ All commands support the following primary options:
 | Option | Default | Description  | 
 | ------ |----- | ------------- | 
 | propertyfile | build.properties | The propertyfile used |
-| job | none | The Job File used to define the project | 
+| job | none | The path to the Job File used to define the project. This is a required option. | 
 
 You can use these properties with the following syntax
 ```bash
-vlocity -propertyfile MY_ORG.properties -job JOB_NAME packExport
+vlocity -propertyfile MY_ORG.properties -job JOB_FILE.yaml packExport
 ```
 
 As previously mentioned, it is best to not rely on a single build.properties file and instead use named properties files for each org like `build_dev.properties` and `build_uat.properties`
@@ -80,8 +80,8 @@ Additionally, when setting up Job Files you may split the Job definitions into g
 
 Then the syntax for running vlocity would become:
 ```bash
-vlocity -propertyfile build_dev.properties -job CRM packExport
-vlocity -propertyfile build_uat.properties -job CRM packDeploy
+vlocity -propertyfile build_dev.properties -job CRM.yaml packExport
+vlocity -propertyfile build_uat.properties -job CRM.yaml packDeploy
 ```
 
 Setting Up Your Project
@@ -90,7 +90,7 @@ Once you have your `build_dev.properties` file setup. You can test that you have
 
 ##### Quick test
 ```bash
-vlocity -propertyfile build_dev.properties -job Example packExport
+vlocity -propertyfile build_dev.properties -job Example.yaml packExport
 ```
 
 This will Export a single DataRaptor and write it to a Local File:  
@@ -102,7 +102,7 @@ Creating file:  ./example_vlocity_build/DataRaptor/CreateAccount/CreateAccount_D
 Once that completes successfully, you could initiate an export of all the data in you org with the following command:
 
 ```bash
-vlocity -propertyfile build_dev.properties -job Example packExport
+vlocity -propertyfile build_dev.properties -job Example.yaml packExport
 ```
 
 This will export data from the org specified in your `build_dev.properties` file and write it to the folder `example_vlocity_build`  
@@ -113,7 +113,7 @@ Once Exported it is very important to validate that your data is in state that i
 ##### Deploy
 To deploy the data you run the following command.
 ```bash
-vlocity -propertyfile build_uat.properties -job AllDefault packDeploy
+vlocity -propertyfile build_uat.properties -job Example.yaml packDeploy
 ```
 
 ##### Errors
@@ -129,7 +129,7 @@ Ultimately the best validation for a deploy will be testing the functionality di
 
 You can run the following command to check the current local data against the data that exists in the org you deployed to:
 ```bash
-vlocity -propertyfile build_uat.properties -job AllDefault packGetDiffs
+vlocity -propertyfile build_uat.properties -job Example.yaml packGetDiffs
 ```
 
 This will provide a list of files that are different locally than in the org. In the future more features will be added to view the actual diffs.
@@ -150,7 +150,7 @@ queries:
 
 This file would be run with the following command:  
 ```bash
-vlocity -job Example packExport
+vlocity -job Example.yaml packExport
 ```
 
 It will Export a single DataRaptor and write it to a Local File:  
@@ -247,7 +247,7 @@ buildFile: ProductInfoPhase3.json
 ##### Export Single
 You can export a single DataPack and all its dependencies with packExportSingle. It also supports only exporting the single DataPack with no dependencies by setting the depth.
 ```bash
-vlocity -job JOB_NAME packExportSingle -type DATA_PACK_TYPE -id SALESFORCE_ID -depth MAX_DEPTH
+vlocity -job JOB_FILE.yaml packExportSingle -type DATA_PACK_TYPE -id SALESFORCE_ID -depth MAX_DEPTH
 ```
 Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
 

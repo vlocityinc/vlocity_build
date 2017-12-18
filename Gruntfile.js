@@ -1,6 +1,6 @@
 'use strict';
 
-var vlocitycli = require('./node_vlocity/vlocitycli.js');
+var vlocitycli = require('./lib/vlocitycli.js');
 module.exports = function(grunt) {
     grunt.log.oklns("Vlocity Build Tools");
 
