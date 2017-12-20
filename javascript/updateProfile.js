@@ -1,10 +1,11 @@
 module.exports = function(vlocity, currentContextData, jobInfo, callback) {
+
     vlocity.checkLogin(function() {
         var profiles = jobInfo.AdminProfiles || [ 'Admin' ];
 
         vlocity.jsForceConnection.metadata.read('Profile', ['Admin'], function(err, metadata) {
 
-            if (err) { console.error(err); }
+            if (err) { VlocityUtils.error(err); }
 
             var metadataUpdated = { 
                 "fullName": "Admin", 
@@ -41,12 +42,12 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'));
                 
                 if (recordType.recordType.indexOf("MobilePhone") == -1 && recordType.visible == "false") {
-                    console.log("Setting Record Type Visible: " + recordType.recordType);
+                    VlocityUtils.log("Setting Record Type Visible: " + recordType.recordType);
 
                     recordType.visible = "true";
 
                     if (!hasDefault[type]) {
-                        console.log("Setting Record Type Default: " + recordType.recordType);
+                        VlocityUtils.log("Setting Record Type Default: " + recordType.recordType);
                         recordType.default = "true";
                         hasDefault[type] = recordType.recordType;
                     }
@@ -66,9 +67,9 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
             vlocity.jsForceConnection.metadata.update('Profile', allUpdatedProfiles, function(err, results) {
 
-                if (err) { console.error(err); }
+                if (err) { VlocityUtils.error(err); }
 
-                console.log("Full Name: ", JSON.stringify(results));
+                VlocityUtils.log("Full Name: ", JSON.stringify(results));
 
                 callback();
             });

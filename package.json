@@ -52,7 +52,6 @@
         "runJavaScript": "vlocity runJavaScript -job DataPacksJob.yaml",
         "test": "vlocity runTestJob",
         "build": "pkg . --out-path ./bin"
-        
     },
     "version": "1.1.0"
 }

@@ -94,8 +94,7 @@ vlocity -propertyfile build_dev.properties -job Example.yaml packExport
 ```
 
 This will Export a single DataRaptor and write it to a Local File:  
-```
-Creating file:  ./example_vlocity_build/DataRaptor/CreateAccount/CreateAccount_DataPack.json
+```./example_vlocity_build/DataRaptor/CreateAccount/CreateAccount_DataPack.json
 ```
 
 ##### Export
@@ -279,11 +278,13 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
 | addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
+| buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
+
 
 ##### DataPacks API
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
-| ignoreAllErrors | Ignore Errors during Job | Boolean | false |
+| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
 | maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
 | processMultiple | When false each Export or Import will run individually | Boolean | true |
 
@@ -316,7 +317,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | OmniScript | OmniScript__c | OmniScript | 
 | OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c | Orchestration Dependency Definition | 
 | OrchestrationItemDefinition | OrchestrationItemDefinition__c | Orchestration Item Definition | 
-| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c | OrchestrationPlanDefinition__c | 
+| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c | Orchestration Plan Definition | 
 | Pricebook2 | Pricebook2 | Pricebook (Salesforce Standard Object) | 
 | PriceList | PriceList__c | Price List | 
 | PricingVariable | PricingVariable__c | Pricing Variable | 
@@ -372,6 +373,27 @@ Pre Job Apex can run Anonymous Apex before the DataPack Job starts. While it is 
 preStepApex will send only the DataPack context data for the currently running API call. For Deploys, this means that instead of Deactivating all Templates and Layouts for an entire project before beginning a full deploy, using the same provided DeactivateTemplatesAndLayouts.cls as preStepApex, the target Salesforce Org will be minimally impacted as each Template or Card will only be Deactivated while it is being deployed. Best when combined with the maximumDeployCount of 1. 
 
 postStepApex can be used to run any compilation steps in Apex that are not automatically run inside triggers. EPCProductJSONUpdate.cls is recommended to be run when Deploying Products.
+
+#### Pre and Post Job JavaScript
+Like Pre and Post Job Apex you can also run JavaScript against the project with the preJobJavaScript, postJobJavaScript in tyour Job File. 
+
+Your JavaScript file should implement:
+```javascript
+/**
+ * 
+ * @param {object} vlocity - This is the vlocity.js object. You can use vlocity.jsForceConnection for access to the current JSForce Session.
+ * 
+ * @param {object} currentContextData - For preJobJavaScript this is null. For postJobJavaScript this will be a full list of records processed during the job.
+ * 
+ * @param {object} jobInfo - This is the entire job state
+ * 
+ * @param {function} callback - Callback - Must be called
+ */ 
+
+module.exports = function(vlocity, currentContextData, jobInfo, callback) {
+  // Your Code Here
+});
+```
 
 ##### Export by Manifest
 If Exporting with a Manifest, each JSON Object will be one entry in the Manifest in the form of:
