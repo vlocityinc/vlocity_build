@@ -10,4 +10,7 @@ for (Map<String, Object> obj : dataPackDataSet)
     }
 }
 
-Database.executeBatch(new vlocity_namespace.EPCProductAttribJSONBatchJob(productIds), 1);
+if (productIds.size() > 0)
+{
+    Database.executeBatch(new vlocity_namespace.EPCProductAttribJSONBatchJob(productIds), 1);
+}

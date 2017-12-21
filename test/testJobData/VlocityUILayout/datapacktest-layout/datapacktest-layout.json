@@ -1,0 +1,16 @@
+{
+    "Cards": [
+        "datapacktest-card"
+    ],
+    "dataSource": {
+        "type": "Query",
+        "value": {
+            "query": "Select Id from Account"
+        }
+    },
+    "templates": {
+        "0": {
+            "templateUrl": "datapacktest-template"
+        }
+    }
+}

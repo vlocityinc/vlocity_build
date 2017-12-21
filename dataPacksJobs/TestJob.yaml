@@ -1,0 +1,24 @@
+projectPath: ./test
+expansionPath: testJobRunning
+buildFile: testJobRunning/testBuildFile.resource
+queries: 
+  - VlocityDataPackType: VlocityUITemplate
+    query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'datapacktest-%' AND %vlocity_namespace%__Active__c = true
+  - VlocityDataPackType: VlocityUILayout
+    query: Select Id, Name from %vlocity_namespace%__VlocityUILayout__c where Name LIKE 'datapacktest-%'
+preJobApex:
+  Deploy: TestJob.cls
+preStepApex:
+  Deploy: DeactivateTemplatesAndLayouts.cls
+postStepApex:
+  Deploy: TestJob.cls
+postJobApex:
+  Deploy: TestJob.cls
+preJobJavaScript:
+  Deploy: ../test/javascript/test.js
+postJobJavaScript:
+  Deploy: ../test/javascript/test.js
+OverrideSettings:
+  DataPacks:
+    VlocityUITemplate:
+      HeadersOnly: true

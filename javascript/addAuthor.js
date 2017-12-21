@@ -1,4 +1,4 @@
-module.exports = function(dataPackData) {
+module.exports = function(vlocity, dataPackData, jobInfo) {
 
     [ '%vlocity_namespace%__VlocityCard__c', 
     '%vlocity_namespace%__VlocityUITemplate__c', 

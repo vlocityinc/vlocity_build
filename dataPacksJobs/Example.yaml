@@ -1,17 +1,4 @@
-projectPath: ../myproject 
-expansionPath: datapack-expanded
-buildFile: staticresources/MyDataPack.json
-preJobApex:
-  Deploy: DeactivateTemplatesAndLayouts.cls
+projectPath: ./example_vlocity_build
 queries: 
   - VlocityDataPackType: DataRaptor 
     query: Select Id from %vlocity_namespace%__DRBundle__c LIMIT 1
-manifestOnly: false
-delete: true
-activate: true
-compileOnBuild: false
-maxDepth: -1
-ignoreAllErrors: false
-continueAfterError: true
-defaultMaxParallel: 10
-exportPacksMaxSize: 10

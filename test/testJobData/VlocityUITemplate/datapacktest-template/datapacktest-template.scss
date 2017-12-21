@@ -1,0 +1,11 @@
+/*** VARIABLES ***/
+@import "datapacktest-variables";
+
+/*** MIXINS ***/
+@import "datapacktest-mixin";
+
+/*** STYLES ***/
+.vlocity {
+    background-color: $white;
+    @include clearfix;
+}

@@ -1,4 +1,11 @@
+package-lock.json
 build_*.properties
-dataPacksJobs/local.yaml
+dataPacksJobs/
+!dataPacksJobs/Example.yaml
+!dataPacksJobs/QueryDefinitions.yaml
+!dataPacksJobs/ReadMeExample.yaml
+!dataPacksJobs/ReadMeExamAllDefault.yaml
 node_modules/
-vlocity-deploy-temp/
+vlocity-temp/
+example_vlocity_build/
+test/testJobRunning/

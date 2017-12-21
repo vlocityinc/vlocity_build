@@ -1,0 +1,138 @@
+# Shared Query Definitions. You can use these in your job file by just using the key:
+# queries:
+#  - CalculationMatrix
+#  - OmniScript
+AttributeAssignmentRule:
+  VlocityDataPackType: AttributeAssignmentRule
+  query: Select Id, Name from %vlocity_namespace%__AttributeAssignmentRule__c
+AttributeCategory:
+  VlocityDataPackType: AttributeCategory
+  query: Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__AttributeCategory__c
+CalculationMatrix:
+  VlocityDataPackType: CalculationMatrix
+  query: Select Id, Name from %vlocity_namespace%__CalculationMatrix__c
+ContextAction:
+  VlocityDataPackType: ContextAction
+  query: Select Id, Name from %vlocity_namespace%__ContextAction__c
+ContextDimension:
+  VlocityDataPackType: ContextDimension
+  query: Select Id, Name from %vlocity_namespace%__ContextDimension__c
+ContextScope:
+  VlocityDataPackType: ContextScope
+  query: Select Id, Name from %vlocity_namespace%__ContextScope__c
+ContractType:
+  VlocityDataPackType: ContractType
+  query: Select Id, Name from %vlocity_namespace%__ContractType__c
+DataRaptor:
+  VlocityDataPackType: DataRaptor
+  query: Select Id, Name from %vlocity_namespace%__DRBundle__c where %vlocity_namespace%__Type__c != 'Migration'
+DocumentClause:
+  VlocityDataPackType: DocumentClause
+  query: Select Id, Name from %vlocity_namespace%__DocumentClause__c
+DocumentTemplate:
+  VlocityDataPackType: DocumentTemplate
+  query: Select Id, Name from %vlocity_namespace%__DocumentTemplate__c
+EntityFilter:
+  VlocityDataPackType: EntityFilter
+  query: Select Id, Name from %vlocity_namespace%__EntityFilter__c
+IntegrationProcedure:
+  VlocityDataPackType: IntegrationProcedure
+  query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
+    = true AND %vlocity_namespace%__IsProcedure__c = true
+ItemImplementation:
+  VlocityDataPackType: ItemImplementation
+  query: Select Id, Name from %vlocity_namespace%__ItemImplementation__c
+ManualQueue:
+  VlocityDataPackType: ManualQueue
+  query: Select Id, Name from %vlocity_namespace%__ManualQueue__c
+ObjectClass:
+  VlocityDataPackType: ObjectClass
+  query: Select Id, Name from %vlocity_namespace%__ObjectClass__c
+ObjectContextRule:
+  VlocityDataPackType: ObjectContextRule
+  query: Select Id, Name from %vlocity_namespace%__ObjectRuleAssignment__c
+ObjectLayout:
+  VlocityDataPackType: ObjectLayout
+  query: Select Id, Name from %vlocity_namespace%__ObjectLayout__c
+OmniScript:
+  VlocityDataPackType: OmniScript
+  query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
+    = true AND %vlocity_namespace%__IsProcedure__c = false
+OrchestrationDependencyDefinition:
+  VlocityDataPackType: OrchestrationDependencyDefinition
+  query: Select Id, Name from %vlocity_namespace%__OrchestrationDependencyDefinition__c
+OrchestrationItemDefinition:
+  VlocityDataPackType: OrchestrationItemDefinition
+  query: Select Id, Name from %vlocity_namespace%__OrchestrationItemDefinition__c
+OrchestrationPlanDefinition:
+  VlocityDataPackType: OrchestrationPlanDefinition
+  query: Select Id, Name from %vlocity_namespace%__OrchestrationPlanDefinition__c
+PriceList:
+  VlocityDataPackType: PriceList
+  query: Select Id, Name from %vlocity_namespace%__PriceList__c
+Pricebook2:
+  VlocityDataPackType: Pricebook2
+  query: Select Id, Name from Pricebook2
+PricingVariable:
+  VlocityDataPackType: PricingVariable
+  query: Select Id, Name from %vlocity_namespace%__PricingVariable__c
+Product2:   
+  VlocityDataPackType: Product2
+  query: Select Id, Name from Product2
+Promotion:
+  VlocityDataPackType: Promotion
+  query: Select Id, Name from %vlocity_namespace%__Promotion__c
+QueryBuilder:
+  VlocityDataPackType: QueryBuilder
+  query: Select Id from %vlocity_namespace%__QueryBuilder__c
+Rule:
+  VlocityDataPackType: Rule
+  query: Select Id, Name from %vlocity_namespace%__Rule__c
+StoryObjectConfiguration:
+  VlocityDataPackType: StoryObjectConfiguration
+  query: Select Id, Name from %vlocity_namespace%__StoryObjectConfiguration__c
+System:
+  VlocityDataPackType: System
+  query: Select Id, Name from %vlocity_namespace%__System__c
+TimePlan:
+  VlocityDataPackType: TimePlan
+  query: Select Id, Name from %vlocity_namespace%__TimePlan__c
+TimePolicy:
+  VlocityDataPackType: TimePolicy
+  query: Select Id, Name from %vlocity_namespace%__TimePolicy__c
+UIFacet:
+  VlocityDataPackType: UIFacet
+  query: Select Id, Name from %vlocity_namespace%__UIFacet__c
+UISection:
+  VlocityDataPackType: UISection
+  query: Select Id, Name from %vlocity_namespace%__UISection__c
+VlocityAction:
+  VlocityDataPackType: VlocityAction
+  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c
+    = true
+VlocityFunction:
+  VlocityDataPackType: VlocityFunction
+  query: Select Id, Name from %vlocity_namespace%__VlocityFunction__c
+VlocityPicklist:
+  VlocityDataPackType: VlocityPicklist
+  query: Select Id, Name from %vlocity_namespace%__Picklist__c
+VlocitySearchWidgetSetup:
+  VlocityDataPackType: VlocitySearchWidgetSetup
+  query: Select Id, Name from %vlocity_namespace%__VlocitySearchWidgetSetup__c
+VlocityStateModel:
+  VlocityDataPackType: VlocityStateModel
+  query: Select Id, Name from %vlocity_namespace%__VlocityStateModel__c
+VlocityUILayout:
+  VlocityDataPackType: VlocityUILayout
+  query: Select Id, Name from %vlocity_namespace%__VlocityUILayout__c where %vlocity_namespace%__Active__c
+    = true
+VlocityUITemplate:
+  VlocityDataPackType: VlocityUITemplate
+  query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c
+    = true
+VqMachine:
+  VlocityDataPackType: VqMachine
+  query: Select Id, Name from %vlocity_namespace%__VqMachine__c
+VqResource:
+  VlocityDataPackType: VqResource
+  query: Select Id, Name from %vlocity_namespace%__VqResource__c
