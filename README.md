@@ -457,3 +457,72 @@ After a Deploy the Ids of every record deployed will be in the JSON Object List.
     "Id": "01r61000000DeTeAAN"
 }
 ```
+
+#### Overriding DataPack Settings
+It is possible to change the settings that are used to define the behavior of each DataPack is Imported, Deployed, and written to the files. Settings overrides are added inside the Job File definition with the following syntax which is also found in the actual `lib/datapacksexpandeddefinition.yaml`:
+```yaml
+OverrideSettings:
+  DataPacks:
+    Product2:
+      SupportParallel: false
+  SObjects:
+    Product2:
+      FilterFields:
+      - AttributeMetadata__c
+      - ImageId__c
+      - JSONAttribute__c
+      FolderName:
+      - GlobalKey__c
+      JsonFields:
+      - CategoryData__c
+      SourceKeyDefinition:
+      - GlobalKey__c
+      UnhashableFields:
+      - JSONAttribute__c
+      - CategoryData__c
+      - IsConfigurable__c    
+```
+In this case the settings for Product2 include:
+`SupportParallel: false` meaning that Product2 DataPacks do not support being uploaded in parallel due to record locking issues on the Standard Pricebook Entry.
+
+```yaml
+FilterFields:
+- AttributeMetadata__c
+- ImageId__c
+- JSONAttribute__c 
+```
+Filter Fields describes fields that will be removed from the JSON before writing to the file system. This is generally due to them being or containing Salesforce Id's that cannot be replaced during export and are not Version Control friendly. 
+```yaml
+FolderName:
+- GlobalKey__c 
+```
+Folder Name is the field which contains the name of the folder where the Product2 will be written. This is seperate from the file name as the folder must be unique, but the file should be readable. In most cases the Folder Name is the Global / Unique Key for the Object such that it should never change no matter what else changes in the object. 
+```yaml
+JsonFields:
+- CategoryData__c
+```
+JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file. 
+
+The following full list of settings are supported  
+| Setting | Description | Type | Default | Valid Values |  
+| --- | ------------- | --- | --- | ------------- | 
+| SortFields | The fields used to sort lists of SObjects to make the sort as consistent as possible | Array | "Hash" | Fields on the SObject (ie Name, Type__c, etc) |
+| DoNotExpand | Skip expanding the DataPack into Multiple Files | Boolean | false |  |
+| FilterFields | Fields to remove before writing to files | Array | none | Fields on SObject |
+| FileName | Fields used to create the File Names for an SObject | Array | Name | Fields on SObject or "_String" to add a Literal |
+| SourceKeyFields | Fields used to build the readable key for a single SObject | Name | Fields on SObject or "_String" to add a Literal |
+| SourceKeyGenerationFields | Fields used to Generate a new Source Key when addSourceKeys: true | none | Fields on SObject |
+| MatchingSourceKeyDefinition | Fields used to build the readable key for a single SObject when it is a Matching Key node | SourceKeyFields | Fields on SObject or "_String" to add a Literal |
+| FolderName | Fields used to create the Folder Name for an SObject | Array | Name | Fields on SObject or "_String" to add a Literal |
+| FileType | Field or String used to determine the File Type when creating a file | String | json | Fields on SObject or a string for a literal |
+| JsonFields | JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file. | String | none | Fields on SObject |
+| ReplacementFields | Fields that should be replaced with values from other fields | Object | none | Key is Target Field - Value is Field to Replace with or "_String" for literals |
+| NonUnique | Declares that an SObject's data will always be created new during Deploy and will never be referenced by other objects and therefore does not need to keep extra metadata | Boolean | false | | 
+| PaginationSize | Declares that an SObject should Paginate during Deploy | Integer | 1000 | |
+| RemoveNullValues | Delete all null values from JSON. Similar to NonUnique it will be created new, but can be referenced by other Objects | Boolean | false | |
+| UnhashableFields | Fields that should not be used for Checking Diffs as they are largely informational | Array | none | Fields on SObject |
+| SupportParallel | Turn on / off parallel processing when Deploying the DataPack Type. Necessary when Master-Detail Parent might be shared with other DataPacks | Boolean | true | |
+| MaxDeploy | Specify the maximum number of DataPacks which should be uploaded in a single transaction | Integer | 50 | | 
+| HeadersOnly | Support uploading only the top level SObject in the DataPack. Good for potentially fixing circular reference issues | Boolean | false | |
+| ExportGroupSize | Specify the maximum number of DataPacks which should be Exported in a single transaction. Potentially large DataPacks like Matrix or Attachments could be set to 1 if necessary | Integer | 5 | |
+ 
