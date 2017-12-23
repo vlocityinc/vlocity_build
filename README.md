@@ -506,17 +506,17 @@ JsonFields is a list of fields on the SObject which should be written as formatt
 The following full list of settings are supported  
 | Setting | Description | Type | Default | Valid Values |  
 | --- | ------------- | --- | --- | ------------- | 
-| SortFields | The fields used to sort lists of SObjects to make the sort as consistent as possible | Array | "Hash" | Fields on the SObject (ie Name, Type__c, etc) |
-| DoNotExpand | Skip expanding the DataPack into Multiple Files | Boolean | false |  |
-| FilterFields | Fields to remove before writing to files | Array | none | Fields on SObject |
-| FileName | Fields used to create the File Names for an SObject | Array | Name | Fields on SObject or "_String" to add a Literal |
-| SourceKeyFields | Fields used to build the readable key for a single SObject | Name | Fields on SObject or "_String" to add a Literal |
-| SourceKeyGenerationFields | Fields used to Generate a new Source Key when addSourceKeys: true | none | Fields on SObject |
-| MatchingSourceKeyDefinition | Fields used to build the readable key for a single SObject when it is a Matching Key node | SourceKeyFields | Fields on SObject or "_String" to add a Literal |
-| FolderName | Fields used to create the Folder Name for an SObject | Array | Name | Fields on SObject or "_String" to add a Literal |
+| SortFields | The fields used to sort lists of SObjects to make the sort as consistent as possible | Array | "Hash" | Fields on the SObject (ie Name, etc) |
+| DoNotExpand | Skip expanding the DataPack into Multiple Files | Boolean | false |  |  
+| FilterFields | Fields to remove before writing to files | Array | none | Fields on SObject |  
+| FileName | Fields used to create the File Names for an SObject | Array | Name | Fields on SObject  |  
+| SourceKeyFields | Fields used to build the readable key for a single SObject | Name | Fields on SObject  |  
+| SourceKeyGenerationFields | Fields used to Generate a new Source Key when addSourceKeys: true | none | Fields on SObject |  
+| MatchingSourceKeyDefinition | Fields used to build the readable key for a single SObject when it is a Matching Key node | SourceKeyFields |   Fields on SObject  |   
+| FolderName | Fields used to create the Folder Name for an SObject | Array | Name | Fields on SObject  |
 | FileType | Field or String used to determine the File Type when creating a file | String | json | Fields on SObject or a string for a literal |
-| JsonFields | JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file. | String | none | Fields on SObject |
-| ReplacementFields | Fields that should be replaced with values from other fields | Object | none | Key is Target Field - Value is Field to Replace with or "_String" for literals |
+| JsonFields | JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file. | String | none | Fields on SObject |  
+| ReplacementFields | Fields that should be replaced with values from other fields | Object | none | Key is Target Field - Value is Field to Replace with |
 | NonUnique | Declares that an SObject's data will always be created new during Deploy and will never be referenced by other objects and therefore does not need to keep extra metadata | Boolean | false | | 
 | PaginationSize | Declares that an SObject should Paginate during Deploy | Integer | 1000 | |
 | RemoveNullValues | Delete all null values from JSON. Similar to NonUnique it will be created new, but can be referenced by other Objects | Boolean | false | |
