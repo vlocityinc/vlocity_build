@@ -64,10 +64,11 @@ vlocity packExport
 ```
 
 All commands support the following primary options:
+
 | Option | Default | Description  | 
-| ------ |----- | ------------- | 
-| propertyfile | build.properties | The propertyfile used |
-| job | none | The path to the Job File used to define the project. This is a required option. | 
+| ------ | ----- | ------------- | 
+| propertyfile | build.properties | The propertyfile used |  
+| job | none | The path to the Job File used to define the project. This is a required option. |  
 
 You can use these properties with the following syntax
 ```bash
@@ -503,26 +504,27 @@ JsonFields:
 ```
 JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file. 
 
-The following full list of settings are supported  
-| Setting | Description | Type | Default | Valid Values |  
-| --- | ------------- | --- | --- | ------------- | 
-| SortFields | The fields used to sort lists of SObjects to make the sort as consistent as possible | Array | "Hash" | Fields on the SObject (ie Name, etc) |
-| DoNotExpand | Skip expanding the DataPack into Multiple Files | Boolean | false |  |  
-| FilterFields | Fields to remove before writing to files | Array | none | Fields on SObject |  
-| FileName | Fields used to create the File Names for an SObject | Array | Name | Fields on SObject  |  
-| SourceKeyFields | Fields used to build the readable key for a single SObject | Name | Fields on SObject  |  
-| SourceKeyGenerationFields | Fields used to Generate a new Source Key when addSourceKeys: true | none | Fields on SObject |  
-| MatchingSourceKeyDefinition | Fields used to build the readable key for a single SObject when it is a Matching Key node | SourceKeyFields |   Fields on SObject  |   
-| FolderName | Fields used to create the Folder Name for an SObject | Array | Name | Fields on SObject  |
-| FileType | Field or String used to determine the File Type when creating a file | String | json | Fields on SObject or a string for a literal |
-| JsonFields | JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file. | String | none | Fields on SObject |  
-| ReplacementFields | Fields that should be replaced with values from other fields | Object | none | Key is Target Field - Value is Field to Replace with |
-| NonUnique | Declares that an SObject's data will always be created new during Deploy and will never be referenced by other objects and therefore does not need to keep extra metadata | Boolean | false | | 
-| PaginationSize | Declares that an SObject should Paginate during Deploy | Integer | 1000 | |
-| RemoveNullValues | Delete all null values from JSON. Similar to NonUnique it will be created new, but can be referenced by other Objects | Boolean | false | |
-| UnhashableFields | Fields that should not be used for Checking Diffs as they are largely informational | Array | none | Fields on SObject |
-| SupportParallel | Turn on / off parallel processing when Deploying the DataPack Type. Necessary when Master-Detail Parent might be shared with other DataPacks | Boolean | true | |
-| MaxDeploy | Specify the maximum number of DataPacks which should be uploaded in a single transaction | Integer | 50 | | 
-| HeadersOnly | Support uploading only the top level SObject in the DataPack. Good for potentially fixing circular reference issues | Boolean | false | |
-| ExportGroupSize | Specify the maximum number of DataPacks which should be Exported in a single transaction. Potentially large DataPacks like Matrix or Attachments could be set to 1 if necessary | Integer | 5 | |
+The following full list of settings are supported:
+
+| Setting | Type | Default | Description | 
+| --- | --- | --- | --- | 
+| SortFields | Array | "Hash" | The fields used to sort lists of SObjects to make the sort as consistent as possible.<br/>**Valid Values:** Fields on the SObject (ie Name, Type__c, etc) | 
+| DoNotExpand | Boolean | false | Skip expanding the DataPack into Multiple Files. |
+| FilterFields | Array | none | Fields to remove before writing to files.<br/>**Valid Values:** Fields on SObject | 
+| FileName | Array | Name | Fields used to create the File Names for an SObject.<br/>**Valid Values:** Fields on SObject or "_String" to add a Literal | 
+| SourceKeyFields | Array | Name | Fields used to build the readable key for a single SObject <br/>**Valid Values:**  Fields on SObject or "_String" to add a Literal |
+| SourceKeyGenerationFields | Array | none | Fields used to Generate a new Source Key when addSourceKeys: true<br/>**Valid Values:** Fields on SObject |
+| MatchingSourceKeyDefinition | Array | none | Fields used to build the readable key for a single SObject when it is a Matching Key node.<br/>**Valid Values:** Fields on SObject or "_String" to add a Literal | 
+| FolderName | Array | Name | Fields used to create the Folder Name for an SObject.<br/>**Valid Values:** Fields on SObject or "_String" to add a Literal | 
+| FileType | String | json | Field or String used to determine the File Type when creating a file.<br/>**Valid Values:** Fields on SObject or a string for a literal | 
+| JsonFields | String | none | JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file.<br/>**Valid Values:** Fields on SObject | 
+| ReplacementFields | Object | none | Fields that should be replaced with values from other fields.<br/>**Valid Values:** Key is Target Field - Value is Field to Replace with or "_String" for literals | 
+| NonUnique | Boolean | false | Declares that an SObject's data will always be created new during Deploy and will never be referenced by other objects and therefore does not need to keep extra metadata
+| PaginationSize | Integer | 1000 | Declares that an SObject should Paginate during Deploy
+| RemoveNullValues | Boolean | false | Delete all null values from JSON. Similar to NonUnique it will be created new, but can be referenced by other Objects
+| UnhashableFields | Array | none | Fields that should not be used for Checking Diffs as they are largely informational.<br/>**Valid Values:** Fields on SObject | 
+| SupportParallel | Boolean | true | Turn on / off parallel processing when Deploying the DataPack Type. Necessary when Master-Detail Parent might be shared with other DataPacks
+| MaxDeploy | Integer | 50 | Specify the maximum number of DataPacks which should be uploaded in a single transaction
+| HeadersOnly | Boolean | false | Support uploading only the top level SObject in the DataPack. Good for potentially fixing circular reference issues
+| ExportGroupSize | Integer | 5 | Specify the maximum number of DataPacks which should be Exported in a single transaction. Potentially large DataPacks like Matrix or Attachments could be set to 1 if necessary
  
