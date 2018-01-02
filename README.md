@@ -259,7 +259,7 @@ This will provide a list of files that are different locally than in the org. In
 `packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
 
 ## Additional 
-`packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org
+`packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org  
 `packGetDiffs`: Find all Diffs in Org Compared to Local Files   
 `packBuildFile`: Build a DataPacks Directory into a DataPack file   
 `runJavaScript`: Rebuild all DataPacks running JavaScript on each or run a Node.js Script   
@@ -271,7 +271,7 @@ This will provide a list of files that are different locally than in the org. In
 ## Example Commands
 
 ### packExport
-`packExport` a will retrieve all Vlocity Metadata from the org as Vlocity DataPacks as defined in the Job File and write them to the local file system in a Version Control friendly format.   
+`packExport` will retrieve all Vlocity Metadata from the org as Vlocity DataPacks as defined in the Job File and write them to the local file system in a Version Control friendly format.   
 ```bash
 vlocity -propertyfile <filepath> -job <filepath> packExport
 ```
@@ -379,7 +379,7 @@ buildFile: ProductInfoPhase3.json
 Vlocity has identified the Anonymous Apex that should run during most Deploys. It is not necessary to change these settings unless you want to change the default behavior. Currently the Vlocity Templates and Vlocity Cards will be deactivated before Deploy, and Products will have their Attribute JSON Generated after Deploy. 
 
 Anonymous Apex will run before and After a Job by job type and before each step of a Deploy. Available types are Import, Export, Deploy, BuildFile, and ExpandFile. Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file.
-```yaml
+```yaml 
 preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
 ```
@@ -414,7 +414,6 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | processMultiple | When false each Export or Import will run individually | Boolean | true |
 
 # Supported DataPack Types
------------------------
 These types are what would be specified when creating a Query or Manifest for the Job. 
 
 | VlocityDataPackType | SObject | Label |
