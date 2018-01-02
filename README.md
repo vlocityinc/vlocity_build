@@ -1,8 +1,24 @@
-Vlocity Build
-===============
+# Vlocity Build
+--------
+
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
-Installation Instructions
+### Table of Contents
+* [Installation Instructions](#installation-instructions)
+* [Getting Started](#getting-started)
+* [Step by Step Guide](#step-by-step-guide)
+    * [Export](#export)
+    * [Deploy](#deploy)
+* [The Job File](#the-job-file)
+  * [Example Job File](#example-job-file)
+* [Troubleshooting](#troubleshooting)
+* [All Commands](#all-commands)
+  * [Example Commands](#example-commands)
+* [Advanced Job File Settings](#advanced-job-file-settings)
+* [Supported DataPack Types](#supported-datapack-types)
+* [Advanced](#advanced)
+
+# Installation Instructions
 -----------
 
 #### Install Node.js  
@@ -17,109 +33,209 @@ Inside the Git repository you have cloned run the following command:
 ```bash   
 npm install
 npm link
-vlocity
+vlocity help
 ```
 
-This should show `Vlocity Build` confirming that the project has been setup successfully.
+This should show a list of all available commands confirming that the project has been setup successfully.
 
 Getting Started
 ------------
-To begin, fill in the information in the build.properties file, or create your own property file.
+To begin, create your own property files for your Source and Target Salesforce Orgs with the following:
 
-sf.username: Salesforce Username  
-sf.password: Salesforce Password  
+```java
+sf.username: <Salesforce Username>  
+sf.password: <Salesforce Password>  
+```
 
-It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_dev.properties` and `build_uat.properties`
-**All commands support "-propertyfile filename.properties"**
-
-#### Basic Commands
-The alias for this tool is `vlocity`.
-
-Use `vlocity help` to see all commands in the command line.
-
-##### Primary Commands
-`packDeploy`: Deploy all contents of a DataPacks Directory  
-`packExport`: Export from a Salesforce org into a DataPack Directory  
-`packExportSingle`: Export a Single DataPack by Id  
-`packExportAllDefault`: Export All Default DataPacks as listed in Supported Types Table  
-
-##### Troubleshooting Commands
-`packContinue`: Continues a job that failed due to an error  
-`packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
-
-##### Additional Commands
-`packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org
-`packGetDiffs`: Find all Diffs in Org Compared to Local Files   
-`packBuildFile`: Build a DataPacks Directory into a DataPack file   
-`runJavaScript`: Rebuild all DataPacks running JavaScript on each  
-`packUpdateSettings`: Refreshes the DataPacks Settings to the version included in this project. Recommended only if you are on the latest Major version of the Vlocity Managed Package  
-`runApex`: Runs Anonymous Apex specified in the option -apex in the /apex folder  
-`packGetAllAvailableExports`: Get list of all DataPacks that can be exported  
-`refreshVlocityBase`: Deploy and Activate the Base Vlocity DataPacks included in the Managed Package
+It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
 ##### Running the Process
 Commands follow the syntax:  
 ```bash
-vlocity packExport
+vlocity packExport -propertyfile <path to property file> -job <path to job file>
 ```
+#### Property File
+The propertyfile is used to provide the credentials of the org you will connect to. It will default to build.properties if no file is specified.
 
-All commands support the following primary options:
+#### Job File
+The Job File used to define the project location and the various settings for running a DataPacks Export / Deploy.
 
-| Option | Default | Description  | 
-| ------ | ----- | ------------- | 
-| propertyfile | build.properties | The propertyfile used |  
-| job | none | The path to the Job File used to define the project. This is a required option. |  
-
-You can use these properties with the following syntax
-```bash
-vlocity -propertyfile MY_ORG.properties -job JOB_FILE.yaml packExport
-```
-
-As previously mentioned, it is best to not rely on a single build.properties file and instead use named properties files for each org like `build_dev.properties` and `build_uat.properties`
-
-Additionally, when setting up Job Files you may split the Job definitions into groups of exports by functionality like `CRM.yaml` and `EPC.yaml`
-
-Then the syntax for running vlocity would become:
-```bash
-vlocity -propertyfile build_dev.properties -job CRM.yaml packExport
-vlocity -propertyfile build_uat.properties -job CRM.yaml packDeploy
-```
-
-Setting Up Your Project
+Step by Step Guide
 ------------
-Once you have your `build_dev.properties` file setup. You can test that you have successfully setup your project by running:
-
-##### Quick test
-```bash
-vlocity -propertyfile build_dev.properties -job Example.yaml packExport
-```
-
-This will Export a single DataRaptor and write it to a Local File:  
-```./example_vlocity_build/DataRaptor/CreateAccount/CreateAccount_DataPack.json
-```
+Once you have your `build_source.properties` file setup, you can get started with mirgation with the following: 
 
 ##### Export
-Once that completes successfully, you could initiate an export of all the data in you org with the following command:
+Example.yaml shows the most Simple Job File that can be used to setup a project:
 
-```bash
-vlocity -propertyfile build_dev.properties -job Example.yaml packExport
+```yaml
+projectPath: ./example_vlocity_build 
+queries: 
+  - VlocityDataPackType: DataRaptor 
+    query: Select Id from %vlocity_namespace%__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1
 ```
 
-This will export data from the org specified in your `build_dev.properties` file and write it to the folder `example_vlocity_build`  
+Run the following command to export this Job File:
+
+```bash
+vlocity -propertyfile build_source.properties -job dataPacksJobs/Example.yaml packExport
+```
+Which will produce the following output:
+<div style="background-color:black;color:white;padding:10px;">
+<span style="color:blue">Salesforce Org >></span> source_org@vlocity.com  <br/>
+<span style="color:blue">VlocityDataPackType >></span> DataRaptor  <br/>
+<span style="color:blue">Query >></span> Select Id from vlocity_cmt__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1  <br/>
+<span style="color:blue">Records >></span> 1  <br/>
+<span style="color:green">Query Total >></span> 1  <br/>
+<span style="color:blue">Initializing Project</span>  <br/>
+<span style="color:green">Exporting >></span> DataRaptor a191N000012pxsYQAQ  <br/>
+<span style="color:green">>Creating file >></span> example_vlocity_build/DataRaptor/DataRaptor-Migration/DataRaptor-Migration_DataPack.json  <br/>
+<span style="color:blue">Salesforce Org >></span> source_org@vlocity.com   <br/>
+<span style="color:blue">Current Status >></span> Export    <br/>
+<span style="color:green">Successful >></span> 1  <br/>
+<span style="color:red">Errors >></span> 0  <br/>
+<span style="color:blue">Remaining >></span> 0  <br/>
+<span style="color:blue">Elapsed Time >></span> 0m 5s  <br/>
+<span style="color:blue">Salesforce Org >></span> source_org@vlocity.com   <br/>
+Export success:  <br/>
+1 Completed<br/>
+</div>
+
+This has exported data from the org specified in your `build_source.properties` file and written it to the folder `example_vlocity_build` specified in the `Example.yaml` file found at `dataPacksJobs/Example.yaml`
+
+##### Deploy
+To deploy the data you just exported run the following command:  
+```bash
+vlocity -propertyfile build_target.properties -job Example.yaml packDeploy
+```
+
+Which will produce the following output:
+<div style="background-color:black;color:white;padding:10px;">
+<span style="color:blue">Salesforce Org >></span> target_org@vlocity.com  <br/>
+<span style="color:blue">Current Status >></span> Deploy   <br/>
+<span style="color:green">Adding to Deploy >></span> DataRaptor/DataRaptor Migration - DataRaptor-Migration<br/>
+<span style="color:green">Deploy Success >></span> DataRaptor/DataRaptor Migration - DataRaptor-Migration<br/>
+<span style="color:blue">Salesforce Org >></span> target_org@vlocity.com   <br/>
+<span style="color:blue">Current Status >></span> Deploy    <br/>
+<span style="color:green">Successful >></span> 1  <br/>
+<span style="color:red">Errors >></span> 0  <br/>
+<span style="color:blue">Remaining >></span> 0  <br/>
+<span style="color:blue">Elapsed Time >></span> 0m 4s  <br/>
+<span style="color:blue">Salesforce Org >></span> target_org@vlocity.com   <br/>
+</div>
+
+The Job File
+------------
+A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.   
+
+**The Default Job Settings will automatically be used if not explicitly specified in your file, and it is best to not add settings to the file unless you want to change them from the defaults.**
+
+The Job File's primary settings that you should define is specifying the folder that you would like to use to contain your project.  
+```yaml
+projectPath: ../myprojectPath 
+```
+
+The projectPath can be the absolute path to a folder or the relative path from where you run the vlocity command.  
+
+#### What will be Exported?
+By default, all data will be exported from the org when running the `packExport` command. To narrow the exported data, you can define any Salesforce SOQL query that returns the Id of records you would like to export. 
+
+```yaml
+queries: 
+  - VlocityDataPackType: DataRaptor 
+    query: Select Id from %vlocity_namespace%__DRBundle__c where Name LIKE '%Migration' LIMIT 1
+```
+
+This query will export a DataRaptor Vlocity DataPack by querying the SObject table for DataRaptor "DRBundle__c" and even supports the "LIMIT 1" and "LIKE" syntax. 
+
+### Example Job File
+#### dataPacksJobs/Example.yaml  
+```yaml
+projectPath: ./example_vlocity_build 
+queries: 
+  - VlocityDataPackType: DataRaptor 
+    query: Select Id from %vlocity_namespace%__DRBundle__c LIMIT 1
+```
+
+When creating your own Job File, the **only** setting that is very important is the projectPath which specifies where the DataPacks files will be written.
+
+All other settings will use the Default Project Settings.  
+
+By Default, all DataPack Types will be Exported when running packExport, so to override the Export data, it is possible to use predefined queries, or write your own.
+
+#### Predefined vs Explicit Queries
+Vlocity has defined full queries for all Supported DataPack Types which will export all currently Active Vlocity Metadata. **This is the most simple way to define your own Job File queries.**
+
+To Export All DataRaptors and OmniScripts from the Org use: 
+```yaml
+projectPath: ./myprojectPath    
+queries:
+  - DataRaptor
+  - OmniScript
+```
+This predefined syntax is defined in dataPacksJobs/QueryDeifnitions.yaml and will load the following explicit queries:
+```yaml
+queries:
+  - VlocityDataPackType: DataRaptor
+    query: Select Id, Name from %vlocity_namespace%__DRBundle__c where %vlocity_namespace%__Type__c != 'Migration'
+  - VlocityDataPackType: OmniScript
+    query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
+    = true AND %vlocity_namespace%__IsProcedure__c = false
+```
+
+The WHERE clauses show that these Queries will Export all DataRaptors that are not internal Vlocity Configuration Data and all Active OmniScripts.
+
+When Exporting, the DataPacks API will additionally export all dependencies of the Vlocity DataPacks which are being exported. So Exporting just the OmniScripts from an Org will also bring in all referenced DataRaptors, VlocityUITemplates, etc, so that the OmniScript will be fully usable once deployed.
+
+#### Query All
+Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queires defined, you can also run: `packExportAllDefault` to specify running all the default queries.
+
+# Troubleshooting
+------------
 
 ##### Data Quality
 Once Exported it is very important to validate that your data is in state that is ready to be deployed. The Vlocity Build tool primarily relies on unique data in fields across the different objects to prevent duplicate data being uploaded.
 
-##### Deploy
-To deploy the data you run the following command.
-```bash
-vlocity -propertyfile build_uat.properties -job Example.yaml packDeploy
-```
-
 ##### Errors
-Generally errors will be due to missing or incorrect references to other objects. Often times these missing references will be due to data that is missing the Unique Global Keys that tie reocrds together in the DataPacks system. You can fix missing GlobalKeys by running the following command:
+Generally errors will be due to missing or incorrect references to other objects. 
+
+<div style="background-color:black;color:white;padding:10px;">
+<span style="color:red">Error >></span> DataRaptor --- GetProducts --- Not Found<br/>
+<span style="color:red">Error >></span> VlocityUITemplate --- ShowProducts --- Not Found
+</div><br/>
+
+This "VlocityUITemplate --- ShowProducts --- Not Found" error during Export means that something, likely an OmniScript, has a reference to a VlocityUITemplate that is not currently Active or does not exist in the org as a VlocityUITemplate. In some cases the VlocityUITemplate for an OmniScript can actually be included inside the Visualforce Page in which the OmniScript is displayed. In that case, this error can be completely ignored. The DataRaptor Not Found means that likely someone deleted or changed the name of the DataRaptor being referenced without updating the OmniScript using it.
+
+Errors occurring during Export will likely result in Errors during deploy. But not always. 
+
+Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:
+
+<div style="background-color:black;color:white;padding:10px;">
+<span style="color:red">Deploy Error >></span> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
+</div><br/>
+
+In this Error the Product being deployed is the iPhone with Global Key `02d3feaf-a390-2f57-a08c-2bfc3f9b7333` and the error is stating that one of the Product Child Items could not find the referenced product with Global Key `db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This means the other Product must also be deployed. 
+
+Additionally, Deploys will run all of the Triggers associated with Objects during their import. As their are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
+
+##### Clean Data
+This tool includes a script to help find and eliminate "bad data". It can be run with the following command:
+
+`vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js`
+
+##### External Ids and Global Keys 
+Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:
+
+<div style="background-color:black;color:white;padding:10px;">
+<span style="color:red">Deploy Error >></span> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG
+</div><br/>
+
+This means that Duplicates have been created in the org and the data must be cleaned up. 
+
+While there are protections against missing or duplicate Global Keys the logic is often in triggers which may have at points been switched off, and sometimes applies to data that may have existed before the Vlocity Package was installed. 
+
+You can fix missing GlobalKeys by running the following command which will start a set of Batch Jobs to add Global Keys to any Objects which are missing them:
 ```bash
-vlocity -propertyfile build_uat.properties runApex AllGlobalKeysBatch.cls
+vlocity -propertyfile <propertyfile> -job <job> runApex -apex AllGlobalKeysBatch.cls
 ```
 
 However, when you are attempting to migrate data from one org to another where both orgs have missing GlobalKeys, but existing data that should not be duplicated, a different strategy may need to be used to produce GlobalKeys that match between orgs.
@@ -134,65 +250,85 @@ vlocity -propertyfile build_uat.properties -job Example.yaml packGetDiffs
 
 This will provide a list of files that are different locally than in the org. In the future more features will be added to view the actual diffs.
 
-The Job File
-------------
-The Job File's primary role is to specify the folder that you would like to use to contain your project and the queries which will be run to populate your data. The Default Job Settings will automatically be used if not explicitly specified in your file, so it is not neccessary to add settings to the file unless you want to change them from the defaults.
+# All Commands
+-----------
 
-A Job File is similar to a Salesforce package.xml file, however it also includes runtime options.  
+##### Primary  
+`packExport`: Export from a Salesforce org into a DataPack Directory  
+`packExportSingle`: Export a Single DataPack by Id  
+`packExportAllDefault`: Export All Default DataPacks as listed in Supported Types Table  
+`packDeploy`: Deploy all contents of a DataPacks Directory  
 
-#### dataPacksJobs/Example.yaml  
-```yaml
-projectPath: ./example_vlocity_build 
-queries: 
-  - VlocityDataPackType: DataRaptor 
-    query: Select Id from %vlocity_namespace%__DRBundle__c LIMIT 1
-```
+##### Troubleshooting 
+`packContinue`: Continues a job that failed due to an error  
+`packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
 
-This file would be run with the following command:  
+##### Additional 
+`packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org
+`packGetDiffs`: Find all Diffs in Org Compared to Local Files   
+`packBuildFile`: Build a DataPacks Directory into a DataPack file   
+`runJavaScript`: Rebuild all DataPacks running JavaScript on each or run a Node.js Script   
+`packUpdateSettings`: Refreshes the DataPacks Settings to the version included in this project. Recommended only if you are on the latest Major version of the Vlocity Managed Package  
+`runApex`: Runs Anonymous Apex specified in the option -apex at the specified path or in the /apex folder  
+`packGetAllAvailableExports`: Get list of all DataPacks that can be exported  
+`refreshVlocityBase`: Deploy and Activate the Base Vlocity DataPacks included in the Managed Package  
+
+### Example Commands
+
+##### packExport
+`packExport` a will retrieve all Vlocity Metadata from the org as Vlocity DataPacks as defined in the Job File and write them to the local file system in a Version Control friendly format.   
 ```bash
-vlocity -job Example.yaml packExport
+vlocity -propertyfile <filepath> -job <filepath> packExport
 ```
 
-It will Export a single DataRaptor and write it to a Local File:  
+##### packExportSingle
+`packExportSingle` will export a single DataPack and all its dependencies. It also supports only exporting the single DataPack with no dependencies by setting the depth.  
+```bash
+vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlcoityDataPackType> -id <Salesforce Id> -depth <Integer>
 ```
- Creating file:  ./example_vlocity_build/DataRaptor/CreateAccount/CreateAccount_DataPack.json
-```
+Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
 
-When creating your own Job File, the only setting that is very important is the propjectPath which specifies where the DataPacks files will be written.
-
-```yaml
-projectPath: ../myprojectPath 
-```
-All other settings will use the Default Project Settings.  
-
-By Default, all DataPack Types will be Exported when running packExport, so to override the Export data, it is possible to use predefined queries, or write your own.
-
-#### Predefined Queries
-To Export All DataRaptors and OmniScripts from the Org: 
-```yaml
-projectPath: ./myprojectPath    
-queries:
-  - DataRaptor
-  - OmniScript
-```
-This syntax loads the following queries:
-```yaml
-queries:
-  - VlocityDataPackType: DataRaptor
-    query: Select Id, Name from %vlocity_namespace%__DRBundle__c where %vlocity_namespace%__Type__c != 'Migration'
-  - VlocityDataPackType: OmniScript
-    query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
-    = true AND %vlocity_namespace%__IsProcedure__c = false
+##### packExportAllDefault
+`packExportAllDefault` will retrieve all Vlocity Metadata instead of using the Job File definition.  
+```bash
+vlocity -propertyfile <filepath> -job <filepath> packExportAllDefault
 ```
 
-These Queries will Export all DataRaptors that are not internal Vlocity Configuration Data and all Active OmniScripts.
+##### packDeploy
+`packDeploy` will deploy all contents in the projectPath of the Job File to the Salesforce Org.  
+```bash
+vlocity -propertyfile <filepath> -job <filepath> packDeploy
+```
 
-Using these predefined queries is recommended and each supported type has a predefined query. Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queires defined, you can run: `packExportAllDefault` also run all the default queries.
+##### packContinue
+`packContinue` can be used to resume the job that was running before being cancelled or if there was an unexpected error. It will work for Export or Deploy.
+```bash
+vlocity -propertyfile <filepath> -job <filepath> packContinue
+```
 
-DataPack Job Files Additional Details
+##### packRetry
+`packRetry` can be used to restart the job that was previously running and will additionally set all Errors back to Ready to deployed again.  
+```bash
+vlocity -propertyfile <filepath> -job <filepath> packRetry
+```
+
+##### packGetDiffs
+`packGetDiffs` will provide a list of files that are different locally than in the org. In the future more features will be added to view the actual diffs.
+```bash
+vlocity -propertyfile <filepath> -job <filepath> packGetDiffs
+```
+
+##### packGetDiffsAndDeploy
+`packGetDiffsAndDeploy` will first find all files that are different locally than in the target Org, and then will deploy only the DataPacks that have changed or are new. 
+```bash
+vlocity -propertyfile <filepath> -job <filepath> packGetDiffsAndDeploy
+```
+While this may take longer than doing an actual deploy, it is a great way to ensure that you are not updating items in your org more than necessary.
+
+## Advanced Job File Settings
 ------------
+The Job File has a number of additonal runtime settings that can be used to define your project and aid in making Exports / Deploys run successfully. However, the Default settings should only be modified to account for unique issues in your Org. 
 
-#### Settings 
 ##### Basic  
 ```yaml
 projectPath: ../my-project # Where the project will be contained. Use . for this folder. The Path is always relative to where you are running the vlocity command, not this yaml file
@@ -214,7 +350,16 @@ queries:
 
 **Export by Predefined Queries is the recommened approach for defining your Project and you can mix the predefined and explicit queries as shown above**
 
-##### Export by Manifest
+##### Export Results 
+The primary use of this tool is to write the results of the Export to the local folders at the expansionPath. There is a large amount of post processing to make the results from Salesforce as Version Control friendly as possible. 
+
+Additionally, an Export Build File can be created as part of an Export. It is a single file with all of the exported DataPack Data in it with no post processing. 
+```yaml
+exportBuildFile: AllDataPacksExported.json
+```
+This file is not Importable to a Salesforce Org through the DataPacks API, but could be used to see the full raw output from a Salesforce Org. Instead, use the BuildFile task to create an Importable file.
+
+##### Advanced: Export by Manifest
 The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard, 
 
 ```yaml
@@ -229,47 +374,33 @@ manifest:
 
 **Due to the limitation that not all DataPackTypes support the manifest format. It is best to use the Export by Queries syntax**
 
-##### Export Results 
-The primary use of this tool is to write the results of the Export to the local folders at the expansionPath. There is a large amount of post processing to make the results from Salesforce as Version Control friendly as possible. 
-
-Additionally, an Export Build File can be created as part of an Export. It is a single file with all of the exported DataPack Data in it with no post processing. 
-```yaml
-exportBuildFile: AllDataPacksExported.json
-```
-This file is not Importable to a Salesforce Org through the DataPacks API, but could be used to see the full raw output from a Salesforce Org. Instead, use the BuildFile task to create an Importable file.
-
 ##### BuildFile  
 This specifies a File to create from the DataPack Directory. It could then be uploaded through the DataPacks UI in a Salesforce Org.
 ```yaml
 buildFile: ProductInfoPhase3.json 
 ```
 
-##### Export Single
-You can export a single DataPack and all its dependencies with packExportSingle. It also supports only exporting the single DataPack with no dependencies by setting the depth.
-```bash
-vlocity -job JOB_FILE.yaml packExportSingle -type DATA_PACK_TYPE -id SALESFORCE_ID -depth MAX_DEPTH
-```
-Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
-
 ##### Anonymous Apex  
-You can run Anonymous Apex before and After a Job by job type and before each step of a Deploy. Available types are Import, Export, Deploy, BuildFile, and ExpandFile. Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file.
+Vlocity has identified the Anonymous Apex that should run during most Deploys. It is not necessary to change these settings unless you want to change the default behavior. Currently the Vlocity Templates and Vlocity Cards will be deactivated before Deploy, and Products will have their Attribute JSON Generated after Deploy. 
+
+Anonymous Apex will run before and After a Job by job type and before each step of a Deploy. Available types are Import, Export, Deploy, BuildFile, and ExpandFile. Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file.
 
 ```yaml
 preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
 ```
 
-With this setting, the Apex Code in DeativateTemplatesAndLayouts.cls will run before the deploy to the org. In this case it will Deactivate the Vlocity Templates and Vlocity UI Layouts (Cards) associated with the Deploy. See Advanced Anonymous Apex for more details.
+With this default setting, the Apex Code in DeativateTemplatesAndLayouts.cls will run before the deploy to the org. In this case it will Deactivate the Vlocity Templates and Vlocity UI Layouts (Cards) associated with the Deploy. See Advanced Anonymous Apex for more details.
 
 ##### Additional Options 
-The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName value` or `--optionName` for Boolean values.
+The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
 
 ##### Vlocity Build 
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
 | compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
-| manifestOnly | If true, an Export job will only save items specifically listed in the manifest |   Boolean | false |
-| delete | Delete the VlocityDataPack__c file on finish   |    Boolean | true |
+| manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
+| delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000
 | defaultMaxParallel | The number of parallel processes to use for export | Integer | 1
@@ -281,7 +412,6 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
 | buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
 
-
 ##### DataPacks API
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
@@ -289,11 +419,10 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
 | processMultiple | When false each Export or Import will run individually | Boolean | true |
 
-Supported DataPack Types
+# Supported DataPack Types
 -----------------------
 These types are what would be specified when creating a Query or Manifest for the Job. 
 
-#### Supported for General Audiences
 | VlocityDataPackType | SObject | Label |
 | ------------- |-------------| ----- | 
 | Attachment | Attachment | Attachment | 
@@ -344,8 +473,10 @@ These types are what would be specified when creating a Query or Manifest for th
 | VqMachine | VqMachine__c | Vlocity Intelligence Machine | 
 | VqResource | VqResource__c | Vlocity Intelligence Resource | 
 
-Advanced Anonymous Apex
+# Advanced
 ---------------------
+
+## Anonymous Apex and JavaScript
 In order to make the Anonymous Apex part reusable, you can include multiple Apex files with "//include FileName.cls;" in your .cls file. This allows you to write Utility files that can be reused. The BaseUtilities.cls file includes an additional feature that will send the data as a JSON to your Anonymous Apex.
 
 #### Namespace
@@ -459,7 +590,7 @@ After a Deploy the Ids of every record deployed will be in the JSON Object List.
 }
 ```
 
-#### Overriding DataPack Settings
+### Overriding DataPack Settings
 It is possible to change the settings that are used to define the behavior of each DataPack is Imported, Deployed, and written to the files. Settings overrides are added inside the Job File definition with the following syntax which is also found in the actual `lib/datapacksexpandeddefinition.yaml`:
 ```yaml
 OverrideSettings:
