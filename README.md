@@ -41,7 +41,6 @@ This should show a list of all available commands confirming that the project ha
 Getting Started
 ------------
 To begin, create your own property files for your Source and Target Salesforce Orgs with the following:
-
 ```java
 sf.username: <Salesforce Username>  
 sf.password: <Salesforce Password>  
@@ -52,7 +51,7 @@ It is best to not rely on a single build.properties file and instead use named p
 ##### Running the Process
 Commands follow the syntax:  
 ```bash
-vlocity packExport -propertyfile <path to property file> -job <path to job file>
+vlocity packExport -propertyfile <filepath> -job <filepath>
 ```
 #### Property File
 The propertyfile is used to provide the credentials of the org you will connect to. It will default to build.properties if no file is specified.
@@ -66,7 +65,6 @@ Once you have your `build_source.properties` file setup, you can get started wit
 
 ##### Export
 Example.yaml shows the most Simple Job File that can be used to setup a project:
-
 ```yaml
 projectPath: ./example_vlocity_build 
 queries: 
@@ -75,30 +73,30 @@ queries:
 ```
 
 Run the following command to export this Job File:
-
 ```bash
 vlocity -propertyfile build_source.properties -job dataPacksJobs/Example.yaml packExport
 ```
+
 Which will produce the following output:
-<div style="background-color:black;color:white;padding:10px;">
-<span style="color:blue">Salesforce Org >></span> source_org@vlocity.com  <br/>
-<span style="color:blue">VlocityDataPackType >></span> DataRaptor  <br/>
-<span style="color:blue">Query >></span> Select Id from vlocity_cmt__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1  <br/>
-<span style="color:blue">Records >></span> 1  <br/>
-<span style="color:green">Query Total >></span> 1  <br/>
-<span style="color:blue">Initializing Project</span>  <br/>
-<span style="color:green">Exporting >></span> DataRaptor a191N000012pxsYQAQ  <br/>
-<span style="color:green">>Creating file >></span> example_vlocity_build/DataRaptor/DataRaptor-Migration/DataRaptor-Migration_DataPack.json  <br/>
-<span style="color:blue">Salesforce Org >></span> source_org@vlocity.com   <br/>
-<span style="color:blue">Current Status >></span> Export    <br/>
-<span style="color:green">Successful >></span> 1  <br/>
-<span style="color:red">Errors >></span> 0  <br/>
-<span style="color:blue">Remaining >></span> 0  <br/>
-<span style="color:blue">Elapsed Time >></span> 0m 5s  <br/>
-<span style="color:blue">Salesforce Org >></span> source_org@vlocity.com   <br/>
-Export success:  <br/>
-1 Completed<br/>
-</div>
+```
+Salesforce Org >> source_org@vlocity.com  
+VlocityDataPackType >>DataRaptor  
+Query >> Select Id from vlocity_cmt__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1  
+Records >> 1  
+Query Total >> 1  
+Initializing Project  
+Exporting >> DataRaptor a191N000012pxsYQAQ  
+Creating file >> example_vlocity_build/DataRaptor/DataRaptor-Migration/DataRaptor-Migration_DataPack.json  
+Salesforce Org >> source_org@vlocity.com   
+Current Status >> Export    
+Successful >> 1  
+Errors >> 0  
+Remaining >> 0  
+Elapsed Time >> 0m 5s  
+Salesforce Org >> source_org@vlocity.com    
+Export success:  
+1 Completed  
+```
 
 This has exported data from the org specified in your `build_source.properties` file and written it to the folder `example_vlocity_build` specified in the `Example.yaml` file found at `dataPacksJobs/Example.yaml`
 
@@ -109,19 +107,19 @@ vlocity -propertyfile build_target.properties -job Example.yaml packDeploy
 ```
 
 Which will produce the following output:
-<div style="background-color:black;color:white;padding:10px;">
-<span style="color:blue">Salesforce Org >></span> target_org@vlocity.com  <br/>
-<span style="color:blue">Current Status >></span> Deploy   <br/>
-<span style="color:green">Adding to Deploy >></span> DataRaptor/DataRaptor Migration - DataRaptor-Migration<br/>
-<span style="color:green">Deploy Success >></span> DataRaptor/DataRaptor Migration - DataRaptor-Migration<br/>
-<span style="color:blue">Salesforce Org >></span> target_org@vlocity.com   <br/>
-<span style="color:blue">Current Status >></span> Deploy    <br/>
-<span style="color:green">Successful >></span> 1  <br/>
-<span style="color:red">Errors >></span> 0  <br/>
-<span style="color:blue">Remaining >></span> 0  <br/>
-<span style="color:blue">Elapsed Time >></span> 0m 4s  <br/>
-<span style="color:blue">Salesforce Org >></span> target_org@vlocity.com   <br/>
-</div>
+```
+Salesforce Org >> target_org@vlocity.com  
+Current Status >> Deploy   
+Adding to Deploy >> DataRaptor/DataRaptor Migration - DataRaptor-Migration
+Deploy Success >> DataRaptor/DataRaptor Migration - DataRaptor-Migration
+Salesforce Org >> target_org@vlocity.com   
+Current Status >> Deploy    
+Successful >> 1  
+Errors >> 0  
+Remaining >> 0  
+Elapsed Time >> 0m 4s  
+Salesforce Org >> target_org@vlocity.com   
+```
 
 The Job File
 ------------
@@ -138,7 +136,6 @@ The projectPath can be the absolute path to a folder or the relative path from w
 
 #### What will be Exported?
 By default, all data will be exported from the org when running the `packExport` command. To narrow the exported data, you can define any Salesforce SOQL query that returns the Id of records you would like to export. 
-
 ```yaml
 queries: 
   - VlocityDataPackType: DataRaptor 
@@ -197,37 +194,35 @@ Once Exported it is very important to validate that your data is in state that i
 
 ##### Errors
 Generally errors will be due to missing or incorrect references to other objects. 
-
-<div style="background-color:black;color:white;padding:10px;">
-<span style="color:red">Error >></span> DataRaptor --- GetProducts --- Not Found<br/>
-<span style="color:red">Error >></span> VlocityUITemplate --- ShowProducts --- Not Found
-</div><br/>
+```
+Error >> DataRaptor --- GetProducts --- Not Found
+Error >> VlocityUITemplate --- ShowProducts --- Not Found
+```
 
 This "VlocityUITemplate --- ShowProducts --- Not Found" error during Export means that something, likely an OmniScript, has a reference to a VlocityUITemplate that is not currently Active or does not exist in the org as a VlocityUITemplate. In some cases the VlocityUITemplate for an OmniScript can actually be included inside the Visualforce Page in which the OmniScript is displayed. In that case, this error can be completely ignored. The DataRaptor Not Found means that likely someone deleted or changed the name of the DataRaptor being referenced without updating the OmniScript using it.
 
-Errors occurring during Export will likely result in Errors during deploy. But not always. 
-
-Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:
-
-<div style="background-color:black;color:white;padding:10px;">
-<span style="color:red">Deploy Error >></span> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
-</div><br/>
+Errors occurring during Export will likely result in Errors during deploy. But not always. Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:
+```
+Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
+```
 
 In this Error the Product being deployed is the iPhone with Global Key `02d3feaf-a390-2f57-a08c-2bfc3f9b7333` and the error is stating that one of the Product Child Items could not find the referenced product with Global Key `db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This means the other Product must also be deployed. 
 
 Additionally, Deploys will run all of the Triggers associated with Objects during their import. As their are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
 
-##### Clean Data
+##### Cleaning Bad Data
 This tool includes a script to help find and eliminate "bad data". It can be run with the following command:
+```bash
+vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js
+```
 
-`vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js`
+This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
 
 ##### External Ids and Global Keys 
 Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:
-
-<div style="background-color:black;color:white;padding:10px;">
-<span style="color:red">Deploy Error >></span> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG
-</div><br/>
+```
+Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG
+```
 
 This means that Duplicates have been created in the org and the data must be cleaned up. 
 
@@ -286,6 +281,7 @@ vlocity -propertyfile <filepath> -job <filepath> packExport
 ```bash
 vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlcoityDataPackType> -id <Salesforce Id> -depth <Integer>
 ```
+
 Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
 
 ##### packExportAllDefault
@@ -340,7 +336,6 @@ Exports can be setup as a series of queries or a manifest.
 
 ##### Export by Queries
 Queries support full SOQL to get an Id for each DataPackType. You can have any number of queries in your export. SOQL Queries can use %vlocity_namespace%__ to be namespace independent or the namespace of your Vlocity Package can be used.
-
 ```yaml
 queries:
   - DataRaptor
@@ -357,11 +352,11 @@ Additionally, an Export Build File can be created as part of an Export. It is a 
 ```yaml
 exportBuildFile: AllDataPacksExported.json
 ```
+
 This file is not Importable to a Salesforce Org through the DataPacks API, but could be used to see the full raw output from a Salesforce Org. Instead, use the BuildFile task to create an Importable file.
 
 ##### Advanced: Export by Manifest
 The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard, 
-
 ```yaml
 manifest: 
   VlocityCard:
@@ -384,7 +379,6 @@ buildFile: ProductInfoPhase3.json
 Vlocity has identified the Anonymous Apex that should run during most Deploys. It is not necessary to change these settings unless you want to change the default behavior. Currently the Vlocity Templates and Vlocity Cards will be deactivated before Deploy, and Products will have their Attribute JSON Generated after Deploy. 
 
 Anonymous Apex will run before and After a Job by job type and before each step of a Deploy. Available types are Import, Export, Deploy, BuildFile, and ExpandFile. Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file.
-
 ```yaml
 preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
@@ -496,6 +490,7 @@ for (Object obj : dataSetObjects)
   }
 }
 ```
+
 The token CURRENT_DATA_PACKS_CONTEXT_DATA will be replaced with JSON data and converted into a List<Map<String, Object>> with data depending on the type of setting and type of job being run.
 
 #### PreJobApex
@@ -557,6 +552,7 @@ Which becomes:
     "Language": "English"
 }
 ```
+
 ##### Export by Queries
 For a Query, each result from the Query will be a JSON Object with the appropriate DataPack Type.
 ```yaml
@@ -564,6 +560,7 @@ queries:
   - VlocityDataPackType: VlocityUITemplate 
     query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'campaign%' # SOQL 
 ```
+
 Becomes:
 ```json
 {
@@ -579,6 +576,7 @@ Before a Deploy, each JSON Object will be a small amount of information about th
     "Name": "Campaign-Story"
 }
 ```
+
 In the DeactivateTemplatesAndLayouts.cls this Name is used to Deactivate the Layouts that are pending for Deploy.
 #### PostJobApex Replacement Format
 Post Job Apex runs after the Job completes successfully.
@@ -614,25 +612,28 @@ OverrideSettings:
       - CategoryData__c
       - IsConfigurable__c    
 ```
+
 In this case the settings for Product2 include:
 `SupportParallel: false` meaning that Product2 DataPacks do not support being uploaded in parallel due to record locking issues on the Standard Pricebook Entry.
-
 ```yaml
 FilterFields:
 - AttributeMetadata__c
 - ImageId__c
 - JSONAttribute__c 
 ```
+
 Filter Fields describes fields that will be removed from the JSON before writing to the file system. This is generally due to them being or containing Salesforce Id's that cannot be replaced during export and are not Version Control friendly. 
 ```yaml
 FolderName:
 - GlobalKey__c 
 ```
+
 Folder Name is the field which contains the name of the folder where the Product2 will be written. This is seperate from the file name as the folder must be unique, but the file should be readable. In most cases the Folder Name is the Global / Unique Key for the Object such that it should never change no matter what else changes in the object. 
 ```yaml
 JsonFields:
 - CategoryData__c
 ```
+
 JsonFields is a list of fields on the SObject which should be written as formatted JSON as opposed to a String when writing to a file. 
 
 The following full list of settings are supported:
