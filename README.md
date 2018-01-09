@@ -142,7 +142,7 @@ queries:
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name LIKE '%Migration' LIMIT 1
 ```
 
-This query will export a DataRaptor Vlocity DataPack by querying the SObject table for DataRaptor "DRBundle__c" and even supports the "LIMIT 1" and "LIKE" syntax. 
+This query will export a DataRaptor Vlocity DataPack by querying the SObject table for DataRaptor `DRBundle__c` and even supports the `LIMIT 1` and `LIKE` syntax. 
 
 ## Example Job File
 #### dataPacksJobs/Example.yaml  
@@ -335,7 +335,7 @@ expansionPath: datapack-expanded # The Path relative to the projectPath to inser
 Exports can be setup as a series of queries or a manifest. 
 
 ## Export by Queries
-Queries support full SOQL to get an Id for each DataPackType. You can have any number of queries in your export. SOQL Queries can use %vlocity_namespace%__ to be namespace independent or the namespace of your Vlocity Package can be used.
+Queries support full SOQL to get an Id for each DataPackType. You can have any number of queries in your export. SOQL Queries can use `%vlocity_namespace%__` to be namespace independent or the namespace of your Vlocity Package can be used.
 ```yaml
 queries:
   - DataRaptor
@@ -379,7 +379,7 @@ buildFile: ProductInfoPhase3.json
 Vlocity has identified the Anonymous Apex that should run during most Deploys. It is not necessary to change these settings unless you want to change the default behavior. Currently the Vlocity Templates and Vlocity Cards will be deactivated before Deploy, and Products will have their Attribute JSON Generated after Deploy. 
 
 Anonymous Apex will run before and After a Job by job type and before each step of a Deploy. Available types are Import, Export, Deploy, BuildFile, and ExpandFile. Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file.
-```yaml 
+```yaml
 preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
 ```

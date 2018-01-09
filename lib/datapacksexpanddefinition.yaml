@@ -63,7 +63,7 @@ DataPacks:
 DataPacksDefault:
   DisplayName: []
   HeadersOnly: false
-  PaginationSize: 1500
+  PaginationSize: 1000
   SupportParallel: true
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
