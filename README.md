@@ -587,6 +587,33 @@ After a Deploy the Ids of every record deployed will be in the JSON Object List.
 }
 ```
 
+### CLI API
+The Command Line API can also return JSON formatted output and accept some inputs as JSON. The primary input JSON would be the Manifest which can be passed in as:
+```bash
+vlocity packExport -manifest '["OmniScript/MACD_Move_English"]'
+```
+
+The tool will return JSON is sent the argument `--json` or `--json-pretty` and will return a JSON in the format of
+```json
+{
+  "action": "Export",
+  "message": "VlocityUITemplate --- SelectAssetToMove.html --- Not Found",
+  "records": [
+    {
+        "VlocityDataPackDisplayLabel": "MACD Move English",
+        "VlocityDataPackKey": "OmniScript/MACD_Move_English",
+        "VlocityDataPackStatus": "Success",
+        "VlocityDataPackType": "OmniScript"
+    }
+  ],
+  "status": "error"
+}    
+```
+
+Where each record contains the VlocityDataPackKey that was Exported / Deployed, and the Export / Deploy will be limited to only VlocityDataPackKeys passed in as part of the manifest if it is supplied. 
+
+A Deploy will always only include the `-manifest` keys, however for an Export it will be defauly include dependencies unless `-maxDepth 0` is used as an argument.
+
 ### Overriding DataPack Settings
 It is possible to change the settings that are used to define the behavior of each DataPack is Imported, Deployed, and written to the files. Settings overrides are added inside the Job File definition with the following syntax which is also found in the actual `lib/datapacksexpandeddefinition.yaml`:
 ```yaml
