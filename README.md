@@ -142,7 +142,7 @@ queries:
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name LIKE '%Migration' LIMIT 1
 ```
 
-This query will export a DataRaptor Vlocity DataPack by querying the SObject table for DataRaptor "DRBundle__c" and even supports the "LIMIT 1" and "LIKE" syntax. 
+This query will export a DataRaptor Vlocity DataPack by querying the SObject table for DataRaptor `DRBundle__c` and even supports the `LIMIT 1` and `LIKE` syntax. 
 
 ## Example Job File
 #### dataPacksJobs/Example.yaml  
@@ -335,7 +335,7 @@ expansionPath: datapack-expanded # The Path relative to the projectPath to inser
 Exports can be setup as a series of queries or a manifest. 
 
 ## Export by Queries
-Queries support full SOQL to get an Id for each DataPackType. You can have any number of queries in your export. SOQL Queries can use %vlocity_namespace%__ to be namespace independent or the namespace of your Vlocity Package can be used.
+Queries support full SOQL to get an Id for each DataPackType. You can have any number of queries in your export. SOQL Queries can use `%vlocity_namespace%__` to be namespace independent or the namespace of your Vlocity Package can be used.
 ```yaml
 queries:
   - DataRaptor
@@ -379,7 +379,7 @@ buildFile: ProductInfoPhase3.json
 Vlocity has identified the Anonymous Apex that should run during most Deploys. It is not necessary to change these settings unless you want to change the default behavior. Currently the Vlocity Templates and Vlocity Cards will be deactivated before Deploy, and Products will have their Attribute JSON Generated after Deploy. 
 
 Anonymous Apex will run before and After a Job by job type and before each step of a Deploy. Available types are Import, Export, Deploy, BuildFile, and ExpandFile. Apex files live in vlocity_build/apex. You can include multiple Apex files with "//include FileName.cls;" in your .cls file.
-```yaml 
+```yaml
 preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
 ```
@@ -586,6 +586,33 @@ After a Deploy the Ids of every record deployed will be in the JSON Object List.
     "Id": "01r61000000DeTeAAN"
 }
 ```
+
+### CLI API
+The Command Line API can also return JSON formatted output and accept some inputs as JSON. The primary input JSON would be the Manifest which can be passed in as:
+```bash
+vlocity packExport -manifest '["OmniScript/MACD_Move_English"]'
+```
+
+The tool will return JSON is sent the argument `--json` or `--json-pretty` and will return a JSON in the format of
+```json
+{
+  "action": "Export",
+  "message": "VlocityUITemplate --- SelectAssetToMove.html --- Not Found",
+  "records": [
+    {
+        "VlocityDataPackDisplayLabel": "MACD Move English",
+        "VlocityDataPackKey": "OmniScript/MACD_Move_English",
+        "VlocityDataPackStatus": "Success",
+        "VlocityDataPackType": "OmniScript"
+    }
+  ],
+  "status": "error"
+}    
+```
+
+Where each record contains the VlocityDataPackKey that was Exported / Deployed, and the Export / Deploy will be limited to only VlocityDataPackKeys passed in as part of the manifest if it is supplied. 
+
+A Deploy will always only include the `-manifest` keys, however for an Export it will be defauly include dependencies unless `-maxDepth 0` is used as an argument.
 
 ### Overriding DataPack Settings
 It is possible to change the settings that are used to define the behavior of each DataPack is Imported, Deployed, and written to the files. Settings overrides are added inside the Job File definition with the following syntax which is also found in the actual `lib/datapacksexpandeddefinition.yaml`:

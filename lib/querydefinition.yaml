@@ -11,6 +11,9 @@ AttributeCategory:
 CalculationMatrix:
   VlocityDataPackType: CalculationMatrix
   query: Select Id, Name from %vlocity_namespace%__CalculationMatrix__c
+CalculationProcedure:
+  VlocityDataPackType: CalculationProcedure
+  query: Select Id, Name from %vlocity_namespace%__CalculationProcedure__c  
 ContextAction:
   VlocityDataPackType: ContextAction
   query: Select Id, Name from %vlocity_namespace%__ContextAction__c
