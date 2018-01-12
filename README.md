@@ -586,6 +586,92 @@ After a Deploy the Ids of every record deployed will be in the JSON Object List.
     "Id": "01r61000000DeTeAAN"
 }
 ```
+### Creating Custom Matching Keys
+DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define the uniqnueness of any SObject. Matching Keys contain the following fields:  
+
+| Name | API Name | Description |   
+| --- | --- | --- |    
+| Matching Key Fields | MatchingKeyFields__c | Comma Separated list of Field API Names that define Uniqnuess |  
+| Vlocity Matching Key Name | Name | Name of the Matching Key |  
+| Label | Label | Label of the Matching Key |  
+| Object API Name | ObjectAPIName__c | Full API Name of the SObject |  
+| Matching Key Object | MatchingKeyObject__c | Full API Name of the SObject |  
+| Return Key Field | ReturnKeyField__c | Always "Id" for DataPacks |  
+| Composite Unique Field | CompositeUniqueFieldName__c | Leave empty - Reserved for future use |  
+
+Create these keys if you want to support connections between SObject Id fields that are not already supported by DataPacks, or if you would like to change the Vlocity Default for any SObject. Matching Keys created outside the Managed Package will always override ones contained inside (Post Vlocity v15).
+
+### Current Matching Keys
+| Object API Name | Matching Key Fields |       
+| --- | --- |   
+| %vlocity_namespace%__Attribute__c  |  %vlocity_namespace%__Code__c |  
+| %vlocity_namespace%__AttributeAssignment__c  | %vlocity_namespace%__ObjectId__c, %vlocity_namespace%__AttributeId__c, %vlocity_namespace%__IsOverride__c |  
+| %vlocity_namespace%__AttributeAssignmentRule__c  | Name |  
+| %vlocity_namespace%__AttributeCategory__c  |  %vlocity_namespace%__Code__c |  
+| %vlocity_namespace%__CalculationMatrix__c  |  Name |  
+| %vlocity_namespace%__CalculationMatrixVersion__c  |  %vlocity_namespace%__VersionNumber__c, %vlocity_namespace%__CalculationMatrixId__c |  
+| %vlocity_namespace%__CalculationProcedure__c | Name |  
+| %vlocity_namespace%__CalculationProcedureVersion__c | %vlocity_namespace%__VersionNumber__c, %vlocity_namespace%__CalculationProcedureId__c |  
+| %vlocity_namespace%__Catalog__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__CatalogProductRelationship__c | %vlocity_namespace%__CatalogId__c, %vlocity_namespace%__Product2Id__c |  
+| %vlocity_namespace%__CatalogRelationship__c | %vlocity_namespace%__ChildCatalogId__c, %vlocity_namespace%__ParentCatalogId__c |  
+| %vlocity_namespace%__ContextAction__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ContextDimension__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ContextScope__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ContractType__c | Name |  
+| %vlocity_namespace%__ContractTypeSetting__c | Name, %vlocity_namespace%__ContractTypeId__c |  
+| %vlocity_namespace%__DocumentClause__c | Name |  
+| %vlocity_namespace%__DocumentTemplate__c | %vlocity_namespace%__ExternalID__c |  
+| %vlocity_namespace%__DRBundle__c | Name |  
+| %vlocity_namespace%__DRMapItem__c | %vlocity_namespace%__MapId__c |  
+| %vlocity_namespace%__Element__c | %vlocity_namespace%__OmniScriptId__c, Name |  
+| %vlocity_namespace%__EntityFilter__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__InterfaceImplementation__c | Name |  
+| %vlocity_namespace%__InterfaceImplementationDetail__c | %vlocity_namespace%__InterfaceId__c, Name |  
+| %vlocity_namespace%__ObjectClass__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ObjectContextRule | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ObjectLayout__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__OfferingProcedure__c | Name |  
+| %vlocity_namespace%__Picklist__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__PicklistValue__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__PriceList__c | %vlocity_namespace%__Code__c |  
+| %vlocity_namespace%__PriceListEntry__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__PricingElement__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__PricingVariable__c | %vlocity_namespace%__Code__c |  
+| %vlocity_namespace%__ProductChildItem__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ProductConfigurationProcedure__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ProductRelationship__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__Promotion__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__PromotionItem__c | %vlocity_namespace%__ProductId__c, %vlocity_namespace%__PromotionId__c |  
+| %vlocity_namespace%__PublicProgram__c | Name |  
+| %vlocity_namespace%__QueryBuilder__c | Name |  
+| %vlocity_namespace%__Rule__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__StoryObjectConfiguration__c | Name |  
+| %vlocity_namespace%__TimePlan__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__TimePolicy__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__UIFacet__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__UISection__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__VlocityAction__c | Name |  
+| %vlocity_namespace%__VlocityAttachment__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__VlocityCard__c | Name, %vlocity_namespace%__Author__c, %vlocity_namespace%__Version__c |  
+| %vlocity_namespace%__VlocityFunction__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__VlocityFunctionArgument__c | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__VlocitySearchWidgetActionsSetup__c | %vlocity_namespace%__VlocityActionId__c, %vlocity_namespace%__VlocitySearchWidgetSetupId__c, %vlocity_namespace%__ActionType__c |  
+| %vlocity_namespace%__VlocitySearchWidgetSetup__c | Name |  
+| %vlocity_namespace%__VlocityState__c | Name, %vlocity_namespace%__DTPStateModelName__c |  
+| %vlocity_namespace%__VlocityStateModel__c | %vlocity_namespace%__ObjectAPIName__c, %vlocity_namespace%__FieldAPIName__c, %vlocity_namespace%__TypeFieldName__c, %vlocity_namespace%__TypeFieldValue__c |  
+| %vlocity_namespace%__VlocityStateModelVersion__c | %vlocity_namespace%__VersionNumber__c, %vlocity_namespace%__StateModelId__c |  
+| %vlocity_namespace%__VlocityUILayout__c | Name, %vlocity_namespace%__Version__c, %vlocity_namespace%__Author__c |  
+| %vlocity_namespace%__VlocityUITemplate__c | Name, %vlocity_namespace%__Author__c, %vlocity_namespace%__Version__c |  
+| %vlocity_namespace%__VqMachine__c | Name |  
+| %vlocity_namespace%__VqMachineResource__c | %vlocity_namespace%__VqMachineId__c, %vlocity_namespace%__VqResourceId__c |  
+| %vlocity_namespace%__VqResource__c | Name |  
+| Document | DeveloperName |  
+| Pricebook2 | Name |  
+| PricebookEntry | Product2Id, Pricebook2Id, CurrencyIsoCode |  
+| Product2 | %vlocity_namespace%__GlobalKey__c |  
+| RecordType | DeveloperName, SobjectType |  
+| User | Email |  
 
 ### CLI API
 The Command Line API can also return JSON formatted output and accept some inputs as JSON. The primary input JSON would be the Manifest which can be passed in as:
