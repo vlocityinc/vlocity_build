@@ -45,6 +45,10 @@ To begin, create your own property files for your Source and Target Salesforce O
 sf.username: <Salesforce Username>  
 sf.password: <Salesforce Password>  
 ```
+When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the below line to your property file:
+```java
+sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy hostname>[:<Proxy Port>]
+```
 
 It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
