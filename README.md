@@ -205,10 +205,9 @@ Error >> VlocityUITemplate --- ShowProducts --- Not Found
 
 This "VlocityUITemplate --- ShowProducts --- Not Found" error during Export means that something, likely an OmniScript, has a reference to a VlocityUITemplate that is not currently Active or does not exist in the org as a VlocityUITemplate. In some cases the VlocityUITemplate for an OmniScript can actually be included inside the Visualforce Page in which the OmniScript is displayed. In that case, this error can be completely ignored. The DataRaptor Not Found means that likely someone deleted or changed the name of the DataRaptor being referenced without updating the OmniScript using it.
 
-Errors occurring during Export will likely result in Errors during deploy. But not always. Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:
-```
-Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
-```
+Errors occurring during Export will likely result in Errors during deploy. But not always. Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:  
+`Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
+`
 
 In this Error the Product being deployed is the iPhone with Global Key `02d3feaf-a390-2f57-a08c-2bfc3f9b7333` and the error is stating that one of the Product Child Items could not find the referenced product with Global Key `db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This means the other Product must also be deployed. 
 
@@ -223,10 +222,10 @@ vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js
 This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
 
 ## External Ids and Global Keys 
-Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:
-```
+Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:  
+`
 Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG
-```
+`
 
 This means that Duplicates have been created in the org and the data must be cleaned up. 
 
@@ -331,8 +330,13 @@ The Job File has a number of additonal runtime settings that can be used to defi
 
 ## Basic  
 ```yaml
-projectPath: ../my-project # Where the project will be contained. Use . for this folder. The Path is always relative to where you are running the vlocity command, not this yaml file
-expansionPath: datapack-expanded # The Path relative to the projectPath to insert the expanded files. Also known as the DataPack Directory in this Doecumentation
+projectPath: ../my-project # Where the project will be contained. Use . for this folder. 
+                           # The Path is always relative to where you are running the vlocity command, 
+                           # not this yaml file
+                           
+expansionPath: datapack-expanded # The Path relative to the projectPath to insert 
+                                 # the expanded files. Also known as the DataPack Directory 
+                                 # in this Doecumentation
 ```
 
 ## Export 
@@ -561,7 +565,7 @@ For a Query, each result from the Query will be a JSON Object with the appropria
 ```yaml
 queries: 
   - VlocityDataPackType: VlocityUITemplate 
-    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'campaign%' # SOQL 
+    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'campaign%' 
 ```
 
 Becomes:
