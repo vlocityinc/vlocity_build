@@ -34,7 +34,7 @@ DataPacks:
     - Language__c
   PriceList:
     HeadersOnly: true
-    PaginationSize: 300
+    PaginationSize: 500
     SupportParallel: false
   Pricebook2:
     HeadersOnly: All
