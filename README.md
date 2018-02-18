@@ -7,8 +7,9 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 * [Installation Instructions](#installation-instructions)
 * [Getting Started](#getting-started)
 * [Step by Step Guide](#step-by-step-guide)
-    * [Export](#export)
-    * [Deploy](#deploy)
+    * [Simple Export](#simple-export)
+    * [Simple Deploy](#simple-deploy)
+    * [Org to Org Migration](#org-to-org-migration)
 * [The Job File](#the-job-file)
   * [Example Job File](#example-job-file)
 * [Troubleshooting](#troubleshooting)
@@ -67,7 +68,7 @@ Step by Step Guide
 ------------
 Once you have your `build_source.properties` file setup, you can get started with mirgation with the following: 
 
-## Export
+## Simple Export
 Example.yaml shows the most Simple Job File that can be used to setup a project:
 ```yaml
 projectPath: ./example_vlocity_build 
@@ -104,7 +105,7 @@ Export success:
 
 This has exported data from the org specified in your `build_source.properties` file and written it to the folder `example_vlocity_build` specified in the `Example.yaml` file found at `dataPacksJobs/Example.yaml`
 
-## Deploy
+## Simple Deploy
 To deploy the data you just exported run the following command:  
 ```bash
 vlocity -propertyfile build_target.properties -job Example.yaml packDeploy
@@ -123,6 +124,70 @@ Errors >> 0
 Remaining >> 0  
 Elapsed Time >> 0m 4s  
 Salesforce Org >> target_org@vlocity.com   
+```
+## Org to Org Migration
+When Exporting and Deploying between two Orgs use the following action plan:  
+1. Create Property Files for each Org. `build_source.properties` and `build_target.properties`  
+2. Create a Job File which identifies your projectPath and the queries for the DataPack Types you would like to export. To export the Vlocity Product Catalog, use the following EPC.yaml file:
+```yaml
+projectPath: vlocity
+queries:
+  - AttributeCategory
+  - CalculationProcedure
+  - ContextAction
+  - ContextDimension
+  - ContextScope
+  - EntityFilter
+  - ObjectClass
+  - ObjectContextRule
+  - ObjectLayout
+  - Pricebook2
+  - PriceList
+  - PricingVariable
+  - Product2
+  - Promotion
+  - Rule
+  - TimePlan
+  - TimePolicy
+  - UIFacet
+  - UISection
+  - VlocityFunction
+  - VlocityPicklist
+```
+3. Ensure High Data Quality in the Source Org by running:   
+`vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js`  
+4. Update your DataPack Settings in the source Org to the latest in the Vlocity Build Tool by running:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings`  
+This step will deliver changes to the DataPack settings outside the Vlocity Managed Package installation flow and should be run after upgrading/installing the package or on new Sandbox orgs.  
+5. Run the Export:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packExport`  
+6. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packRetry`  
+If your Export fails midway through due to conenction issues, you can also the followinf to pick the export back up where it left off:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
+7. Ensure High Data Quality in the Target Org by running:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js`  
+8. Update the DataPack Settings in the Target Org:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings`
+9. Run the deploy:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy`
+10. If you encounter any Errorx during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml packRetry`  
+Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
+
+### Summary of Org to Org Migration
+All together the commands are:
+```bash
+# Source Org
+vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings
+vlocity -propertyfile build_source.properties -job EPC.yaml packExport
+
+# Target Org
+vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings
+vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
+vlocity -propertyfile build_target.properties -job EPC.yaml packRetry
 ```
 
 # The Job File
