@@ -163,7 +163,7 @@ This step will deliver changes to the DataPack settings outside the Vlocity Mana
 `vlocity -propertyfile build_source.properties -job EPC.yaml packExport`  
 6. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packRetry`  
-If your Export fails midway through due to conenction issues, you can also the followinf to pick the export back up where it left off:  
+If your Export fails midway through due to conenction issues, you can also the following to pick the export back up where it left off:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
 7. Ensure High Data Quality in the Target Org by running:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js`  
@@ -171,7 +171,7 @@ If your Export fails midway through due to conenction issues, you can also the f
 `vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings`
 9. Run the deploy:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy`
-10. If you encounter any Errorx during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+10. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packRetry`  
 Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
 
