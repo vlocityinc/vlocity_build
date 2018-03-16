@@ -3,13 +3,13 @@
 
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
-### Table of Contents
+## Table of Contents
 * [Installation Instructions](#installation-instructions)
 * [Getting Started](#getting-started)
 * [Step by Step Guide](#step-by-step-guide)
-    * [Simple Export](#simple-export)
-    * [Simple Deploy](#simple-deploy)
-    * [Org to Org Migration](#org-to-org-migration)
+  * [Simple Export](#simple-export)
+  * [Simple Deploy](#simple-deploy)
+  * [Org to Org Migration](#org-to-org-migration)
 * [The Job File](#the-job-file)
   * [Example Job File](#example-job-file)
 * [Troubleshooting](#troubleshooting)
@@ -22,16 +22,17 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 # Installation Instructions
 -----------
 
-## Install Node.js  
-Download and Install Node at:  
-https://nodejs.org/  
+## Install Node.js
+Download and Install Node at:
 
-This project requires Node Version 8+.  
+https://nodejs.org/
 
-Use `node -v` to find out which version you are on.  
+This project requires Node Version 8+.
 
-Inside the Git repository you have cloned run the following command:  
-```bash   
+Use `node -v` to find out which version you are on.
+
+Inside the Git repository you have cloned run the following command:
+```bash
 npm install
 npm link
 vlocity help
@@ -43,8 +44,8 @@ This should show a list of all available commands confirming that the project ha
 ------------
 To begin, create your own property files for your Source and Target Salesforce Orgs with the following:
 ```java
-sf.username: <Salesforce Username>  
-sf.password: <Salesforce Password>  
+sf.username: <Salesforce Username>
+sf.password: <Salesforce Password>
 ```
 When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the below line to your property file:
 ```java
@@ -54,7 +55,7 @@ sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy ho
 It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
 ## Running the Process
-Commands follow the syntax:  
+Commands follow the syntax:
 ```bash
 vlocity packExport -propertyfile <filepath> -job <filepath>
 ```
@@ -64,7 +65,7 @@ The propertyfile is used to provide the credentials of the org you will connect 
 ## Job File
 The Job File used to define the project location and the various settings for running a DataPacks Export / Deploy.
 
-Step by Step Guide
+# Step by Step Guide
 ------------
 Once you have your `build_source.properties` file setup, you can get started with mirgation with the following: 
 
@@ -442,6 +443,25 @@ manifest:
 
 **Due to the limitation that not all DataPackTypes support the manifest format. It is best to use the Export by Queries syntax**
 
+## Advanced: Export Individual SObject Records
+You can export individual SObjects by using the VlocityDataPackType SObject. This will save each SObject as its own file. 
+
+```bash
+vlocity packExport -type SObject -query 'SELECT Id from PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
+```
+
+This will export the PricebookEntries into a folder called SObject_PricebookEntry.
+
+This method is also very good for adding Custom Settings to Version Control, however it requires creating Matching Key Records for your Custom Setting. See [Creating Custom Matching Keys] (#creating-custom-matching-keys) for more information on Matching Keys. You can specify a Custom Setting in your job file as follows:
+
+```yaml
+queries: 
+  - VlocityDataPackType: SObject 
+    query: Select Id from MyCustomSetting__c' 
+```
+
+This will export the MyCustomSetting__c records into a folder called SObject_MyCustomSetting.
+
 ## BuildFile  
 This specifies a File to create from the DataPack Directory. It could then be uploaded through the DataPacks UI in a Salesforce Org.
 ```yaml
@@ -673,6 +693,8 @@ DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define 
 | Composite Unique Field | CompositeUniqueFieldName__c | Leave empty - Reserved for future use |  
 
 Create these keys if you want to support connections between SObject Id fields that are not already supported by DataPacks, or if you would like to change the Vlocity Default for any SObject. Matching Keys created outside the Managed Package will always override ones contained inside (Post Vlocity v15).
+
+For Custom Settings `MatchingKeyFields__c` should always be `Name`.
 
 ### Current Matching Keys
 | Object API Name | Matching Key Fields |       
