@@ -31,14 +31,14 @@ This project requires Node Version 8+.
 
 Use `node -v` to find out which version you are on.
 
-Inside the Git repository you have cloned run the following command:
+## Install Vlocity Build
+You can install and use this project without cloning the repo using the following commands:
 ```bash
-npm install
-npm link
+npm install --global https://github.com/vlocityinc/vlocity_build
 vlocity help
 ```
 
-This should show a list of all available commands confirming that the project has been setup successfully.
+This should show a list of all available commands confirming that the project has been setup successfully. You can now run this command from any folder.
 
 # Getting Started
 ------------
