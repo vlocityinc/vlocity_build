@@ -447,12 +447,12 @@ manifest:
 You can export individual SObjects by using the VlocityDataPackType SObject. This will save each SObject as its own file. 
 
 ```bash
-vlocity packExport -type SObject -query 'SELECT Id from PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
+vlocity packExport -type SObject -query "SELECT Id from PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
 ```
 
 This will export the PricebookEntries into a folder called SObject_PricebookEntry.
 
-This method is also very good for adding Custom Settings to Version Control, however it requires creating Matching Key Records for your Custom Setting. See [Creating Custom Matching Keys] (#creating-custom-matching-keys) for more information on Matching Keys. You can specify a Custom Setting in your job file as follows:
+This method is also very good for adding Custom Settings to Version Control, however it requires creating Matching Key Records for your Custom Setting. See [Creating Custom Matching Keys](#creating-custom-matching-keys) for more information on Matching Keys. You can specify a Custom Setting in your job file as follows:
 
 ```yaml
 queries: 
