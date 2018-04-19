@@ -52,6 +52,11 @@ When you (or your CI/CD server) is behind a proxy you can specify the proxy URL 
 sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy hostname>[:<Proxy Port>]
 ```
 
+Additionally there is support for OAuth style information sent through the command line or property file:
+```bash
+vlocity packExport -sf.authToken <authToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
+```
+
 It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
 ## Running the Process
@@ -168,11 +173,14 @@ If your Export fails midway through due to conenction issues, you can also the f
 `vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
 7. Ensure High Data Quality in the Target Org by running:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js`  
-8. Update the DataPack Settings in the Target Org:  
+8. Ensure your Vlocity Metadata is high quality by running:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject` 
+This command helps fix any broken references in the project.  
+9. Update the DataPack Settings in the Target Org:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings`
-9. Run the deploy:  
+10. Run the deploy:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy`
-10. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+11. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packRetry`  
 Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
 
@@ -186,6 +194,7 @@ vlocity -propertyfile build_source.properties -job EPC.yaml packExport
 
 # Target Org
 vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject
 vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings
 vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
 vlocity -propertyfile build_target.properties -job EPC.yaml packRetry
@@ -193,7 +202,7 @@ vlocity -propertyfile build_target.properties -job EPC.yaml packRetry
 
 # The Job File
 ------------
-A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.   
+A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
 
 **The Default Job Settings will automatically be used if not explicitly specified in your file, and it is best to not add settings to the file unless you want to change them from the defaults.**
 
@@ -205,10 +214,10 @@ projectPath: ../myprojectPath
 The projectPath can be the absolute path to a folder or the relative path from where you run the vlocity command.  
 
 ## What will be Exported?
-By default, all data will be exported from the org when running the `packExport` command. To narrow the exported data, you can define any Salesforce SOQL query that returns the Id of records you would like to export. 
+By default, all data will be exported from the org when running the `packExport` command. To narrow the exported data, you can define any Salesforce SOQL query that returns the Id of records you would like to export.
 ```yaml
-queries: 
-  - VlocityDataPackType: DataRaptor 
+queries:
+  - VlocityDataPackType: DataRaptor
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name LIKE '%Migration' LIMIT 1
 ```
 
@@ -225,16 +234,16 @@ queries:
 
 When creating your own Job File, the **only** setting that is very important is the projectPath which specifies where the DataPacks files will be written.
 
-All other settings will use the Default Project Settings.  
+All other settings will use the Default Project Settings.
 
 By Default, all DataPack Types will be Exported when running packExport, so to override the Export data, it is possible to use predefined queries, or write your own.
 
 ## Predefined vs Explicit Queries
 Vlocity has defined full queries for all Supported DataPack Types which will export all currently Active Vlocity Metadata. **This is the most simple way to define your own Job File queries.**
 
-To Export All DataRaptors and OmniScripts from the Org use: 
+To Export All DataRaptors and OmniScripts from the Org use:
 ```yaml
-projectPath: ./myprojectPath    
+projectPath: ./myprojectPath
 queries:
   - DataRaptor
   - OmniScript
@@ -277,7 +286,14 @@ Errors occurring during Export will likely result in Errors during deploy. But n
 
 In this Error the Product being deployed is the iPhone with Global Key `02d3feaf-a390-2f57-a08c-2bfc3f9b7333` and the error is stating that one of the Product Child Items could not find the referenced product with Global Key `db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This means the other Product must also be deployed. 
 
-Additionally, Deploys will run all of the Triggers associated with Objects during their import. As their are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
+Additionally, Deploys will run all of the Triggers associated with Objects during their import. As there are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
+
+Some errors are related to potential data quality issues:
+`Product2/adac7afa-f741-80dd-9a69-f8a5aa61eb56 >> IPhone Charger - Error - Product you are trying to add is missing a Pricebook Entry in pricebook >>2018 Pricebook<< Please add product to pricebook and try again`
+
+While not clear from the wording, this error indicates that one of the Child Products being added to this Product will potentially cause issues because the Child Product is not in the 2018 Pricebook. To workaround this issue it is most simple to disable temporarily disable the listed Pricebook. This error is generally caused by a cascading failure and can also be solved by deploying the listed pricebook on its own with the command:
+
+`vlocity packDeploy -manifest '["Pricebook2/2018 Pricebook"]'`
 
 ## Cleaning Bad Data
 This tool includes a script to help find and eliminate "bad data". It can be run with the following command:
@@ -399,7 +415,7 @@ The Job File has a number of additonal runtime settings that can be used to defi
 projectPath: ../my-project # Where the project will be contained. Use . for this folder. 
                            # The Path is always relative to where you are running the vlocity command, 
                            # not this yaml file
-                           
+
 expansionPath: datapack-expanded # The Path relative to the projectPath to insert 
                                  # the expanded files. Also known as the DataPack Directory 
                                  # in this Doecumentation
@@ -482,29 +498,51 @@ With this default setting, the Apex Code in DeativateTemplatesAndLayouts.cls wil
 ## Additional Options 
 The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
 
-## All Options 
+## Job Options 
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
-| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
-| manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
-| delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
-| maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000
-| defaultMaxParallel | The number of parallel processes to use for export | Integer | 1
-| exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
+| addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
+| buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
+| defaultMaxParallel | The number of parallel processes to use for export | Integer | 1 |
+| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
 | continueAfterError | Don't end vlocity job on error | Boolean | false |
+| delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
+| exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
+| expansionPath | Secondary path after projectPath to expand the data for the Job | String | . |
+| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
+| manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
+| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
+| maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
+| processMultiple | When false each Export or Import will run individually | Boolean | true |
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
 | supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
-| addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
-| buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
 
-## DataPacks API
+## Vlocity Build Options
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
-| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
-| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
-| processMultiple | When false each Export or Import will run individually | Boolean | true |
+| apex | Apex Class to run with the runApex command | String | none |
+| folder | Path to folder containing Apex Files when using the runApex command | String | none |
+| javascript | Path to javascript file to run when using the runJavaScript command | String | none |
+| json | Output the result of the Job as JSON Only. Used in CLI API applications | Boolean | false |
+| json-pretty | Output the result of the Job as more readable JSON Only. Used in CLI API applications | Boolean | false |
+| job | Path to job file | String | none |
+| manifest | JSON of VlocityDataPackKeys to be processed | JSON | none | 
+| nojob | Run command without specifying a Job File. Will use all default settings | Boolean | false |
+| propertyfile | Path to propertyfile which can also contain any Options | String | build.properties |
+| query | SOQL Query used for packExportSingle command | String | none |
+| queryAll | Query all default types. Overrides any project settings | Boolean | false |
+| sandbox | Set sf.loginUrl to https://test.salesforce.com | Boolean | false | 
+| sf.accessToken | Salesforce Access Token when using OAuth info | String | none |
+| sf.instanceUrl | Salesforce Instance URL when using OAuth info | String | none |
+| sf.loginUrl | Salesforce Login URL when sf.username + sf.password | String | https://login.salesforce.com |
+| sf.password | Salesforce password + security token when using sf.username | String | none |
+| sf.sessionId | Salesforce Session Id when using OAuth info | String | none |
+| sf.username | Salesforce username when using sf.password | String | none |
+| type | DataPack Type used for packExportSingle command | String | none |
+| verbose | Show additional logging statements | Boolean | false |
+| version | Show Vlocity Build Tool Version | Boolean | false |
 
 # Supported DataPack Types
 These types are what would be specified when creating a Query or Manifest for the Job. 

@@ -11,7 +11,7 @@ delete: true
 activate: true
 compileOnBuild: true
 maxDepth: -1
-defaultMaxParallel: 10
+defaultMaxParallel: 5
 exportPacksMaxSize: 10
 useAllRelationships: false
 ignoreAllErrors: false

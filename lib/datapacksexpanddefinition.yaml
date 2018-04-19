@@ -20,10 +20,8 @@ DataPacks:
       - CustomJavaScript__c
   ObjectClass:
     HeadersOnly: true
-    SupportParallel: false
   ObjectLayout:
     DoNotExpand: true
-    SupportParallel: false
   OmniScript:
     DisplayName:
     - Type
@@ -35,25 +33,22 @@ DataPacks:
   PriceList:
     HeadersOnly: true
     PaginationSize: 500
-    SupportParallel: false
   Pricebook2:
     HeadersOnly: All
     PaginationSize: 500
-    SupportParallel: false
   Product2:
     HeadersOnly: true
     PricebookEntry:
       ListFileName:
       - _StandardPricebookEntry
-    SupportParallel: false
+    ApexSObjectTypeList:
+    - Product2
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
       - Name
       - ParentProductId__r.Name
       - ChildProductId__r.Name
-    SupportParallel: false
-  Promotion:
     SupportParallel: false
   SObject:
     HeadersOnly: Identical
@@ -516,7 +511,7 @@ SObjects:
   VlocityCard__c:
     Definition__c: json
     FilterFields:
-    - IsActive__c
+    - Active__c
     UnhashableFields:
     - Author__c
     - GlobalKey__c
