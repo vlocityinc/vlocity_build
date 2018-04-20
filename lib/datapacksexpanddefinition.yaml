@@ -43,6 +43,7 @@ DataPacks:
       - _StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
+    SupportParallel: false
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
@@ -82,6 +83,17 @@ SObjects:
   AttributeAssignment__c:
     FilterFields:
     - ObjectLink__c
+    - AttributeName__c
+    - CategoryCode__c
+    - CategoryName__c
+    - AttributeCloneable__c
+    - AttributeUniqueCode__c
+    - AttributeConfigurable__c
+    - AttributeDisplayName__c
+    - AttributeFilterable__c
+    - AttributeName__c
+    - CategoryDisplaySequence__c
+    - ValueInNumber__c
     JsonFields:
     - ValidValuesData__c
     SourceKeyDefinition:
