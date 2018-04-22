@@ -20,10 +20,8 @@ DataPacks:
       - CustomJavaScript__c
   ObjectClass:
     HeadersOnly: true
-    SupportParallel: false
   ObjectLayout:
     DoNotExpand: true
-    SupportParallel: false
   OmniScript:
     DisplayName:
     - Type
@@ -35,16 +33,16 @@ DataPacks:
   PriceList:
     HeadersOnly: true
     PaginationSize: 500
-    SupportParallel: false
   Pricebook2:
     HeadersOnly: All
     PaginationSize: 500
-    SupportParallel: false
   Product2:
     HeadersOnly: true
     PricebookEntry:
       ListFileName:
       - _StandardPricebookEntry
+    ApexSObjectTypeList:
+    - Product2
     SupportParallel: false
   ProductChildItem:
     ProductChildItem__c:
@@ -52,8 +50,6 @@ DataPacks:
       - Name
       - ParentProductId__r.Name
       - ChildProductId__r.Name
-    SupportParallel: false
-  Promotion:
     SupportParallel: false
   SObject:
     HeadersOnly: Identical
@@ -87,6 +83,17 @@ SObjects:
   AttributeAssignment__c:
     FilterFields:
     - ObjectLink__c
+    - AttributeName__c
+    - CategoryCode__c
+    - CategoryName__c
+    - AttributeCloneable__c
+    - AttributeUniqueCode__c
+    - AttributeConfigurable__c
+    - AttributeDisplayName__c
+    - AttributeFilterable__c
+    - AttributeName__c
+    - CategoryDisplaySequence__c
+    - ValueInNumber__c
     JsonFields:
     - ValidValuesData__c
     SourceKeyDefinition:
@@ -516,7 +523,7 @@ SObjects:
   VlocityCard__c:
     Definition__c: json
     FilterFields:
-    - IsActive__c
+    - Active__c
     UnhashableFields:
     - Author__c
     - GlobalKey__c

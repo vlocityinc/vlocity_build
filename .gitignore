@@ -9,3 +9,5 @@ node_modules/
 vlocity-temp/
 example_vlocity_build/
 test/testJobRunning/
+.vscode/
+.sfdx/
