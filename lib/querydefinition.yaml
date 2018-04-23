@@ -81,7 +81,7 @@ PricingVariable:
   query: Select Id, Name from %vlocity_namespace%__PricingVariable__c
 Product2:   
   VlocityDataPackType: Product2
-  query: Select Id, Name from Product2
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from Product2
 Promotion:
   VlocityDataPackType: Promotion
   query: Select Id, Name from %vlocity_namespace%__Promotion__c
