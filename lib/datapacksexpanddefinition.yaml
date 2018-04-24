@@ -370,9 +370,6 @@ SObjects:
     - Name
     - Product2Id__c
   OverrideDefinition__c:
-    FilterFields:
-    - ProductHierarchyPath__c
-    - GlobalKey__c
     NonUnique: true
     ReplacementFields:
       Name: _OverrideDefinition
