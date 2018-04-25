@@ -200,13 +200,20 @@ vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
 vlocity -propertyfile build_target.properties -job EPC.yaml packRetry
 ```
 
+### New Sandbox Orgs
+If you have recently installed the Vlocity Managed Package or created a Sandbox Org that is not a Full Copy Sandbox and have done *no* development this Salesforce Org, you should run the following command to load all the default Vlocity Metadata:
+```bash
+vlocity -propertyfile build_target.properties --nojob packUpdateSettings refreshVlocityBase
+```
+This will install the Base UI Templates, CPQ Base Templates, EPC Default Objects and any other default data delivered through Vlocity DataPacks. This command should only be run if the Org was not previously used for Vlocity Development.
+
 # The Job File
 ------------
 A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
 
 **The Default Job Settings will automatically be used if not explicitly specified in your file, and it is best to not add settings to the file unless you want to change them from the defaults.**
 
-The Job File's primary settings that you should define is specifying the folder that you would like to use to contain your project.  
+The Job File's primary settings that you should define is specifying the folder that you would like to use to contain your project.
 ```yaml
 projectPath: ../myprojectPath 
 ```
@@ -315,8 +322,9 @@ While there are protections against missing or duplicate Global Keys the logic i
 
 You can fix missing GlobalKeys by running the following command which will start a set of Batch Jobs to add Global Keys to any Objects which are missing them:
 ```bash
-vlocity -propertyfile <propertyfile> -job <job> runApex -apex AllGlobalKeysBatch.cls
+vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js
 ```
+This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
 
 However, when you are attempting to migrate data from one org to another where both orgs have missing GlobalKeys, but existing data that should not be duplicated, a different strategy may need to be used to produce GlobalKeys that match between orgs.
 
@@ -472,8 +480,8 @@ This method is also very good for adding Custom Settings to Version Control, how
 
 ```yaml
 queries: 
-  - VlocityDataPackType: SObject 
-    query: Select Id from MyCustomSetting__c' 
+  - VlocityDataPackType: SObject
+    query: Select Id from MyCustomSetting__c
 ```
 
 This will export the MyCustomSetting__c records into a folder called SObject_MyCustomSetting.
