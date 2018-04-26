@@ -17,6 +17,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT Id FROM vlocity_namespace__AttributeAssignment__c WHERE vlocity_namespace__GlobalKey__c = null', 
                 'SELECT Id FROM vlocity_namespace__ContextAction__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ContextDimension__c WHERE vlocity_namespace__GlobalKey__c = null',
+                'SELECT Id FROM vlocity_namespace__ContextMapping__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ContextScope__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__EntityFilter__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ObjectClass__c WHERE vlocity_namespace__GlobalKey__c = null',

@@ -168,9 +168,10 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   ContextMapping__c:
-    FilterFields:
-    - Name
-    NonUnique: true
+    SourceKeyDefinition:
+    - GlobalKey__c
+    ReplacementFields:
+      Name: GlobalKey__c
   ContextScope__c:
     FolderName:
     - GlobalKey__c
