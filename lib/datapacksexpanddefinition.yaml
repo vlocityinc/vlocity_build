@@ -1,4 +1,6 @@
 DataPacks:
+  EntityFilter:
+    MaxDeploy: 1
   IntegrationProcedure:
     DisplayName:
     - Type
