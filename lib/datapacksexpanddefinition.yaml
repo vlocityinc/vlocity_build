@@ -263,9 +263,9 @@ SObjects:
     - Index__c
   EntityFilter__c:
     FolderName:
-    - Name
+    - GlobalKey__c
     SourceKeyDefinition:
-    - Name
+    - GlobalKey__c
   ItemImplementation__c:
     FolderName:
     - Name
