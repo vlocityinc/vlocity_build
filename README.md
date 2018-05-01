@@ -541,6 +541,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | propertyfile | Path to propertyfile which can also contain any Options | String | build.properties |
 | query | SOQL Query used for packExportSingle command | String | none |
 | queryAll | Query all default types. Overrides any project settings | Boolean | false |
+| quiet | Don't log any output | Boolean | false |
 | sandbox | Set sf.loginUrl to https://test.salesforce.com | Boolean | false | 
 | sf.accessToken | Salesforce Access Token when using OAuth info | String | none |
 | sf.instanceUrl | Salesforce Instance URL when using OAuth info | String | none |
