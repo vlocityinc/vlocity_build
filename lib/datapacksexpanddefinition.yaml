@@ -103,6 +103,8 @@ SObjects:
     SourceKeyDefinition:
     - AttributeId__c
     - ObjectId__c
+    - _GlobalKey
+    - GlobalKey__c
   AttributeBinding__c:
     NonUnique: true
   AttributeCategory__c:
