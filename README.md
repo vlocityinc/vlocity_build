@@ -733,7 +733,7 @@ DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define 
 
 | Name | API Name | Description |   
 | --- | --- | --- |    
-| Matching Key Fields | MatchingKeyFields__c | Comma Separated list of Field API Names that define Uniqnuess |  
+| Matching Key Fields | MatchingKeyFields__c | Comma Separated list of Field API Names that define Uniqueness |  
 | Vlocity Matching Key Name | Name | Name of the Matching Key |  
 | Label | Label | Label of the Matching Key |  
 | Object API Name | ObjectAPIName__c | Full API Name of the SObject |  
