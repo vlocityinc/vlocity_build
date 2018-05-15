@@ -45,7 +45,7 @@ This should show a list of all available commands confirming that the project ha
 To begin, create your own property files for your Source and Target Salesforce Orgs with the following:
 ```java
 sf.username = < Salesforce Username >
-sf.password = < Salesforce Password >
+sf.password = < Salesforce Password + Security Token >
 sf.loginUrl = < https://login.salesforce.com or https://test.salesforce.com for Sandbox >
 ```
 When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the below line to your property file:
