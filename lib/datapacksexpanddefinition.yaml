@@ -362,7 +362,7 @@ SObjects:
     - OrchestrationPlanDefinitionId__c
     MatchingSourceKeyDefinition:
     - Name
-    - _OrchestrationPlanDefinition
+    - _%vlocity_namespace%__OrchestrationPlanDefinition__c
     - OrchestrationPlanDefinitionId__r.Name
     SourceKeyDefinition:
     - Name
@@ -495,7 +495,7 @@ SObjects:
   SystemInterface__c:
     MatchingSourceKeyDefinition:
     - Name
-    - _System
+    - _%vlocity_namespace%__System__c
     - SystemId__r.Name
     SourceKeyDefinition:
     - Name
