@@ -1,4 +1,6 @@
 DataPacks:
+  Attachment:
+    ChildrenLimit: 10
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -65,6 +67,7 @@ DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
+  ChildrenLimit: 100
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
@@ -272,6 +275,15 @@ SObjects:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
+  InterfaceImplementation__c:
+    FolderName: 
+    - Name
+    SourceKeyDefinition:
+    - Name  
+  InterfaceImplementationDetail__c:
+    SourceKeyDefinition:
+    - InterfaceId__c
+    - Name
   ItemImplementation__c:
     FolderName:
     - Name
@@ -362,7 +374,7 @@ SObjects:
     - OrchestrationPlanDefinitionId__c
     MatchingSourceKeyDefinition:
     - Name
-    - _OrchestrationPlanDefinition
+    - _%vlocity_namespace%__OrchestrationPlanDefinition__c
     - OrchestrationPlanDefinitionId__r.Name
     SourceKeyDefinition:
     - Name
@@ -495,7 +507,7 @@ SObjects:
   SystemInterface__c:
     MatchingSourceKeyDefinition:
     - Name
-    - _System
+    - _%vlocity_namespace%__System__c
     - SystemId__r.Name
     SourceKeyDefinition:
     - Name

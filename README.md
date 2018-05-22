@@ -455,7 +455,7 @@ exportBuildFile: AllDataPacksExported.json
 This file is not Importable to a Salesforce Org through the DataPacks API, but could be used to see the full raw output from a Salesforce Org. Instead, use the BuildFile task to create an Importable file.
 
 ## Advanced: Export by Manifest
-The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard, 
+The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard
 ```yaml
 manifest: 
   VlocityCard:
@@ -559,54 +559,55 @@ These types are what would be specified when creating a Query or Manifest for th
 
 | VlocityDataPackType | Primary SObject | Label | All SObjects |
 | ------------- |-------------| ----- | ---- |
-| Attachment | Attachment | Attachment | Attachment |
-| AttributeAssignmentRule | AttributeAssignmentRule__c | Attribute Assignment Rule | AttributeAssignmentRule__c |
-| AttributeCategory | AttributeCategory__c | Attribute Category | AttributeCategory__c<br>Attribute__c |
-| CalculationMatrix | CalculationMatrix__c | Calculation Matrix | CalculationMatrix__c<br>CalculationMatrixVersion__c<br>CalculationMatrixRow__c |
-| CalculationProcedure | CalculationProcedure__c | Calculation Procedure | CalculationProcedure__c<br>CalculationProcedureVersion__c<br>CalculationProcedureStep__c |
-| Catalog | Catalog__c | Catalog | Catalog__c<br>CatalogRelationship__c<br>CatalogProductRelationship__c |
-| ContextAction | ContextAction__c | Context Action | ContextAction__c |
-| ContextDimension | ContextDimension__c | Vlocity Context Dimension | ContextDimension__c<br>ContextMapping__c<br>ContextMappingArgument__c |
-| ContextScope | ContextScope__c | Context Scope | ContextScope__c |
-| ContractType | ContractType__c | Contract Type | ContractType__c<br>ContractTypeSetting__c |
-| DataRaptor | DRBundle__c | DataRaptor Interface | DRBundle__c<br>DRMapItem__c |
-| Document | Document | Document (Salesforce Standard Object) | Document |
-| DocumentClause | DocumentClause__c | Document Clause | DocumentClause__c |
-| DocumentTemplate | DocumentTemplate__c | Document Template | DocumentTemplate__c<br>DocumentTemplateSection__c<br>DocumentTemplateSectionCondition__c |
-| EntityFilter | EntityFilter__c | Entity Filter | EntityFilter__c<br>EntityFilterCondition__c<br>EntityFilterMember__c<br>EntityFilterConditionArgument__c |
-| ItemImplementation | ItemImplementation__c | Item Implementation | ItemImplementation__c |
-| ManualQueue | ManualQueue__c | Manual Queue | ManualQueue__c |
-| ObjectClass | ObjectClass__c | Object Class | ObjectClass__c<br>ObjectFieldAttribute__c<br>AttributeBinding__c<br>AttributeAssignment__c |
-| ObjectContextRule | ObjectRuleAssignment__c | Vlocity Object Rule Assignment | ObjectRuleAssignment__c |
-| ObjectLayout | ObjectLayout__c | Object Layout | ObjectLayout__c<br>ObjectFacet__c<br>ObjectSection__c<br>ObjectElement__c |
-| OmniScript | OmniScript__c | OmniScript | OmniScript__c<br>Element__c |
-| OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c | Orchestration Dependency Definition | OrchestrationDependencyDefinition__c |
-| OrchestrationItemDefinition | OrchestrationItemDefinition__c | Orchestration Item Definition | OrchestrationItemDefinition__c |
-| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c | Orchestration Plan Definition | OrchestrationPlanDefinition__c |
-| Pricebook2 | Pricebook2 | Pricebook (Salesforce Standard Object) | Pricebook2<br>PricebookEntry |
-| PriceList | PriceList__c | Price List | PriceList__c<br>PriceListEntry__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
-| PricingVariable | PricingVariable__c | Pricing Variable | PricingVariable__c |
-| Product2 | Product2 | Product (Salesforce Standard Object) | Product2<br>PricebookEntry(In the Standard Pricebook)<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
-| Promotion | Promotion__c | Promotion | Promotion__c<br>PromotionItem__c |
-| QueryBuilder | QueryBuilder__c | Query Builder | QueryBuilder__c<br>QueryBuilderDetail__c |
-| Rule | Rule__c | Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
-| StoryObjectConfiguration | StoryObjectConfiguration__c | Story Object Configuration (Custom Setting) | StoryObjectConfiguration__c |
-| System | System__c | System | System__c<br>SystemInterface__c |
-| TimePlan | TimePlan__c | Time Plan | TimePlan__c |
-| TimePolicy | TimePolicy__c | Time Policy | TimePolicy__c |
-| UIFacet | UIFacet__c | UI Facet | UIFacet__c |
-| UISection | UISection__c | UI Section | UISection__c |
-| VlocityAction | VlocityAction__c | Vlocity Action | VlocityAction__c |
-| VlocityAttachment | VlocityAttachment__c | Vlocity Attachment | VlocityAttachment__c |
-| VlocityCard | VlocityCard__c | Vlocity Card | VlocityCard__c |
-| VlocityFunction | VlocityFunction__c | Vlocity Function | VlocityFunction__c<br>VlocityFunctionArgument__c |
-| VlocityPicklist | Picklist__c | Vlocity Picklist | Picklist__c<br>PicklistValue__c |
-| VlocitySearchWidgetSetup | VlocitySearchWidgetSetup__c | Vlocity Interaction Launcher | VlocitySearchWidgetSetup__c<br>VlocitySearchWidgetActionsSetup__c |
-| VlocityStateModel | VlocityStateModel__c | Vlocity State Model | VlocityStateModel__c<br>VlocityStateModelVersion__c<br>VlocityState__c<br>VlocityStateTransition__c |
-| VlocityUILayout | VlocityUILayout__c | Vlocity UI Layout | VlocityUILayout__c |
-| VlocityUITemplate | VlocityUITemplate__c | Vlocity UI Template | VlocityUITemplate__c |
-| VqMachine | VqMachine__c | Vlocity Intelligence Machine | VqMachine__c<br>VqMachineResource__c |
-| VqResource | VqResource__c | Vlocity Intelligence Resource | VqResource__c<br>Attachment<br>AttributeAssignment__c |
+| Attachment | Attachment |
+| AttributeAssignmentRule | AttributeAssignmentRule__c |
+| AttributeCategory | AttributeCategory__c<br>Attribute__c |
+| CalculationMatrix | CalculationMatrix__c<br>CalculationMatrixVersion__c<br>CalculationMatrixRow__c |
+| CalculationProcedure | CalculationProcedure__c<br>CalculationProcedureVersion__c<br>CalculationProcedureStep__c |
+| Catalog | Catalog__c<br>CatalogRelationship__c<br>CatalogProductRelationship__c |
+| ContextAction | ContextAction__c |
+| ContextDimension | ContextDimension__c<br>ContextMapping__c<br>ContextMappingArgument__c |
+| ContextScope | ContextScope__c |
+| ContractType | ContractType__c<br>ContractTypeSetting__c |
+| DataRaptor | DRBundle__c<br>DRMapItem__c |
+| Document<br>(Salesforce Standard Object) | Document |
+| DocumentClause | DocumentClause__c |
+| DocumentTemplate | DocumentTemplate__c<br>DocumentTemplateSection__c<br>DocumentTemplateSectionCondition__c |
+| EntityFilter | EntityFilter__c<br>EntityFilterCondition__c<br>EntityFilterMember__c<br>EntityFilterConditionArgument__c |
+| IntegrartionProcedure | OmniScript__c<br>Element__c |
+| ItemImplementation | ItemImplementation__c |
+| ManualQueue | ManualQueue__c |
+| ObjectClass | ObjectClass__c<br>ObjectFieldAttribute__c<br>AttributeBinding__c<br>AttributeAssignment__c |
+| ObjectContextRule<br>(Vlocity Object Rule Assignment) | ObjectRuleAssignment__c |
+| ObjectLayout | ObjectLayout__c<br>ObjectFacet__c<br>ObjectSection__c<br>ObjectElement__c |
+| OmniScript | OmniScript__c<br>Element__c |
+| OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
+| OrchestrationItemDefinition | OrchestrationItemDefinition__c |
+| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
+| Pricebook2<br>(Salesforce Standard Object) | Pricebook2<br>PricebookEntry |
+| PriceList | PriceList__c<br>PriceListEntry__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
+| PricingVariable | PricingVariable__c |
+| Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry(In the Standard Pricebook)<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
+| Promotion | Promotion__c<br>PromotionItem__c |
+| QueryBuilder | QueryBuilder__c<br>QueryBuilderDetail__c |
+| Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
+| StoryObjectConfiguration<br>(Custom Setting) | StoryObjectConfiguration__c |
+| System | System__c<br>SystemInterface__c |
+| TimePlan | TimePlan__c |
+| TimePolicy | TimePolicy__c |
+| UIFacet | UIFacet__c |
+| UISection | UISection__c |
+| VlocityAction | VlocityAction__c |
+| VlocityAttachment | VlocityAttachment__c |
+| VlocityCard | VlocityCard__c |
+| VlocityFunction | VlocityFunction__c<br>VlocityFunctionArgument__c |
+| VlocityPicklist | Picklist__c<br>PicklistValue__c |
+| VlocitySearchWidgetSetup<br>(Vlocity Interaction Launcher) | VlocitySearchWidgetSetup__c<br>VlocitySearchWidgetActionsSetup__c |
+| VlocityStateModel | VlocityStateModel__c<br>VlocityStateModelVersion__c<br>VlocityState__c<br>VlocityStateTransition__c |
+| VlocityUILayout | VlocityUILayout__c |
+| VlocityUITemplate | VlocityUITemplate__c |
+| VqMachine<br>(Vlocity Intelligence Machine) | VqMachine__c<br>VqMachineResource__c |
+| VqResource<br>(Vlocity Intelligence Resource) | VqResource__c<br>Attachment<br>AttributeAssignment__c |
 
 
 # Advanced

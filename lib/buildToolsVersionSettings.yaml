@@ -1,0 +1,15 @@
+latest: 2
+vlocity_cmt:
+- version: latest
+  PackageMajorVersion: 900
+  PackageMinorVersion: 85
+- version: 1
+  PackageMajorVersion: 0
+  PackageMinorVersion: 0
+vlocity_ins:
+- version: latest
+  PackageMajorVersion: 890
+  PackageMinorVersion: 56
+- version: 1
+  PackageMajorVersion: 0
+  PackageMinorVersion: 0
