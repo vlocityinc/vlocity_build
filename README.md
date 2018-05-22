@@ -557,8 +557,8 @@ The Job file additionally supports some Vlocity Build based options and the opti
 # Supported DataPack Types
 These types are what would be specified when creating a Query or Manifest for the Job. 
 
-| VlocityDataPackType | Primary SObject | Label | All SObjects |
-| ------------- |-------------| ----- | ---- |
+| VlocityDataPackType | All SObjects |
+| ------------- |-------------| 
 | Attachment | Attachment |
 | AttributeAssignmentRule | AttributeAssignmentRule__c |
 | AttributeCategory | AttributeCategory__c<br>Attribute__c |
