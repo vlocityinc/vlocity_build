@@ -1,6 +1,0 @@
-/*** MIXINS ***/
-@mixin clearfix {
-    &:after {
-        clear: both;
-    }
-}
