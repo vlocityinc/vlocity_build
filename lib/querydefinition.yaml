@@ -13,7 +13,10 @@ CalculationMatrix:
   query: Select Id, Name from %vlocity_namespace%__CalculationMatrix__c
 CalculationProcedure:
   VlocityDataPackType: CalculationProcedure
-  query: Select Id, Name from %vlocity_namespace%__CalculationProcedure__c  
+  query: Select Id, Name from %vlocity_namespace%__CalculationProcedure__c
+Catalog:
+  VlocityDataPackType: Catalog
+  query: Select Id, Name from %vlocity_namespace%__Catalog__c     
 ContextAction:
   VlocityDataPackType: ContextAction
   query: Select Id, Name from %vlocity_namespace%__ContextAction__c
@@ -42,6 +45,9 @@ IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
     = true AND %vlocity_namespace%__IsProcedure__c = true
+InterfaceImplementation:
+  VlocityDataPackType: InterfaceImplementation
+  query: Select Id, Name from %vlocity_namespace%__InterfaceImplementation__c    
 ItemImplementation:
   VlocityDataPackType: ItemImplementation
   query: Select Id, Name from %vlocity_namespace%__ItemImplementation__c
@@ -76,12 +82,15 @@ PriceList:
 Pricebook2:
   VlocityDataPackType: Pricebook2
   query: Select Id, Name from Pricebook2
+PricingPlan:
+  VlocityDataPackType: PricingPlan
+  query: Select Id, Name from %vlocity_namespace%__PricingPlan__c
 PricingVariable:
   VlocityDataPackType: PricingVariable
   query: Select Id, Name from %vlocity_namespace%__PricingVariable__c
 Product2:   
   VlocityDataPackType: Product2
-  query: Select Id, Name from Product2
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from Product2
 Promotion:
   VlocityDataPackType: Promotion
   query: Select Id, Name from %vlocity_namespace%__Promotion__c

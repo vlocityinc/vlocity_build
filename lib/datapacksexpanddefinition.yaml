@@ -1,4 +1,8 @@
 DataPacks:
+  Attachment:
+    ChildrenLimit: 10
+  EntityFilter:
+    MaxDeploy: 1
   IntegrationProcedure:
     DisplayName:
     - Type
@@ -20,10 +24,8 @@ DataPacks:
       - CustomJavaScript__c
   ObjectClass:
     HeadersOnly: true
-    SupportParallel: false
   ObjectLayout:
     DoNotExpand: true
-    SupportParallel: false
   OmniScript:
     DisplayName:
     - Type
@@ -32,19 +34,21 @@ DataPacks:
     - Type__c
     - SubType__c
     - Language__c
+    SupportParallel: 
+      IsReusable__c: false
   PriceList:
     HeadersOnly: true
-    PaginationSize: 300
-    SupportParallel: false
+    PaginationSize: 500
   Pricebook2:
     HeadersOnly: All
     PaginationSize: 500
-    SupportParallel: false
   Product2:
     HeadersOnly: true
     PricebookEntry:
       ListFileName:
       - _StandardPricebookEntry
+    ApexSObjectTypeList:
+    - Product2
     SupportParallel: false
   ProductChildItem:
     ProductChildItem__c:
@@ -52,8 +56,6 @@ DataPacks:
       - Name
       - ParentProductId__r.Name
       - ChildProductId__r.Name
-    SupportParallel: false
-  Promotion:
     SupportParallel: false
   SObject:
     HeadersOnly: Identical
@@ -65,6 +67,7 @@ DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
+  ChildrenLimit: 100
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
@@ -87,11 +90,24 @@ SObjects:
   AttributeAssignment__c:
     FilterFields:
     - ObjectLink__c
+    - AttributeName__c
+    - CategoryCode__c
+    - CategoryName__c
+    - AttributeCloneable__c
+    - AttributeUniqueCode__c
+    - AttributeConfigurable__c
+    - AttributeDisplayName__c
+    - AttributeFilterable__c
+    - AttributeName__c
+    - CategoryDisplaySequence__c
+    - ValueInNumber__c
     JsonFields:
     - ValidValuesData__c
     SourceKeyDefinition:
     - AttributeId__c
     - ObjectId__c
+    - _GlobalKey
+    - GlobalKey__c
   AttributeBinding__c:
     NonUnique: true
   AttributeCategory__c:
@@ -161,9 +177,10 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   ContextMapping__c:
-    FilterFields:
-    - Name
-    NonUnique: true
+    SourceKeyDefinition:
+    - GlobalKey__c
+    ReplacementFields:
+      Name: GlobalKey__c
   ContextScope__c:
     FolderName:
     - GlobalKey__c
@@ -255,8 +272,17 @@ SObjects:
     - Index__c
   EntityFilter__c:
     FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c
+  InterfaceImplementation__c:
+    FolderName: 
     - Name
     SourceKeyDefinition:
+    - Name  
+  InterfaceImplementationDetail__c:
+    SourceKeyDefinition:
+    - InterfaceId__c
     - Name
   ItemImplementation__c:
     FolderName:
@@ -348,7 +374,7 @@ SObjects:
     - OrchestrationPlanDefinitionId__c
     MatchingSourceKeyDefinition:
     - Name
-    - _OrchestrationPlanDefinition
+    - _%vlocity_namespace%__OrchestrationPlanDefinition__c
     - OrchestrationPlanDefinitionId__r.Name
     SourceKeyDefinition:
     - Name
@@ -363,9 +389,6 @@ SObjects:
     - Name
     - Product2Id__c
   OverrideDefinition__c:
-    FilterFields:
-    - ProductHierarchyPath__c
-    - GlobalKey__c
     NonUnique: true
     ReplacementFields:
       Name: _OverrideDefinition
@@ -484,7 +507,7 @@ SObjects:
   SystemInterface__c:
     MatchingSourceKeyDefinition:
     - Name
-    - _System
+    - _%vlocity_namespace%__System__c
     - SystemId__r.Name
     SourceKeyDefinition:
     - Name
@@ -516,7 +539,7 @@ SObjects:
   VlocityCard__c:
     Definition__c: json
     FilterFields:
-    - IsActive__c
+    - Active__c
     UnhashableFields:
     - Author__c
     - GlobalKey__c

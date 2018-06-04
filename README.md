@@ -3,12 +3,13 @@
 
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
-### Table of Contents
+## Table of Contents
 * [Installation Instructions](#installation-instructions)
 * [Getting Started](#getting-started)
 * [Step by Step Guide](#step-by-step-guide)
-    * [Export](#export)
-    * [Deploy](#deploy)
+  * [Simple Export](#simple-export)
+  * [Simple Deploy](#simple-deploy)
+  * [Org to Org Migration](#org-to-org-migration)
 * [The Job File](#the-job-file)
   * [Example Job File](#example-job-file)
 * [Troubleshooting](#troubleshooting)
@@ -21,39 +22,46 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 # Installation Instructions
 -----------
 
-## Install Node.js  
-Download and Install Node at:  
-https://nodejs.org/  
+## Install Node.js
+Download and Install Node at:
 
-This project requires Node Version 8+.  
+https://nodejs.org/
 
-Use `node -v` to find out which version you are on.  
+This project requires Node Version 8+.
 
-Inside the Git repository you have cloned run the following command:  
-```bash   
-npm install
-npm link
+Use `node -v` to find out which version you are on.
+
+## Install Vlocity Build
+You can install and use this project without cloning the repo using the following commands:
+```bash
+npm install --global https://github.com/vlocityinc/vlocity_build
 vlocity help
 ```
 
-This should show a list of all available commands confirming that the project has been setup successfully.
+This should show a list of all available commands confirming that the project has been setup successfully. You can now run this command from any folder.
 
 # Getting Started
 ------------
 To begin, create your own property files for your Source and Target Salesforce Orgs with the following:
 ```java
-sf.username: <Salesforce Username>  
-sf.password: <Salesforce Password>  
+sf.username = < Salesforce Username >
+sf.password = < Salesforce Password + Security Token >
+sf.loginUrl = < https://login.salesforce.com or https://test.salesforce.com for Sandbox >
 ```
 When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the below line to your property file:
 ```java
 sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy hostname>[:<Proxy Port>]
 ```
 
+Additionally there is support for OAuth style information sent through the command line or property file:
+```bash
+vlocity packExport -sf.authToken <authToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
+```
+
 It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
 ## Running the Process
-Commands follow the syntax:  
+Commands follow the syntax:
 ```bash
 vlocity packExport -propertyfile <filepath> -job <filepath>
 ```
@@ -63,11 +71,11 @@ The propertyfile is used to provide the credentials of the org you will connect 
 ## Job File
 The Job File used to define the project location and the various settings for running a DataPacks Export / Deploy.
 
-Step by Step Guide
+# Step by Step Guide
 ------------
 Once you have your `build_source.properties` file setup, you can get started with mirgation with the following: 
 
-## Export
+## Simple Export
 Example.yaml shows the most Simple Job File that can be used to setup a project:
 ```yaml
 projectPath: ./example_vlocity_build 
@@ -104,7 +112,7 @@ Export success:
 
 This has exported data from the org specified in your `build_source.properties` file and written it to the folder `example_vlocity_build` specified in the `Example.yaml` file found at `dataPacksJobs/Example.yaml`
 
-## Deploy
+## Simple Deploy
 To deploy the data you just exported run the following command:  
 ```bash
 vlocity -propertyfile build_target.properties -job Example.yaml packDeploy
@@ -124,14 +132,89 @@ Remaining >> 0
 Elapsed Time >> 0m 4s  
 Salesforce Org >> target_org@vlocity.com   
 ```
+## Org to Org Migration
+When Exporting and Deploying between two Orgs use the following action plan:  
+1. Create Property Files for each Org. `build_source.properties` and `build_target.properties`  
+2. Create a Job File which identifies your projectPath and the queries for the DataPack Types you would like to export. To export the Vlocity Product Catalog, use the following EPC.yaml file:
+```yaml
+projectPath: vlocity
+queries:
+  - AttributeCategory
+  - CalculationProcedure
+  - ContextAction
+  - ContextDimension
+  - ContextScope
+  - EntityFilter
+  - ObjectClass
+  - ObjectContextRule
+  - ObjectLayout
+  - Pricebook2
+  - PriceList
+  - PricingVariable
+  - Product2
+  - Promotion
+  - Rule
+  - TimePlan
+  - TimePolicy
+  - UIFacet
+  - UISection
+  - VlocityFunction
+  - VlocityPicklist
+```
+3. Ensure High Data Quality in the Source Org by running:   
+`vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js`  
+4. Update your DataPack Settings in the source Org to the latest in the Vlocity Build Tool by running:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings`  
+This step will deliver changes to the DataPack settings outside the Vlocity Managed Package installation flow and should be run after upgrading/installing the package or on new Sandbox orgs.  
+5. Run the Export:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packExport`  
+6. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packRetry`  
+If your Export fails midway through due to conenction issues, you can also the following to pick the export back up where it left off:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
+7. Ensure High Data Quality in the Target Org by running:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js`  
+8. Ensure your Vlocity Metadata is high quality by running:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject` 
+This command helps fix any broken references in the project.  
+9. Update the DataPack Settings in the Target Org:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings`
+10. Run the deploy:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy`
+11. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml packRetry`  
+Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
+
+### Summary of Org to Org Migration
+All together the commands are:
+```bash
+# Source Org
+vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings
+vlocity -propertyfile build_source.properties -job EPC.yaml packExport
+
+# Target Org
+vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject
+vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings
+vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
+vlocity -propertyfile build_target.properties -job EPC.yaml packRetry
+```
+
+### New Sandbox Orgs
+If you have recently installed the Vlocity Managed Package or created a Sandbox Org that is not a Full Copy Sandbox and have done *no* development this Salesforce Org, you should run the following command to load all the default Vlocity Metadata:
+```bash
+vlocity -propertyfile build_target.properties --nojob packUpdateSettings refreshVlocityBase
+```
+This will install the Base UI Templates, CPQ Base Templates, EPC Default Objects and any other default data delivered through Vlocity DataPacks. This command should only be run if the Org was not previously used for Vlocity Development.
 
 # The Job File
 ------------
-A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.   
+A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
 
 **The Default Job Settings will automatically be used if not explicitly specified in your file, and it is best to not add settings to the file unless you want to change them from the defaults.**
 
-The Job File's primary settings that you should define is specifying the folder that you would like to use to contain your project.  
+The Job File's primary settings that you should define is specifying the folder that you would like to use to contain your project.
 ```yaml
 projectPath: ../myprojectPath 
 ```
@@ -139,10 +222,10 @@ projectPath: ../myprojectPath
 The projectPath can be the absolute path to a folder or the relative path from where you run the vlocity command.  
 
 ## What will be Exported?
-By default, all data will be exported from the org when running the `packExport` command. To narrow the exported data, you can define any Salesforce SOQL query that returns the Id of records you would like to export. 
+By default, all data will be exported from the org when running the `packExport` command. To narrow the exported data, you can define any Salesforce SOQL query that returns the Id of records you would like to export.
 ```yaml
-queries: 
-  - VlocityDataPackType: DataRaptor 
+queries:
+  - VlocityDataPackType: DataRaptor
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name LIKE '%Migration' LIMIT 1
 ```
 
@@ -159,16 +242,16 @@ queries:
 
 When creating your own Job File, the **only** setting that is very important is the projectPath which specifies where the DataPacks files will be written.
 
-All other settings will use the Default Project Settings.  
+All other settings will use the Default Project Settings.
 
 By Default, all DataPack Types will be Exported when running packExport, so to override the Export data, it is possible to use predefined queries, or write your own.
 
 ## Predefined vs Explicit Queries
 Vlocity has defined full queries for all Supported DataPack Types which will export all currently Active Vlocity Metadata. **This is the most simple way to define your own Job File queries.**
 
-To Export All DataRaptors and OmniScripts from the Org use: 
+To Export All DataRaptors and OmniScripts from the Org use:
 ```yaml
-projectPath: ./myprojectPath    
+projectPath: ./myprojectPath
 queries:
   - DataRaptor
   - OmniScript
@@ -205,14 +288,20 @@ Error >> VlocityUITemplate --- ShowProducts --- Not Found
 
 This "VlocityUITemplate --- ShowProducts --- Not Found" error during Export means that something, likely an OmniScript, has a reference to a VlocityUITemplate that is not currently Active or does not exist in the org as a VlocityUITemplate. In some cases the VlocityUITemplate for an OmniScript can actually be included inside the Visualforce Page in which the OmniScript is displayed. In that case, this error can be completely ignored. The DataRaptor Not Found means that likely someone deleted or changed the name of the DataRaptor being referenced without updating the OmniScript using it.
 
-Errors occurring during Export will likely result in Errors during deploy. But not always. Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:
-```
-Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
-```
+Errors occurring during Export will likely result in Errors during deploy. But not always. Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:  
+`Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
+`
 
 In this Error the Product being deployed is the iPhone with Global Key `02d3feaf-a390-2f57-a08c-2bfc3f9b7333` and the error is stating that one of the Product Child Items could not find the referenced product with Global Key `db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This means the other Product must also be deployed. 
 
-Additionally, Deploys will run all of the Triggers associated with Objects during their import. As their are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
+Additionally, Deploys will run all of the Triggers associated with Objects during their import. As there are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
+
+Some errors are related to potential data quality issues:
+`Product2/adac7afa-f741-80dd-9a69-f8a5aa61eb56 >> IPhone Charger - Error - Product you are trying to add is missing a Pricebook Entry in pricebook >>2018 Pricebook<< Please add product to pricebook and try again`
+
+While not clear from the wording, this error indicates that one of the Child Products being added to this Product will potentially cause issues because the Child Product is not in the 2018 Pricebook. To workaround this issue it is most simple to disable temporarily disable the listed Pricebook. This error is generally caused by a cascading failure and can also be solved by deploying the listed pricebook on its own with the command:
+
+`vlocity packDeploy -manifest '["Pricebook2/2018 Pricebook"]'`
 
 ## Cleaning Bad Data
 This tool includes a script to help find and eliminate "bad data". It can be run with the following command:
@@ -223,10 +312,10 @@ vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js
 This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
 
 ## External Ids and Global Keys 
-Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:
-```
+Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:  
+`
 Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG
-```
+`
 
 This means that Duplicates have been created in the org and the data must be cleaned up. 
 
@@ -234,8 +323,9 @@ While there are protections against missing or duplicate Global Keys the logic i
 
 You can fix missing GlobalKeys by running the following command which will start a set of Batch Jobs to add Global Keys to any Objects which are missing them:
 ```bash
-vlocity -propertyfile <propertyfile> -job <job> runApex -apex AllGlobalKeysBatch.cls
+vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js
 ```
+This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
 
 However, when you are attempting to migrate data from one org to another where both orgs have missing GlobalKeys, but existing data that should not be duplicated, a different strategy may need to be used to produce GlobalKeys that match between orgs.
 
@@ -331,8 +421,13 @@ The Job File has a number of additonal runtime settings that can be used to defi
 
 ## Basic  
 ```yaml
-projectPath: ../my-project # Where the project will be contained. Use . for this folder. The Path is always relative to where you are running the vlocity command, not this yaml file
-expansionPath: datapack-expanded # The Path relative to the projectPath to insert the expanded files. Also known as the DataPack Directory in this Doecumentation
+projectPath: ../my-project # Where the project will be contained. Use . for this folder. 
+                           # The Path is always relative to where you are running the vlocity command, 
+                           # not this yaml file
+
+expansionPath: datapack-expanded # The Path relative to the projectPath to insert 
+                                 # the expanded files. Also known as the DataPack Directory 
+                                 # in this Doecumentation
 ```
 
 ## Export 
@@ -360,7 +455,7 @@ exportBuildFile: AllDataPacksExported.json
 This file is not Importable to a Salesforce Org through the DataPacks API, but could be used to see the full raw output from a Salesforce Org. Instead, use the BuildFile task to create an Importable file.
 
 ## Advanced: Export by Manifest
-The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard, 
+The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard
 ```yaml
 manifest: 
   VlocityCard:
@@ -372,6 +467,25 @@ manifest:
 ```
 
 **Due to the limitation that not all DataPackTypes support the manifest format. It is best to use the Export by Queries syntax**
+
+## Advanced: Export Individual SObject Records
+You can export individual SObjects by using the VlocityDataPackType SObject. This will save each SObject as its own file. 
+
+```bash
+vlocity packExport -type SObject -query "SELECT Id from PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
+```
+
+This will export the PricebookEntries into a folder called SObject_PricebookEntry.
+
+This method is also very good for adding Custom Settings to Version Control, however it requires creating Matching Key Records for your Custom Setting. See [Creating Custom Matching Keys](#creating-custom-matching-keys) for more information on Matching Keys. You can specify a Custom Setting in your job file as follows:
+
+```yaml
+queries: 
+  - VlocityDataPackType: SObject
+    query: Select Id from MyCustomSetting__c
+```
+
+This will export the MyCustomSetting__c records into a folder called SObject_MyCustomSetting.
 
 ## BuildFile  
 This specifies a File to create from the DataPack Directory. It could then be uploaded through the DataPacks UI in a Salesforce Org.
@@ -393,82 +507,108 @@ With this default setting, the Apex Code in DeativateTemplatesAndLayouts.cls wil
 ## Additional Options 
 The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
 
-## All Options 
+## Job Options 
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
-| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
-| manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
-| delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
-| maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000
-| defaultMaxParallel | The number of parallel processes to use for export | Integer | 1
-| exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
+| addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
+| buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
+| defaultMaxParallel | The number of parallel processes to use for export | Integer | 1 |
+| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
 | continueAfterError | Don't end vlocity job on error | Boolean | false |
+| delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
+| exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
+| expansionPath | Secondary path after projectPath to expand the data for the Job | String | . |
+| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
+| manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
+| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
+| maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
+| processMultiple | When false each Export or Import will run individually | Boolean | true |
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
 | supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
-| addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
-| buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
 
-## DataPacks API
+## Vlocity Build Options
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
-| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
-| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
-| processMultiple | When false each Export or Import will run individually | Boolean | true |
+| apex | Apex Class to run with the runApex command | String | none |
+| folder | Path to folder containing Apex Files when using the runApex command | String | none |
+| javascript | Path to javascript file to run when using the runJavaScript command | String | none |
+| json | Output the result of the Job as JSON Only. Used in CLI API applications | Boolean | false |
+| json-pretty | Output the result of the Job as more readable JSON Only. Used in CLI API applications | Boolean | false |
+| job | Path to job file | String | none |
+| manifest | JSON of VlocityDataPackKeys to be processed | JSON | none | 
+| nojob | Run command without specifying a Job File. Will use all default settings | Boolean | false |
+| propertyfile | Path to propertyfile which can also contain any Options | String | build.properties |
+| query | SOQL Query used for packExportSingle command | String | none |
+| queryAll | Query all default types. Overrides any project settings | Boolean | false |
+| quiet | Don't log any output | Boolean | false |
+| sandbox | Set sf.loginUrl to https://test.salesforce.com | Boolean | false | 
+| sf.accessToken | Salesforce Access Token when using OAuth info | String | none |
+| sf.instanceUrl | Salesforce Instance URL when using OAuth info | String | none |
+| sf.loginUrl | Salesforce Login URL when sf.username + sf.password | String | https://login.salesforce.com |
+| sf.password | Salesforce password + security token when using sf.username | String | none |
+| sf.sessionId | Salesforce Session Id when using OAuth info | String | none |
+| sf.username | Salesforce username when using sf.password | String | none |
+| type | DataPack Type used for packExportSingle command | String | none |
+| verbose | Show additional logging statements | Boolean | false |
+| version | Show Vlocity Build Tool Version | Boolean | false |
 
 # Supported DataPack Types
 These types are what would be specified when creating a Query or Manifest for the Job. 
 
-| VlocityDataPackType | SObject | Label |
-| ------------- |-------------| ----- | 
-| Attachment | Attachment | Attachment | 
-| AttributeAssignmentRule | AttributeAssignmentRule__c | Attribute Assignment Rule | 
-| AttributeCategory | AttributeCategory__c | Attribute Category | 
-| CalculationMatrix | CalculationMatrix__c | Calculation Matrix | 
-| CalculationProcedure | CalculationProcedure__c | Calculation Procedure | 
-| ContextAction | ContextAction__c | Context Action | 
-| ContextDimension | ContextDimension__c | Vlocity Context Dimension | 
-| ContextScope | ContextScope__c | Context Scope | 
-| ContractType | ContractType__c | Contract Type | 
-| DataRaptor | DRBundle__c | DataRaptor Interface | 
-| Document | Document | Document (Salesforce Standard Object) | 
-| DocumentClause | DocumentClause__c | Document Clause | 
-| DocumentTemplate | DocumentTemplate__c | Document Template | 
-| EntityFilter | EntityFilter__c | Entity Filter | 
-| ItemImplementation | ItemImplementation__c | Item Implementation | 
-| ManualQueue | ManualQueue__c | Manual Queue | 
-| ObjectClass | ObjectClass__c | Object Layout | 
-| ObjectContextRule | ObjectRuleAssignment__c | Vlocity Object Rule Assignment | 
-| ObjectLayout | ObjectLayout__c | Object Layout | 
-| OmniScript | OmniScript__c | OmniScript | 
-| OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c | Orchestration Dependency Definition | 
-| OrchestrationItemDefinition | OrchestrationItemDefinition__c | Orchestration Item Definition | 
-| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c | Orchestration Plan Definition | 
-| Pricebook2 | Pricebook2 | Pricebook (Salesforce Standard Object) | 
-| PriceList | PriceList__c | Price List | 
-| PricingVariable | PricingVariable__c | Pricing Variable | 
-| Product2 | Product2 | Product (Salesforce Standard Object) | 
-| Promotion | Promotion__c | Promotion | 
-| QueryBuilder | QueryBuilder__c | Query Builder | 
-| Rule | Rule__c | Rule | 
-| StoryObjectConfiguration | StoryObjectConfiguration__c | Story Object Configuration (Custom Setting) | 
-| System | System__c | System | 
-| TimePlan | TimePlan__c | Time Plan | 
-| TimePolicy | TimePolicy__c | Time Policy | 
-| UIFacet | UIFacte__c | UI Facet | 
-| UISection | UISection__c | UI Section | 
-| VlocityAction | VlocityAction__c | Vlocity Action | 
-| VlocityAttachment | VlocityAttachment__c | Vlocity Attachment | 
-| VlocityCard | VlocityCard__c | Vlocity Card | 
-| VlocityFunction | VlocityFunction__c | Vlocity Function | 
-| VlocityPicklist | Picklist__c | Vlocity Picklist | 
-| VlocitySearchWidgetSetup | VlocitySearchWidgetSetup__c | Vlocity Interaction Launcher | 
-| VlocityStateModel | VlocityStateModel__c | Vlocity State Model | 
-| VlocityUILayout | VlocityUILayout__c | Vlocity UI Layout | 
-| VlocityUITemplate | VlocityUITemplate__c | Vlocity UI Template | 
-| VqMachine | VqMachine__c | Vlocity Intelligence Machine | 
-| VqResource | VqResource__c | Vlocity Intelligence Resource | 
+| VlocityDataPackType | All SObjects |
+| ------------- |-------------| 
+| Attachment | Attachment |
+| AttributeAssignmentRule | AttributeAssignmentRule__c |
+| AttributeCategory | AttributeCategory__c<br>Attribute__c |
+| CalculationMatrix | CalculationMatrix__c<br>CalculationMatrixVersion__c<br>CalculationMatrixRow__c |
+| CalculationProcedure | CalculationProcedure__c<br>CalculationProcedureVersion__c<br>CalculationProcedureStep__c |
+| Catalog | Catalog__c<br>CatalogRelationship__c<br>CatalogProductRelationship__c |
+| ContextAction | ContextAction__c |
+| ContextDimension | ContextDimension__c<br>ContextMapping__c<br>ContextMappingArgument__c |
+| ContextScope | ContextScope__c |
+| ContractType | ContractType__c<br>ContractTypeSetting__c |
+| DataRaptor | DRBundle__c<br>DRMapItem__c |
+| Document<br>(Salesforce Standard Object) | Document |
+| DocumentClause | DocumentClause__c |
+| DocumentTemplate | DocumentTemplate__c<br>DocumentTemplateSection__c<br>DocumentTemplateSectionCondition__c |
+| EntityFilter | EntityFilter__c<br>EntityFilterCondition__c<br>EntityFilterMember__c<br>EntityFilterConditionArgument__c |
+| IntegrartionProcedure | OmniScript__c<br>Element__c |
+| ItemImplementation | ItemImplementation__c |
+| ManualQueue | ManualQueue__c |
+| ObjectClass | ObjectClass__c<br>ObjectFieldAttribute__c<br>AttributeBinding__c<br>AttributeAssignment__c |
+| ObjectContextRule<br>(Vlocity Object Rule Assignment) | ObjectRuleAssignment__c |
+| ObjectLayout | ObjectLayout__c<br>ObjectFacet__c<br>ObjectSection__c<br>ObjectElement__c |
+| OmniScript | OmniScript__c<br>Element__c |
+| OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
+| OrchestrationItemDefinition | OrchestrationItemDefinition__c |
+| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
+| Pricebook2<br>(Salesforce Standard Object) | Pricebook2<br>PricebookEntry |
+| PriceList | PriceList__c<br>PriceListEntry__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
+| PricingVariable | PricingVariable__c |
+| Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry(In the Standard Pricebook)<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
+| Promotion | Promotion__c<br>PromotionItem__c |
+| QueryBuilder | QueryBuilder__c<br>QueryBuilderDetail__c |
+| Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
+| StoryObjectConfiguration<br>(Custom Setting) | StoryObjectConfiguration__c |
+| System | System__c<br>SystemInterface__c |
+| TimePlan | TimePlan__c |
+| TimePolicy | TimePolicy__c |
+| UIFacet | UIFacet__c |
+| UISection | UISection__c |
+| VlocityAction | VlocityAction__c |
+| VlocityAttachment | VlocityAttachment__c |
+| VlocityCard | VlocityCard__c |
+| VlocityFunction | VlocityFunction__c<br>VlocityFunctionArgument__c |
+| VlocityPicklist | Picklist__c<br>PicklistValue__c |
+| VlocitySearchWidgetSetup<br>(Vlocity Interaction Launcher) | VlocitySearchWidgetSetup__c<br>VlocitySearchWidgetActionsSetup__c |
+| VlocityStateModel | VlocityStateModel__c<br>VlocityStateModelVersion__c<br>VlocityState__c<br>VlocityStateTransition__c |
+| VlocityUILayout | VlocityUILayout__c |
+| VlocityUITemplate | VlocityUITemplate__c |
+| VqMachine<br>(Vlocity Intelligence Machine) | VqMachine__c<br>VqMachineResource__c |
+| VqResource<br>(Vlocity Intelligence Resource) | VqResource__c<br>Attachment<br>AttributeAssignment__c |
+
 
 # Advanced
 ---------------------
@@ -561,7 +701,7 @@ For a Query, each result from the Query will be a JSON Object with the appropria
 ```yaml
 queries: 
   - VlocityDataPackType: VlocityUITemplate 
-    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'campaign%' # SOQL 
+    query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'campaign%' 
 ```
 
 Becomes:
@@ -595,7 +735,7 @@ DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define 
 
 | Name | API Name | Description |   
 | --- | --- | --- |    
-| Matching Key Fields | MatchingKeyFields__c | Comma Separated list of Field API Names that define Uniqnuess |  
+| Matching Key Fields | MatchingKeyFields__c | Comma Separated list of Field API Names that define Uniqueness |  
 | Vlocity Matching Key Name | Name | Name of the Matching Key |  
 | Label | Label | Label of the Matching Key |  
 | Object API Name | ObjectAPIName__c | Full API Name of the SObject |  
@@ -604,6 +744,8 @@ DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define 
 | Composite Unique Field | CompositeUniqueFieldName__c | Leave empty - Reserved for future use |  
 
 Create these keys if you want to support connections between SObject Id fields that are not already supported by DataPacks, or if you would like to change the Vlocity Default for any SObject. Matching Keys created outside the Managed Package will always override ones contained inside (Post Vlocity v15).
+
+For Custom Settings `MatchingKeyFields__c` should always be `Name`.
 
 ### Current Matching Keys
 | Object API Name | Matching Key Fields |       

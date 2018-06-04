@@ -91,6 +91,22 @@
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__OverrideDefinition__c",
+        "%vlocity_namespace%__ConfigurationCategory__c": "PUT",
+        "%vlocity_namespace%__ConfigurationProcess__c": "Import",
+        "%vlocity_namespace%__ConfigurationType__c": "Action",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__PromotionId__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
+        "%vlocity_namespace%__MapId__c": "Promotion Migration4133",
+        "Name": "Promotion Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
         "%vlocity_namespace%__ConfigurationAttribute__c": "TimePolicy",
         "%vlocity_namespace%__ConfigurationCategory__c": "Parent",
         "%vlocity_namespace%__ConfigurationProcess__c": "Export",
@@ -447,6 +463,20 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__MapId__c": "Promotion Migration30",
+        "Name": "Promotion Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "Global",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
+        "%vlocity_namespace%__ConfigurationProcess__c": "All",
+        "%vlocity_namespace%__ConfigurationType__c": "Action",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__CompiledAttributeOverrideId__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration32311111",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
