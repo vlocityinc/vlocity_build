@@ -106,7 +106,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 seriesCallback();
             })
             .catch(function(err){
-                VlocityUtils.error('Error', err.stack);
+                VlocityUtils.error('Error', err);
                 seriesCallback();
             });
 

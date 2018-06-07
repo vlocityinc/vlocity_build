@@ -56,13 +56,13 @@ ManualQueue:
   query: Select Id, Name from %vlocity_namespace%__ManualQueue__c
 ObjectClass:
   VlocityDataPackType: ObjectClass
-  query: Select Id, Name from %vlocity_namespace%__ObjectClass__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ObjectClass__c
 ObjectContextRule:
   VlocityDataPackType: ObjectContextRule
   query: Select Id, Name from %vlocity_namespace%__ObjectRuleAssignment__c
 ObjectLayout:
   VlocityDataPackType: ObjectLayout
-  query: Select Id, Name from %vlocity_namespace%__ObjectLayout__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ObjectLayout__c
 OmniScript:
   VlocityDataPackType: OmniScript
   query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c

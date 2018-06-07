@@ -68,7 +68,7 @@
         "%vlocity_namespace%__FilterValue__c": "500",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 3,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__PriceListEntry__c",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration40",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration4",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -84,7 +84,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 3,
-        "%vlocity_namespace%__MapId__c": "PriceList Migration4",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration5",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -99,7 +99,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__OverridingPriceListEntryId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__OverrideDefinition__c",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration5",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration6",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -114,7 +114,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__RuleAssignment__c",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration6",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration7",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -130,7 +130,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
-        "%vlocity_namespace%__MapId__c": "PriceList Migration7",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration8",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -145,7 +145,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration16",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration17",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -160,7 +160,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration15",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration16",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -175,7 +175,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration8",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration9",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -190,7 +190,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration17",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration18",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -205,7 +205,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration14",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration15",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -220,7 +220,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration9",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration10",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -235,7 +235,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration13",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration14",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -250,7 +250,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration18",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration19",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -265,7 +265,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration10",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration11",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -280,7 +280,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration19",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration20",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -295,7 +295,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration21",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration22",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -310,7 +310,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration11",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration12",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -325,7 +325,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration20",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration21",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -340,7 +340,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration12",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration13",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -354,7 +354,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration32",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration33",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -368,7 +368,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration34",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration35",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -382,7 +382,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration33",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration34",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -396,7 +396,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration35",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration36",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -410,7 +410,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration25",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration26",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -424,7 +424,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration24",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration25",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -438,7 +438,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration28",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration29",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -452,7 +452,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration23",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration24",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -466,7 +466,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration29",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration30",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -480,7 +480,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration30",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration31",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -494,7 +494,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration26",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration27",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -508,7 +508,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration22",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration23",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -522,7 +522,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration31",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration32",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -536,7 +536,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "PriceList Migration27",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration28",
         "Name": "PriceList Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"

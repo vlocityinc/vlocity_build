@@ -40,7 +40,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 1,
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration4",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration6",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -55,6 +55,36 @@
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__VlocitySearchWidgetActionsSetup__c",
         "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration2",
+        "Name": "Vlocity Search Widget Setup Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "DataRaptor",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Sibling",
+        "%vlocity_namespace%__ConfigurationProcess__c": "Export",
+        "%vlocity_namespace%__ConfigurationType__c": "Relationship",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__VlocitySearchWidgetSetup__c:%vlocity_namespace%__InteractionCreationBundleName__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration5",
+        "Name": "Vlocity Search Widget Setup Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "IntegrationProcedure",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Sibling",
+        "%vlocity_namespace%__ConfigurationProcess__c": "Export",
+        "%vlocity_namespace%__ConfigurationType__c": "Relationship",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__VlocitySearchWidgetSetup__c:%vlocity_namespace%__InteractionCreationProcName__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration4",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -83,7 +113,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration15",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration17",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -97,7 +127,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration17",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration19",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -111,7 +141,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration16",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration18",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -125,7 +155,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration18",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration20",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -139,7 +169,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration8",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration10",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -153,7 +183,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration7",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration9",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -167,7 +197,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration11",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration13",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -181,7 +211,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration6",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration8",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -195,7 +225,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration12",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration14",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -209,7 +239,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration13",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration15",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -223,7 +253,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration9",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration11",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -237,7 +267,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration5",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration7",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -251,7 +281,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration14",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration16",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -265,7 +295,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration10",
+        "%vlocity_namespace%__MapId__c": "Vlocity Search Widget Setup Migration12",
         "Name": "Vlocity Search Widget Setup Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"

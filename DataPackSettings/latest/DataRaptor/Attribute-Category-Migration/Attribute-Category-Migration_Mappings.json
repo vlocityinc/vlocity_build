@@ -68,7 +68,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration15",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration14",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -82,7 +82,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration17",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration16",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -96,7 +96,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration16",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration15",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -110,7 +110,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration18",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration17",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -124,7 +124,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration8",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration7",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -138,7 +138,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration7",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration6",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -152,7 +152,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration11",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration10",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -166,7 +166,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration6",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration5",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -180,7 +180,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration12",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration11",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -194,7 +194,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration13",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration12",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -208,7 +208,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration9",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration8",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -222,7 +222,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration5",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration4",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -236,7 +236,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration14",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration13",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -250,7 +250,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Attribute Category Migration10",
+        "%vlocity_namespace%__MapId__c": "Attribute Category Migration9",
         "Name": "Attribute Category Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"

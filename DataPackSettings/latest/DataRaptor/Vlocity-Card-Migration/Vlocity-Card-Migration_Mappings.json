@@ -9,7 +9,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__Active__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 1,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__VlocityCard__c",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration454",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration1",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -39,7 +39,22 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Id",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 1,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__VlocityCard__c",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration1",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration2",
+        "Name": "Vlocity Card Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__VlocityCard__c",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
+        "%vlocity_namespace%__ConfigurationProcess__c": "Import",
+        "%vlocity_namespace%__ConfigurationType__c": "Action",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__Active__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration9",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -55,7 +70,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration4",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration5",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -70,7 +85,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration3",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration4",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -87,7 +102,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration6",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration7",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -105,7 +120,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration7",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration8",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -120,7 +135,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration2",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration3",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -135,21 +150,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration5",
-        "Name": "Vlocity Card Migration",
-        "VlocityDataPackType": "SObject",
-        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
-    },
-    {
-        "%vlocity_namespace%__ConfigurationAttribute__c": "Global",
-        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
-        "%vlocity_namespace%__ConfigurationProcess__c": "All",
-        "%vlocity_namespace%__ConfigurationType__c": "Action",
-        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__Active__c",
-        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
-        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
-        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration140",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration6",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -163,7 +164,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration18",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration20",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -177,7 +178,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration20",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration22",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -191,7 +192,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration19",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration21",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -205,7 +206,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration21",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration23",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -219,7 +220,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration11",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration13",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -233,7 +234,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration10",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration12",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -247,7 +248,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration14",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration16",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -261,7 +262,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration9",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration11",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -275,7 +276,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration15",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration17",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -289,7 +290,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration16",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration18",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -303,7 +304,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration12",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration14",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -317,7 +318,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration8",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration10",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -331,7 +332,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration17",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration19",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -345,7 +346,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration13",
+        "%vlocity_namespace%__MapId__c": "Vlocity Card Migration15",
         "Name": "Vlocity Card Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"

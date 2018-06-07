@@ -24,7 +24,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectClassId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__ObjectFieldAttribute__c",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration1214",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration1",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -39,7 +39,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__SubClassId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__ObjectFieldAttribute__c",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration1",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration2",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -54,7 +54,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__SubClassId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__ObjectFieldAttribute__c",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration122",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration3",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -70,7 +70,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
-        "%vlocity_namespace%__MapId__c": "Object Class Migration2",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration4",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -86,7 +86,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
-        "%vlocity_namespace%__MapId__c": "Object Class Migration28929",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration5",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -101,7 +101,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectClassId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 3,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeBinding__c",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration3",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration6",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -117,7 +117,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 3,
-        "%vlocity_namespace%__MapId__c": "Object Class Migration4",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration7",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -132,7 +132,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__AttributeId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration51",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration9",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -147,7 +147,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration5",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration8",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -163,7 +163,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
-        "%vlocity_namespace%__MapId__c": "Object Class Migration50",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration10",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -179,7 +179,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
-        "%vlocity_namespace%__MapId__c": "Object Class Migration6",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration11",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -194,7 +194,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration7",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration12",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -209,7 +209,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration8",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration13",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -224,7 +224,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration9",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration14",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -239,7 +239,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration11",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration16",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -254,7 +254,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration12",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration17",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -269,7 +269,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration10",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration15",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -283,7 +283,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration23",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration28",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -297,7 +297,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration25",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration30",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -311,7 +311,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration24",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration29",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -325,7 +325,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration26",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration31",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -339,7 +339,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration16",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration21",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -353,7 +353,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration15",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration20",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -367,7 +367,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration19",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration24",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -381,7 +381,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration14",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration19",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -395,7 +395,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration20",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration25",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -409,7 +409,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration21",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration26",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -423,7 +423,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration17",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration22",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -437,7 +437,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration13",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration18",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -451,7 +451,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration22",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration27",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -465,7 +465,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Object Class Migration18",
+        "%vlocity_namespace%__MapId__c": "Object Class Migration23",
         "Name": "Object Class Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"

@@ -868,7 +868,10 @@ OverrideSettings:
       UnhashableFields:
       - JSONAttribute__c
       - CategoryData__c
-      - IsConfigurable__c    
+      - IsConfigurable__c
+    vlocity_namespace__DRMapItem__c:
+      FilterFields: 
+        - vlocity_namespace__UpsertKey__c
 ```
 
 In this case the settings for Product2 include:

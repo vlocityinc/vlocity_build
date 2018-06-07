@@ -101,7 +101,22 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
-        "%vlocity_namespace%__MapId__c": "Promotion Migration4133",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration6",
+        "Name": "Promotion Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "Global",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
+        "%vlocity_namespace%__ConfigurationProcess__c": "All",
+        "%vlocity_namespace%__ConfigurationType__c": "Action",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__CompiledAttributeOverrideId__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration18",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -116,7 +131,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration7",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration8",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -131,7 +146,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration14",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration15",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -146,7 +161,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration12",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration13",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -161,7 +176,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration6",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration7",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -176,7 +191,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration13",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration14",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -191,7 +206,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration9",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration10",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -206,7 +221,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration11",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration12",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -221,7 +236,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration15",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration16",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -236,7 +251,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration8",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration9",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -251,7 +266,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration10",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration11",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -266,21 +281,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration16",
-        "Name": "Promotion Migration",
-        "VlocityDataPackType": "SObject",
-        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
-    },
-    {
-        "%vlocity_namespace%__ConfigurationAttribute__c": "Global",
-        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
-        "%vlocity_namespace%__ConfigurationProcess__c": "All",
-        "%vlocity_namespace%__ConfigurationType__c": "Action",
-        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__CompiledAttributeOverrideId__c",
-        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
-        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
-        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration32311111",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration17",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -294,7 +295,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration27",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration29",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -308,7 +309,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration29",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration31",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -322,7 +323,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration28",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration30",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -336,7 +337,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration30",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration32",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -350,7 +351,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration20",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration22",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -364,7 +365,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration19",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration21",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -378,7 +379,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration23",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration25",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -392,7 +393,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration18",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration20",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -406,7 +407,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration24",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration26",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -420,7 +421,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration25",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration27",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -434,7 +435,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration21",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration23",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -448,7 +449,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration17",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration19",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -462,7 +463,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration26",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration28",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -476,7 +477,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Promotion Migration22",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration24",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
