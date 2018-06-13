@@ -585,7 +585,8 @@ These types are what would be specified when creating a Query or Manifest for th
 | DocumentClause | DocumentClause__c |
 | DocumentTemplate | DocumentTemplate__c<br>DocumentTemplateSection__c<br>DocumentTemplateSectionCondition__c |
 | EntityFilter | EntityFilter__c<br>EntityFilterCondition__c<br>EntityFilterMember__c<br>EntityFilterConditionArgument__c |
-| IntegrartionProcedure | OmniScript__c<br>Element__c |
+| IntegrationProcedure | OmniScript__c<br>Element__c |
+| InterfaceImplementation | InterfaceImplementation__c<br>InterfaceImplementationDetail__c |
 | ItemImplementation | ItemImplementation__c |
 | ManualQueue | ManualQueue__c |
 | ObjectClass | ObjectClass__c<br>ObjectFieldAttribute__c<br>AttributeBinding__c<br>AttributeAssignment__c |
