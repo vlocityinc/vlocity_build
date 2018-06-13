@@ -44,6 +44,22 @@
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__InterfaceImplementationDetail__c",
+        "%vlocity_namespace%__ConfigurationCategory__c": "PUT",
+        "%vlocity_namespace%__ConfigurationProcess__c": "Import",
+        "%vlocity_namespace%__ConfigurationType__c": "Action",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__InterfaceId__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
+        "%vlocity_namespace%__MapId__c": "Interface Implementation Migration334",
+        "Name": "Interface Implementation Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
         "%vlocity_namespace%__ConfigurationAttribute__c": "Global",
         "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
         "%vlocity_namespace%__ConfigurationProcess__c": "All",
