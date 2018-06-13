@@ -19,13 +19,13 @@ Catalog:
   query: Select Id, Name from %vlocity_namespace%__Catalog__c     
 ContextAction:
   VlocityDataPackType: ContextAction
-  query: Select Id, Name from %vlocity_namespace%__ContextAction__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ContextAction__c
 ContextDimension:
   VlocityDataPackType: ContextDimension
-  query: Select Id, Name from %vlocity_namespace%__ContextDimension__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ContextDimension__c
 ContextScope:
   VlocityDataPackType: ContextScope
-  query: Select Id, Name from %vlocity_namespace%__ContextScope__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ContextScope__c
 ContractType:
   VlocityDataPackType: ContractType
   query: Select Id, Name from %vlocity_namespace%__ContractType__c
@@ -40,7 +40,7 @@ DocumentTemplate:
   query: Select Id, Name from %vlocity_namespace%__DocumentTemplate__c
 EntityFilter:
   VlocityDataPackType: EntityFilter
-  query: Select Id, Name from %vlocity_namespace%__EntityFilter__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
 IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
@@ -56,20 +56,20 @@ ManualQueue:
   query: Select Id, Name from %vlocity_namespace%__ManualQueue__c
 ObjectClass:
   VlocityDataPackType: ObjectClass
-  query: Select Id, Name from %vlocity_namespace%__ObjectClass__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ObjectClass__c
 ObjectContextRule:
   VlocityDataPackType: ObjectContextRule
   query: Select Id, Name from %vlocity_namespace%__ObjectRuleAssignment__c
 ObjectLayout:
   VlocityDataPackType: ObjectLayout
-  query: Select Id, Name from %vlocity_namespace%__ObjectLayout__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ObjectLayout__c
 OmniScript:
   VlocityDataPackType: OmniScript
-  query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
     = true AND %vlocity_namespace%__IsProcedure__c = false
 OrchestrationDependencyDefinition:
   VlocityDataPackType: OrchestrationDependencyDefinition
-  query: Select Id, Name from %vlocity_namespace%__OrchestrationDependencyDefinition__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__OrchestrationDependencyDefinition__c
 OrchestrationItemDefinition:
   VlocityDataPackType: OrchestrationItemDefinition
   query: Select Id, Name from %vlocity_namespace%__OrchestrationItemDefinition__c
@@ -78,7 +78,7 @@ OrchestrationPlanDefinition:
   query: Select Id, Name from %vlocity_namespace%__OrchestrationPlanDefinition__c
 PriceList:
   VlocityDataPackType: PriceList
-  query: Select Id, Name from %vlocity_namespace%__PriceList__c
+  query: Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__PriceList__c
 Pricebook2:
   VlocityDataPackType: Pricebook2
   query: Select Id, Name from Pricebook2
@@ -87,19 +87,19 @@ PricingPlan:
   query: Select Id, Name from %vlocity_namespace%__PricingPlan__c
 PricingVariable:
   VlocityDataPackType: PricingVariable
-  query: Select Id, Name from %vlocity_namespace%__PricingVariable__c
+  query: Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__PricingVariable__c
 Product2:   
   VlocityDataPackType: Product2
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from Product2
 Promotion:
   VlocityDataPackType: Promotion
-  query: Select Id, Name from %vlocity_namespace%__Promotion__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Promotion__c
 QueryBuilder:
   VlocityDataPackType: QueryBuilder
   query: Select Id from %vlocity_namespace%__QueryBuilder__c
 Rule:
   VlocityDataPackType: Rule
-  query: Select Id, Name from %vlocity_namespace%__Rule__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Rule__c
 StoryObjectConfiguration:
   VlocityDataPackType: StoryObjectConfiguration
   query: Select Id, Name from %vlocity_namespace%__StoryObjectConfiguration__c
@@ -108,26 +108,26 @@ System:
   query: Select Id, Name from %vlocity_namespace%__System__c
 TimePlan:
   VlocityDataPackType: TimePlan
-  query: Select Id, Name from %vlocity_namespace%__TimePlan__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__TimePlan__c
 TimePolicy:
   VlocityDataPackType: TimePolicy
-  query: Select Id, Name from %vlocity_namespace%__TimePolicy__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__TimePolicy__c
 UIFacet:
   VlocityDataPackType: UIFacet
-  query: Select Id, Name from %vlocity_namespace%__UIFacet__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__UIFacet__c
 UISection:
   VlocityDataPackType: UISection
-  query: Select Id, Name from %vlocity_namespace%__UISection__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__UISection__c
 VlocityAction:
   VlocityDataPackType: VlocityAction
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c
     = true
 VlocityFunction:
   VlocityDataPackType: VlocityFunction
-  query: Select Id, Name from %vlocity_namespace%__VlocityFunction__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityFunction__c
 VlocityPicklist:
   VlocityDataPackType: VlocityPicklist
-  query: Select Id, Name from %vlocity_namespace%__Picklist__c
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Picklist__c
 VlocitySearchWidgetSetup:
   VlocityDataPackType: VlocitySearchWidgetSetup
   query: Select Id, Name from %vlocity_namespace%__VlocitySearchWidgetSetup__c

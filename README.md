@@ -303,6 +303,17 @@ While not clear from the wording, this error indicates that one of the Child Pro
 
 `vlocity packDeploy -manifest '["Pricebook2/2018 Pricebook"]'`
 
+Some errors are related to conflicting data. For Attribute Category Display Sequence you will receive the following:
+
+`Error >> AttributeCategory/Product_Attributes --- Product Attributes --- duplicate value found: <unknown> duplicates value on record with id: <unknown>`
+
+This error means that a Unique field on the Object is a duplicate of an existing Unique field value. Unfortunately it does not always provide the actual Id. Update the display sequence value for an existing Attribute Category objects in Target Org.
+
+Records with the same Display Sequence can be found via SOQL query: 
+
+Select Id, Name from %vlocity_namespace%__AttributeCategory__c 
+where %vlocity_namespace%__DisplaySequence__c = %DisplaySequence__c from DataPack.json file%
+
 ## Cleaning Bad Data
 This tool includes a script to help find and eliminate "bad data". It can be run with the following command:
 ```bash
@@ -869,7 +880,10 @@ OverrideSettings:
       UnhashableFields:
       - JSONAttribute__c
       - CategoryData__c
-      - IsConfigurable__c    
+      - IsConfigurable__c
+    vlocity_namespace__DRMapItem__c:
+      FilterFields: 
+        - vlocity_namespace__UpsertKey__c
 ```
 
 In this case the settings for Product2 include:
