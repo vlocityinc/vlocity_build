@@ -162,7 +162,7 @@ queries:
   - VlocityPicklist
 ```
 3. Ensure High Data Quality in the Source Org by running:   
-`vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js`  
+`vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData`  
 4. Update your DataPack Settings in the source Org to the latest in the Vlocity Build Tool by running:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings`  
 This step will deliver changes to the DataPack settings outside the Vlocity Managed Package installation flow and should be run after upgrading/installing the package or on new Sandbox orgs.  
@@ -170,18 +170,21 @@ This step will deliver changes to the DataPack settings outside the Vlocity Mana
 `vlocity -propertyfile build_source.properties -job EPC.yaml packExport`  
 6. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packRetry`  
-If your Export fails midway through due to conenction issues, you can also the following to pick the export back up where it left off:  
+If your Export fails midway through due to conenction issues, you can also use the following to pick the export back up where it left off:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
-7. Ensure High Data Quality in the Target Org by running:  
-`vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js`  
-8. Ensure your Vlocity Metadata is high quality by running:  
+7. Check the Exported Data for Potential Issues:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml validateLocalData`  
+This will give a summary of Duplicate and Missing Global Keys. Use the argument `--fixLocalGlobalKeys` to automatically add missing and change duplicate keys. However it is generally better to fix the data in the Org itself.
+8. Ensure High Data Quality in the Target Org by running:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml cleanOrgData`  
+9. Ensure your Vlocity Metadata is high quality by running:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject` 
 This command helps fix any broken references in the project.  
-9. Update the DataPack Settings in the Target Org:  
+10. Update the DataPack Settings in the Target Org:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings`
-10. Run the deploy:  
+11. Run the deploy:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy`
-11. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+12. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packRetry`  
 Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
 
@@ -189,16 +192,18 @@ Which will retry the failed DataPacks, often fixing errors due to issues in the 
 All together the commands are:
 ```bash
 # Source Org
-vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData
 vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings
 vlocity -propertyfile build_source.properties -job EPC.yaml packExport
+vlocity -propertyfile build_source.properties -job EPC.yaml packRetry # If any errors
+vlocity -propertyfile build_source.properties -job EPC.yaml validateLocalData
 
 # Target Org
-vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_target.properties -job EPC.yaml cleanOrgData
 vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject
 vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings
 vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
-vlocity -propertyfile build_target.properties -job EPC.yaml packRetry
+vlocity -propertyfile build_target.properties -job EPC.yaml packRetry # If any errors
 ```
 
 ### New Sandbox Orgs
@@ -328,7 +333,7 @@ This error means that during the Deploy some of the Records that exist as part o
 ## Cleaning Bad Data
 This tool includes a script to help find and eliminate "bad data". It can be run with the following command:
 ```bash
-vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js
+vlocity -propertyfile <propertyfile> -job <job> cleanOrgData
 ```
 
 This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
@@ -351,7 +356,11 @@ This will run Node.js script that Adds Global Keys to all SObjects missing them,
 However, when you are attempting to migrate data from one org to another where both orgs have missing GlobalKeys, but existing data that should not be duplicated, a different strategy may need to be used to produce GlobalKeys that match between orgs.
 
 ## Validation
-Ultimately the best validation for a deploy will be testing the functionality directly in the org. However, another way to see any very clear potential issues is to see if recently deployed data matches exactly what was just exported. 
+Ultimately the best validation for a deploy will be testing the functionality directly in the org. 
+
+After Export the command `validateLocalData` can be used to detect missing and duplicate GlobalKeys in the local files that have been exported. 
+
+Another way to see any very clear potential issues is to see if recently deployed data matches exactly what was just exported. 
 
 You can run the following command to check the current local data against the data that exists in the org you deployed to:
 ```bash
@@ -372,6 +381,9 @@ This will provide a list of files that are different locally than in the org. In
 ## Troubleshooting 
 `packContinue`: Continues a job that failed due to an error  
 `packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
+`validateLocalData`:  Check for Missing Global Keys in Data.
+`cleanOrgData`: Run Scripts to Clean Data in the Org and Add Global Keys to SObjects missing them
+`refreshProject`: Refresh the Project's Data to the latest format for this tool
 
 ## Additional 
 `packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org  
@@ -409,6 +421,24 @@ vlocity -propertyfile <filepath> -job <filepath> packExportAllDefault
 `packDeploy` will deploy all contents in the projectPath of the Job File to the Salesforce Org.  
 ```bash
 vlocity -propertyfile <filepath> -job <filepath> packDeploy
+```
+
+### cleanOrgData
+`cleanOrgData` will find and fix issues in the Org Data. It will add values to missing Global Keys and detect Duplicate Global Keys. Duplicate Global Keys must be fixed in the Org.
+```bash
+vlocity -propertyfile <filepath> -job <filepath> cleanOrgData
+```
+
+### validateLocalData
+`validateLocalData` will find and can fix issues in the local data files. It will detect Missing and Duplicate Global Keys. Using the argument `--fixLocalGlobalKeys` will add missing Global Keys and change duplicate Global Keys to a new GUID.
+```bash
+vlocity -propertyfile <filepath> -job <filepath> validateLocalData --fixLocalGlobalKeys
+```
+
+### refreshProject
+`refreshProject` will rebuild the folders for the Data at the projectPath. Additonally, it will resolve any missing references between the files to ensure they deploy in the correct order.  
+```bash
+vlocity -propertyfile <filepath> -job <filepath> refreshProject
 ```
 
 ### packContinue
@@ -548,6 +578,8 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
 | supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
+| useVlocityTriggers | Boolean | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | true |
+| disableVlocityTriggers | Boolean | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | false |
 
 ## Vlocity Build Options
 | Option | Description | Type  | Default |
@@ -573,7 +605,6 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | sf.username | Salesforce username when using sf.password | String | none |
 | type | DataPack Type used for packExportSingle command | String | none |
 | verbose | Show additional logging statements | Boolean | false |
-| version | Show Vlocity Build Tool Version | Boolean | false |
 
 # Supported DataPack Types
 These types are what would be specified when creating a Query or Manifest for the Job. 
@@ -711,7 +742,7 @@ manifest:
 Which becomes:
 ```json
 {
-    "VlocityDataPackType": "VlocityCard",
+    "VlocityDataPackType": "OmniScript",
     "Type": "Insurance",
     "SubType": "Billing",
     "Language": "English"
@@ -797,7 +828,7 @@ For Custom Settings `MatchingKeyFields__c` should always be `Name`.
 | %vlocity_namespace%__InterfaceImplementation__c | Name |  
 | %vlocity_namespace%__InterfaceImplementationDetail__c | %vlocity_namespace%__InterfaceId__c, Name |  
 | %vlocity_namespace%__ObjectClass__c | %vlocity_namespace%__GlobalKey__c |  
-| %vlocity_namespace%__ObjectContextRule | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ObjectRuleAssignment__c | %vlocity_namespace%__GlobalKey__c |  
 | %vlocity_namespace%__ObjectLayout__c | %vlocity_namespace%__GlobalKey__c |  
 | %vlocity_namespace%__OfferingProcedure__c | Name |  
 | %vlocity_namespace%__Picklist__c | %vlocity_namespace%__GlobalKey__c |  

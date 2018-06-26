@@ -2,8 +2,6 @@ var async = require('async');
 
 module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
-    var errorLog = [];
-
     vlocity.checkLogin(function() {
 
         // Add Global Key
@@ -17,7 +15,8 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT Id FROM vlocity_namespace__VlocityDataPack__c where vlocity_namespace__Status__c in (\'Ready\',\'InProgress\',\'Complete\') AND CreatedDate != TODAY'
             ],
             AddGlobalKey: [
-                'SELECT Id FROM vlocity_namespace__AttributeAssignment__c WHERE vlocity_namespace__GlobalKey__c = null', 
+                'SELECT Id FROM vlocity_namespace__AttributeAssignment__c WHERE vlocity_namespace__GlobalKey__c = null',
+                'SELECT Id FROM vlocity_namespace__Catalog__c WHERE vlocity_namespace__GlobalKey__c = null', 
                 'SELECT Id FROM vlocity_namespace__ContextAction__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ContextDimension__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ContextMapping__c WHERE vlocity_namespace__GlobalKey__c = null',
@@ -37,6 +36,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT Id FROM vlocity_namespace__PicklistValue__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__PriceListEntry__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__PricingElement__c WHERE vlocity_namespace__GlobalKey__c = null',
+                'SELECT Id FROM vlocity_namespace__PricingVariable__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM Product2 WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ProductChildItem__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ProductConfigurationProcedure__c WHERE vlocity_namespace__GlobalKey__c = null',
@@ -48,22 +48,18 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT Id FROM vlocity_namespace__UIFacet__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__UISection__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__VlocityFunctionArgument__c WHERE vlocity_namespace__GlobalKey__c = null',
-                'SELECT Id FROM vlocity_namespace__VlocityFunction__c WHERE vlocity_namespace__GlobalKey__c = null'
+                'SELECT Id FROM vlocity_namespace__VlocityFunction__c WHERE vlocity_namespace__GlobalKey__c = null',
+                'SELECT Id FROM vlocity_namespace__VlocityUILayout__c WHERE vlocity_namespace__GlobalKey__c = null'
             ],
             CheckDuplicates: [
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__AttributeAssignment__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1', 
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ContextAction__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ContextDimension__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
-                'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ContextMapping__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ContextScope__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__EntityFilter__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectClass__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
-                'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectElement__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
-                'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectFacet__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
-                'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectFieldAttribute__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectLayout__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectRuleAssignment__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
-                'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectSection__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__OrchestrationDependencyDefinition__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__OrchestrationItemDefinition__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__OrchestrationPlanDefinition__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
@@ -112,10 +108,10 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
         }, function(err, result) {
 
-            errorLog.forEach(function(errLog) {
-                VlocityUtils.error('Error', errLog);
-            });
-            
+            if (jobInfo.report.length == 0) {
+                jobInfo.report.push('No Issues Found');
+            }
+
             callback();
         });
     });
@@ -134,7 +130,8 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
                     var sobjectType = item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP'));
                     var field = item.query.substring(item.query.indexOf('BY') + 3, item.query.indexOf('HAVING')-1);
-                    errorLog.push(item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP')) + 'found duplicates for ' + field + ': ' + record[field]);
+                   
+                    jobInfo.report.push(item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP')) + 'found duplicates for ' + field + ': ' + record[field]);
                 } else {
                     item.records.push(record);
                 }
@@ -189,7 +186,14 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 item.batchType = 'update';
 
                 item.records.forEach(function(record) {
-                    VlocityUtils.success((item.type == 'AddGlobalKey' ? 'Adding' : 'Changing') + ' GlobalKey', record.Id);
+                    
+                    var message = 'Added ' + item.records.length + ' GlobalKeys for ' + record.attributes.type;
+
+                    if (jobInfo.report.indexOf(message) == -1) {
+                        jobInfo.report.push(message);
+                    }
+
+                    VlocityUtils.error('Adding GlobalKey', record.attributes.type, record.Id);
                     record[vlocity.namespacePrefix + 'GlobalKey__c'] = vlocity.datapacksutils.guid();
                 });
             } 
@@ -197,6 +201,4 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             resolve(item);
         });
     }
-
-
 }

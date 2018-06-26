@@ -110,6 +110,10 @@ VlocityAction:
   VlocityDataPackType: VlocityAction
   query: SELECT Id FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c
     = true
+VlocityCard:
+  VlocityDataPackType: VlocityCard
+  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c where %vlocity_namespace%__Active__c
+    = true    
 VlocityFunction:
   VlocityDataPackType: VlocityFunction
   query: Select Id from %vlocity_namespace%__VlocityFunction__c

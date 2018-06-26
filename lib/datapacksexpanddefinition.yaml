@@ -1,6 +1,14 @@
 DataPacks:
   Attachment:
     ChildrenLimit: 10
+  CalculationMatrix:
+    UniqueByName: true
+  CalculationProcedure:
+    UniqueByName: true
+  ContractType:
+    UniqueByName: true  
+  DataRaptor:
+    UniqueByName: true
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -60,6 +68,14 @@ DataPacks:
   SObject:
     HeadersOnly: Identical
     SupportParallel: false
+  VlocityAction:
+    UniqueByName: true  
+  VlocityCard:
+    UniqueByName: true  
+  VlocityUILayout:
+    UniqueByName: true  
+  VlocityUITemplate:
+    UniqueByName: true
   VlocityAttachment:
     SupportParallel: false
 DataPacksDefault:
@@ -501,7 +517,7 @@ SObjects:
     - Index__c
   Rule__c:
     FolderName:
-    - Name
+    - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
   SystemInterface__c:
