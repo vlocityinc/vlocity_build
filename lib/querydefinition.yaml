@@ -65,8 +65,7 @@ ObjectLayout:
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ObjectLayout__c
 OmniScript:
   VlocityDataPackType: OmniScript
-  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
-    = true AND %vlocity_namespace%__IsProcedure__c = false
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
 OrchestrationDependencyDefinition:
   VlocityDataPackType: OrchestrationDependencyDefinition
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__OrchestrationDependencyDefinition__c
@@ -120,8 +119,10 @@ UISection:
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__UISection__c
 VlocityAction:
   VlocityDataPackType: VlocityAction
-  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c
-    = true
+  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c = true
+VlocityCard:
+  VlocityDataPackType: VlocityCard
+  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c where %vlocity_namespace%__Active__c = true
 VlocityFunction:
   VlocityDataPackType: VlocityFunction
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityFunction__c
@@ -136,12 +137,10 @@ VlocityStateModel:
   query: Select Id, Name from %vlocity_namespace%__VlocityStateModel__c
 VlocityUILayout:
   VlocityDataPackType: VlocityUILayout
-  query: Select Id, Name from %vlocity_namespace%__VlocityUILayout__c where %vlocity_namespace%__Active__c
-    = true
+  query: Select Id, Name from %vlocity_namespace%__VlocityUILayout__c where %vlocity_namespace%__Active__c = true
 VlocityUITemplate:
   VlocityDataPackType: VlocityUITemplate
-  query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c
-    = true
+  query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c = true
 VqMachine:
   VlocityDataPackType: VqMachine
   query: Select Id, Name from %vlocity_namespace%__VqMachine__c

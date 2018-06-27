@@ -43,6 +43,21 @@
         "Name": "Pricebook2 Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    }, 
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Pricebook2:PricebookEntry",
+        "%vlocity_namespace%__FilterGroup__c": 1,
+        "%vlocity_namespace%__FilterOperator__c": "=",
+        "%vlocity_namespace%__FilterValue__c": "\"$Vlocity.TRUE\"",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "IsActive",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
+        "%vlocity_namespace%__InterfaceObjectName__c": "PricebookEntry",
+        "%vlocity_namespace%__MapId__c": "Pricebook2 Migration2221",
+        "Name": "Pricebook2 Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
