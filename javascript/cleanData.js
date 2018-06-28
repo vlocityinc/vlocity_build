@@ -24,7 +24,6 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT Id FROM vlocity_namespace__EntityFilter__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ObjectClass__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ObjectElement__c WHERE vlocity_namespace__GlobalKey__c = null',
-                'SELECT Id FROM vlocity_namespace__ObjectFacet__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ObjectFieldAttribute__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ObjectLayout__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__ObjectRuleAssignment__c WHERE vlocity_namespace__GlobalKey__c = null',
@@ -79,7 +78,8 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__UISection__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__VlocityFunctionArgument__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__VlocityFunction__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
-                'SELECT Name, count(Id) FROM vlocity_namespace__InterfaceImplementation__c GROUP BY Name HAVING count(Id) > 1'
+                'SELECT Name, count(Id) FROM vlocity_namespace__InterfaceImplementation__c GROUP BY Name HAVING count(Id) > 1',
+                'SELECT vlocity_namespace__CatalogId__c, count(Id) FROM vlocity_namespace__CatalogProductRelationship__c GROUP BY vlocity_namespace__CatalogId__c, vlocity_namespace__Product2Id__c HAVING count(Id) > 1'
             ]
         }; 
 
@@ -129,8 +129,8 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 if (record.attributes.type == 'AggregateResult') {
 
                     var sobjectType = item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP'));
-                    var field = item.query.substring(item.query.indexOf('BY') + 3, item.query.indexOf('HAVING')-1);
-                   
+                    var field = item.query.substring(item.query.indexOf('SELECT') + 7, item.query.indexOf(','));
+                   console.log(record);
                     jobInfo.report.push(item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP')) + 'found duplicates for ' + field + ': ' + record[field]);
                 } else {
                     item.records.push(record);

@@ -47,6 +47,12 @@ DataPacks:
   PriceList:
     HeadersOnly: true
     PaginationSize: 500
+    PaginationActions:
+      PricingElement__c: 
+        - Remove
+      PriceListEntry__c: 
+        - RemoveFromInitial
+        - AddLookupRelationships
   Pricebook2:
     HeadersOnly: All
     PaginationSize: 500
