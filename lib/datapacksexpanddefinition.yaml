@@ -261,6 +261,16 @@ SObjects:
     - DeveloperName
   DocumentClause__c: {}
   DocumentTemplate__c: {}
+  DocumentTemplateSection__c: 
+    SortFields:
+    - Sequence__c
+    SourceKeyDefinition:
+    - Name
+    - Sequence__c
+  DocumentTemplateSectionCondition__c: 
+    SourceKeyDefinition:
+    - DocumentTemplateSectionId__c
+    - ConditionalExpression__c
   Element__c:
     FileName:
     - _Element
