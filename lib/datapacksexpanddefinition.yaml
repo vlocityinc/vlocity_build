@@ -5,6 +5,8 @@ DataPacks:
     UniqueByName: true
   CalculationProcedure:
     UniqueByName: true
+  Catalog:
+    MaxDeploy: 1
   ContractType:
     UniqueByName: true  
   DataRaptor:
