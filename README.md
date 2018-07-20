@@ -980,6 +980,6 @@ The following full list of settings are supported:
 
 In order to Retrieve the OmniScripts that will be deployed as part of the OmniOut deployment, run the following command:
 
-`vlocity -propertyfile <propertyfile> --nojob runJavaScript -js omniOutRetrieve.js`
+`vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js omniOutRetrieve.js`
 
 This will export the retrieved files into the folder `OmniOut/scripts` in your Project.
