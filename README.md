@@ -18,6 +18,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 * [Advanced Job File Settings](#advanced-job-file-settings)
 * [Supported DataPack Types](#supported-datapack-types)
 * [Advanced](#advanced)
+* [OmniOut](#OmniOut)
 
 # Installation Instructions
 -----------
@@ -406,7 +407,7 @@ vlocity -propertyfile <filepath> -job <filepath> packExport
 ### packExportSingle
 `packExportSingle` will export a single DataPack and all its dependencies. It also supports only exporting the single DataPack with no dependencies by setting the depth.  
 ```bash
-vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlcoityDataPackType> -id <Salesforce Id> -depth <Integer>
+vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlocityDataPackType> -id <Salesforce Id> -depth <Integer>
 ```
 
 Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
@@ -973,4 +974,12 @@ The following full list of settings are supported:
 | MaxDeploy | Integer | 50 | Specify the maximum number of DataPacks which should be uploaded in a single transaction
 | HeadersOnly | Boolean | false | Support uploading only the top level SObject in the DataPack. Good for potentially fixing circular reference issues
 | ExportGroupSize | Integer | 5 | Specify the maximum number of DataPacks which should be Exported in a single transaction. Potentially large DataPacks like Matrix or Attachments could be set to 1 if necessary
- 
+
+# OmniOut
+-----------
+
+In order to Retrieve the OmniScripts that will be deployed as part of the OmniOut deployment, run the following command:
+
+`vlocity -propertyfile <propertyfile> --nojob runJavaScript -js omniOutRetrieve.js`
+
+This will export the retrieved files into the folder `OmniOut/scripts` in your Project.
