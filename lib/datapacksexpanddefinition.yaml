@@ -60,9 +60,8 @@ DataPacks:
     PaginationSize: 500
   Product2:
     HeadersOnly: true
-    PricebookEntry:
-      ListFileName:
-      - _StandardPricebookEntry
+    IgnoreExpand:
+    - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
     SupportParallel: false
