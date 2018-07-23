@@ -46,11 +46,9 @@ module.exports = function(vlocity, dataPackData, jobInfo, callback) {
 
                                 console.log(dataRaptorName + ' - ' + ((isRolledBack == "true") ? 'Old' : 'New') +': ' + result.ACTUAL + ' CPU: ' + result.CPU);
 
-
                                 totalCpuTime += result.CPU;
                                 totalTime += result.ACTUAL;
                                
-
                                 timingCallback();
                             });
                         }, function(err, result) {

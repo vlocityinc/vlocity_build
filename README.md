@@ -18,6 +18,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 * [Advanced Job File Settings](#advanced-job-file-settings)
 * [Supported DataPack Types](#supported-datapack-types)
 * [Advanced](#advanced)
+* [OmniOut](#OmniOut)
 
 # Installation Instructions
 -----------
@@ -44,8 +45,9 @@ This should show a list of all available commands confirming that the project ha
 ------------
 To begin, create your own property files for your Source and Target Salesforce Orgs with the following:
 ```java
-sf.username: <Salesforce Username>
-sf.password: <Salesforce Password>
+sf.username = < Salesforce Username >
+sf.password = < Salesforce Password + Security Token >
+sf.loginUrl = < https://login.salesforce.com or https://test.salesforce.com for Sandbox >
 ```
 When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the below line to your property file:
 ```java
@@ -161,7 +163,7 @@ queries:
   - VlocityPicklist
 ```
 3. Ensure High Data Quality in the Source Org by running:   
-`vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js`  
+`vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData`  
 4. Update your DataPack Settings in the source Org to the latest in the Vlocity Build Tool by running:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings`  
 This step will deliver changes to the DataPack settings outside the Vlocity Managed Package installation flow and should be run after upgrading/installing the package or on new Sandbox orgs.  
@@ -169,18 +171,21 @@ This step will deliver changes to the DataPack settings outside the Vlocity Mana
 `vlocity -propertyfile build_source.properties -job EPC.yaml packExport`  
 6. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packRetry`  
-If your Export fails midway through due to conenction issues, you can also the following to pick the export back up where it left off:  
+If your Export fails midway through due to conenction issues, you can also use the following to pick the export back up where it left off:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
-7. Ensure High Data Quality in the Target Org by running:  
-`vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js`  
-8. Ensure your Vlocity Metadata is high quality by running:  
+7. Check the Exported Data for Potential Issues:  
+`vlocity -propertyfile build_source.properties -job EPC.yaml validateLocalData`  
+This will give a summary of Duplicate and Missing Global Keys. Use the argument `--fixLocalGlobalKeys` to automatically add missing and change duplicate keys. However it is generally better to fix the data in the Org itself.
+8. Ensure High Data Quality in the Target Org by running:  
+`vlocity -propertyfile build_target.properties -job EPC.yaml cleanOrgData`  
+9. Ensure your Vlocity Metadata is high quality by running:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject` 
 This command helps fix any broken references in the project.  
-9. Update the DataPack Settings in the Target Org:  
+10. Update the DataPack Settings in the Target Org:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings`
-10. Run the deploy:  
+11. Run the deploy:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy`
-11. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+12. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
 `vlocity -propertyfile build_target.properties -job EPC.yaml packRetry`  
 Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
 
@@ -188,16 +193,18 @@ Which will retry the failed DataPacks, often fixing errors due to issues in the 
 All together the commands are:
 ```bash
 # Source Org
-vlocity -propertyfile build_source.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData
 vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings
 vlocity -propertyfile build_source.properties -job EPC.yaml packExport
+vlocity -propertyfile build_source.properties -job EPC.yaml packRetry # If any errors
+vlocity -propertyfile build_source.properties -job EPC.yaml validateLocalData
 
 # Target Org
-vlocity -propertyfile build_target.properties -job EPC.yaml runJavaScript -js cleanData.js
+vlocity -propertyfile build_target.properties -job EPC.yaml cleanOrgData
 vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject
 vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings
 vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
-vlocity -propertyfile build_target.properties -job EPC.yaml packRetry
+vlocity -propertyfile build_target.properties -job EPC.yaml packRetry # If any errors
 ```
 
 ### New Sandbox Orgs
@@ -287,13 +294,16 @@ Error >> VlocityUITemplate --- ShowProducts --- Not Found
 
 This "VlocityUITemplate --- ShowProducts --- Not Found" error during Export means that something, likely an OmniScript, has a reference to a VlocityUITemplate that is not currently Active or does not exist in the org as a VlocityUITemplate. In some cases the VlocityUITemplate for an OmniScript can actually be included inside the Visualforce Page in which the OmniScript is displayed. In that case, this error can be completely ignored. The DataRaptor Not Found means that likely someone deleted or changed the name of the DataRaptor being referenced without updating the OmniScript using it.
 
+## Common Error Messages
 Errors occurring during Export will likely result in Errors during deploy. But not always. Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:  
-`Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02
-`
+`Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02`
 
 In this Error the Product being deployed is the iPhone with Global Key `02d3feaf-a390-2f57-a08c-2bfc3f9b7333` and the error is stating that one of the Product Child Items could not find the referenced product with Global Key `db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This means the other Product must also be deployed. 
 
-Additionally, Deploys will run all of the Triggers associated with Objects during their import. As there are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
+In the error, after `No match found for` it is signifying a Reference Field on the SObject with the missing data `<SObject>.<FieldName>` or in this example `vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c`. After this it is indicating what Data is in the DataPack's saved reference: `vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This is the Global Key of the Product2 being referenced by the field `ChildProductId__c` on the SObject `ProductChildItem__c`. If it is clear that the referenced data does exist, in this case a Product2 with `vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02`, make sure that the Matching Key for this SObject type is correctly aligned between your two environments. 
+
+### Validation Errors
+Deploys will run all of the Triggers associated with Objects during their import. As there are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
 
 Some errors are related to potential data quality issues:
 `Product2/adac7afa-f741-80dd-9a69-f8a5aa61eb56 >> IPhone Charger - Error - Product you are trying to add is missing a Pricebook Entry in pricebook >>2018 Pricebook<< Please add product to pricebook and try again`
@@ -302,19 +312,37 @@ While not clear from the wording, this error indicates that one of the Child Pro
 
 `vlocity packDeploy -manifest '["Pricebook2/2018 Pricebook"]'`
 
+Some errors are related to conflicting data. For Attribute Category Display Sequence you will receive the following:
+
+`Error >> AttributeCategory/Product_Attributes --- Product Attributes --- duplicate value found: <unknown> duplicates value on record with id: <unknown>`
+
+This error means that a Unique field on the Object is a duplicate of an existing Unique field value. Unfortunately it does not always provide the actual Id. Update the display sequence value for an existing Attribute Category objects in Target Org.
+
+Records with the same Display Sequence can be found via the SOQL query: 
+
+Select Id, Name from %vlocity_namespace%__AttributeCategory__c 
+where %vlocity_namespace%__DisplaySequence__c = %DisplaySequence__c from DataPack.json file%
+
+`Catalog/Data – Datapack >> Data – Error Message – Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. vlocity_cmt__CatalogProductRelationship__c: 20MB Plan`
+
+These errors mean there are duplicates in the data. Multiple records with the same data for `vlocity_cmt__CatalogProductRelationship__c: 20MB Plan` (this is the Name). The Matching Key for a CatalogProductRelationship__c object is `%vlocity_namespace%__CatalogId__c, %vlocity_namespace%__Product2Id__c` (See [Current Matching Keys](#current-matching-keys)). Therefore, this error means that there are two references to the same product inside the same Catalog, which is not allowed. The Duplicates must be removed from the Source Org and Re-Exported.
+
+`Product2/adac7afa-f741-80dd-9a69-f8a5aa61eb56 -- Datapack >> IPhone Charger -- Error Message -- Some records were not processed. Please validate imported data types.`
+
+This error means that during the Deploy some of the Records that exist as part of the DataPack Data were not upserted into Salesforce. This generally means that there is a mismatch between the Configuration Data in the target org compared to the Source Org. Re-running `packUpdateSettings` in both orgs is the best way to solve this issue.
+
 ## Cleaning Bad Data
 This tool includes a script to help find and eliminate "bad data". It can be run with the following command:
 ```bash
-vlocity -propertyfile <propertyfile> -job <job> runJavaScript -js cleanData.js
+vlocity -propertyfile <propertyfile> -job <job> cleanOrgData
 ```
 
 This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
 
 ## External Ids and Global Keys 
 Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:  
-`
-Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG
-`
+
+`Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG`
 
 This means that Duplicates have been created in the org and the data must be cleaned up. 
 
@@ -329,7 +357,11 @@ This will run Node.js script that Adds Global Keys to all SObjects missing them,
 However, when you are attempting to migrate data from one org to another where both orgs have missing GlobalKeys, but existing data that should not be duplicated, a different strategy may need to be used to produce GlobalKeys that match between orgs.
 
 ## Validation
-Ultimately the best validation for a deploy will be testing the functionality directly in the org. However, another way to see any very clear potential issues is to see if recently deployed data matches exactly what was just exported. 
+Ultimately the best validation for a deploy will be testing the functionality directly in the org. 
+
+After Export the command `validateLocalData` can be used to detect missing and duplicate GlobalKeys in the local files that have been exported. 
+
+Another way to see any very clear potential issues is to see if recently deployed data matches exactly what was just exported. 
 
 You can run the following command to check the current local data against the data that exists in the org you deployed to:
 ```bash
@@ -350,6 +382,9 @@ This will provide a list of files that are different locally than in the org. In
 ## Troubleshooting 
 `packContinue`: Continues a job that failed due to an error  
 `packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
+`validateLocalData`:  Check for Missing Global Keys in Data.
+`cleanOrgData`: Run Scripts to Clean Data in the Org and Add Global Keys to SObjects missing them
+`refreshProject`: Refresh the Project's Data to the latest format for this tool
 
 ## Additional 
 `packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org  
@@ -372,7 +407,7 @@ vlocity -propertyfile <filepath> -job <filepath> packExport
 ### packExportSingle
 `packExportSingle` will export a single DataPack and all its dependencies. It also supports only exporting the single DataPack with no dependencies by setting the depth.  
 ```bash
-vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlcoityDataPackType> -id <Salesforce Id> -depth <Integer>
+vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlocityDataPackType> -id <Salesforce Id> -depth <Integer>
 ```
 
 Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
@@ -387,6 +422,24 @@ vlocity -propertyfile <filepath> -job <filepath> packExportAllDefault
 `packDeploy` will deploy all contents in the projectPath of the Job File to the Salesforce Org.  
 ```bash
 vlocity -propertyfile <filepath> -job <filepath> packDeploy
+```
+
+### cleanOrgData
+`cleanOrgData` will find and fix issues in the Org Data. It will add values to missing Global Keys and detect Duplicate Global Keys. Duplicate Global Keys must be fixed in the Org.
+```bash
+vlocity -propertyfile <filepath> -job <filepath> cleanOrgData
+```
+
+### validateLocalData
+`validateLocalData` will find and can fix issues in the local data files. It will detect Missing and Duplicate Global Keys. Using the argument `--fixLocalGlobalKeys` will add missing Global Keys and change duplicate Global Keys to a new GUID.
+```bash
+vlocity -propertyfile <filepath> -job <filepath> validateLocalData --fixLocalGlobalKeys
+```
+
+### refreshProject
+`refreshProject` will rebuild the folders for the Data at the projectPath. Additonally, it will resolve any missing references between the files to ensure they deploy in the correct order.  
+```bash
+vlocity -propertyfile <filepath> -job <filepath> refreshProject
 ```
 
 ### packContinue
@@ -454,7 +507,7 @@ exportBuildFile: AllDataPacksExported.json
 This file is not Importable to a Salesforce Org through the DataPacks API, but could be used to see the full raw output from a Salesforce Org. Instead, use the BuildFile task to create an Importable file.
 
 ## Advanced: Export by Manifest
-The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard, 
+The manifest defines the Data used to export. Not all types will support using a manifest as many types are only unique by their Id. VlocityDataPackTypes that are unique by name will work for manifest. These are limited to: DataRaptor, VlocityUITemplate, VlocityCard
 ```yaml
 manifest: 
   VlocityCard:
@@ -526,6 +579,8 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
 | supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
+| useVlocityTriggers | Boolean | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | true |
+| disableVlocityTriggers | Boolean | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | false |
 
 ## Vlocity Build Options
 | Option | Description | Type  | Default |
@@ -551,60 +606,63 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | sf.username | Salesforce username when using sf.password | String | none |
 | type | DataPack Type used for packExportSingle command | String | none |
 | verbose | Show additional logging statements | Boolean | false |
-| version | Show Vlocity Build Tool Version | Boolean | false |
 
 # Supported DataPack Types
 These types are what would be specified when creating a Query or Manifest for the Job. 
 
-| VlocityDataPackType | SObject | Label |
-| ------------- |-------------| ----- | 
-| Attachment | Attachment | Attachment | 
-| AttributeAssignmentRule | AttributeAssignmentRule__c | Attribute Assignment Rule | 
-| AttributeCategory | AttributeCategory__c | Attribute Category | 
-| CalculationMatrix | CalculationMatrix__c | Calculation Matrix | 
-| CalculationProcedure | CalculationProcedure__c | Calculation Procedure | 
-| ContextAction | ContextAction__c | Context Action | 
-| ContextDimension | ContextDimension__c | Vlocity Context Dimension | 
-| ContextScope | ContextScope__c | Context Scope | 
-| ContractType | ContractType__c | Contract Type | 
-| DataRaptor | DRBundle__c | DataRaptor Interface | 
-| Document | Document | Document (Salesforce Standard Object) | 
-| DocumentClause | DocumentClause__c | Document Clause | 
-| DocumentTemplate | DocumentTemplate__c | Document Template | 
-| EntityFilter | EntityFilter__c | Entity Filter | 
-| ItemImplementation | ItemImplementation__c | Item Implementation | 
-| ManualQueue | ManualQueue__c | Manual Queue | 
-| ObjectClass | ObjectClass__c | Object Layout | 
-| ObjectContextRule | ObjectRuleAssignment__c | Vlocity Object Rule Assignment | 
-| ObjectLayout | ObjectLayout__c | Object Layout | 
-| OmniScript | OmniScript__c | OmniScript | 
-| OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c | Orchestration Dependency Definition | 
-| OrchestrationItemDefinition | OrchestrationItemDefinition__c | Orchestration Item Definition | 
-| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c | Orchestration Plan Definition | 
-| Pricebook2 | Pricebook2 | Pricebook (Salesforce Standard Object) | 
-| PriceList | PriceList__c | Price List | 
-| PricingVariable | PricingVariable__c | Pricing Variable | 
-| Product2 | Product2 | Product (Salesforce Standard Object) | 
-| Promotion | Promotion__c | Promotion | 
-| QueryBuilder | QueryBuilder__c | Query Builder | 
-| Rule | Rule__c | Rule | 
-| StoryObjectConfiguration | StoryObjectConfiguration__c | Story Object Configuration (Custom Setting) | 
-| System | System__c | System | 
-| TimePlan | TimePlan__c | Time Plan | 
-| TimePolicy | TimePolicy__c | Time Policy | 
-| UIFacet | UIFacte__c | UI Facet | 
-| UISection | UISection__c | UI Section | 
-| VlocityAction | VlocityAction__c | Vlocity Action | 
-| VlocityAttachment | VlocityAttachment__c | Vlocity Attachment | 
-| VlocityCard | VlocityCard__c | Vlocity Card | 
-| VlocityFunction | VlocityFunction__c | Vlocity Function | 
-| VlocityPicklist | Picklist__c | Vlocity Picklist | 
-| VlocitySearchWidgetSetup | VlocitySearchWidgetSetup__c | Vlocity Interaction Launcher | 
-| VlocityStateModel | VlocityStateModel__c | Vlocity State Model | 
-| VlocityUILayout | VlocityUILayout__c | Vlocity UI Layout | 
-| VlocityUITemplate | VlocityUITemplate__c | Vlocity UI Template | 
-| VqMachine | VqMachine__c | Vlocity Intelligence Machine | 
-| VqResource | VqResource__c | Vlocity Intelligence Resource | 
+| VlocityDataPackType | All SObjects |
+| ------------- |-------------| 
+| Attachment | Attachment |
+| AttributeAssignmentRule | AttributeAssignmentRule__c |
+| AttributeCategory | AttributeCategory__c<br>Attribute__c |
+| CalculationMatrix | CalculationMatrix__c<br>CalculationMatrixVersion__c<br>CalculationMatrixRow__c |
+| CalculationProcedure | CalculationProcedure__c<br>CalculationProcedureVersion__c<br>CalculationProcedureStep__c |
+| Catalog | Catalog__c<br>CatalogRelationship__c<br>CatalogProductRelationship__c |
+| ContextAction | ContextAction__c |
+| ContextDimension | ContextDimension__c<br>ContextMapping__c<br>ContextMappingArgument__c |
+| ContextScope | ContextScope__c |
+| ContractType | ContractType__c<br>ContractTypeSetting__c |
+| DataRaptor | DRBundle__c<br>DRMapItem__c |
+| Document<br>(Salesforce Standard Object) | Document |
+| DocumentClause | DocumentClause__c |
+| DocumentTemplate | DocumentTemplate__c<br>DocumentTemplateSection__c<br>DocumentTemplateSectionCondition__c |
+| EntityFilter | EntityFilter__c<br>EntityFilterCondition__c<br>EntityFilterMember__c<br>EntityFilterConditionArgument__c |
+| IntegrationProcedure | OmniScript__c<br>Element__c |
+| InterfaceImplementation | InterfaceImplementation__c<br>InterfaceImplementationDetail__c |
+| ItemImplementation | ItemImplementation__c |
+| ManualQueue | ManualQueue__c |
+| ObjectClass | ObjectClass__c<br>ObjectFieldAttribute__c<br>AttributeBinding__c<br>AttributeAssignment__c |
+| ObjectContextRule<br>(Vlocity Object Rule Assignment) | ObjectRuleAssignment__c |
+| ObjectLayout | ObjectLayout__c<br>ObjectFacet__c<br>ObjectSection__c<br>ObjectElement__c |
+| OmniScript | OmniScript__c<br>Element__c |
+| OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
+| OrchestrationItemDefinition | OrchestrationItemDefinition__c |
+| OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
+| Pricebook2<br>(Salesforce Standard Object) | Pricebook2<br>PricebookEntry |
+| PriceList | PriceList__c<br>PriceListEntry__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
+| PricingVariable | PricingVariable__c |
+| Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry(In the Standard Pricebook)<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
+| Promotion | Promotion__c<br>PromotionItem__c |
+| QueryBuilder | QueryBuilder__c<br>QueryBuilderDetail__c |
+| Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
+| StoryObjectConfiguration<br>(Custom Setting) | StoryObjectConfiguration__c |
+| System | System__c<br>SystemInterface__c |
+| TimePlan | TimePlan__c |
+| TimePolicy | TimePolicy__c |
+| UIFacet | UIFacet__c |
+| UISection | UISection__c |
+| VlocityAction | VlocityAction__c |
+| VlocityAttachment | VlocityAttachment__c |
+| VlocityCard | VlocityCard__c |
+| VlocityFunction | VlocityFunction__c<br>VlocityFunctionArgument__c |
+| VlocityPicklist | Picklist__c<br>PicklistValue__c |
+| VlocitySearchWidgetSetup<br>(Vlocity Interaction Launcher) | VlocitySearchWidgetSetup__c<br>VlocitySearchWidgetActionsSetup__c |
+| VlocityStateModel | VlocityStateModel__c<br>VlocityStateModelVersion__c<br>VlocityState__c<br>VlocityStateTransition__c |
+| VlocityUILayout | VlocityUILayout__c |
+| VlocityUITemplate | VlocityUITemplate__c |
+| VqMachine<br>(Vlocity Intelligence Machine) | VqMachine__c<br>VqMachineResource__c |
+| VqResource<br>(Vlocity Intelligence Resource) | VqResource__c<br>Attachment<br>AttributeAssignment__c |
+
 
 # Advanced
 ---------------------
@@ -685,7 +743,7 @@ manifest:
 Which becomes:
 ```json
 {
-    "VlocityDataPackType": "VlocityCard",
+    "VlocityDataPackType": "OmniScript",
     "Type": "Insurance",
     "SubType": "Billing",
     "Language": "English"
@@ -731,7 +789,7 @@ DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define 
 
 | Name | API Name | Description |   
 | --- | --- | --- |    
-| Matching Key Fields | MatchingKeyFields__c | Comma Separated list of Field API Names that define Uniqnuess |  
+| Matching Key Fields | MatchingKeyFields__c | Comma Separated list of Field API Names that define Uniqueness |  
 | Vlocity Matching Key Name | Name | Name of the Matching Key |  
 | Label | Label | Label of the Matching Key |  
 | Object API Name | ObjectAPIName__c | Full API Name of the SObject |  
@@ -771,7 +829,7 @@ For Custom Settings `MatchingKeyFields__c` should always be `Name`.
 | %vlocity_namespace%__InterfaceImplementation__c | Name |  
 | %vlocity_namespace%__InterfaceImplementationDetail__c | %vlocity_namespace%__InterfaceId__c, Name |  
 | %vlocity_namespace%__ObjectClass__c | %vlocity_namespace%__GlobalKey__c |  
-| %vlocity_namespace%__ObjectContextRule | %vlocity_namespace%__GlobalKey__c |  
+| %vlocity_namespace%__ObjectRuleAssignment__c | %vlocity_namespace%__GlobalKey__c |  
 | %vlocity_namespace%__ObjectLayout__c | %vlocity_namespace%__GlobalKey__c |  
 | %vlocity_namespace%__OfferingProcedure__c | Name |  
 | %vlocity_namespace%__Picklist__c | %vlocity_namespace%__GlobalKey__c |  
@@ -864,7 +922,10 @@ OverrideSettings:
       UnhashableFields:
       - JSONAttribute__c
       - CategoryData__c
-      - IsConfigurable__c    
+      - IsConfigurable__c
+    vlocity_namespace__DRMapItem__c:
+      FilterFields: 
+        - vlocity_namespace__UpsertKey__c
 ```
 
 In this case the settings for Product2 include:
@@ -913,4 +974,12 @@ The following full list of settings are supported:
 | MaxDeploy | Integer | 50 | Specify the maximum number of DataPacks which should be uploaded in a single transaction
 | HeadersOnly | Boolean | false | Support uploading only the top level SObject in the DataPack. Good for potentially fixing circular reference issues
 | ExportGroupSize | Integer | 5 | Specify the maximum number of DataPacks which should be Exported in a single transaction. Potentially large DataPacks like Matrix or Attachments could be set to 1 if necessary
- 
+
+# OmniOut
+-----------
+
+In order to Retrieve the OmniScripts that will be deployed as part of the OmniOut deployment, run the following command:
+
+`vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js omniOutRetrieve.js`
+
+This will export the retrieved files into the folder `OmniOut/scripts` in your Project.

@@ -63,5 +63,5 @@
         "unitTest": "mocha test/**/**.spec.js",
         "build": "pkg . --out-path ./bin"
     },
-    "version": "1.4.1"
+    "version": "1.5.6"
 }

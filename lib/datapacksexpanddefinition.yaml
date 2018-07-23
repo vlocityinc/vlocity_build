@@ -1,4 +1,16 @@
 DataPacks:
+  Attachment:
+    ChildrenLimit: 10
+  CalculationMatrix:
+    UniqueByName: true
+  CalculationProcedure:
+    UniqueByName: true
+  Catalog:
+    MaxDeploy: 1
+  ContractType:
+    UniqueByName: true  
+  DataRaptor:
+    UniqueByName: true
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -37,6 +49,12 @@ DataPacks:
   PriceList:
     HeadersOnly: true
     PaginationSize: 500
+    PaginationActions:
+      PricingElement__c: 
+        - Remove
+      PriceListEntry__c: 
+        - RemoveFromInitial
+        - AddLookupRelationships
   Pricebook2:
     HeadersOnly: All
     PaginationSize: 500
@@ -58,6 +76,14 @@ DataPacks:
   SObject:
     HeadersOnly: Identical
     SupportParallel: false
+  VlocityAction:
+    UniqueByName: true  
+  VlocityCard:
+    UniqueByName: true  
+  VlocityUILayout:
+    UniqueByName: true  
+  VlocityUITemplate:
+    UniqueByName: true
   VlocityAttachment:
     SupportParallel: false
 DataPacksDefault:
@@ -65,6 +91,7 @@ DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
+  ChildrenLimit: 100
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
@@ -103,6 +130,8 @@ SObjects:
     SourceKeyDefinition:
     - AttributeId__c
     - ObjectId__c
+    - _GlobalKey
+    - GlobalKey__c
   AttributeBinding__c:
     NonUnique: true
   AttributeCategory__c:
@@ -234,6 +263,16 @@ SObjects:
     - DeveloperName
   DocumentClause__c: {}
   DocumentTemplate__c: {}
+  DocumentTemplateSection__c: 
+    SortFields:
+    - Sequence__c
+    SourceKeyDefinition:
+    - Name
+    - Sequence__c
+  DocumentTemplateSectionCondition__c: 
+    SourceKeyDefinition:
+    - DocumentTemplateSectionId__c
+    - ConditionalExpression__c
   Element__c:
     FileName:
     - _Element
@@ -270,6 +309,15 @@ SObjects:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
+  InterfaceImplementation__c:
+    FolderName: 
+    - Name
+    SourceKeyDefinition:
+    - Name  
+  InterfaceImplementationDetail__c:
+    SourceKeyDefinition:
+    - InterfaceId__c
+    - Name
   ItemImplementation__c:
     FolderName:
     - Name
@@ -360,7 +408,7 @@ SObjects:
     - OrchestrationPlanDefinitionId__c
     MatchingSourceKeyDefinition:
     - Name
-    - _OrchestrationPlanDefinition
+    - _%vlocity_namespace%__OrchestrationPlanDefinition__c
     - OrchestrationPlanDefinitionId__r.Name
     SourceKeyDefinition:
     - Name
@@ -487,13 +535,13 @@ SObjects:
     - Index__c
   Rule__c:
     FolderName:
-    - Name
+    - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
   SystemInterface__c:
     MatchingSourceKeyDefinition:
     - Name
-    - _System
+    - _%vlocity_namespace%__System__c
     - SystemId__r.Name
     SourceKeyDefinition:
     - Name
