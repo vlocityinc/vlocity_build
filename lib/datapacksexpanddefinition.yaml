@@ -44,6 +44,7 @@ DataPacks:
     - Type__c
     - SubType__c
     - Language__c
+    PaginationSize: 5000
     SupportParallel: 
       IsReusable__c: false
   PriceList:
