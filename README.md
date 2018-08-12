@@ -3,6 +3,11 @@
 
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
+## ** Changes to Enterprise Product Catalog DataPacks **
+The Product2 DataPack has been modified to include all Pricebook and PriceList Entries for the Product. This means that a Product can be migrated from one org to another along with its Pricing Information without migrating the other Products in the Pricebook and Price List. 
+
+Running `packUpdateSettings` and re-exporting the Product2, Pricebook and PriceList is necessary to migrate to the new format, however existing data should still be deployable with the new changes.
+
 ## Table of Contents
 * [Installation Instructions](#installation-instructions)
 * [Getting Started](#getting-started)
@@ -281,6 +286,15 @@ Running `packExport` with no queries defined in your Job File will export all th
 
 # Troubleshooting
 ------------
+
+## Log Files
+Three log files are generated for every command run.
+
+`VlocityBuildLog.yaml` - This file is a summary of what was executed during the command just run. It will appear in directory you are running the command.
+
+`VlocityBuildErrors.log` - This file will contain the errors during the job. It will appear in directory you are running the command. 
+
+`vlocity-temp/logs/<JobName>-<Timestamp>-<Command>.yaml` - This is a saved version of the VlocityBuildLog.yaml in the logs folder for every command run.
 
 ## Data Quality
 Once Exported it is very important to validate that your data is in state that is ready to be deployed. The Vlocity Build tool primarily relies on unique data in fields across the different objects to prevent duplicate data being uploaded.

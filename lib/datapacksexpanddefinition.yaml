@@ -452,6 +452,8 @@ SObjects:
       - _JavaScript
       FileType: js
   PricebookEntry:
+    FilterFields:
+    - Pricebook2.IsActive
     SortFields:
     - VlocityRecordSourceKey
     SourceKeyDefinition:
