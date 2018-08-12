@@ -588,10 +588,7 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   VlocitySearchWidgetSetup__c: {}
-  VlocityStateModel__c:
-    FileName:
-    - _v
-    - VersionNumber__c
+  VlocityStateModel__c: {}
   VlocityStateTransition__c:
     NonUnique: true
   VlocityState__c: {}
