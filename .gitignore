@@ -13,4 +13,4 @@ test/testJobRunning/
 .sfdx/
 bin/vlocity*
 VlocityBuildLog.yaml
-VlocityErrorLog.yaml
+VlocityBuildErrors.log
