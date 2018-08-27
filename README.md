@@ -572,7 +572,7 @@ manifest:
 You can export individual SObjects by using the VlocityDataPackType SObject. This will save each SObject as its own file. 
 
 ```bash
-vlocity packExport -type SObject -query "SELECT Id from PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
+vlocity packExport -type SObject -query "SELECT Id FROM PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
 ```
 
 This will export the PricebookEntries into a folder called SObject_PricebookEntry.
@@ -582,7 +582,7 @@ This method is also very good for adding Custom Settings to Version Control, how
 ```yaml
 queries: 
   - VlocityDataPackType: SObject
-    query: Select Id from MyCustomSetting__c
+    query: Select Id FROM MyCustomSetting__c
 ```
 
 This will export the MyCustomSetting__c records into a folder called SObject_MyCustomSetting.
@@ -602,7 +602,7 @@ preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
 ```
 
-With this default setting, the Apex Code in DeativateTemplatesAndLayouts.cls will run before the deploy to the org. In this case it will Deactivate the Vlocity Templates and Vlocity UI Layouts (Cards) associated with the Deploy. See Advanced Anonymous Apex for more details.
+With this default setting, the Apex Code in DeativateTemplatesAndLayouts.cls will run before the deploy to the org. In this case it will Deactivate the Vlocity Templates and Vlocity UI Layouts (Cards) associated with the Deploy. See [Advanced Anonymous Apex](#advanced) for more details.
 
 ## Additional Options 
 The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
@@ -686,10 +686,10 @@ These types are what would be specified when creating a Query or Manifest for th
 | OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
 | OrchestrationItemDefinition | OrchestrationItemDefinition__c |
 | OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
-| Pricebook2<br>(Salesforce Standard Object) | Pricebook2<br>PricebookEntry |
-| PriceList | PriceList__c<br>PriceListEntry__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
+| Pricebook2<br>(Salesforce Standard Object) | Pricebook2 |
+| PriceList | PriceList__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
 | PricingVariable | PricingVariable__c |
-| Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry(In the Standard Pricebook)<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
+| Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>RuleAssignment__c<br>ProductRequirement__c<br>ObjectFieldAttribute__c<br>PricingElement__c<br>PriceListEntry__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
 | Promotion | Promotion__c<br>PromotionItem__c |
 | QueryBuilder | QueryBuilder__c<br>QueryBuilderDetail__c |
 | Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
@@ -720,6 +720,9 @@ In order to make the Anonymous Apex part reusable, you can include multiple Apex
 
 ### Namespace
 In Anonymous apex vlocity_namespace will be replaced with the vlocity.namespace from the propertyfile.
+
+### Loading Apex Code
+Apex code can be loaded relative from the Project Path or with an absolute path.
 
 ### BaseUtilities.cls 
 ```java
