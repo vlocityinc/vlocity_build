@@ -3,6 +3,16 @@
 
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
+## ** Changes to Enterprise Product Catalog DataPacks **
+The Product2 DataPack has been modified to include all Pricebook and PriceList Entries for the Product. This means that a Product can be migrated from one org to another along with its Pricing Information without migrating the other Products in the Pricebook and Price List. 
+
+Running `packUpdateSettings` and re-exporting the Product2, Pricebook and PriceList is necessary to migrate to the new format, however existing data should still be deployable with the new changes.
+
+If you have any issues with these changes you can install the previous version of the tool with:
+```bash
+npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
+```
+
 ## Table of Contents
 * [Installation Instructions](#installation-instructions)
 * [Getting Started](#getting-started)
@@ -18,6 +28,8 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 * [Advanced Job File Settings](#advanced-job-file-settings)
 * [Supported DataPack Types](#supported-datapack-types)
 * [Advanced](#advanced)
+  * [Matching Keys](#matching-keys)
+* [OmniOut](#OmniOut)
 
 # Installation Instructions
 -----------
@@ -32,13 +44,41 @@ This project requires Node Version 8+.
 Use `node -v` to find out which version you are on.
 
 ## Install Vlocity Build
-You can install and use this project without cloning the repo using the following commands:
+You can install and use this project *without cloning the repo* using the following commands:
 ```bash
 npm install --global https://github.com/vlocityinc/vlocity_build
 vlocity help
 ```
 
 This should show a list of all available commands confirming that the project has been setup successfully. You can now run this command from any folder.
+
+## Releases
+All releases for this Project can be found at:
+https://github.com/vlocityinc/vlocity_build/releases
+
+Each release includes a Binary for:  
+Linux  
+MacOS  
+Windows x64  
+Windows x86  
+
+### Installing Older Releases
+To Install an Older Version of the Vlocity Build Tool use the following command:
+```bash
+npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
+vlocity help
+```
+
+### Cloning Vlocity Build
+It is no longer advised to clone the Vlocity Build Repository directly. If you have previously cloned the Vlocity Build Project and are having issues with the alias `vlocity` still being used as the cloned project, please use the following command in the cloned `vlocity_build` folder:
+```bash
+npm unlink .
+```
+If you would like to use the Vlocity Build Project from its Source, please use the following command in the cloned `vlocity_build` folder:
+```bash
+npm link
+npm install
+```
 
 # Getting Started
 ------------
@@ -281,6 +321,15 @@ Running `packExport` with no queries defined in your Job File will export all th
 # Troubleshooting
 ------------
 
+## Log Files
+Three log files are generated for every command run.
+
+`VlocityBuildLog.yaml` - This file is a summary of what was executed during the command just run. It will appear in directory you are running the command.
+
+`VlocityBuildErrors.log` - This file will contain the errors during the job. It will appear in directory you are running the command. 
+
+`vlocity-temp/logs/<JobName>-<Timestamp>-<Command>.yaml` - This is a saved version of the VlocityBuildLog.yaml in the logs folder for every command run.
+
 ## Data Quality
 Once Exported it is very important to validate that your data is in state that is ready to be deployed. The Vlocity Build tool primarily relies on unique data in fields across the different objects to prevent duplicate data being uploaded.
 
@@ -406,7 +455,7 @@ vlocity -propertyfile <filepath> -job <filepath> packExport
 ### packExportSingle
 `packExportSingle` will export a single DataPack and all its dependencies. It also supports only exporting the single DataPack with no dependencies by setting the depth.  
 ```bash
-vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlcoityDataPackType> -id <Salesforce Id> -depth <Integer>
+vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlocityDataPackType> -id <Salesforce Id> -depth <Integer>
 ```
 
 Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
@@ -783,8 +832,14 @@ After a Deploy the Ids of every record deployed will be in the JSON Object List.
     "Id": "01r61000000DeTeAAN"
 }
 ```
+
+## Matching Keys
+DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define the uniqnueness of any SObject. 
+
+For Example, a Product2 in Vlocity DataPacks is unique by the `vlocity_namespace__GlobalKey__c` field by default. If your Org has a different field that is used for uniqueness like `ProductCode`, you can override this Vlocity Matching Key and use your unique field instead.
+
 ### Creating Custom Matching Keys
-DataPacks uses a Custom Metadata Object called a Vlocity Matching Key to define the uniqnueness of any SObject. Matching Keys contain the following fields:  
+Vlocity Matching Keys are a *Custom Metadata Type* in Salesforce. Vlocity Matching Keys contain the following fields:  
 
 | Name | API Name | Description |   
 | --- | --- | --- |    
@@ -973,4 +1028,12 @@ The following full list of settings are supported:
 | MaxDeploy | Integer | 50 | Specify the maximum number of DataPacks which should be uploaded in a single transaction
 | HeadersOnly | Boolean | false | Support uploading only the top level SObject in the DataPack. Good for potentially fixing circular reference issues
 | ExportGroupSize | Integer | 5 | Specify the maximum number of DataPacks which should be Exported in a single transaction. Potentially large DataPacks like Matrix or Attachments could be set to 1 if necessary
- 
+
+# OmniOut
+-----------
+
+In order to Retrieve the OmniScripts that will be deployed as part of the OmniOut deployment, run the following command:
+
+`vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js omniOutRetrieve.js`
+
+This will export the retrieved files into the folder `OmniOut/scripts` in your Project.

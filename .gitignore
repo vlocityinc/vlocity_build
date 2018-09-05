@@ -11,3 +11,6 @@ example_vlocity_build/
 test/testJobRunning/
 .vscode/
 .sfdx/
+bin/vlocity*
+VlocityBuildLog.yaml
+VlocityBuildErrors.log

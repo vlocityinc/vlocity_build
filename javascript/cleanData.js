@@ -8,11 +8,13 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
         // Delete
         var healthCheckItems = {
             Delete: [
-                'SELECT Id FROM vlocity_namespace__ProductChildItem__c where vlocity_namespace__ParentProductId__c = null',
+                'SELECT Id FROM vlocity_namespace__ProductChildItem__c where vlocity_namespace__ParentProductId__c = null OR (vlocity_namespace__ChildProductId__c = null AND vlocity_namespace__IsRootProductChildItem__c = false)',
+                //'SELECT Id FROM vlocity_namespace__OverrideDefinition__c where (vlocity_namespace__OverriddenProductChildItemId__c = null AND vlocity_namespace__OverridingProductChildItemId__c != null) OR (vlocity_namespace__OverriddenProductChildItemId__c != null AND vlocity_namespace__OverridingProductChildItemId__c = null) OR (vlocity_namespace__OverriddenAttributeAssignmentId__c = null AND vlocity_namespace__OverridingAttributeAssignmentId__c != null) OR (vlocity_namespace__OverriddenAttributeAssignmentId__c != null AND vlocity_namespace__OverridingAttributeAssignmentId__c = null) OR (vlocity_namespace__OverridingPriceListEntryId__c = null AND vlocity_namespace__OverriddenPriceListEntryId__c != null) OR (vlocity_namespace__OverridingPriceListEntryId__c != null AND vlocity_namespace__OverriddenPriceListEntryId__c = null) OR ( vlocity_namespace__OverriddenProductChildItemId__c = null AND vlocity_namespace__OverridingProductChildItemId__c = null AND vlocity_namespace__OverriddenAttributeAssignmentId__c = null AND vlocity_namespace__OverridingAttributeAssignmentId__c = null AND vlocity_namespace__OverridingPriceListEntryId__c = null AND vlocity_namespace__OverriddenPriceListEntryId__c = null)',
                 'SELECT Id FROM vlocity_namespace__AttributeAssignment__c where vlocity_namespace__AttributeId__c = null',
                 'SELECT Id FROM vlocity_namespace__PriceListEntry__c where vlocity_namespace__ProductId__c = null',
                 'SELECT Id FROM vlocity_namespace__VqMachineResource__c where vlocity_namespace__VqResourceId__c = null OR vlocity_namespace__VqMachineId__c = null',
-                'SELECT Id FROM vlocity_namespace__VlocityDataPack__c where vlocity_namespace__Status__c in (\'Ready\',\'InProgress\',\'Complete\') AND CreatedDate != TODAY'
+                'SELECT Id FROM vlocity_namespace__VlocityDataPack__c where vlocity_namespace__Status__c in (\'Ready\',\'InProgress\',\'Complete\') AND CreatedDate != TODAY',
+
             ],
             AddGlobalKey: [
                 'SELECT Id FROM vlocity_namespace__AttributeAssignment__c WHERE vlocity_namespace__GlobalKey__c = null',
@@ -79,7 +81,8 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__VlocityFunctionArgument__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__VlocityFunction__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT Name, count(Id) FROM vlocity_namespace__InterfaceImplementation__c GROUP BY Name HAVING count(Id) > 1',
-                'SELECT vlocity_namespace__CatalogId__c, count(Id) FROM vlocity_namespace__CatalogProductRelationship__c GROUP BY vlocity_namespace__CatalogId__c, vlocity_namespace__Product2Id__c HAVING count(Id) > 1'
+                'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__Catalog__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
+                'SELECT vlocity_namespace__CatalogId__c, vlocity_namespace__Product2Id__c, count(Id) FROM vlocity_namespace__CatalogProductRelationship__c GROUP BY vlocity_namespace__CatalogId__c, vlocity_namespace__Product2Id__c HAVING count(Id) > 1'
             ]
         }; 
 
@@ -130,7 +133,6 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
                     var sobjectType = item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP'));
                     var field = item.query.substring(item.query.indexOf('SELECT') + 7, item.query.indexOf(','));
-                   console.log(record);
                     jobInfo.report.push(item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP')) + 'found duplicates for ' + field + ': ' + record[field]);
                 } else {
                     item.records.push(record);

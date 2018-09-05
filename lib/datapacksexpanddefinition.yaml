@@ -5,6 +5,8 @@ DataPacks:
     UniqueByName: true
   CalculationProcedure:
     UniqueByName: true
+  Catalog:
+    MaxDeploy: 1
   ContractType:
     UniqueByName: true  
   DataRaptor:
@@ -42,6 +44,7 @@ DataPacks:
     - Type__c
     - SubType__c
     - Language__c
+    PaginationSize: 5000
     SupportParallel: 
       IsReusable__c: false
   PriceList:
@@ -58,9 +61,8 @@ DataPacks:
     PaginationSize: 500
   Product2:
     HeadersOnly: true
-    PricebookEntry:
-      ListFileName:
-      - _StandardPricebookEntry
+    IgnoreExpand:
+    - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
     SupportParallel: false
@@ -261,6 +263,16 @@ SObjects:
     - DeveloperName
   DocumentClause__c: {}
   DocumentTemplate__c: {}
+  DocumentTemplateSection__c: 
+    SortFields:
+    - Sequence__c
+    SourceKeyDefinition:
+    - Name
+    - Sequence__c
+  DocumentTemplateSectionCondition__c: 
+    SourceKeyDefinition:
+    - DocumentTemplateSectionId__c
+    - ConditionalExpression__c
   Element__c:
     FileName:
     - _Element
@@ -440,6 +452,8 @@ SObjects:
       - _JavaScript
       FileType: js
   PricebookEntry:
+    FilterFields:
+    - Pricebook2.IsActive
     SortFields:
     - VlocityRecordSourceKey
     SourceKeyDefinition:
@@ -574,10 +588,7 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   VlocitySearchWidgetSetup__c: {}
-  VlocityStateModel__c:
-    FileName:
-    - _v
-    - VersionNumber__c
+  VlocityStateModel__c: {}
   VlocityStateTransition__c:
     NonUnique: true
   VlocityState__c: {}
