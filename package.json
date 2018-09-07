@@ -11,6 +11,7 @@
         "nopt": "4.0.1",
         "properties": "1.2.1",
         "sass.js": "0.10.6",
+        "sfdx-node": "^1.0.0",
         "unidecode": "0.1.8"
     },
     "description": "",

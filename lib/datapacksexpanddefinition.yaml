@@ -1,6 +1,7 @@
 DataPacks:
   Attachment:
     ChildrenLimit: 10
+    IsDiffable: false
   CalculationMatrix:
     UniqueByName: true
   CalculationProcedure:
@@ -91,6 +92,7 @@ DataPacksDefault:
   PaginationSize: 1000
   SupportParallel: true
   ChildrenLimit: 100
+  IsDiffable: true
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
