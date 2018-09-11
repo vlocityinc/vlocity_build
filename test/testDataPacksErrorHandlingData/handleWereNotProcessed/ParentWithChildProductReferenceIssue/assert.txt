@@ -1,0 +1,1 @@
+Product2/bde15892-31df-ef61-53e7-de1b20505e6a -- DataPack >> parent with child product reference issue -- Error Message -- DataPack contains data that was not deployed due to setting mismatch between source and target orgs. Please run packUpdateSettings in both orgs to ensure the settings are the same.
