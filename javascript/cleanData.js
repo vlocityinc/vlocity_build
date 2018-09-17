@@ -48,6 +48,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT Id FROM vlocity_namespace__TimePolicy__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__UIFacet__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__UISection__c WHERE vlocity_namespace__GlobalKey__c = null',
+                'SELECT Id FROM vlocity_namespace__VlocityAttachment__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__VlocityFunctionArgument__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__VlocityFunction__c WHERE vlocity_namespace__GlobalKey__c = null',
                 'SELECT Id FROM vlocity_namespace__VlocityUILayout__c WHERE vlocity_namespace__GlobalKey__c = null'
@@ -82,6 +83,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__VlocityFunction__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT Name, count(Id) FROM vlocity_namespace__InterfaceImplementation__c GROUP BY Name HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__Catalog__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
+                'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__VlocityAttachment__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
                 'SELECT vlocity_namespace__CatalogId__c, vlocity_namespace__Product2Id__c, count(Id) FROM vlocity_namespace__CatalogProductRelationship__c GROUP BY vlocity_namespace__CatalogId__c, vlocity_namespace__Product2Id__c HAVING count(Id) > 1'
             ]
         }; 

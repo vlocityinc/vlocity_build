@@ -85,6 +85,7 @@ DataPacks:
   VlocityUITemplate:
     UniqueByName: true
   VlocityAttachment:
+    IsDiffable: false
     SupportParallel: false
 DataPacksDefault:
   DisplayName: []
@@ -314,6 +315,8 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   InterfaceImplementation__c:
+    FilterFields:
+    - ImplementationClassName__c
     FolderName: 
     - Name
     SourceKeyDefinition:
@@ -576,7 +579,11 @@ SObjects:
   VlocityAction__c:
     FilterFields:
     - IsActive__c
-  VlocityAttachment__c: {}
+  VlocityAttachment__c: 
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c
   VlocityCard__c:
     Definition__c: json
     FilterFields:
