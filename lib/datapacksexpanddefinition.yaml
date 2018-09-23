@@ -8,6 +8,7 @@ DataPacks:
     UniqueByName: true
   Catalog:
     MaxDeploy: 1
+    SupportParallel: false
   ContractType:
     UniqueByName: true  
   DataRaptor:

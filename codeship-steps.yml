@@ -1,0 +1,7 @@
+- name: test
+  service: vlocitybuild
+  command: ./codeship/test.sh
+- name: publish
+  service: vlocitybuild
+  tag: ^(master|staging)
+  command: ./codeship/publish.sh
