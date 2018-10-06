@@ -13,6 +13,8 @@ DataPacks:
     UniqueByName: true  
   DataRaptor:
     UniqueByName: true
+  Document:
+    IsDiffable: false  
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -630,6 +632,9 @@ SObjects:
     - SampleJson__c
     - Author__c
   VqMachine__c: {}
+  VqMachineResource__c: 
+    ReplacementFields:
+      Name: _MachineResource
   VqResource__c: {}
 SObjectsDefault:
   FileName:
