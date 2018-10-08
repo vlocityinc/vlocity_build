@@ -3,15 +3,39 @@
 
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
-## ** Changes to Enterprise Product Catalog DataPacks **
+# Recent Major Changes
+--------
+
+## v1.7.0 - OmniScript and IntegrationProcedure
+The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level fields which previously controlled how the OmniScript Elements were ordered in the UI. Now the Elements__c Array in the OmniScript `_DataPack.json` file is ordered in the display order of the UI.
+
+This change will affect any newly exported OmniScript and IntegrationProcedure, and all files in the newly exported DataPacks should be committed to version control. 
+
+This change can be applied to all OmniScripts and IntegrationProcedures immediately by running the `refreshProject` command. 
+
+All existing data is still compatible, and issues will only arise when an OmniScript or IntegrationProcedure exported with Vlocity Build 1.7+ is deployed with an earlier version of the Vlocity Build Tool. 
+
+Please ensure everyone on your project is using the same version of this build tool.
+
+## v1.6.0 - Enterprise Product Catalog - Product2, Pricebook and PriceList 
 The Product2 DataPack has been modified to include all Pricebook and PriceList Entries for the Product. This means that a Product can be migrated from one org to another along with its Pricing Information without migrating the other Products in the Pricebook and Price List. 
 
 Running `packUpdateSettings` and re-exporting the Product2, Pricebook and PriceList is necessary to migrate to the new format, however existing data should still be deployable with the new changes.
 
+## Rolling Back Changes to the Vlocity Build Tool
 If you have any issues with these changes you can install the previous version of the tool with:
 ```bash
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 ```
+
+# Recent Features
+--------
+
+## v1.7.0 - OmniScript and IntegrationProcedure
+The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level. This means that merging changes for these objects is now much easier.
+
+## v1.7.0 - SFDX
+Authentication with Salesforce DX credentials is now possible. Use `-sfdx.username` to use a Salesforce DX Authorized Org for `vlocity` commands. Once you are passing this parameter you will not need a password or any other propertyfile information. The Salesforce DX Authorization from `sfdx force:org:display -u <username>` will handle all the information. Passing an alias will work as well.
 
 ## Table of Contents
 * [Installation Instructions](#installation-instructions)
@@ -20,11 +44,13 @@ npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
   * [Simple Export](#simple-export)
   * [Simple Deploy](#simple-deploy)
   * [Org to Org Migration](#org-to-org-migration)
+* [Automation Guide](#automation-quick-guide)
 * [The Job File](#the-job-file)
   * [Example Job File](#example-job-file)
 * [Troubleshooting](#troubleshooting)
 * [All Commands](#all-commands)
   * [Example Commands](#example-commands)
+  * [Additional Command Line Options ](#additional-command-line-options)
 * [Advanced Job File Settings](#advanced-job-file-settings)
 * [Supported DataPack Types](#supported-datapack-types)
 * [Advanced](#advanced)
@@ -82,7 +108,9 @@ npm install
 
 # Getting Started
 ------------
-To begin, create your own property files for your Source and Target Salesforce Orgs with the following:
+If you are using Salesforce DX, you can use `-sfdx.username` to use a Salesforce DX Authorized Org for authentication. The Vlocity Build Tool will use the Salesforce DX information from `sfdx force:org:display -u <username or alias>`. This can be a Scratch Org, or one Authorized through `sfdx force:auth:web:login`.
+
+Otherwise, create your own property files for your Source and Target Salesforce Orgs with the following:
 ```java
 sf.username = < Salesforce Username >
 sf.password = < Salesforce Password + Security Token >
@@ -252,6 +280,75 @@ If you have recently installed the Vlocity Managed Package or created a Sandbox 
 vlocity -propertyfile build_target.properties --nojob packUpdateSettings refreshVlocityBase
 ```
 This will install the Base UI Templates, CPQ Base Templates, EPC Default Objects and any other default data delivered through Vlocity DataPacks. This command should only be run if the Org was not previously used for Vlocity Development.
+
+# Automation Quick Guide
+------------
+
+## Vlocity Build + Salesforce DX
+
+Vlocity Build is meant to fit seamlessly into an Automated Salesforce Build.
+
+A simple Project could look like:  
+![Project](doc/ProjectStructure.png)
+
+Which includes Vlocity DataPacks in `vlocity_components` folder and a Salesforce DX Project in the `salesforce_sfdx` folder. 
+
+A Shell script with Salesforce DX and Vlocity Build would have the following:
+```bash
+# Use JWT Authorization flow for Jenkins / Automation Server - Additional info below
+sfdx force:auth:jwt:grant --username "$DP_BT_HUB" --jwtkeyfile "$DP_BT_JWT" --clientid "$DP_DT_CONNECTED" --setdefaultdevhubusername
+
+# Change how long the Scratch Org will last. Max: 30
+DURATION_DAYS=1
+
+# Create Scratch Org if no Username provided as first argument to script. 
+# Get Created Username using jq bash tool. 
+# Can also just set "--alias ${JOB_NAME}_${JOB_NUMBER}" and use Alias as username in subsequent calls
+
+if [ -z "$1" ]; then
+    SCRATCH_ORG=`sfdx force:org:create --definitionfile config/scratch.json --durationdays $DURATION_DAYS --json`
+    SF_USERNAME=`echo $SCRATCH_ORG | jq -r '. | .result.username'`
+else 
+    SF_USERNAME=$1
+fi
+
+# Install or Update Managed Package
+sfdx force:mdapi:deploy --deploydir managed_packages/vlocity_package --wait -1 --targetusername $SF_USERNAME
+
+# Push Salesforce part of Project
+sfdx force:source:push --targetusername $SF_USERNAME
+
+# Refresh Vlocity Base - Installs all the Base DataPacks that can also be installed manually through 
+# the Vlocity Cards and Vlocity UI Templates Home Screens - 
+# Should only be run on newly created Orgs - Never in Production!
+# vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml refreshVlocityBase
+
+# Update Settings
+vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml packUpdateSettings
+
+# Deploy Vlocity folder
+vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml packDeploy
+```
+
+### Vlocity Managed Package
+The managed package in the example is installed through the Metadata API with `sfdx`. It is stored at the path `managed_packages/vlocity_package/installedPackages/vlocity_cmt.installedPackage`. The version of the package installed can be updated in this file.
+
+```xml
+<InstalledPackage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <versionNumber>900.171.0</versionNumber>
+</InstalledPackage>
+```
+
+## Running in Jenkins
+In order to run `sfdx` in Jenkins (or any server) you must setup [JWT Authorization.](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm)
+
+Salesforce additionally provides a [Trailhead for Travis CI](https://trailhead.salesforce.com/modules/sfdx_travis_ci/units/sfdx_travis_ci_connected_app)
+
+The first step of setting up Jenkins for this project is adding the JWT Bindings:
+![Bindings](doc/Bindings.png)
+
+Then adding the build step:
+![Build](doc/Build.png)
 
 # The Job File
 ------------
@@ -430,9 +527,9 @@ This will provide a list of files that are different locally than in the org. In
 ## Troubleshooting 
 `packContinue`: Continues a job that failed due to an error  
 `packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
-`validateLocalData`:  Check for Missing Global Keys in Data.
-`cleanOrgData`: Run Scripts to Clean Data in the Org and Add Global Keys to SObjects missing them
-`refreshProject`: Refresh the Project's Data to the latest format for this tool
+`validateLocalData`:  Check for Missing Global Keys in Data.  
+`cleanOrgData`: Run Scripts to Clean Data in the Org and Add Global Keys to SObjects missing them  
+`refreshProject`: Refresh the Project's Data to the latest format for this tool  
 
 ## Additional 
 `packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org  
@@ -515,6 +612,60 @@ vlocity -propertyfile <filepath> -job <filepath> packGetDiffsAndDeploy
 ```
 While this may take longer than doing an actual deploy, it is a great way to ensure that you are not updating items in your org more than necessary.
 
+
+# Additional Command Line Options 
+The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
+
+## Job Options 
+| Option | Description | Type  | Default |
+| ------------- |------------- |----- | -----|
+| activate | Will Activate everything after it is imported / deployed | Boolean | false |
+| addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
+| buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
+| defaultMaxParallel | The number of parallel processes to use for export | Integer | 1 |
+| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
+| continueAfterError | Don't end vlocity job on error | Boolean | false |
+| delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
+| exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
+| expansionPath | Secondary path after projectPath to expand the data for the Job | String | . |
+| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
+| manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
+| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
+| maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
+| processMultiple | When false each Export or Import will run individually | Boolean | true |
+| supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
+| supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
+| useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
+| useVlocityTriggers | Boolean | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | true |
+| disableVlocityTriggers | Boolean | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | false |
+
+## Vlocity Build Options
+| Option | Description | Type  | Default |
+| ------------- |------------- |----- | -----|
+| apex | Apex Class to run with the runApex command | String | none |
+| folder | Path to folder containing Apex Files when using the runApex command | String | none |
+| javascript | Path to javascript file to run when using the runJavaScript command | String | none |
+| json | Output the result of the Job as JSON Only. Used in CLI API applications | Boolean | false |
+| json-pretty | Output the result of the Job as more readable JSON Only. Used in CLI API applications | Boolean | false |
+| job | Path to job file | String | none |
+| manifest | JSON of VlocityDataPackKeys to be processed | JSON | none | 
+| noColor | Remove the colors from console output. Good for Automation servers. | Boolean | false |
+| nojob | Run command without specifying a Job File. Will use all default settings | Boolean | false |
+| propertyfile | Path to propertyfile which can also contain any Options | String | build.properties |
+| query | SOQL Query used for packExportSingle command | String | none |
+| queryAll | Query all default types. Overrides any project settings | Boolean | false |
+| quiet | Don't log any output | Boolean | false |
+| sandbox | Set sf.loginUrl to https://test.salesforce.com | Boolean | false | 
+| sfdx.username | Use Salesforce DX Authorized Username | String | none |
+| sf.accessToken | Salesforce Access Token when using OAuth info | String | none |
+| sf.instanceUrl | Salesforce Instance URL when using OAuth info | String | none |
+| sf.loginUrl | Salesforce Login URL when sf.username + sf.password | String | https://login.salesforce.com |
+| sf.password | Salesforce password + security token when using sf.username | String | none |
+| sf.sessionId | Salesforce Session Id when using OAuth info | String | none |
+| sf.username | Salesforce username when using sf.password | String | none |
+| type | DataPack Type used for packExportSingle command | String | none |
+| verbose | Show additional logging statements | Boolean | false |
+
 # Advanced Job File Settings
 ------------
 The Job File has a number of additonal runtime settings that can be used to define your project and aid in making Exports / Deploys run successfully. However, the Default settings should only be modified to account for unique issues in your Org. 
@@ -527,7 +678,7 @@ projectPath: ../my-project # Where the project will be contained. Use . for this
 
 expansionPath: datapack-expanded # The Path relative to the projectPath to insert 
                                  # the expanded files. Also known as the DataPack Directory 
-                                 # in this Doecumentation
+                                 # in this Documentation
 ```
 
 ## Export 
@@ -572,7 +723,7 @@ manifest:
 You can export individual SObjects by using the VlocityDataPackType SObject. This will save each SObject as its own file. 
 
 ```bash
-vlocity packExport -type SObject -query "SELECT Id from PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
+vlocity packExport -type SObject -query "SELECT Id FROM PricebookEntry WHERE Id in ('01u0a00000I4ON2AAN', '01u0a00000I4ON2AAN')"
 ```
 
 This will export the PricebookEntries into a folder called SObject_PricebookEntry.
@@ -582,7 +733,7 @@ This method is also very good for adding Custom Settings to Version Control, how
 ```yaml
 queries: 
   - VlocityDataPackType: SObject
-    query: Select Id from MyCustomSetting__c
+    query: Select Id FROM MyCustomSetting__c
 ```
 
 This will export the MyCustomSetting__c records into a folder called SObject_MyCustomSetting.
@@ -602,58 +753,7 @@ preJobApex:
   Deploy: DeactivateTemplatesAndLayouts.cls  
 ```
 
-With this default setting, the Apex Code in DeativateTemplatesAndLayouts.cls will run before the deploy to the org. In this case it will Deactivate the Vlocity Templates and Vlocity UI Layouts (Cards) associated with the Deploy. See Advanced Anonymous Apex for more details.
-
-## Additional Options 
-The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
-
-## Job Options 
-| Option | Description | Type  | Default |
-| ------------- |------------- |----- | -----|
-| activate | Will Activate everything after it is imported / deployed | Boolean | false |
-| addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
-| buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
-| defaultMaxParallel | The number of parallel processes to use for export | Integer | 1 |
-| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
-| continueAfterError | Don't end vlocity job on error | Boolean | false |
-| delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
-| exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
-| expansionPath | Secondary path after projectPath to expand the data for the Job | String | . |
-| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
-| manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
-| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
-| maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
-| processMultiple | When false each Export or Import will run individually | Boolean | true |
-| supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
-| supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
-| useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
-| useVlocityTriggers | Boolean | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | true |
-| disableVlocityTriggers | Boolean | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | false |
-
-## Vlocity Build Options
-| Option | Description | Type  | Default |
-| ------------- |------------- |----- | -----|
-| apex | Apex Class to run with the runApex command | String | none |
-| folder | Path to folder containing Apex Files when using the runApex command | String | none |
-| javascript | Path to javascript file to run when using the runJavaScript command | String | none |
-| json | Output the result of the Job as JSON Only. Used in CLI API applications | Boolean | false |
-| json-pretty | Output the result of the Job as more readable JSON Only. Used in CLI API applications | Boolean | false |
-| job | Path to job file | String | none |
-| manifest | JSON of VlocityDataPackKeys to be processed | JSON | none | 
-| nojob | Run command without specifying a Job File. Will use all default settings | Boolean | false |
-| propertyfile | Path to propertyfile which can also contain any Options | String | build.properties |
-| query | SOQL Query used for packExportSingle command | String | none |
-| queryAll | Query all default types. Overrides any project settings | Boolean | false |
-| quiet | Don't log any output | Boolean | false |
-| sandbox | Set sf.loginUrl to https://test.salesforce.com | Boolean | false | 
-| sf.accessToken | Salesforce Access Token when using OAuth info | String | none |
-| sf.instanceUrl | Salesforce Instance URL when using OAuth info | String | none |
-| sf.loginUrl | Salesforce Login URL when sf.username + sf.password | String | https://login.salesforce.com |
-| sf.password | Salesforce password + security token when using sf.username | String | none |
-| sf.sessionId | Salesforce Session Id when using OAuth info | String | none |
-| sf.username | Salesforce username when using sf.password | String | none |
-| type | DataPack Type used for packExportSingle command | String | none |
-| verbose | Show additional logging statements | Boolean | false |
+With this default setting, the Apex Code in DeativateTemplatesAndLayouts.cls will run before the deploy to the org. In this case it will Deactivate the Vlocity Templates and Vlocity UI Layouts (Cards) associated with the Deploy. See [Advanced Anonymous Apex](#advanced) for more details.
 
 # Supported DataPack Types
 These types are what would be specified when creating a Query or Manifest for the Job. 
@@ -686,10 +786,10 @@ These types are what would be specified when creating a Query or Manifest for th
 | OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
 | OrchestrationItemDefinition | OrchestrationItemDefinition__c |
 | OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
-| Pricebook2<br>(Salesforce Standard Object) | Pricebook2<br>PricebookEntry |
-| PriceList | PriceList__c<br>PriceListEntry__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
+| Pricebook2<br>(Salesforce Standard Object) | Pricebook2 |
+| PriceList | PriceList__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
 | PricingVariable | PricingVariable__c |
-| Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry(In the Standard Pricebook)<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
+| Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>RuleAssignment__c<br>ProductRequirement__c<br>ObjectFieldAttribute__c<br>PricingElement__c<br>PriceListEntry__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
 | Promotion | Promotion__c<br>PromotionItem__c |
 | QueryBuilder | QueryBuilder__c<br>QueryBuilderDetail__c |
 | Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
@@ -711,7 +811,6 @@ These types are what would be specified when creating a Query or Manifest for th
 | VqMachine<br>(Vlocity Intelligence Machine) | VqMachine__c<br>VqMachineResource__c |
 | VqResource<br>(Vlocity Intelligence Resource) | VqResource__c<br>Attachment<br>AttributeAssignment__c |
 
-
 # Advanced
 ---------------------
 
@@ -720,6 +819,9 @@ In order to make the Anonymous Apex part reusable, you can include multiple Apex
 
 ### Namespace
 In Anonymous apex vlocity_namespace will be replaced with the vlocity.namespace from the propertyfile.
+
+### Loading Apex Code
+Apex code can be loaded relative from the Project Path or with an absolute path.
 
 ### BaseUtilities.cls 
 ```java
@@ -854,6 +956,10 @@ Vlocity Matching Keys are a *Custom Metadata Type* in Salesforce. Vlocity Matchi
 Create these keys if you want to support connections between SObject Id fields that are not already supported by DataPacks, or if you would like to change the Vlocity Default for any SObject. Matching Keys created outside the Managed Package will always override ones contained inside (Post Vlocity v15).
 
 For Custom Settings `MatchingKeyFields__c` should always be `Name`.
+
+The following would be used to change the Matching Key of a Product2 to its ProductCode instead of using Vlocity's GlobalKey field. This is great if your project has Unique ProductCode's for each Product2. As long as the same Matching Keys are used in each Org, then there will be no issues with using Custom Matching Keys. As these are Salesforce Metadata, they can be added to the version controlled project as well.
+
+![Custom Matching Key](doc/CustomMatchingKey.png)
 
 ### Current Matching Keys
 | Object API Name | Matching Key Fields |       

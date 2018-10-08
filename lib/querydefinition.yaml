@@ -71,7 +71,7 @@ OrchestrationDependencyDefinition:
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__OrchestrationDependencyDefinition__c
 OrchestrationItemDefinition:
   VlocityDataPackType: OrchestrationItemDefinition
-  query: Select Id, Name from %vlocity_namespace%__OrchestrationItemDefinition__c
+  query: Select Id, Name, %vlocity_namespace%__OrchestrationPlanDefinitionId__r.Name from %vlocity_namespace%__OrchestrationItemDefinition__c
 OrchestrationPlanDefinition:
   VlocityDataPackType: OrchestrationPlanDefinition
   query: Select Id, Name from %vlocity_namespace%__OrchestrationPlanDefinition__c
