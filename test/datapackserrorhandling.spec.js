@@ -1,5 +1,4 @@
 'use strict'
-
 var fs = require('fs-extra');
 var path = require('path');
 
@@ -31,12 +30,6 @@ describe('DataPacksErrorHandling', () => {
     describe('handleIncorrectImportData', () => {
         runTest('handleIncorrectImportData');
     })
-
-    /*
-    describe('handleSObjectUniqueness', () => {
-        runTest('handleSObjectUniqueness'); // TODO: requires login credentials and dynamic assert
-    })
-    */
     
     // ------ EXPORT ERRORS ------
     describe('handleNotFound', () => {
@@ -95,7 +88,7 @@ describe('DataPacksErrorHandling', () => {
         var errorMessage;
 
         it('should return a error message - MissingReference', () => {
-            errorMessage = 'No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935TES';
+            errorMessage = 'No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935';
             expect(datapackserrorhandling.getMatchingError(errorMessage)).to.be.eq('MissingReference');
         })
 
@@ -110,7 +103,7 @@ describe('DataPacksErrorHandling', () => {
         })
 
         it('should return a error message - WereNotProcessed', () => {
-            errorMessage = 'No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935TEST';
+            errorMessage = 'Some records were not processed. Please validate imported data types. ["Pricebook2/B2B - All"]';
             expect(datapackserrorhandling.getMatchingError(errorMessage)).to.be.eq('WereNotProcessed');
         })
 

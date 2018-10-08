@@ -1,0 +1,18 @@
+- Action: validateInOrg
+- Action: getCartsProducts
+  Assert:
+    totalSize: "> 0"
+  TimeTrack: true
+- Action: addProduct
+  TimeTrack: true
+- Action: getCartItems
+  Assert:
+    totalSize: "> 0"
+  TimeTrack: true
+- Action: deleteCartItems
+  TimeTrack: true
+- Action: getCartItems
+  Assert:
+    totalSize: 0
+  TimeTrack: true
+- Action: cleanDataAll
