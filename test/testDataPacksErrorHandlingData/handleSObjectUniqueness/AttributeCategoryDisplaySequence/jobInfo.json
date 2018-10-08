@@ -1,0 +1,196 @@
+{
+    "projectPath": "/Users/alex/Documents/vDeploy/vlocitybuild/example_vlocity_build",
+    "queries": [
+    {
+        "VlocityDataPackType": "AttributeCategory",
+        "query": "Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__AttributeCategory__c"
+    }],
+    "job": "runErrorHandling.yaml",
+    "propertyfile": "build_target.properties",
+    "jobName": "runErrorHandling.yaml",
+    "jobAction": "Deploy",
+    "expansionPath": ".",
+    "buildFile": "AllDataPacks.json",
+    "preStepApex":
+    {
+        "Deploy":
+        {
+            "VlocityUITemplate": "DeactivateTemplatesAndLayouts.cls",
+            "VlocityUILayout": "DeactivateTemplatesAndLayouts.cls"
+        }
+    },
+    "postStepApex":
+    {
+        "Deploy":
+        {
+            "Product2": "EPCProductJSONUpdate.cls"
+        }
+    },
+    "delete": true,
+    "activate": true,
+    "compileOnBuild": true,
+    "maxDepth": -1,
+    "defaultMaxParallel": 10,
+    "exportPacksMaxSize": 10,
+    "useAllRelationships": false,
+    "ignoreAllErrors": false,
+    "addSourceKeys": false,
+    "maximumDeployCount": 1000,
+    "manifestOnly": false,
+    "continueAfterError": true,
+    "supportHeadersOnly": true,
+    "supportForceDeploy": true,
+    "strict": false,
+    "startTime": 1536617527781,
+    "originalAction": "Deploy",
+    "logName": "runErrorHandling-yaml-2018-09-10T22-12-07-781Z-Deploy.yaml",
+    "alreadyExportedKeys": [],
+    "allParents": ["AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054"],
+    "errors": ["AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054 -- DataPack >> test -- Error Message -- duplicate value found: <unknown> duplicates value on record with id: <unknown>"],
+    "report": [],
+    "postDeployResults": [],
+    "preDeployDataSummary": [
+    {
+        "VlocityRecordSObjectType": "%vlocity_namespace%__AttributeCategory__c",
+        "Name": "test",
+        "%vlocity_namespace%__Code__c": "549f657a-7831-2860-b602-2d569f3d4054",
+        "VlocityRecordSourceKey": "%vlocity_namespace%__AttributeCategory__c/549f657a-7831-2860-b602-2d569f3d4054",
+        "VlocityDataPackType": "AttributeCategory"
+    }],
+    "refreshVlocityBase": [],
+    "currentStatus":
+    {
+        "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054": "Error"
+    },
+    "currentErrors":
+    {
+        "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054": "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054 -- DataPack >> test -- Error Message -- duplicate value found: <unknown> duplicates value on record with id: <unknown>"
+    },
+    "sourceKeysByParent":
+    {},
+    "alreadyExportedIdsByType":
+    {},
+    "alreadyErroredIdsByType":
+    {},
+    "alreadyRetriedIdsByType":
+    {},
+    "vlocityKeysToNewNamesMap":
+    {},
+    "vlocityRecordSourceKeyMap":
+    {},
+    "VlocityDataPackIds":
+    {},
+    "generatedKeysToNames":
+    {
+        "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054": "test"
+    },
+    "sourceKeyToRecordId":
+    {},
+    "dataPackKeyToPrimarySourceKey":
+    {
+        "%vlocity_namespace%__AttributeCategory__c/549f657a-7831-2860-b602-2d569f3d4054": "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054"
+    },
+    "diffStatus":
+    {},
+    "fullManifest":
+    {},
+    "manifestFound":
+    {},
+    "dataPackDisplayLabels":
+    {},
+    "allDataSummary":
+    {
+        "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054":
+        {
+            "VlocityRecordSObjectType": "%vlocity_namespace%__AttributeCategory__c",
+            "Name": "test",
+            "%vlocity_namespace%__Code__c": "549f657a-7831-2860-b602-2d569f3d4054",
+            "VlocityRecordSourceKey": "%vlocity_namespace%__AttributeCategory__c/549f657a-7831-2860-b602-2d569f3d4054",
+            "VlocityDataPackType": "AttributeCategory"
+        }
+    },
+    "pendingFromManifest":
+    {},
+    "keysToDirectories":
+    {
+        "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054": "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054"
+    },
+    "errorHandling":
+    {
+        "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054":
+        {
+            "dataPack":
+            {
+                "VlocityPrimarySourceId": null,
+                "VlocityPreviousPageKey": null,
+                "VlocityMultiPackParentKey": null,
+                "VlocityDepthFromPrimary": 0,
+                "VlocityDataPackType": "AttributeCategory",
+                "VlocityDataPackStatus": "Error",
+                "VlocityDataPackRelationshipType": "Primary",
+                "VlocityDataPackRecords": [
+                {
+                    "VlocityRecordStatus": "Error",
+                    "VlocityRecordSourceKey": "%vlocity_namespace%__AttributeCategory__c/549f657a-7831-2860-b602-2d569f3d4054",
+                    "VlocityRecordSObjectType": null,
+                    "VlocityRecordSalesforceId": null,
+                    "VlocityRecordName": "test",
+                    "VlocityRecordError": "duplicate value found: <unknown> duplicates value on record with id: <unknown> ",
+                    "VlocityDataPackKey": "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054"
+                }],
+                "VlocityDataPackParents": [],
+                "VlocityDataPackName": "test",
+                "VlocityDataPackMessage": "duplicate value found: <unknown> duplicates value on record with id: <unknown> ",
+                "VlocityDataPackLabel": "Attribute Category",
+                "VlocityDataPackKey": "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054",
+                "VlocityDataPackIsNotSupported": false,
+                "VlocityDataPackIsIncluded": true,
+                "VlocityDataPackData":
+                {
+                    "%vlocity_namespace%__AttributeCategory__c": [
+                    {
+                        "VlocityDataPackIsIncluded": true,
+                        "VlocityRecordSourceKey": "%vlocity_namespace%__AttributeCategory__c/549f657a-7831-2860-b602-2d569f3d4054",
+                        "VlocityRecordSObjectType": "%vlocity_namespace%__AttributeCategory__c",
+                        "VlocityDataPackType": "SObject",
+                        "Name": "test",
+                        "%vlocity_namespace%__UIControlType__c": "On-Off",
+                        "%vlocity_namespace%__Status__c": "",
+                        "%vlocity_namespace%__LockedFlg__c": false,
+                        "%vlocity_namespace%__IsUserAttributesCreatedPrivate__c": false,
+                        "%vlocity_namespace%__IsPrivate__c": false,
+                        "%vlocity_namespace%__IsActive__c": true,
+                        "%vlocity_namespace%__IndustryVertical__c": "",
+                        "%vlocity_namespace%__GlobalKey__c": "",
+                        "%vlocity_namespace%__EffectiveUntilDate__c": "",
+                        "%vlocity_namespace%__EffectiveFromDate__c": "",
+                        "%vlocity_namespace%__DisplaySequence__c": 2,
+                        "%vlocity_namespace%__DisplayFilter__c": false,
+                        "%vlocity_namespace%__Description__c": "",
+                        "%vlocity_namespace%__ColorCode__c": "",
+                        "%vlocity_namespace%__Code__c": "549f657a-7831-2860-b602-2d569f3d4054",
+                        "%vlocity_namespace%__ApplicableTypes__c": "Any",
+                        "%vlocity_namespace%__ApplicableTypesFilter__c": "",
+                        "%vlocity_namespace%__ApplicableSubType__c": "Profile Attribute"
+                    }],
+                    "VlocityDataPackIsIncluded": true,
+                    "VlocityDataPackType": "AttributeCategory",
+                    "VlocityDataPackKey": "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054"
+                },
+                "VlocityDataPackAllRelationships":
+                {},
+                "DataPackAttachmentSize": 2314,
+                "DataPackAttachmentParentId": "a1H6A0000018ug7UAA",
+                "DataPackAttachmentId": "00P6A00000DbcviUAB",
+                "ActivationStatus": "NA"
+            },
+            "errorMessage": "AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054 -- DataPack >> test -- Error Message -- duplicate value found: <unknown> duplicates value on record with id: <unknown>",
+            "processed": false
+        }
+    },
+    "relationshipKeyToChildKeys":
+    {},
+    "addedToExportBuildFile": [],
+    "supportParallel": true,
+    "hasError": true
+}

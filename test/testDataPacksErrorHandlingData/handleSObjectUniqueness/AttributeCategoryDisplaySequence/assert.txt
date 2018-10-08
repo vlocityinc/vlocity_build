@@ -1,0 +1,1 @@
+AttributeCategory/549f657a-7831-2860-b602-2d569f3d4054 -- DataPack >> test -- Error Message --  duplicate field value found: 2 on the field: dev_core__DisplaySequence__c on record with id: a086A000003vcxUQAQ -- Change the dev_core__DisplaySequence__c field value of the dev_core__AttributeCategory__c on record with id: a086A000003vcxUQAQ in the target org to resolve the issue.

@@ -1,0 +1,33 @@
+{
+    "VlocityPrimarySourceId": null,
+    "VlocityPreviousPageKey": null,
+    "VlocityMultiPackParentKey": null,
+    "VlocityDepthFromPrimary": 0,
+    "VlocityDataPackType": "DataRaptor",
+    "VlocityDataPackStatus": "Error",
+    "VlocityDataPackRelationshipType": "Sibling",
+    "VlocityDataPackRecords": [],
+    "VlocityDataPackParents": [],
+    "VlocityDataPackName": "test",
+    "VlocityDataPackMessage": "Not Found",
+    "VlocityDataPackLabel": "DataRaptor",
+    "VlocityDataPackKey": "ba2320c7638165031955b55dbc9c9cf6",
+    "VlocityDataPackIsNotSupported": false,
+    "VlocityDataPackIsIncluded": true,
+    "VlocityDataPackData":
+    {
+        "Id": "test",
+        "VlocityDataPackType": "DataRaptor",
+        "VlocityDataPackLabel": "DataRaptor",
+        "VlocityDataPackKey": "ba2320c7638165031955b55dbc9c9cf6",
+        "VlocityDataPackRelationshipType": "Sibling"
+    },
+    "VlocityDataPackAllRelationships":
+    {
+        "5af6d927e853f1e4eb9daa82e00166e8": "Reference by Name"
+    },
+    "DataPackAttachmentSize": 922,
+    "DataPackAttachmentParentId": "a17f4000002lKojAAE",
+    "DataPackAttachmentId": "00Pf4000006Qs0XEAS",
+    "ActivationStatus": "NA"
+}
