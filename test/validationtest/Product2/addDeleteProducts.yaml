@@ -1,4 +1,9 @@
 - Action: validateInOrg
+- Action: createSObject
+  SObject: Account
+- Action: createCart
+  Type: Order
+  Name: OrderName
 - Action: getCartsProducts
   Assert:
     totalSize: "> 0"
