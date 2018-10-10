@@ -11,7 +11,7 @@
         "nopt": "4.0.1",
         "properties": "1.2.1",
         "sass.js": "0.10.6",
-        "sfdx-node": "1.0.0",
+        "sfdx-node": "^42.0.0",
         "unidecode": "0.1.8"
     },
     "description": "Enable Continuous Integration for Vlocity",
@@ -74,5 +74,5 @@
         "unitTest": "mocha test/**/**.spec.js",
         "build": "pkg . --out-path ./dist"
     },
-    "version": "1.7.4"
+    "version": "1.7.5"
 }
