@@ -52,7 +52,7 @@ Authentication with Salesforce DX credentials is now possible. Use `-sfdx.userna
   * [Example Commands](#example-commands)
   * [Additional Command Line Options ](#additional-command-line-options)
 * [Developer Workflow](#developer-workflow)
-* [Other Job File Settings](#Other-job-file-settings)
+* [Other Job File Settings](#other-job-file-settings)
 * [Supported DataPack Types](#supported-datapack-types)
 * [Advanced](#advanced)
   * [Matching Keys](#matching-keys)
