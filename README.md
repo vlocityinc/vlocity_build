@@ -56,7 +56,7 @@ Authentication with Salesforce DX credentials is now possible. Use `-sfdx.userna
 * [Supported DataPack Types](#supported-datapack-types)
 * [Advanced](#advanced)
   * [Matching Keys](#matching-keys)
-* [OmniOut](#OmniOut)
+* [OmniOut](#omniout)
 
 # Installation Instructions
 -----------
