@@ -1,0 +1,15 @@
+.vscode/
+.sfdx/
+.npmrc
+
+build_*.properties
+node_modules/
+vlocity-temp/
+dist/
+codeship.aes
+codeship/unencrypted*/
+
+test/testJobRunning/
+VlocityBuildLog.yaml
+VlocityBuildErrors.log
+

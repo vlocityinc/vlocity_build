@@ -5,7 +5,7 @@ const expect = require('chai').expect;
 
 describe('DataPacksUtils', () => 
 {
-    var datapacksutils = new _datapacksutils();
+    var datapacksutils = new _datapacksutils({tempFolder: '../vlocity-temp'});
     
     it('should not be null', () => { 
         expect(_datapacksutils).to.not.be.eq(null);
