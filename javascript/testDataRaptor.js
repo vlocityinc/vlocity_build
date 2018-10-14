@@ -40,11 +40,11 @@ module.exports = function(vlocity, dataPackData, jobInfo, callback) {
                             var currentTime = Date.now();
 
                             vlocity.jsForceConnection.apex.post('/' + vlocity.namespace + '/v2/DataRaptor/', body, function(err, result) {
-                                if (err) { return console.error(err); }
+                                if (err) { return VlocityUtils.error(err); }
                                 
                                 var thisTime = (Date.now() - currentTime);
 
-                                console.log(dataRaptorName + ' - ' + ((isRolledBack == "true") ? 'Old' : 'New') +': ' + result.ACTUAL + ' CPU: ' + result.CPU);
+                                VlocityUtils.log(dataRaptorName + ' - ' + ((isRolledBack == "true") ? 'Old' : 'New') +': ' + result.ACTUAL + ' CPU: ' + result.CPU);
 
                                 totalCpuTime += result.CPU;
                                 totalTime += result.ACTUAL;
@@ -52,7 +52,7 @@ module.exports = function(vlocity, dataPackData, jobInfo, callback) {
                                 timingCallback();
                             });
                         }, function(err, result) {
-                                console.log(dataRaptorName + ' - Final Total: ' + totalTime + ' Final Avg: ' + (totalTime / TOTAL_TO_RUN) + ' CPU ' +  (totalCpuTime / TOTAL_TO_RUN));
+                            VlocityUtils.log(dataRaptorName + ' - Final Total: ' + totalTime + ' Final Avg: ' + (totalTime / TOTAL_TO_RUN) + ' CPU ' +  (totalCpuTime / TOTAL_TO_RUN));
                                 seriesCallback();
                         });
                     });
