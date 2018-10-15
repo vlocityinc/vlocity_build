@@ -1,6 +1,16 @@
 #!/usr/bin/env bash 
 set -e
 
+if [ $CI_BRANCH == "master" ]; then
+    CURRENT_VERSION=`npm show vlocity version`
+    npm version $CURRENT_VERSION --no-git-tag-version
+    npm version patch --no-git-tag-version
+else 
+    CURRENT_VERSION=`npm show vlocity@next version`
+    npm version $CURRENT_VERSION --no-git-tag-version
+    npm version prerelease --no-git-tag-version
+fi
+
 npm run-script build
 
 P_VERSION=`cat package.json | jq -r '. | .version'` 
