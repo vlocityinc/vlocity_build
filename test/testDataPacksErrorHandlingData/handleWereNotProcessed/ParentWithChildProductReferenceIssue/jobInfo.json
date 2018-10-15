@@ -1,0 +1,322 @@
+{
+  "projectPath": "/Users/alex/Documents/vDeploy/vlocitybuild/example_vlocity_build",
+  "queries": [
+    {
+      "VlocityDataPackType": "AttributeCategory",
+      "query": "Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__AttributeCategory__c"
+    }
+  ],
+  "job": "runErrorHandling.yaml",
+  "propertyfile": "build_target.properties",
+  "jobName": "runErrorHandling.yaml",
+  "jobAction": "Deploy",
+  "expansionPath": ".",
+  "buildFile": "AllDataPacks.json",
+  "preStepApex": {
+    "Deploy": {
+      "VlocityUITemplate": "DeactivateTemplatesAndLayouts.cls",
+      "VlocityUILayout": "DeactivateTemplatesAndLayouts.cls"
+    }
+  },
+  "postStepApex": {
+    "Deploy": {
+      "Product2": "EPCProductJSONUpdate.cls"
+    }
+  },
+  "delete": true,
+  "activate": true,
+  "compileOnBuild": true,
+  "maxDepth": -1,
+  "defaultMaxParallel": 10,
+  "exportPacksMaxSize": 10,
+  "useAllRelationships": false,
+  "ignoreAllErrors": false,
+  "addSourceKeys": false,
+  "maximumDeployCount": 1000,
+  "manifestOnly": false,
+  "continueAfterError": true,
+  "supportHeadersOnly": true,
+  "supportForceDeploy": true,
+  "strict": false,
+  "startTime": 1536274290932,
+  "originalAction": "Deploy",
+  "logName": "runErrorHandling-yaml-2018-09-06T22-51-30-932Z-Deploy.yaml",
+  "alreadyExportedKeys": [],
+  "allParents": [
+    "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a"
+  ],
+  "errors": [
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a -- DataPack >> parent with child product reference issue -- Error Message -- No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935TEST Class.%vlocity_namespace%.DRSObjectGenerator: line 127, column 1\nClass.%vlocity_namespace%.DRSObjectGenerator: line 228, column 1\nClass.%vlocity_namespace%.DREngine.upsertIntoSalesforce: line 2613, column 1\nClass.%vlocity_namespace%.DREngine: line 405, column 1\nClass.%vlocity_namespace%.DRProcessor: line 158, column 1\nClass.%vlocity_namespace%.DRProcessor: line 113, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2476, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2226, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2360, column 1\nClass.%vlocity_namespace%.DRDataPackRestResource.doPost: line 113, column 1"
+  ],
+  "report": [],
+  "postDeployResults": [
+    {
+      "Id": "01t6A000003wW84QAE"
+    },
+    {
+      "Id": "a2t6A000002DLnUQAW"
+    }
+  ],
+  "preDeployDataSummary": [
+    {
+      "VlocityRecordSObjectType": "Product2",
+      "Name": "parent with child product reference issue2",
+      "%vlocity_namespace%__GlobalKey__c": "2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+      "VlocityRecordSourceKey": "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+      "VlocityDataPackType": "Product2"
+    },
+    {
+      "VlocityRecordSObjectType": "Product2",
+      "Name": "parent with child product reference issue",
+      "%vlocity_namespace%__GlobalKey__c": "bde15892-31df-ef61-53e7-de1b20505e6a",
+      "VlocityRecordSourceKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a",
+      "VlocityDataPackType": "Product2"
+    }
+  ],
+  "refreshVlocityBase": [],
+  "currentStatus": {
+    "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935": "Success",
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a": "Error"
+  },
+  "currentErrors": {
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a -- DataPack >> parent with child product reference issue -- Error Message -- No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935TEST Class.%vlocity_namespace%.DRSObjectGenerator: line 127, column 1\nClass.%vlocity_namespace%.DRSObjectGenerator: line 228, column 1\nClass.%vlocity_namespace%.DREngine.upsertIntoSalesforce: line 2613, column 1\nClass.%vlocity_namespace%.DREngine: line 405, column 1\nClass.%vlocity_namespace%.DRProcessor: line 158, column 1\nClass.%vlocity_namespace%.DRProcessor: line 113, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2476, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2226, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2360, column 1\nClass.%vlocity_namespace%.DRDataPackRestResource.doPost: line 113, column 1"
+  },
+  "sourceKeysByParent": {},
+  "alreadyExportedIdsByType": {},
+  "alreadyErroredIdsByType": {},
+  "alreadyRetriedIdsByType": {},
+  "vlocityKeysToNewNamesMap": {},
+  "vlocityRecordSourceKeyMap": {},
+  "VlocityDataPackIds": {},
+  "generatedKeysToNames": {
+    "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935": "parent with child product reference issue2",
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a": "parent with child product reference issue"
+  },
+  "sourceKeyToRecordId": {
+    "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935": "01t6A000003wW84QAE",
+    "%vlocity_namespace%__ProductChildItem__c/dec761f8-0bc2-352a-da1a-7d6b0123f55a": "a2t6A000002DLnUQAW"
+  },
+  "dataPackKeyToPrimarySourceKey": {
+    "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935": "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a"
+  },
+  "diffStatus": {},
+  "fullManifest": {},
+  "manifestFound": {},
+  "dataPackDisplayLabels": {},
+  "allDataSummary": {
+    "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935": {
+      "VlocityRecordSObjectType": "Product2",
+      "Name": "parent with child product reference issue2",
+      "%vlocity_namespace%__GlobalKey__c": "2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+      "VlocityRecordSourceKey": "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+      "VlocityDataPackType": "Product2"
+    },
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a": {
+      "VlocityRecordSObjectType": "Product2",
+      "Name": "parent with child product reference issue",
+      "%vlocity_namespace%__GlobalKey__c": "bde15892-31df-ef61-53e7-de1b20505e6a",
+      "VlocityRecordSourceKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a",
+      "VlocityDataPackType": "Product2"
+    }
+  },
+  "pendingFromManifest": {},
+  "keysToDirectories": {
+    "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935": "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a"
+  },
+  "errorHandling": {
+    "Product2/bde15892-31df-ef61-53e7-de1b20505e6a": {
+      "dataPack": {
+        "VlocityPrimarySourceId": null,
+        "VlocityPreviousPageKey": null,
+        "VlocityMultiPackParentKey": null,
+        "VlocityDepthFromPrimary": 0,
+        "VlocityDataPackType": "Product2",
+        "VlocityDataPackStatus": "Error",
+        "VlocityDataPackRelationshipType": "Primary",
+        "VlocityDataPackRecords": [
+          {
+            "VlocityRecordStatus": "Ready",
+            "VlocityRecordSourceKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a",
+            "VlocityRecordSObjectType": null,
+            "VlocityRecordSalesforceId": null,
+            "VlocityRecordName": null,
+            "VlocityRecordError": null,
+            "VlocityDataPackKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a"
+          },
+          {
+            "VlocityRecordStatus": "Ready",
+            "VlocityRecordSourceKey": "%vlocity_namespace%__ProductChildItem__c/31d24f86-5ed4-8563-e6e8-953c526b4326",
+            "VlocityRecordSObjectType": null,
+            "VlocityRecordSalesforceId": null,
+            "VlocityRecordName": null,
+            "VlocityRecordError": null,
+            "VlocityDataPackKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a"
+          },
+          {
+            "VlocityRecordStatus": "Ready",
+            "VlocityRecordSourceKey": "%vlocity_namespace%__ProductChildItem__c/f0f4b5c1-1978-7296-271f-190bce161c42",
+            "VlocityRecordSObjectType": null,
+            "VlocityRecordSalesforceId": null,
+            "VlocityRecordName": null,
+            "VlocityRecordError": null,
+            "VlocityDataPackKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a"
+          }
+        ],
+        "VlocityDataPackParents": [
+          "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935"
+        ],
+        "VlocityDataPackName": "parent with child product reference issue",
+        "VlocityDataPackMessage": "No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935TEST Class.%vlocity_namespace%.DRSObjectGenerator: line 127, column 1\nClass.%vlocity_namespace%.DRSObjectGenerator: line 228, column 1\nClass.%vlocity_namespace%.DREngine.upsertIntoSalesforce: line 2613, column 1\nClass.%vlocity_namespace%.DREngine: line 405, column 1\nClass.%vlocity_namespace%.DRProcessor: line 158, column 1\nClass.%vlocity_namespace%.DRProcessor: line 113, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2476, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2226, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2360, column 1\nClass.%vlocity_namespace%.DRDataPackRestResource.doPost: line 113, column 1",
+        "VlocityDataPackLabel": "Product2",
+        "VlocityDataPackKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a",
+        "VlocityDataPackIsNotSupported": false,
+        "VlocityDataPackIsIncluded": true,
+        "VlocityDataPackData": {
+          "Product2": [
+            {
+              "VlocityDataPackIsIncluded": true,
+              "VlocityRecordSourceKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a",
+              "VlocityRecordSObjectType": "Product2",
+              "VlocityDataPackType": "SObject",
+              "RevenueScheduleType": "",
+              "RevenueInstallmentPeriod": "",
+              "RecordTypeId": {
+                "VlocityRecordSObjectType": "RecordType",
+                "VlocityLookupRecordSourceKey": "RecordType/Product2/Product",
+                "VlocityDataPackType": "VlocityLookupMatchingKeyObject",
+                "SobjectType": "Product2",
+                "DeveloperName": "Product"
+              },
+              "QuantityUnitOfMeasure": "",
+              "QuantityScheduleType": "",
+              "QuantityInstallmentPeriod": "",
+              "ProductCode": "",
+              "NumberOfRevenueInstallments": "",
+              "NumberOfQuantityInstallments": "",
+              "Name": "parent with child product reference issue",
+              "IsActive": false,
+              "Family": "",
+              "ExternalId": "",
+              "ExternalDataSourceId": "",
+              "DisplayUrl": "",
+              "Description": "",
+              "CanUseRevenueSchedule": false,
+              "CanUseQuantitySchedule": false,
+              "%vlocity_namespace%__VendorAccountId__c": "",
+              "%vlocity_namespace%__Type__c": "",
+              "%vlocity_namespace%__TrackAsAgreement__c": false,
+              "%vlocity_namespace%__TimeToLive__c": "",
+              "%vlocity_namespace%__SubType__c": "",
+              "%vlocity_namespace%__Status__c": "",
+              "%vlocity_namespace%__SpecificationType__c": "",
+              "%vlocity_namespace%__Scope__c": "Order Item",
+              "%vlocity_namespace%__ProductTemplateProductId__c": "",
+              "%vlocity_namespace%__ProductSpecId__c": "",
+              "%vlocity_namespace%__ProductChildItem__c": [
+                {
+                  "VlocityDataPackIsIncluded": true,
+                  "VlocityRecordSourceKey": "%vlocity_namespace%__ProductChildItem__c/31d24f86-5ed4-8563-e6e8-953c526b4326",
+                  "VlocityRecordSObjectType": "%vlocity_namespace%__ProductChildItem__c",
+                  "VlocityDataPackType": "SObject",
+                  "Name": "Root PCI",
+                  "%vlocity_namespace%__SeqNumber__c": 1,
+                  "%vlocity_namespace%__SelectionMethodImplementation__c": "",
+                  "%vlocity_namespace%__RelationshipType__c": "Child",
+                  "%vlocity_namespace%__Quantity__c": 1,
+                  "%vlocity_namespace%__ParentProductId__c": {
+                    "VlocityRecordSObjectType": "Product2",
+                    "VlocityMatchingRecordSourceKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a",
+                    "VlocityDataPackType": "VlocityMatchingKeyObject",
+                    "%vlocity_namespace%__GlobalKey__c": "bde15892-31df-ef61-53e7-de1b20505e6a"
+                  },
+                  "%vlocity_namespace%__MinimumChildItemQuantity__c": 0,
+                  "%vlocity_namespace%__MinQuantity__c": 0,
+                  "%vlocity_namespace%__MinMaxDefaultQty__c": "0, 99999, 1",
+                  "%vlocity_namespace%__MaximumChildItemQuantity__c": 99999,
+                  "%vlocity_namespace%__MaxQuantity__c": 99999,
+                  "%vlocity_namespace%__IsVirtualItem__c": false,
+                  "%vlocity_namespace%__IsRootProductChildItem__c": true,
+                  "%vlocity_namespace%__IsOverride__c": false,
+                  "%vlocity_namespace%__GlobalKey__c": "31d24f86-5ed4-8563-e6e8-953c526b4326",
+                  "%vlocity_namespace%__CollapseHierarchy__c": false,
+                  "%vlocity_namespace%__ChildProductId__c": "",
+                  "%vlocity_namespace%__ChildLineNumber__c": "1"
+                },
+                {
+                  "VlocityDataPackIsIncluded": true,
+                  "VlocityRecordSourceKey": "%vlocity_namespace%__ProductChildItem__c/f0f4b5c1-1978-7296-271f-190bce161c42",
+                  "VlocityRecordSObjectType": "%vlocity_namespace%__ProductChildItem__c",
+                  "VlocityDataPackType": "SObject",
+                  "Name": "01tf4000002457M",
+                  "%vlocity_namespace%__SeqNumber__c": 1,
+                  "%vlocity_namespace%__SelectionMethodImplementation__c": "",
+                  "%vlocity_namespace%__RelationshipType__c": "Child",
+                  "%vlocity_namespace%__Quantity__c": 1,
+                  "%vlocity_namespace%__ParentProductId__c": {
+                    "VlocityRecordSObjectType": "Product2",
+                    "VlocityMatchingRecordSourceKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a",
+                    "VlocityDataPackType": "VlocityMatchingKeyObject",
+                    "%vlocity_namespace%__GlobalKey__c": "bde15892-31df-ef61-53e7-de1b20505e6a"
+                  },
+                  "%vlocity_namespace%__MinimumChildItemQuantity__c": 0,
+                  "%vlocity_namespace%__MinQuantity__c": 0,
+                  "%vlocity_namespace%__MinMaxDefaultQty__c": "0, 99999, 1",
+                  "%vlocity_namespace%__MaximumChildItemQuantity__c": 99999,
+                  "%vlocity_namespace%__MaxQuantity__c": 99999,
+                  "%vlocity_namespace%__IsVirtualItem__c": false,
+                  "%vlocity_namespace%__IsRootProductChildItem__c": false,
+                  "%vlocity_namespace%__IsOverride__c": false,
+                  "%vlocity_namespace%__GlobalKey__c": "f0f4b5c1-1978-7296-271f-190bce161c42",
+                  "%vlocity_namespace%__CollapseHierarchy__c": false,
+                  "%vlocity_namespace%__ChildProductId__c": {
+                    "VlocityRecordSObjectType": "Product2",
+                    "VlocityLookupRecordSourceKey": "Product2/2bf166dd-0a5b-4634-4bcb-ff73b5747935",
+                    "VlocityDataPackType": "VlocityLookupMatchingKeyObject",
+                    "%vlocity_namespace%__GlobalKey__c": "2bf166dd-0a5b-4634-4bcb-ff73b5747935TEST"
+                  },
+                  "%vlocity_namespace%__ChildLineNumber__c": "1"
+                }
+              ],
+              "%vlocity_namespace%__ParentClassId__c": "",
+              "%vlocity_namespace%__ObjectTypeId__c": "",
+              "%vlocity_namespace%__JeopardySafetyInterval__c": "",
+              "%vlocity_namespace%__JeopardySafetyIntervalUnit__c": "Seconds",
+              "%vlocity_namespace%__IsOrderable__c": true,
+              "%vlocity_namespace%__IsNotAssetizable__c": false,
+              "%vlocity_namespace%__IsLocationDependent__c": false,
+              "%vlocity_namespace%__IsConfigurable__c": false,
+              "%vlocity_namespace%__HelpText__c": "",
+              "%vlocity_namespace%__HeaderData__c": "",
+              "%vlocity_namespace%__GlobalKey__c": "bde15892-31df-ef61-53e7-de1b20505e6a",
+              "%vlocity_namespace%__EndDate__c": "",
+              "%vlocity_namespace%__EffectiveDate__c": "",
+              "%vlocity_namespace%__DefaultImageId__c": "",
+              "%vlocity_namespace%__ClassId__c": "",
+              "%vlocity_namespace%__ChangeDetectorImplementation__c": "",
+              "%vlocity_namespace%__CategoryData__c": "",
+              "%vlocity_namespace%__AttributeRules__c": "",
+              "%vlocity_namespace%__AttributeDefaultValues__c": ""
+            }
+          ],
+          "VlocityDataPackIsIncluded": true,
+          "VlocityDataPackType": "Product2",
+          "VlocityDataPackKey": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a"
+        },
+        "VlocityDataPackAllRelationships": {},
+        "DataPackAttachmentSize": 6936,
+        "DataPackAttachmentParentId": "a1H6A0000018uOOUAY",
+        "DataPackAttachmentId": "00P6A00000DbBQaUAN",
+        "ActivationStatus": "NA"
+      },
+      "errorMessage": "Product2/bde15892-31df-ef61-53e7-de1b20505e6a -- DataPack >> parent with child product reference issue -- Error Message -- No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935TEST Class.%vlocity_namespace%.DRSObjectGenerator: line 127, column 1\nClass.%vlocity_namespace%.DRSObjectGenerator: line 228, column 1\nClass.%vlocity_namespace%.DREngine.upsertIntoSalesforce: line 2613, column 1\nClass.%vlocity_namespace%.DREngine: line 405, column 1\nClass.%vlocity_namespace%.DRProcessor: line 158, column 1\nClass.%vlocity_namespace%.DRProcessor: line 113, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2476, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2226, column 1\nClass.%vlocity_namespace%.DRDataPackService: line 2360, column 1\nClass.%vlocity_namespace%.DRDataPackRestResource.doPost: line 113, column 1",
+      "processed": false
+    }
+  },
+  "relationshipKeyToChildKeys": {},
+  "addedToExportBuildFile": [],
+  "supportParallel": true,
+  "hasError": true
+}

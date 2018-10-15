@@ -1,0 +1,122 @@
+{
+    "VlocityPrimarySourceId": null,
+    "VlocityPreviousPageKey": null,
+    "VlocityMultiPackParentKey": null,
+    "VlocityDepthFromPrimary": 0,
+    "VlocityDataPackType": "Catalog",
+    "VlocityDataPackStatus": "Error",
+    "VlocityDataPackRelationshipType": "Primary",
+    "VlocityDataPackRecords": [
+    {
+        "VlocityRecordStatus": "Ready",
+        "VlocityRecordSourceKey": "%vlocity_namespace%__Catalog__c/Root",
+        "VlocityRecordSObjectType": null,
+        "VlocityRecordSalesforceId": null,
+        "VlocityRecordName": null,
+        "VlocityRecordError": null,
+        "VlocityDataPackKey": "Catalog/Root"
+    },
+    {
+        "VlocityRecordStatus": "Error",
+        "VlocityRecordSourceKey": "%vlocity_namespace%__CatalogRelationship__c/Deals32532",
+        "VlocityRecordSObjectType": null,
+        "VlocityRecordSalesforceId": null,
+        "VlocityRecordName": "Deals2",
+        "VlocityRecordError": "Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. %vlocity_namespace%__CatalogRelationship__c: Deals2",
+        "VlocityDataPackKey": "Catalog/Root"
+    },
+    {
+        "VlocityRecordStatus": "Ready",
+        "VlocityRecordSourceKey": "%vlocity_namespace%__CatalogRelationship__c/Deals235235",
+        "VlocityRecordSObjectType": null,
+        "VlocityRecordSalesforceId": null,
+        "VlocityRecordName": null,
+        "VlocityRecordError": null,
+        "VlocityDataPackKey": "Catalog/Root"
+    }],
+    "VlocityDataPackParents": ["Catalog/Deals"],
+    "VlocityDataPackName": "Root",
+    "VlocityDataPackMessage": "Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. %vlocity_namespace%__CatalogRelationship__c: Deals2",
+    "VlocityDataPackLabel": "Catalog",
+    "VlocityDataPackKey": "Catalog/Root",
+    "VlocityDataPackIsNotSupported": false,
+    "VlocityDataPackIsIncluded": true,
+    "VlocityDataPackData":
+    {
+        "%vlocity_namespace%__Catalog__c": [
+        {
+            "VlocityDataPackIsIncluded": true,
+            "VlocityRecordSourceKey": "%vlocity_namespace%__Catalog__c/Root",
+            "VlocityRecordSObjectType": "%vlocity_namespace%__Catalog__c",
+            "VlocityDataPackType": "SObject",
+            "Name": "Root",
+            "%vlocity_namespace%__VendorAccount__c": "",
+            "%vlocity_namespace%__StartDateTime__c": "2017-04-04T21:20:00.000Z",
+            "%vlocity_namespace%__SourceType__c": "",
+            "%vlocity_namespace%__IsCatalogRoot__c": true,
+            "%vlocity_namespace%__IsActive__c": true,
+            "%vlocity_namespace%__GlobalKey__c": "a4fe212c-5e4a-6a52-5063-64f1ca5d5914",
+            "%vlocity_namespace%__EndDateTime__c": "",
+            "%vlocity_namespace%__Description__c": "",
+            "%vlocity_namespace%__CatalogRelationship__c": [
+            {
+                "VlocityDataPackIsIncluded": true,
+                "VlocityRecordSourceKey": "%vlocity_namespace%__CatalogRelationship__c/Deals32532",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__CatalogRelationship__c",
+                "VlocityDataPackType": "SObject",
+                "Name": "Deals",
+                "%vlocity_namespace%__SequenceNumber__c": 6,
+                "%vlocity_namespace%__ParentCatalogId__r.%vlocity_namespace%__GlobalKey__c": "a4fe212c-5e4a-6a52-5063-64f1ca5d5914",
+                "%vlocity_namespace%__ParentCatalogId__c":
+                {
+                    "VlocityRecordSObjectType": "%vlocity_namespace%__Catalog__c",
+                    "VlocityMatchingRecordSourceKey": "%vlocity_namespace%__Catalog__c/Root",
+                    "VlocityDataPackType": "VlocityMatchingKeyObject",
+                    "%vlocity_namespace%__GlobalKey__c": "a4fe212c-5e4a-6a52-5063-64f1ca5d5914"
+                },
+                "%vlocity_namespace%__ChildCatalogId__r.%vlocity_namespace%__GlobalKey__c": "578a2fef-77a3-ec80-b10c-47f6dedbf690",
+                "%vlocity_namespace%__ChildCatalogId__c":
+                {
+                    "VlocityRecordSObjectType": "%vlocity_namespace%__Catalog__c",
+                    "VlocityLookupRecordSourceKey": "%vlocity_namespace%__Catalog__c/Deals",
+                    "VlocityDataPackType": "VlocityLookupMatchingKeyObject",
+                    "%vlocity_namespace%__GlobalKey__c": "578a2fef-77a3-ec80-b10c-47f6dedbf690"
+                }
+            },
+            {
+                "VlocityDataPackIsIncluded": true,
+                "VlocityRecordSourceKey": "%vlocity_namespace%__CatalogRelationship__c/Deals235235",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__CatalogRelationship__c",
+                "VlocityDataPackType": "SObject",
+                "Name": "Deals2",
+                "%vlocity_namespace%__SequenceNumber__c": 3,
+                "%vlocity_namespace%__ParentCatalogId__r.%vlocity_namespace%__GlobalKey__c": "a4fe212c-5e4a-6a52-5063-64f1ca5d5914",
+                "%vlocity_namespace%__ParentCatalogId__c":
+                {
+                    "VlocityRecordSObjectType": "%vlocity_namespace%__Catalog__c",
+                    "VlocityMatchingRecordSourceKey": "%vlocity_namespace%__Catalog__c/Root",
+                    "VlocityDataPackType": "VlocityMatchingKeyObject",
+                    "%vlocity_namespace%__GlobalKey__c": "a4fe212c-5e4a-6a52-5063-64f1ca5d5914"
+                },
+                "%vlocity_namespace%__ChildCatalogId__r.%vlocity_namespace%__GlobalKey__c": "578a2fef-77a3-ec80-b10c-47f6dedbf690",
+                "%vlocity_namespace%__ChildCatalogId__c":
+                {
+                    "VlocityRecordSObjectType": "%vlocity_namespace%__Catalog__c",
+                    "VlocityLookupRecordSourceKey": "%vlocity_namespace%__Catalog__c/Deals",
+                    "VlocityDataPackType": "VlocityLookupMatchingKeyObject",
+                    "%vlocity_namespace%__GlobalKey__c": "578a2fef-77a3-ec80-b10c-47f6dedbf690"
+                }
+            }],
+            "%vlocity_namespace%__CatalogCode__c": ""
+        }],
+        "VlocityDataPackIsIncluded": true,
+        "VlocityDataPackType": "Catalog",
+        "VlocityDataPackKey": "Catalog/Root"
+    },
+    "VlocityDataPackAllRelationships":
+    {},
+    "DataPackAttachmentSize": 4317,
+    "DataPackAttachmentParentId": "a1H6A0000018ugvUAA",
+    "DataPackAttachmentId": "00P6A00000DbdFNUAZ",
+    "ActivationStatus": "NA"
+}

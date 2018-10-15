@@ -1,0 +1,6 @@
+- Action: validateInOrg
+- Action: query
+  Query: "SELECT Id FROM Product2 WHERE %vlocity_namespace%__GlobalKey__c = '{{%vlocity_namespace%__GlobalKey__c}}'"
+  Assert: 
+    totalSize: 1
+  TimeTrack: true
