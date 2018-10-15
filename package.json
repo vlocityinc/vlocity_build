@@ -75,5 +75,5 @@
         "unitTest": "mocha test/**/**.spec.js",
         "build": "pkg . --out-path ./dist"
     },
-    "version": "1.7.7"
+    "version": "1.7.8"
 }
