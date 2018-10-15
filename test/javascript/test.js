@@ -1,7 +1,7 @@
 
 module.exports = function(vlocity, currentContextData, jobInfo, callback) {
     
-    console.log('RunningJS');
+    VlocityUtils.report('RunningJS');
     if (callback) {
         callback();
     }

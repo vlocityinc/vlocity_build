@@ -10,7 +10,7 @@
         "nopt": "4.0.1",
         "properties": "1.2.1",
         "sass.js": "0.10.6",
-        "sfdx-node": "^42.0.0",
+        "sfdx-node": "1.0.0",
         "unidecode": "0.1.8"
     },
     "description": "Enable Continuous Integration for Vlocity",
@@ -42,10 +42,13 @@
             "javascript/*",
             "lib/*.json",
             "lib/*.yaml",
-            "dataPacksJobs/*"
+            "dataPacksJobs/*",
+            "node_modules/sfdx-node/node_modules/salesforce-alm/dist/*",
+            "node_modules/sfdx-node/node_modules/salesforce-alm/dist/**/*"
         ],
         "scripts": [
-            "lib/*.js"
+            "lib/*.js",
+            "node_modules/sfdx-node/node_modules/salesforce-alm/dist/**/*.js"
         ],
         "targets": [
             "win-x64",
@@ -72,5 +75,5 @@
         "unitTest": "mocha test/**/**.spec.js",
         "build": "pkg . --out-path ./dist"
     },
-    "version": "1.7.5"
+    "version": "1.7.6"
 }
