@@ -22,4 +22,8 @@ continueAfterError: true
 supportHeadersOnly: true
 supportForceDeploy: true
 strict: false
-  
+cleanTestData: true
+tests:
+  - Local
+  - Product2/addDeleteProducts
+  - Product2/validateProduct2DataPackInOrg

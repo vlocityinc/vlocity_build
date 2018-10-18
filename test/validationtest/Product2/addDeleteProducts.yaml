@@ -1,23 +1,18 @@
-- Action: validateInOrg
+- Action: Org
 - Action: createSObject
   SObject: Account
 - Action: createCart
   Type: Order
-  Name: OrderName
 - Action: getCartsProducts
   Assert:
     totalSize: "> 0"
-  TimeTrack: true
 - Action: addProduct
   TimeTrack: true
 - Action: getCartItems
   Assert:
     totalSize: "> 0"
-  TimeTrack: true
 - Action: deleteCartItems
   TimeTrack: true
 - Action: getCartItems
   Assert:
     totalSize: 0
-  TimeTrack: true
-- Action: cleanDataAll
