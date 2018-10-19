@@ -245,6 +245,23 @@ SObjects:
     - TargetOutJson__c
     - TargetOutXml__c
   DRMapItem__c:
+    DeletedDuringDeploy: true
+    DiffKeys:
+      1: 
+        - DomainObjectFieldAPIName__c
+        - DomainObjectCreationOrder__c
+      2:
+        - DomainObjectCreationOrder__c
+        - InterfaceFieldAPIName__c 
+      3: 
+        - InterfaceObjectLookupOrder__c
+        - FilterGroup__c
+        - InterfaceFieldAPIName__c
+      4:
+        - Formula__c
+        - FormulaOrder__c  
+      5: 
+        - MapId__c
     ListFileName:
     - _Mappings
     NonUnique: true
@@ -651,7 +668,5 @@ SObjectsDefault:
   ReplacementFields: {}
   SortFields:
   - Hash
-  SourceKeyDefinition:
-  - Name
   SourceKeyGenerationFields: []
   SummaryFields: []
