@@ -22,4 +22,7 @@ continueAfterError: true
 supportHeadersOnly: true
 supportForceDeploy: true
 strict: false
-  
+cleanTestData: true
+tests:
+  - Local
+  - Org
