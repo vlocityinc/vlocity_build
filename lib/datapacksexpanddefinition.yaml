@@ -36,6 +36,7 @@ DataPacks:
       - SubType__c
       UnhashableFields:
       - CustomJavaScript__c
+      - Order__c
   ObjectClass:
     HeadersOnly: true
   ObjectLayout:
@@ -314,6 +315,9 @@ SObjects:
     SourceKeyDefinition:
     - OmniScriptId__c
     - Name
+    UnhashableFields:
+    - Order__c
+    - OmniScriptId__c
   EntityFilterConditionArgument__c:
     SortFields:
     - ArgumentSequence__c
@@ -664,6 +668,8 @@ SObjectsDefault:
   - LastReferencedDate
   - HierarchyKey
   FolderName:
+  - Name
+  RecordLabel:
   - Name
   ReplacementFields: {}
   SortFields:
