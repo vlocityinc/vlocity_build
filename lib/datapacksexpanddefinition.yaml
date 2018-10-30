@@ -258,10 +258,12 @@ SObjects:
         - InterfaceObjectLookupOrder__c
         - FilterGroup__c
         - InterfaceFieldAPIName__c
-      4:
+      4: 
+        - FormulaResultPath__c
+      5:
         - Formula__c
         - FormulaOrder__c  
-      5: 
+      6: 
         - MapId__c
     ListFileName:
     - _Mappings
@@ -676,4 +678,6 @@ SObjectsDefault:
   SortFields:
   - Hash
   SourceKeyGenerationFields: []
+  SourceKeyDefinition:
+  - Name
   SummaryFields: []

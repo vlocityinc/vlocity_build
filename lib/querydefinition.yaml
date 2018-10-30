@@ -32,12 +32,16 @@ ContractType:
 DataRaptor:
   VlocityDataPackType: DataRaptor
   query: Select Id, Name from %vlocity_namespace%__DRBundle__c where %vlocity_namespace%__Type__c != 'Migration'
+DocumentDocument:
+  VlocityDataPackType: Document
+  query: Select Id, DeveloperName from Document
+  manifestOnly: true
 DocumentClause:
   VlocityDataPackType: DocumentClause
   query: Select Id, Name from %vlocity_namespace%__DocumentClause__c
 DocumentTemplate:
   VlocityDataPackType: DocumentTemplate
-  query: Select Id, Name from %vlocity_namespace%__DocumentTemplate__c
+  query: Select Id, Name from %vlocity_namespace%__DocumentTemplate__c WHERE %vlocity_namespace%__Status__c = 'Active'
 EntityFilter:
   VlocityDataPackType: EntityFilter
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
