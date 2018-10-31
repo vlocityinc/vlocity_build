@@ -3,7 +3,7 @@ set -e
 
 if [ $CI_BRANCH == "master" ]; then
     CURRENT_VERSION=`npm show vlocity version`
-    npm version $CURRENT_VERSION --no-git-tag-version
+    npm version $CURRENT_VERSION --no-git-tag-version --allow-same-version
     npm version patch --no-git-tag-version
 else 
     CURRENT_VERSION=`npm show vlocity@$CI_BRANCH version`
