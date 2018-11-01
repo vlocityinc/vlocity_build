@@ -400,7 +400,7 @@ queries:
   - DataRaptor
   - OmniScript
 ```
-This predefined syntax is defined in dataPacksJobs/QueryDeifnitions.yaml and will load the following explicit queries:
+This predefined syntax is defined in lib/querydefinitions.yaml and will load the following explicit queries:
 ```yaml
 queries:
   - VlocityDataPackType: DataRaptor
