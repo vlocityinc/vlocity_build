@@ -64,6 +64,8 @@ DataPacks:
     HeadersOnly: All
     PaginationSize: 500
   Product2:
+    DeltaQueryChildren:
+      ProductChildItem__c : ParentProductId__c
     IgnoreExpand:
     - StandardPricebookEntry
     ApexSObjectTypeList:
