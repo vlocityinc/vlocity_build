@@ -483,7 +483,6 @@ SObjects:
     - Code__c
   Product2:
     FilterFields:
-    - AttributeMetadata__c
     - ImageId__c
     - JSONAttribute__c
     FolderName:
