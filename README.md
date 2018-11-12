@@ -651,7 +651,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | json-pretty | Output the result of the Job as more readable JSON Only. Used in CLI API applications | Boolean | false |
 | job | Path to job file | String | none |
 | manifest | JSON of VlocityDataPackKeys to be processed | JSON | none | 
-| noColor | Remove the colors from console output. Good for Automation servers. | Boolean | false |
+| simpleLogging | Remove the colors from console output. Good for Automation servers. | Boolean | false |
 | nojob | Run command without specifying a Job File. Will use all default settings | Boolean | false |
 | propertyfile | Path to propertyfile which can also contain any Options | String | build.properties |
 | query | SOQL Query used for packExportSingle command | String | none |
