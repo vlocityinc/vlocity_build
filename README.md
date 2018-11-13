@@ -6,7 +6,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 # Recent Major Changes
 --------
 
-## v1.7.0 - OmniScript and IntegrationProcedure
+## v1.7 - OmniScript and IntegrationProcedure
 The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level fields which previously controlled how the OmniScript Elements were ordered in the UI. Now the Elements__c Array in the OmniScript `_DataPack.json` file is ordered in the display order of the UI.
 
 This change will affect any newly exported OmniScript and IntegrationProcedure, and all files in the newly exported DataPacks should be committed to version control. 
@@ -31,10 +31,10 @@ npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 # Recent Features
 --------
 
-## v1.7.0 - OmniScript and IntegrationProcedure
+## v1.7 - OmniScript and IntegrationProcedure
 The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level. This means that merging changes for these objects is now much easier.
 
-## v1.7.0 - SFDX
+## v1.7 - SFDX
 Authentication with Salesforce DX credentials is now possible. Use `-sfdx.username` to use a Salesforce DX Authorized Org for `vlocity` commands. Once you are passing this parameter you will not need a password or any other propertyfile information. The Salesforce DX Authorization from `sfdx force:org:display -u <username>` will handle all the information. Passing an alias will work as well.
 
 ## Table of Contents
@@ -51,11 +51,12 @@ Authentication with Salesforce DX credentials is now possible. Use `-sfdx.userna
 * [All Commands](#all-commands)
   * [Example Commands](#example-commands)
   * [Additional Command Line Options ](#additional-command-line-options)
-* [Advanced Job File Settings](#advanced-job-file-settings)
+* [Developer Workflow](#developer-workflow)
+* [Other Job File Settings](#other-job-file-settings)
 * [Supported DataPack Types](#supported-datapack-types)
 * [Advanced](#advanced)
   * [Matching Keys](#matching-keys)
-* [OmniOut](#OmniOut)
+* [OmniOut](#omniout)
 
 # Installation Instructions
 -----------
@@ -69,10 +70,10 @@ This project requires Node Version 8+.
 
 Use `node -v` to find out which version you are on.
 
-## Install Vlocity Build
-You can install and use this project *without cloning the repo* using the following commands:
+## Install Vlocity Build through NPM
+You can install this package linke any other Node Package! *Do not clone the repo!*
 ```bash
-npm install --global https://github.com/vlocityinc/vlocity_build
+npm install --global vlocity
 vlocity help
 ```
 
@@ -94,8 +95,9 @@ To Install an Older Version of the Vlocity Build Tool use the following command:
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 vlocity help
 ```
+v1.7 is the first version available as an official Node Package, so use this syntax to install older versions for now.
 
-### Cloning Vlocity Build
+### Cloning Vlocity Build - Not Recommended
 It is no longer advised to clone the Vlocity Build Repository directly. If you have previously cloned the Vlocity Build Project and are having issues with the alias `vlocity` still being used as the cloned project, please use the following command in the cloned `vlocity_build` folder:
 ```bash
 npm unlink .
@@ -519,17 +521,17 @@ This will provide a list of files that are different locally than in the org. In
 -----------
 
 ## Primary  
-`packExport`: Export from a Salesforce org into a DataPack Directory  
-`packExportSingle`: Export a Single DataPack by Id  
-`packExportAllDefault`: Export All Default DataPacks as listed in Supported Types Table  
-`packDeploy`: Deploy all contents of a DataPacks Directory  
+`packExport`: Export from a Salesforce org into a DataPack Directory    
+`packExportSingle`: Export a Single DataPack by Id    
+`packExportAllDefault`: Export All Default DataPacks as listed in Supported Types Table    
+`packDeploy`: Deploy all contents of a DataPacks Directory    
 
 ## Troubleshooting 
 `packContinue`: Continues a job that failed due to an error  
-`packRetry`: Continues a Job retrying all deploy errors or re-running all export queries  
-`validateLocalData`:  Check for Missing Global Keys in Data.  
-`cleanOrgData`: Run Scripts to Clean Data in the Org and Add Global Keys to SObjects missing them  
-`refreshProject`: Refresh the Project's Data to the latest format for this tool  
+`packRetry`: Continues a Job retrying all deploy errors or re-running all export queries    
+`validateLocalData`:  Check for Missing Global Keys in Data.    
+`cleanOrgData`: Run Scripts to Clean Data in the Org and Add Global Keys to SObjects missing them    
+`refreshProject`: Refresh the Project's Data to the latest format for this tool    
 
 ## Additional 
 `packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org  
@@ -666,7 +668,99 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | type | DataPack Type used for packExportSingle command | String | none |
 | verbose | Show additional logging statements | Boolean | false |
 
-# Advanced Job File Settings
+# Developer Workflow
+------
+When developing on a large project, exporting DataPacks through Queires is not the ideal process. Instead, each developer should keep track of the major items that they are working on and extract those items as needed to commit to Version Control.
+
+## Manifest Driven Workflow
+The `manifest` section of the Job File can be used to create a collection of DataPacks to be exported or deployed. Manifests are based on the VlocityDataPackKey of each DataPack.
+
+### VlocityDataPackKey Overview
+Each DataPack has a VlocityDataPackKey that represents its Unique Name in the DataPacks system. After Exporting a DataPack this VlocityDataPackKey is also the `VlocityDataPackType/FolderName` of the DataPack. 
+
+For Product2 DataPacks, the VlocityDataPackKey is built using the  `vlocity_namespace__GlobalKey__c`. Given the Product2:
+``` json
+{
+    "%vlocity_namespace%__GlobalKey__c": "7e0b4fa5-4290-d439-ba96-f1a1c3708b0b",
+    "Family": "Phones",
+    "IsActive": true,
+    "Name": "iPhone 6s Plus",
+    "VlocityDataPackType": "SObject",
+    "VlocityRecordSObjectType": "Product2"
+}
+```
+
+The VlocityDataPackKey would be `Product2/7e0b4fa5-4290-d439-ba96-f1a1c3708b0b`. This is also the same as the Folder Name of the Product2 DataPack when saved to the file system. This is because the `GlobalKey__c` of the Product2 is meant to be a unique field, and the Folders must also have unique names.
+
+Here is the `iPhone 6s Plus` Product2 DataPack in its folder with the same VlocityDataPackKey as shown above:
+
+![iPhone6sPlus](doc/iPhone6sPlus.png)
+
+### Using the VlocityDataPackKey in the Manifest
+This VlocityDataPackKey can be added to the `manifest` of the Job File to drive Export of this Product along with all its dependencies.
+
+```yaml
+projectPath: .
+manifest:
+- Product2/7e0b4fa5-4290-d439-ba96-f1a1c3708b0b 
+```
+
+You can see all the available VlocityDataPackKeys for your Manifest by running:  
+`vlocity packGetAllAvailableExports --nojob`
+
+![GetAllOutput](doc/GetAllOutput.png)
+
+This will additionally create the file `VlocityBuildLog.yaml` which will save all the results in a format that you can move to your job file.
+
+```yaml
+manifest:
+  - AttributeCategory/CLOUD_SERVICES
+  - AttributeCategory/MOBILE_HANDSET
+  - AttributeCategory/INTERNET
+  - AttributeCategory/MOBILE_CONTRACT
+  - AttributeCategory/MOBILE_TRADE_IN
+  - AttributeCategory/SIM_CARD
+  - AttributeCategory/WATCH
+  - CalculationMatrix/AgeRating
+  - DataRaptor/Billing Import Bundle
+```
+
+### Adding to Job Files
+When defining your project through a Manifest, it is best to create 2 Job Files.
+
+1. Export Job File
+2. Deploy Job File
+
+#### Export Job File
+The Export Job File will be used to *only* export the listed manifest items plus their dependencies. For someone only working on a set of Products, this Job File would look like: 
+
+**Export.yaml**
+```yaml
+projectPath: .
+expansionPath: vlocity
+manifest:
+- Product2/1b1b6c6f-c1b0-1c1d-e068-4651202cb07b
+- Product2/6e28982d-57c8-5bd3-e6db-d66c02c20e43
+- Product2/7e0b4fa5-4290-d439-ba96-f1a1c3708b0b
+- Product2/9a86f5d9-2e05-ef0d-3492-3479db233ef8
+```
+
+Running `packExport -job Export.yaml` would also export any DataPacks that these Products depend on by default. To only export the exact manifest you can use `-depth 0` to your command. 
+
+#### Deploy Job File
+The manifest is also used to control what is deployed, but in the deploy case it will only deploy waht is specified. This allows deploying only a specific set of local folders to the Org, as the VlocityDataPackKeys are the Folder Paths of the DataPacks.
+
+Therefore, it is best to create a second job file for Deploy. This job file only needs projectPath as it will deploy the entire contents of the project by default.
+
+**Deploy.yaml**
+``` yaml
+projectPath: .
+expansionPath: vlocity
+```
+
+Running `packDeploy -job Deploy.yaml` will then deploy all of the DataPacks in the `vlocity` folder as there is no manifest being defined.
+
+# Other Job File Settings
 ------------
 The Job File has a number of additonal runtime settings that can be used to define your project and aid in making Exports / Deploys run successfully. However, the Default settings should only be modified to account for unique issues in your Org. 
 
@@ -788,6 +882,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
 | Pricebook2<br>(Salesforce Standard Object) | Pricebook2 |
 | PriceList | PriceList__c<br>PricingElement__c<br>PricingVariable__c<br>PricingVariableBinding__c |
+| PricingPlan | PricingPlan__c<br>PricingPlanStep__c |
 | PricingVariable | PricingVariable__c |
 | Product2<br>(Salesforce Standard Object) | Product2<br>PricebookEntry<br>AttributeAssignment__c<br>ProductChildItem__c<br>OverrideDefinition__c<br>ProductConfigurationProcedure__c<br>ProductRelationship__c<br>ProductEligibility__c<br>ProductAvailability__c<br>RuleAssignment__c<br>ProductRequirement__c<br>ObjectFieldAttribute__c<br>PricingElement__c<br>PriceListEntry__c<br>DecompositionRelationship__c<br>OrchestrationScenario__c | 
 | Promotion | Promotion__c<br>PromotionItem__c |
@@ -867,37 +962,6 @@ Your JavaScript file should implement:
 module.exports = function(vlocity, currentContextData, jobInfo, callback) {
   // Your Code Here
 });
-```
-
-##### Export by Manifest
-If Exporting with a Manifest, each JSON Object will be one entry in the Manifest in the form of:
-```yaml
-manifest:
-  VlocityCard: 
-    - Campaign-Story 
-```
-```json
-{
-    "VlocityDataPackType": "VlocityCard",
-    "Id": "Campaign-Story"
-}
-```
-"Id" is the default JSON key in the Manifest, but Manifests also support YAML Key/Value pair syntax:
-```yaml
-manifest: 
-  OmniScript: 
-    - Type: Insurance 
-      SubType: Billing
-      Language: English
-```
-Which becomes:
-```json
-{
-    "VlocityDataPackType": "OmniScript",
-    "Type": "Insurance",
-    "SubType": "Billing",
-    "Language": "English"
-}
 ```
 
 ##### Export by Queries
