@@ -9,12 +9,12 @@ DataPacks:
   Catalog:
     MaxDeploy: 1
     SupportParallel: false
+  ContentVersion:
+    ExportGroupSize: 1
   ContractType:
     UniqueByName: true  
   DataRaptor:
-    UniqueByName: true
-  Document:
-    IsDiffable: false  
+    UniqueByName: true 
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -91,8 +91,8 @@ DataPacks:
   VlocityUITemplate:
     UniqueByName: true
   VlocityAttachment:
-    IsDiffable: false
     SupportParallel: false
+    ChildrenLimit: 10
 DataPacksDefault:
   DisplayName: []
   HeadersOnly: false
@@ -508,7 +508,6 @@ SObjects:
     - Code__c
   Product2:
     FilterFields:
-    - AttributeMetadata__c
     - ImageId__c
     - JSONAttribute__c
     FolderName:
