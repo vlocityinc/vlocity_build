@@ -40,6 +40,10 @@ CustomFieldMap:
 DataRaptor:
   VlocityDataPackType: DataRaptor
   query: Select Id, Name from %vlocity_namespace%__DRBundle__c where %vlocity_namespace%__Type__c != 'Migration'
+DataRaptorMigration:
+  VlocityDataPackType: DataRaptor
+  query: Select Id, Name from %vlocity_namespace%__DRBundle__c WHERE %vlocity_namespace%__Type__c = 'Migration'
+  manifestOnly: true
 DocumentDocument:
   VlocityDataPackType: Document
   query: Select Id, DeveloperName from Document
