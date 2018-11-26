@@ -1,6 +1,7 @@
 projectPath: ./test
 expansionPath: testJobRunning
 buildFile: testJobRunning/testBuildFile.resource
+autoUpdateSettings: true
 queries: 
   - VlocityDataPackType: VlocityUITemplate
     query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'datapacktest-%' AND %vlocity_namespace%__Active__c = true

@@ -21,7 +21,7 @@
         "%vlocity_namespace%__FilterGroup__c": 2,
         "%vlocity_namespace%__FilterOperator__c": "=",
         "%vlocity_namespace%__FilterValue__c": "Id",
-        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__AttributeId__c",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__AttributeCategoryId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 1,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignmentRule__c",
         "%vlocity_namespace%__MapId__c": "Attribute Assignment Rule Migration1",
