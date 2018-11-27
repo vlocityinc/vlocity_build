@@ -1,6 +1,5 @@
 mkdir codeship/unencrypted_files
 
-set -x 
 for filename in codeship/encrypted_files/*; do
 
     BASE=`echo "$(basename $filename)"`
