@@ -684,3 +684,6 @@ SObjectsDefault:
   SourceKeyDefinition:
   - Name
   SummaryFields: []
+FieldLabels:
+  All:
+    id: Id  
