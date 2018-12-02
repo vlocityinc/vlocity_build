@@ -9,6 +9,8 @@ DataPacks:
   Catalog:
     MaxDeploy: 1
     SupportParallel: false
+  ContentVersion:
+    ExportGroupSize: 1
   ContractType:
     UniqueByName: true  
   DataRaptor:
@@ -195,6 +197,21 @@ SObjects:
     CalculationProcedureVersion__c: object
     SourceKeyDefinition:
     - Name
+  ContentVersion:
+    FileName:
+    - Title
+    FilterFields:
+    - ContentBodyId
+    - ContentDocumentId
+    - ContentModifiedById
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c
+    VersionData:
+      FileExt: FileExtension
+      FilePrefix: Title
+      FileType: base64   
   ContextAction__c:
     FolderName:
     - GlobalKey__c
