@@ -155,6 +155,13 @@ SObjects:
     SourceKeyDefinition:
     - Code__c
   CalculationMatrixRow__c:
+    DiffKeys:
+      1: 
+        - Name
+      2:
+        - InputData__c.columnKey
+    FilterFields:
+    - InputData__c.lineItemId
     JsonFields:
     - InputData__c
     - OutputData__c
@@ -164,7 +171,12 @@ SObjects:
     SortFields:
     - Name=Header
     - InputData__c
+    UnhashableFields:
+    - CalculationMatrixVersionId__c
   CalculationMatrixVersion__c:
+    DiffKeys:
+      1: 
+        - _Version
     FileName:
     - _Version
   CalculationMatrix__c:
@@ -172,6 +184,11 @@ SObjects:
     SourceKeyDefinition:
     - Name
   CalculationProcedureStep__c:
+    DiffKeys:
+      1: 
+        - CalculationFormulaLong__c
+      2: 
+        - Sequence__c
     FilterFields:
     - Name
     JSONFields:
@@ -185,7 +202,17 @@ SObjects:
     NonUnique: true
     SortFields:
     - Sequence__c
+    UnhashableFields:
+    - CalculationProcedureVersionId__c
+  CalculationProcedureVariable__c:
+    ListFileName:
+    - _Variables
+    UnhashableFields:
+    - CalculationProcedureVersionId__c
   CalculationProcedureVersion__c:
+    DiffKeys:
+      1: 
+        - _Version
     FileName:
     - _Version
     JSONFields:
@@ -198,6 +225,23 @@ SObjects:
     CalculationProcedureVersion__c: object
     SourceKeyDefinition:
     - Name
+    UnhashableFields:
+    - LastSimulationInput__c
+  ContentVersion:
+    FileName:
+    - Title
+    FilterFields:
+    - ContentBodyId
+    - ContentDocumentId
+    - ContentModifiedById
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c
+    VersionData:
+      FileExt: FileExtension
+      FilePrefix: Title
+      FileType: base64  
   ContextAction__c:
     FolderName:
     - GlobalKey__c
@@ -251,22 +295,24 @@ SObjects:
     DeletedDuringDeploy: true
     DiffKeys:
       1: 
+        - MapId__c
+      2: 
         - DomainObjectFieldAPIName__c
         - DomainObjectCreationOrder__c
-      2:
+      3:
         - DomainObjectCreationOrder__c
         - InterfaceFieldAPIName__c 
-      3: 
+      4: 
         - InterfaceObjectLookupOrder__c
         - FilterGroup__c
         - InterfaceFieldAPIName__c
-      4: 
+      5: 
         - FormulaResultPath__c
-      5:
+      6:
         - Formula__c
-        - FormulaOrder__c  
-      6: 
-        - MapId__c
+        - FormulaOrder__c
+      7:
+        - VlocityRecordSourceKey   
     ListFileName:
     - _Mappings
     NonUnique: true
@@ -658,6 +704,7 @@ SObjects:
     UnhashableFields:
     - SampleJson__c
     - Author__c
+    - CSS__c
   VqMachine__c: {}
   VqMachineResource__c: 
     ReplacementFields:
@@ -684,3 +731,6 @@ SObjectsDefault:
   SourceKeyDefinition:
   - Name
   SummaryFields: []
+FieldLabels:
+  All:
+    id: Id  
