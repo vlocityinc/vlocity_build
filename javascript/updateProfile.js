@@ -1,76 +1,73 @@
-module.exports = function(vlocity, currentContextData, jobInfo, callback) {
+const VlocityUtils = require('./vlocityutils')
 
-    var profiles = jobInfo.AdminProfiles || [ 'Admin' ];
+module.exports = function (vlocity, currentContextData, jobInfo, callback) {
+  var profiles = jobInfo.AdminProfiles || [ 'Admin' ]
 
-    vlocity.jsForceConnection.metadata.read('Profile', ['Admin'], function(err, metadata) {
+  vlocity.jsForceConnection.metadata.read('Profile', ['Admin'], function (err, metadata) {
+    if (err) { VlocityUtils.error(err) }
 
-        if (err) { VlocityUtils.error(err); }
+    var metadataUpdated = {
+      'fullName': 'Admin',
+      'fieldPermissions': metadata.fieldPermissions,
+      'tabVisibilities': [],
+      'recordTypeVisibilities': []
+    }
 
-        var metadataUpdated = { 
-            "fullName": "Admin", 
-            "fieldPermissions": metadata.fieldPermissions,
-            "tabVisibilities": [],
-            "recordTypeVisibilities": []
-        };
+    metadataUpdated.fieldPermissions.forEach(function (field) {
+      field.editable = 'true'
+      field.readable = 'true'
+    })
 
-        metadataUpdated.fieldPermissions.forEach(function(field) {
-            field.editable = "true";
-            field.readable = "true";
-        });
+    metadata.tabVisibilities.forEach(function (tab) {
+      if (tab.tab.indexOf('__') !== -1) {
+        tab.visibility = 'DefaultOn'
+        metadataUpdated.tabVisibilities.push(tab)
+      }
+    })
 
-        metadata.tabVisibilities.forEach(function(tab) {
-            if (tab.tab.indexOf('__') != -1) {
-                tab.visibility = "DefaultOn";
-                metadataUpdated.tabVisibilities.push(tab);
-            }
-        });
+    var hasDefault = {}
 
-        var hasDefault = {};
+    metadata.recordTypeVisibilities.forEach(function (recordType) {
+      var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'))
 
-        metadata.recordTypeVisibilities.forEach(function(recordType) {
+      if (recordType.default === 'true') {
+        hasDefault[type] = recordType.recordType
+      }
+    })
 
-            var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'));
+    metadata.recordTypeVisibilities.forEach(function (recordType) {
+      var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'))
 
-            if (recordType.default == "true") {
-                    hasDefault[type] = recordType.recordType;
-            }
-        });
+      if (recordType.recordType.indexOf('MobilePhone') === -1 && recordType.visible === 'false') {
+        VlocityUtils.log('Setting Record Type Visible: ' + recordType.recordType)
 
-        metadata.recordTypeVisibilities.forEach(function(recordType) {
+        recordType.visible = 'true'
 
-            var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'));
-            
-            if (recordType.recordType.indexOf("MobilePhone") == -1 && recordType.visible == "false") {
-                VlocityUtils.log("Setting Record Type Visible: " + recordType.recordType);
+        if (!hasDefault[type]) {
+          VlocityUtils.log('Setting Record Type Default: ' + recordType.recordType)
+          recordType.default = 'true'
+          hasDefault[type] = recordType.recordType
+        }
 
-                recordType.visible = "true";
+        metadataUpdated.recordTypeVisibilities.push(recordType)
+      }
+    })
+    var allUpdatedProfiles = []
 
-                if (!hasDefault[type]) {
-                    VlocityUtils.log("Setting Record Type Default: " + recordType.recordType);
-                    recordType.default = "true";
-                    hasDefault[type] = recordType.recordType;
-                }
+    profiles.forEach(function (profileName) {
+      var profile = JSON.parse(JSON.stringify(metadataUpdated))
 
-                metadataUpdated.recordTypeVisibilities.push(recordType);
-            }
-        });
-        var allUpdatedProfiles = [];
+      profile.fullName = profileName
 
-        profiles.forEach(function(profileName) {
-            var profile = JSON.parse(JSON.stringify(metadataUpdated));
+      allUpdatedProfiles.push(profile)
+    })
 
-            profile.fullName = profileName;
+    vlocity.jsForceConnection.metadata.update('Profile', allUpdatedProfiles, function (err, results) {
+      if (err) { VlocityUtils.error(err) }
 
-            allUpdatedProfiles.push(profile);
-        });
+      VlocityUtils.log('Full Name: ', JSON.stringify(results))
 
-        vlocity.jsForceConnection.metadata.update('Profile', allUpdatedProfiles, function(err, results) {
-
-            if (err) { VlocityUtils.error(err); }
-
-            VlocityUtils.log("Full Name: ", JSON.stringify(results));
-
-            callback();
-        });
-    });
+      callback()
+    })
+  })
 }
