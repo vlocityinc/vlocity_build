@@ -16,7 +16,7 @@ DataPacks:
   ContractType:
     UniqueByName: true  
   DataRaptor:
-    UniqueByName: true 
+    UniqueByName: true
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -68,7 +68,8 @@ DataPacks:
     PaginationSize: 500
   Product2:
     DeltaQueryChildren:
-      ProductChildItem__c : ParentProductId__c
+      ProductChildItem__c : 
+        ParentProductId__c : Id
     IgnoreExpand:
     - StandardPricebookEntry
     ApexSObjectTypeList:
@@ -293,6 +294,10 @@ SObjects:
     - SampleInputRows__c
     - TargetOutJson__c
     - TargetOutXml__c
+    DeltaQueryChildren:
+      DRMapItem__c:
+        Name : Name
+        IsDisabled__c : false
   DRMapItem__c:
     DeletedDuringDeploy: true
     DiffKeys:
@@ -569,7 +574,8 @@ SObjects:
     - CategoryData__c
     - IsConfigurable__c
     DeltaQueryChildren:
-      ProductChildItem__c : ParentProductId__c
+      ProductChildItem__c : 
+        ParentProductId__c : Id
   ProductAvailability__c:
     NonUnique: true
   ProductChildItem__c:
