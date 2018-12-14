@@ -11,6 +11,8 @@ DataPacks:
     SupportParallel: false
   ContentVersion:
     ExportGroupSize: 1
+    DisplayName:
+    - Title
   ContractType:
     UniqueByName: true  
   DataRaptor:
