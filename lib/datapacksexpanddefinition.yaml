@@ -158,6 +158,9 @@ SObjects:
     SourceKeyDefinition:
     - Code__c
   CalculationMatrixRow__c:
+    DeltaCheckMatchingKey:
+    - CalculationMatrixVersionId__c
+    - InputData__c
     DiffKeys:
       1: 
         - Name
@@ -194,7 +197,7 @@ SObjects:
         - Sequence__c
     FilterFields:
     - Name
-    JSONFields:
+    JsonFields:
     - CalculationFormulaTags__c
     - OutputJSON__c
     - Input__c
@@ -218,7 +221,7 @@ SObjects:
         - _Version
     FileName:
     - _Version
-    JSONFields:
+    JsonFields:
     - Constants__c
     - Variables__c
     SourceKeyDefinition:
@@ -237,6 +240,7 @@ SObjects:
     - ContentBodyId
     - ContentDocumentId
     - ContentModifiedById
+    - FirstPublishLocationId
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
@@ -342,7 +346,9 @@ SObjects:
     FolderName:
     - DeveloperName
   DocumentClause__c: {}
-  DocumentTemplate__c: {}
+  DocumentTemplate__c: 
+    JsonFields:
+    - TokenData__c
   DocumentTemplateSection__c: 
     SortFields:
     - Sequence__c
@@ -404,6 +410,9 @@ SObjects:
     SourceKeyDefinition:
     - Name  
   InterfaceImplementationDetail__c:
+    DeltaCheckMatchingKey:
+    - InterfaceId__c
+    - Name
     SourceKeyDefinition:
     - InterfaceId__c
     - Name
@@ -461,6 +470,14 @@ SObjects:
       FileName:
       - _JavaScript
       FileType: js
+    DeltaCheckMatchingKey:
+    - Type__c
+    - SubType__c
+    - Language__c
+    - IsActive__c: true
+    DeltaQueryChildren:
+      Element__c:
+        OmniScriptId__c: Id
     Element__c: object
     FileName:
     - Type__c
@@ -672,6 +689,8 @@ SObjects:
     Definition__c: json
     FilterFields:
     - Active__c
+    JsonFields:
+    - Datasource__c
     UnhashableFields:
     - Author__c
     - GlobalKey__c
@@ -692,6 +711,8 @@ SObjects:
     Definition__c: json
     FilterFields:
     - Active__c
+    JsonFields:
+    - Datasource__c
     UnhashableFields:
     - Author__c
     - GlobalKey__c
@@ -713,7 +734,11 @@ SObjects:
     - SampleJson__c
     - Author__c
     - CSS__c
-  VqMachine__c: {}
+  VqMachine__c: 
+    FilterFields:
+    - Config__c.Id
+    JsonFields:
+    - Config__c
   VqMachineResource__c: 
     ReplacementFields:
       Name: _MachineResource
