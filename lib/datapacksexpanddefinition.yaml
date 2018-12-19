@@ -11,8 +11,6 @@ DataPacks:
     SupportParallel: false
   ContentVersion:
     ExportGroupSize: 1
-    DisplayName:
-    - Title
   ContractType:
     UniqueByName: true  
   DataRaptor:
@@ -20,11 +18,6 @@ DataPacks:
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
-    DisplayName:
-    - Type
-    - Sub Type
-    - Type__c
-    - SubType__c
     OmniScript__c:
       CustomJavaScript__c:
         FileName:
@@ -44,13 +37,6 @@ DataPacks:
   ObjectLayout:
     DoNotExpand: true
   OmniScript:
-    DisplayName:
-    - Type
-    - Sub Type
-    - Language
-    - Type__c
-    - SubType__c
-    - Language__c
     PaginationSize: 5000
     SupportParallel: 
       IsReusable__c: false
@@ -97,7 +83,6 @@ DataPacks:
     SupportParallel: false
     ChildrenLimit: 10
 DataPacksDefault:
-  DisplayName: []
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
@@ -234,6 +219,8 @@ SObjects:
     UnhashableFields:
     - LastSimulationInput__c
   ContentVersion:
+    DisplayName:
+    - Title
     FileName:
     - Title
     FilterFields:
@@ -243,12 +230,14 @@ SObjects:
     - FirstPublishLocationId
     FolderName:
     - GlobalKey__c
+    RecordLabel:
+    - Title
     SourceKeyDefinition:
     - GlobalKey__c
     VersionData:
       FileExt: FileExtension
       FilePrefix: Title
-      FileType: base64  
+      FileType: base64
   ContextAction__c:
     FolderName:
     - GlobalKey__c
@@ -477,7 +466,7 @@ SObjects:
     - IsActive__c: true
     DeltaQueryChildren:
       Element__c:
-        OmniScriptId__c: Id
+        OmniScriptId__c: Id   
     Element__c: object
     FileName:
     - Type__c
@@ -744,6 +733,8 @@ SObjects:
       Name: _MachineResource
   VqResource__c: {}
 SObjectsDefault:
+  DisplayName:
+  - Name
   FileName:
   - Name
   FileType: json
