@@ -614,7 +614,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 17,
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 18,
         "%vlocity_namespace%__MapId__c": "Product2 Migration40",
         "Name": "Product2 Migration",
         "VlocityDataPackType": "SObject",
