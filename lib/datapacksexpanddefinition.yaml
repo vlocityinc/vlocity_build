@@ -68,8 +68,8 @@ DataPacks:
     PaginationSize: 500
   Product2:
     DeltaQueryChildren:
-      ProductChildItem__c : 
-        ParentProductId__c : Id
+      ProductChildItem__c: 
+        ParentProductId__c: Id
     IgnoreExpand:
     - StandardPricebookEntry
     ApexSObjectTypeList:
@@ -107,6 +107,8 @@ GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
   Attachment:
+    UnhashableFields:
+    - Body
     Body:
       FileExt: 'null'
       FilePrefix: File
@@ -158,6 +160,7 @@ SObjects:
     SourceKeyDefinition:
     - Code__c
   CalculationMatrixRow__c:
+    DeltaCheckMatchingKeyNotQueryable: true
     DeltaCheckMatchingKey:
     - CalculationMatrixVersionId__c
     - InputData__c
@@ -180,16 +183,28 @@ SObjects:
     UnhashableFields:
     - CalculationMatrixVersionId__c
   CalculationMatrixVersion__c:
+    DeltaQueryChildren:
+      CalculationMatrixRow__c:
+        CalculationMatrixVersionId__c: Id
     DiffKeys:
       1: 
         - _Version
     FileName:
     - _Version
   CalculationMatrix__c:
+    DeltaQueryChildren:
+      CalculationMatrixVersion__c:
+        CalculationMatrixId__c: Id
     CalculationMatrixVersion__c: object
     SourceKeyDefinition:
     - Name
   CalculationProcedureStep__c:
+    DeltaCheckTextIdField:
+    - CalculationProcedureId__c
+    DeltaCheckMatchingKey:
+    - Function__c
+    - Sequence__c
+    - IsIncludedInResult__c
     DiffKeys:
       1: 
         - CalculationFormulaLong__c
@@ -211,6 +226,10 @@ SObjects:
     UnhashableFields:
     - CalculationProcedureVersionId__c
   CalculationProcedureVariable__c:
+    DeltaCheckMatchingKey:
+    - Name
+    - DataType__c
+    - Alias__c
     ListFileName:
     - _Variables
     UnhashableFields:
@@ -339,6 +358,8 @@ SObjects:
     - Name
     - SourceProductId__c
   Document:
+    UnhashableFields:
+    - Body
     Body:
       FileExt: Type
       FilePrefix: File
@@ -428,11 +449,17 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectElement__c:
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
+    DeltaCheckTextIdField:
+    - AttributeCategoryId__c
     SortFields:
     - Sequence__c
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectFacet__c:
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
     ReplacementFields:
       Name: GlobalKey__c
     SortFields:
@@ -440,6 +467,10 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectFieldAttribute__c:
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
+    DeltaCheckTextIdField:
+    - AttributeCategoryId__c
     NonUnique: true
     ReplacementFields:
       Name: GlobalKey__c
@@ -456,6 +487,8 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectSection__c:
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
     ReplacementFields:
       Name: GlobalKey__c
     SortFields:
@@ -570,8 +603,14 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   PricingVariableBinding__c:
+    DeltaCheckMatchingKey:
+    - Name
+    - DestinationSObjectType__c
     NonUnique: true
   PricingVariable__c:
+    DeltaQueryChildren:
+      PricingVariableBinding__c:
+        PricingVariableId__c: Id 
     FolderName:
     - Code__c
     SourceKeyDefinition:
@@ -591,8 +630,8 @@ SObjects:
     - CategoryData__c
     - IsConfigurable__c
     DeltaQueryChildren:
-      ProductChildItem__c : 
-        ParentProductId__c : Id
+      ProductChildItem__c: 
+        ParentProductId__c: Id
   ProductAvailability__c:
     NonUnique: true
   ProductChildItem__c:
@@ -734,7 +773,10 @@ SObjects:
     - SampleJson__c
     - Author__c
     - CSS__c
-  VqMachine__c: 
+  VqMachine__c:
+    DeltaCheckQueryChildren:
+      VqMachineResource__c:
+        VqMachineId__c: Id
     FilterFields:
     - Config__c.Id
     JsonFields:
