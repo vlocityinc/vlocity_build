@@ -18,7 +18,6 @@ ignoreAllErrors: false
 addSourceKeys: false
 maximumDeployCount: 1000
 manifestOnly: false
-continueAfterError: true
 supportHeadersOnly: true
 supportForceDeploy: true
 strict: false
