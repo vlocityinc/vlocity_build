@@ -6,6 +6,25 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 # Recent Major Changes
 --------
 
+## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings,   
+### Delta Deploys / Exports
+Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not gauranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
+
+### Error Message Enhancements
+Error messages have been improved to give more instrution on how to fix issues. An example change is as follows:
+
+##### Previous:
+`Error >> AttributeCategory/ATTRIBUTE_CATEGORY --- ATTRIBUTE_CATEGORY --- duplicate value found: <unknown> duplicates value on record with id: <unknown>`
+
+##### New:
+`Error >> AttributeCategory/ATTRIBUTE_CATEGORY -- DataPack >> ATTRIBUTE_CATEGORY -- Error Message --  duplicate field value found: 100 on the field: vlocity_cmt__DisplaySequence__c on record with id: a0K0b00000XabWUEAZ -- Change the vlocity_cmt__DisplaySequence__c field value of the vlocity_cmt__AttributeCategory__c on record with id: a0K0b00000XabWUEAZ in the target org to resolve the issue.`
+
+### Git Changes Based Deploys
+Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. 
+
+### Auto Update Settings
+Add `autoUpdateSettings: true` to your job file to enable checking that you have the latest DataPack settings before every export and deploy. This check is very fast and it is advised that this is enabled. 
+
 ## v1.7 - OmniScript and IntegrationProcedure
 The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level fields which previously controlled how the OmniScript Elements were ordered in the UI. Now the Elements__c Array in the OmniScript `_DataPack.json` file is ordered in the display order of the UI.
 
