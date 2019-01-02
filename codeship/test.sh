@@ -6,6 +6,8 @@ set -e
 SF_AUTH_ORG=`sfdx force:auth:sfdxurl:store -f codeship/unencrypted_files/test.sfdx --json`
 SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
 
+sfdx force:alias:set VB_TEST_ORG=$SF_USERNAME
+
 npm run-script unitTest
 
 npm link

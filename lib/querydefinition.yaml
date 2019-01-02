@@ -44,7 +44,7 @@ DataRaptorMigration:
   VlocityDataPackType: DataRaptor
   query: Select Id, Name from %vlocity_namespace%__DRBundle__c WHERE %vlocity_namespace%__Type__c = 'Migration'
   manifestOnly: true
-DocumentDocument:
+Document:
   VlocityDataPackType: Document
   query: Select Id, DeveloperName from Document
   manifestOnly: true
@@ -147,10 +147,6 @@ VlocityAttachment:
 VlocityCard:
   VlocityDataPackType: VlocityCard
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c where %vlocity_namespace%__Active__c = true
-  manifestOnly: true
-VlocityCardNonVlocity:
-  VlocityDataPackType: VlocityCard
-  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c where %vlocity_namespace%__Active__c = true AND %vlocity_namespace%__Author__c != 'Vlocity'
 VlocityFunction:
   VlocityDataPackType: VlocityFunction
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityFunction__c
@@ -169,17 +165,9 @@ VlocityStateModel:
 VlocityUILayout:
   VlocityDataPackType: VlocityUILayout
   query: Select Id, Name from %vlocity_namespace%__VlocityUILayout__c where %vlocity_namespace%__Active__c = true
-  manifestOnly: true
 VlocityUITemplate:
   VlocityDataPackType: VlocityUITemplate
   query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c = true
-  manifestOnly: true
-VlocityUILayoutNonVlocity:
-  VlocityDataPackType: VlocityUILayout
-  query: Select Id, Name from %vlocity_namespace%__VlocityUILayout__c where %vlocity_namespace%__Active__c = true AND %vlocity_namespace%__Author__c != 'Vlocity'
-VlocityUITemplateNonVlocity:
-  VlocityDataPackType: VlocityUITemplate
-  query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where %vlocity_namespace%__Active__c = true AND (%vlocity_namespace%__Author__c != 'Vlocity' OR %vlocity_namespace%__Type__c = 'mixin')
 VqMachine:
   VlocityDataPackType: VqMachine
   query: Select Id, Name from %vlocity_namespace%__VqMachine__c

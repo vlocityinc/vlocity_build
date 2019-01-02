@@ -124,10 +124,10 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             item.records = [];
 
             item.query = item.query.replace(/vlocity_namespace/g, vlocity.namespace);
-
-            VlocityUtils.success('Running Query', item.query);
+            
             var thisQuery = vlocity.jsForceConnection.query(item.query)
             .on('record', function(record) {
+                
                 if (record.attributes.type == 'AggregateResult') {
 
                     var sobjectType = item.query.substring(item.query.indexOf('FROM') + 5, item.query.indexOf('GROUP'));
@@ -138,10 +138,12 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 }
             })
             .on('end', function() {
+                VlocityUtils.success('Running Query', item.query);
                 VlocityUtils.success('Records', thisQuery.totalFetched);
                 resolve(item);
             })
             .on('error', function(err) {
+                VlocityUtils.success('Running Query', item.query);
                 VlocityUtils.error('Query Error', err);
                 resolve(item);
             })
