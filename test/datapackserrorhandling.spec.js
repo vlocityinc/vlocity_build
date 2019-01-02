@@ -87,34 +87,34 @@ describe('DataPacksErrorHandling', () => {
 
         var errorMessage;
 
-        it('should return a error message - MissingReference', () => {
+        it('should return an error message - MissingReference', () => {
             errorMessage = 'No match found for %vlocity_namespace%__ProductChildItem__c.%vlocity_namespace%__ChildProductId__c - %vlocity_namespace%__GlobalKey__c=2bf166dd-0a5b-4634-4bcb-ff73b5747935';
             expect(datapackserrorhandling.getMatchingError(errorMessage)).to.be.eq('MissingReference');
         })
 
-        it('should return a error message - NotFound', () => {
+        it('should return an error message - NotFound', () => {
             errorMessage = 'Not Found';
             expect(datapackserrorhandling.getMatchingError(errorMessage)).to.be.eq('NotFound');
         })
 
-        it('should return a error message - SObjectUniqueness', () => {
+        it('should return an error message - SObjectUniqueness', () => {
             errorMessage = 'duplicate value found: <unknown> duplicates value on record with id: <unknown>';
             expect(datapackserrorhandling.getMatchingError(errorMessage)).to.be.eq('SObjectUniqueness');
         })
 
-        it('should return a error message - WereNotProcessed', () => {
+        it('should return an error message - WereNotProcessed', () => {
             errorMessage = 'Some records were not processed. Please validate imported data types. ["Pricebook2/B2B - All"]';
             expect(datapackserrorhandling.getMatchingError(errorMessage)).to.be.eq('WereNotProcessed');
         })
 
-        it('should return a error message - IncorrectImportData', () => {
+        it('should return an error message - IncorrectImportData', () => {
             errorMessage = 'Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. %vlocity_namespace%__CatalogRelationship__c: Deals2';
             expect(datapackserrorhandling.getMatchingError(errorMessage)).to.be.eq('IncorrectImportData');
         })
     })
 
     function equalsAssert(functionName, dataPackWithError, jobInfo, assert) {
-        it('should return a error message', () => {   
+        it('should return an error message', () => {   
             expect(datapackserrorhandling[functionName].call(datapackserrorhandling, dataPackWithError, jobInfo)).to.be.eq(assert);
         })
     }

@@ -21,5 +21,7 @@ postJobJavaScript:
   Deploy: ../test/javascript/test.js
 OverrideSettings:
   DataPacks:
+    AttributeCategory:
+      MaxDeploy: 1
     VlocityUITemplate:
       HeadersOnly: true
