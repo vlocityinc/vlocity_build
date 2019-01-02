@@ -23,6 +23,10 @@ npm run-script build
 
 ./dist/vlocity-linux-x64 -sfdx.username $SF_USERNAME --nojob packGetAllAvailableExports --json | jq .
 
+./dist/vlocity-linux-x64 -sfdx.username $SF_USERNAME --nojob installVlocityInitial
+
+./dist/vlocity-linux-x64 -sfdx.username $SF_USERNAME --nojob refreshVlocityBase
+
 ./dist/vlocity-linux-x64 -sfdx.username $SF_USERNAME -projectPath "vlocity-temp" --nojob packExport -key VlocityCard/datapacktest-card
 
 ./dist/vlocity-linux-x64 -sfdx.username $SF_USERNAME -projectPath "vlocity-temp" --nojob packDeploy -key VlocityCard/datapacktest-card --json | jq .

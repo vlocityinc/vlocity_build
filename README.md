@@ -3,10 +3,10 @@
 
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
-# Recent Major Changes
+# Recent Features
 --------
 
-## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings,   
+## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
 ### Delta Deploys / Exports
 Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not gauranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
 
@@ -24,6 +24,19 @@ Add `gitCheck: true` to your job file to enable checking what the latest git has
 
 ### Auto Update Settings
 Add `autoUpdateSettings: true` to your job file to enable checking that you have the latest DataPack settings before every export and deploy. This check is very fast and it is advised that this is enabled. 
+
+## v1.7
+### OmniScript and IntegrationProcedure
+The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level. This means that merging changes for these objects is now much easier.
+
+### SFDX
+Authentication with Salesforce DX credentials is now possible. Use `-sfdx.username` to use a Salesforce DX Authorized Org for `vlocity` commands. Once you are passing this parameter you will not need a password or any other propertyfile information. The Salesforce DX Authorization from `sfdx force:org:display -u <username>` will handle all the information. Passing an alias will work as well.
+
+# Recent Data Model Changes
+--------
+
+## v1.8
+There were no data model changes for v1.8
 
 ## v1.7 - OmniScript and IntegrationProcedure
 The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level fields which previously controlled how the OmniScript Elements were ordered in the UI. Now the Elements__c Array in the OmniScript `_DataPack.json` file is ordered in the display order of the UI.
@@ -47,16 +60,8 @@ If you have any issues with these changes you can install the previous version o
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 ```
 
-# Recent Features
---------
-
-## v1.7 - OmniScript and IntegrationProcedure
-The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level. This means that merging changes for these objects is now much easier.
-
-## v1.7 - SFDX
-Authentication with Salesforce DX credentials is now possible. Use `-sfdx.username` to use a Salesforce DX Authorized Org for `vlocity` commands. Once you are passing this parameter you will not need a password or any other propertyfile information. The Salesforce DX Authorization from `sfdx force:org:display -u <username>` will handle all the information. Passing an alias will work as well.
-
-## Table of Contents
+# Table of Contents
+-----------
 * [Installation Instructions](#installation-instructions)
 * [Getting Started](#getting-started)
 * [Step by Step Guide](#step-by-step-guide)
@@ -76,6 +81,7 @@ Authentication with Salesforce DX credentials is now possible. Use `-sfdx.userna
 * [Advanced](#advanced)
   * [Matching Keys](#matching-keys)
 * [OmniOut](#omniout)
+* [Known Issues](#known-issues)
 
 # Installation Instructions
 -----------
@@ -90,7 +96,7 @@ This project requires Node Version 8+.
 Use `node -v` to find out which version you are on.
 
 ## Install Vlocity Build through NPM
-You can install this package linke any other Node Package! *Do not clone the repo!*
+You can install this package like any other Node Package! *Do not clone the repo!*
 ```bash
 npm install --global vlocity
 vlocity help
@@ -298,7 +304,7 @@ vlocity -propertyfile build_target.properties -job EPC.yaml packRetry # If any e
 ### New Sandbox Orgs
 If you have recently installed the Vlocity Managed Package or created a Sandbox Org that is not a Full Copy Sandbox and have done *no* development this Salesforce Org, you should run the following command to load all the default Vlocity Metadata:
 ```bash
-vlocity -propertyfile build_target.properties --nojob packUpdateSettings refreshVlocityBase
+vlocity -propertyfile build_target.properties --nojob packUpdateSettings installVlocityInitial
 ```
 This will install the Base UI Templates, CPQ Base Templates, EPC Default Objects and any other default data delivered through Vlocity DataPacks. This command should only be run if the Org was not previously used for Vlocity Development.
 
@@ -339,10 +345,8 @@ sfdx force:mdapi:deploy --deploydir managed_packages/vlocity_package --wait -1 -
 # Push Salesforce part of Project
 sfdx force:source:push --targetusername $SF_USERNAME
 
-# Refresh Vlocity Base - Installs all the Base DataPacks that can also be installed manually through 
-# the Vlocity Cards and Vlocity UI Templates Home Screens - 
-# Should only be run on newly created Orgs - Never in Production!
-# vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml refreshVlocityBase
+# Refresh Vlocity Base - Installs all the Vlocity Authored Vlocity Cards and Vlocity UI Templates
+vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml refreshVlocityBase
 
 # Update Settings
 vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml packUpdateSettings
@@ -356,7 +360,7 @@ The managed package in the example is installed through the Metadata API with `s
 
 ```xml
 <InstalledPackage xmlns="http://soap.sforce.com/2006/04/metadata">
-    <versionNumber>900.171.0</versionNumber>
+    <versionNumber>900.208.0</versionNumber>
 </InstalledPackage>
 ```
 
@@ -561,6 +565,7 @@ This will provide a list of files that are different locally than in the org. In
 `runApex`: Runs Anonymous Apex specified in the option -apex at the specified path or in the /apex folder  
 `packGetAllAvailableExports`: Get list of all DataPacks that can be exported  
 `refreshVlocityBase`: Deploy and Activate the Base Vlocity DataPacks included in the Managed Package  
+`installVlocityInitial`: Deploy and Activate the Base Vlocity DataPacks and Configuration DataPacks included in the Managed Package  
 
 ## Example Commands
 
@@ -669,6 +674,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | json | Output the result of the Job as JSON Only. Used in CLI API applications | Boolean | false |
 | json-pretty | Output the result of the Job as more readable JSON Only. Used in CLI API applications | Boolean | false |
 | job | Path to job file | String | none |
+| key | DataPack Key to Export or Deploy | String | none |
 | manifest | JSON of VlocityDataPackKeys to be processed | JSON | none | 
 | simpleLogging | Remove the colors from console output. Good for Automation servers. | Boolean | false |
 | nojob | Run command without specifying a Job File. Will use all default settings | Boolean | false |
@@ -1226,3 +1232,9 @@ In order to Retrieve the OmniScripts that will be deployed as part of the OmniOu
 `vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js omniOutRetrieve.js`
 
 This will export the retrieved files into the folder `OmniOut/scripts` in your Project.
+
+# Known Issues
+-----------
+
+* When Multi Currency is enabled, you can only deploy data exported from another Multi Currency Org or to deploy to another Multi Currency Org. Non Multi Currency to Mulit Currency Export / Deploy will not work as expected.  
+* OmniScripts that are embedded in many other OmniScripts cannot be activated due to SOQL Query limits.
