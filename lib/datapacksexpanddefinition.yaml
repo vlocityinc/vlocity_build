@@ -15,16 +15,9 @@ DataPacks:
     UniqueByName: true  
   DataRaptor:
     UniqueByName: true
-  Document:
-    IsDiffable: false  
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
-    DisplayName:
-    - Type
-    - Sub Type
-    - Type__c
-    - SubType__c
     OmniScript__c:
       CustomJavaScript__c:
         FileName:
@@ -38,18 +31,12 @@ DataPacks:
       - SubType__c
       UnhashableFields:
       - CustomJavaScript__c
+      - Order__c
   ObjectClass:
     HeadersOnly: true
   ObjectLayout:
     DoNotExpand: true
   OmniScript:
-    DisplayName:
-    - Type
-    - Sub Type
-    - Language
-    - Type__c
-    - SubType__c
-    - Language__c
     PaginationSize: 5000
     SupportParallel: 
       IsReusable__c: false
@@ -90,19 +77,22 @@ DataPacks:
   VlocityUITemplate:
     UniqueByName: true
   VlocityAttachment:
-    IsDiffable: false
     SupportParallel: false
+    ChildrenLimit: 10
 DataPacksDefault:
-  DisplayName: []
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
   ChildrenLimit: 100
   IsDiffable: true
+  DisplayName:
+  - Name
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
   Attachment:
+    UnhashableFields:
+    - Body
     Body:
       FileExt: 'null'
       FilePrefix: File
@@ -114,10 +104,11 @@ SObjects:
     - ParentId
     - Name
   AttributeAssignmentRule__c:
-    SourceKeyGenerationFields:
-    - AttributeId__c
-    - Service__c
-    - Type__c
+    DeltaQueryChildren:
+      AttributeAssignment__c:
+        ObjectId__c: Id
+    SourceKeyDefinition:
+    - Name
   AttributeAssignment__c:
     FilterFields:
     - ObjectLink__c
@@ -142,6 +133,9 @@ SObjects:
   AttributeBinding__c:
     NonUnique: true
   AttributeCategory__c:
+    DeltaQueryChildren:
+      Attribute__c:
+        AttributeCategoryId__c: Id
     FolderName:
     - Code__c
     SourceKeyDefinition:
@@ -154,6 +148,17 @@ SObjects:
     SourceKeyDefinition:
     - Code__c
   CalculationMatrixRow__c:
+    DeltaCheckMatchingKeyNotQueryable: true
+    DeltaCheckMatchingKey:
+    - CalculationMatrixVersionId__c
+    - InputData__c
+    DiffKeys:
+      1: 
+        - Name
+      2:
+        - InputData__c.columnKey
+    FilterFields:
+    - InputData__c.lineItemId
     JsonFields:
     - InputData__c
     - OutputData__c
@@ -163,17 +168,45 @@ SObjects:
     SortFields:
     - Name=Header
     - InputData__c
+    UnhashableFields:
+    - CalculationMatrixVersionId__c
   CalculationMatrixVersion__c:
+    DeltaQueryChildren:
+      CalculationMatrixRow__c:
+        CalculationMatrixVersionId__c: Id
+    DiffKeys:
+      1: 
+        - _Version
     FileName:
     - _Version
+    SourceKeyDefinition:
+    - VersionNumber__c
+    - CalculationMatrixId__c
   CalculationMatrix__c:
     CalculationMatrixVersion__c: object
+    DeltaQueryChildren:
+      CalculationMatrixVersion__c:
+        CalculationMatrixId__c: Id
+        CurrentStatus__c: _Active
+        IsEnabled__c: true
+        OrderBy: ORDER BY %vlocity_namespace%__Priority__c DESC LIMIT 1
     SourceKeyDefinition:
     - Name
   CalculationProcedureStep__c:
+    DeltaCheckTextIdField:
+    - CalculationProcedureId__c
+    DeltaCheckMatchingKey:
+    - Function__c
+    - Sequence__c
+    - IsIncludedInResult__c
+    DiffKeys:
+      1: 
+        - CalculationFormulaLong__c
+      2: 
+        - Sequence__c
     FilterFields:
     - Name
-    JSONFields:
+    JsonFields:
     - CalculationFormulaTags__c
     - OutputJSON__c
     - Input__c
@@ -184,40 +217,81 @@ SObjects:
     NonUnique: true
     SortFields:
     - Sequence__c
+    UnhashableFields:
+    - CalculationProcedureVersionId__c
+  CalculationProcedureVariable__c:
+    DeltaCheckMatchingKey:
+    - Name
+    - DataType__c
+    - Alias__c
+    ListFileName:
+    - _Variables
+    UnhashableFields:
+    - CalculationProcedureVersionId__c
   CalculationProcedureVersion__c:
+    DiffKeys:
+      1: 
+        - _Version
     FileName:
     - _Version
-    JSONFields:
+    JsonFields:
     - Constants__c
     - Variables__c
     SourceKeyDefinition:
     - VersionNumber__c
     - CalculationProcedureId__c
   CalculationProcedure__c:
+    DeltaQueryChildren:
+      CalculationProcedureVersion__c:
+        CalculationProcedureId__c: Id
+        CurrentStatus__c: _Active
+        IsEnabled__c: true
+        OrderBy: ORDER BY %vlocity_namespace%__Priority__c DESC LIMIT 1
     CalculationProcedureVersion__c: object
     SourceKeyDefinition:
     - Name
+    UnhashableFields:
+    - LastSimulationInput__c
+  Catalog__c:
+    DeltaQueryChildren:
+      CatalogRelationship__c:
+        ParentCatalogId__c: Id
+    SourceKeyDefinition:
+    - GlobalKey__c
+  CompiledAttributeOverride__c:
+    SourceKeyDefinition: 
+    - JSONAttribute__c
   ContentVersion:
+    DisplayName:
+    - Title
     FileName:
     - Title
     FilterFields:
     - ContentBodyId
     - ContentDocumentId
     - ContentModifiedById
+    - FirstPublishLocationId
     FolderName:
     - GlobalKey__c
+    RecordLabel:
+    - Title
     SourceKeyDefinition:
     - GlobalKey__c
+    UnhashableFields:
+    - VersionData
     VersionData:
       FileExt: FileExtension
       FilePrefix: Title
-      FileType: base64   
+      FileType: base64
   ContextAction__c:
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
   ContextDimension__c:
+    DeltaQueryChildren:
+      Contextmapping__c:
+        Dimension__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
@@ -232,8 +306,21 @@ SObjects:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
-  ContractType__c: {}
+  ContractType__c: 
+    DeltaQueryChildren:
+      ContractTypeSetting__c:
+        ContractTypeId__c: Id
+    SourceKeyDefinition:
+    - Name
+  ContractTypeSetting__c: 
+    SourceKeyDefinition:
+    - Name
+    - ContractTypeId__c
   DRBundle__c:
+    DeltaQueryChildren:
+      DRMapItem__c:
+        Name : Name
+        IsDisabled__c : false
     InputJson__c:
       FileName:
       - _InputJson
@@ -262,6 +349,27 @@ SObjects:
     - TargetOutJson__c
     - TargetOutXml__c
   DRMapItem__c:
+    DeletedDuringDeploy: true
+    DiffKeys:
+      1: 
+        - MapId__c
+      2: 
+        - DomainObjectFieldAPIName__c
+        - DomainObjectCreationOrder__c
+      3:
+        - DomainObjectCreationOrder__c
+        - InterfaceFieldAPIName__c 
+      4: 
+        - InterfaceObjectLookupOrder__c
+        - FilterGroup__c
+        - InterfaceFieldAPIName__c
+      5: 
+        - FormulaResultPath__c
+      6:
+        - Formula__c
+        - FormulaOrder__c
+      7:
+        - VlocityRecordSourceKey
     ListFileName:
     - _Mappings
     NonUnique: true
@@ -277,15 +385,34 @@ SObjects:
     - Name
     - SourceProductId__c
   Document:
+    UnhashableFields:
+    - Body
     Body:
       FileExt: Type
       FilePrefix: File
       FileType: base64
     FolderName:
     - DeveloperName
-  DocumentClause__c: {}
-  DocumentTemplate__c: {}
+    SourceKeyDefinition:
+    - DeveloperName
+  DocumentClause__c: 
+    SourceKeyDefinition:
+    - Name
+  DocumentTemplate__c: 
+    DeltaQueryChildren:
+      DocumentTemplateSection__c:
+        DocumentTemplateId__c: Id
+    FilterFields:
+    - IsActive__c
+    - Status__c
+    JsonFields:
+    - TokenData__c
+    SourceKeyDefinition:
+    - Name
   DocumentTemplateSection__c: 
+    DeltaQueryChildren:
+      DocumentTemplateSectionCondition__c:
+        DocumentTemplateSectionId__c: Id
     SortFields:
     - Sequence__c
     SourceKeyDefinition:
@@ -295,6 +422,9 @@ SObjects:
     SourceKeyDefinition:
     - DocumentTemplateSectionId__c
     - ConditionalExpression__c
+  DocumentToken__c: 
+    SourceKeyDefinition:
+    - TokenSymbol__c
   Element__c:
     BuildOnlyFields:
       Order__c: index
@@ -314,16 +444,20 @@ SObjects:
     SourceKeyDefinition:
     - OmniScriptId__c
     - Name
+    UnhashableFields:
+    - Order__c
+    - OmniScriptId__c
   EntityFilterConditionArgument__c:
     SortFields:
     - ArgumentSequence__c
   EntityFilterCondition__c:
+    DeltaQueryChildren:
+      EntityFilterConditionArgument__c:
+        FilterConditionId__c: Id
     ReplacementFields:
       Name: _AutoGenerated
     SortFields:
     - Index__c
-    SourceKeyDefinition:
-    - Code__c
   EntityFilterMember__c:
     NonUnique: true
     ReplacementFields:
@@ -331,11 +465,19 @@ SObjects:
     SortFields:
     - Index__c
   EntityFilter__c:
+    DeltaQueryChildren:
+      EntityFilterCondition__c:
+        EntityFilterId__c: Id
+      EntityFilterMember__c:
+        EntityFilterId__c: Id   
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
   InterfaceImplementation__c:
+    DeltaQueryChildren:
+      InterfaceImplementationDetail__c:
+        InterfaceId__c: Id
     FilterFields:
     - ImplementationClassName__c
     FolderName: 
@@ -343,6 +485,9 @@ SObjects:
     SourceKeyDefinition:
     - Name  
   InterfaceImplementationDetail__c:
+    DeltaCheckMatchingKey:
+    - InterfaceId__c
+    - Name
     SourceKeyDefinition:
     - InterfaceId__c
     - Name
@@ -351,18 +496,37 @@ SObjects:
     - Name
     SourceKeyDefinition:
     - Name
-  ManualQueue__c: {}
+  ManualQueue__c: 
+    SourceKeyDefinition:
+    - Name
   ObjectClass__c:
+    DeltaQueryChildren:
+      ObjectFieldAttribute__c:
+        ObjectClassId__c: Id
+        SubClassId__c: 'null'
+      AttributeBinding__c: 
+        ObjectClassId__c: Id
+      AttributeAssignment__c:
+        ObjectId__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectElement__c:
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
+    DeltaCheckTextIdField:
+    - AttributeCategoryId__c
     SortFields:
     - Sequence__c
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectFacet__c:
+    DeltaQueryChildren:
+      ObjectSection__c:
+        ObjectFacetId__c: Id
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
     ReplacementFields:
       Name: GlobalKey__c
     SortFields:
@@ -370,12 +534,19 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectFieldAttribute__c:
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
+    DeltaCheckTextIdField:
+    - AttributeCategoryId__c
     NonUnique: true
     ReplacementFields:
       Name: GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectLayout__c:
+    DeltaQueryChildren:
+      ObjectFacet__c:
+        ObjectLayoutId__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
@@ -386,6 +557,11 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   ObjectSection__c:
+    DeltaQueryChildren:
+      ObjectElement__c:
+        ObjectSectionId__c: Id
+    DeltaCheckMatchingKey:
+    - GlobalKey__c
     ReplacementFields:
       Name: GlobalKey__c
     SortFields:
@@ -400,6 +576,14 @@ SObjects:
       FileName:
       - _JavaScript
       FileType: js
+    DeltaCheckMatchingKey:
+    - Type__c
+    - SubType__c
+    - Language__c
+    - IsActive__c: true
+    DeltaQueryChildren:
+      Element__c:
+        OmniScriptId__c: Id   
     Element__c: object
     FileName:
     - Type__c
@@ -432,6 +616,8 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   OrchestrationItemDefinition__c:
+    DeltaCheckTextIdField:
+    - SystemId__c
     FolderName:
     - Name
     - OrchestrationPlanDefinitionId__c
@@ -461,6 +647,9 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   Picklist__c:
+    DeltaQueryChildren:
+      PicklistValue__c:
+        PicklistId__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
@@ -471,6 +660,10 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   PriceList__c:
+    DeltaQueryChildren:
+      PricingElement__c:
+        OfferId__c: 'null'
+        PriceListId__c: Id
     FolderName:
     - Code__c
     SourceKeyDefinition:
@@ -480,6 +673,8 @@ SObjects:
       FileName:
       - _JavaScript
       FileType: js
+    SourceKeyDefinition:
+    - Name  
   PricebookEntry:
     FilterFields:
     - Pricebook2.IsActive
@@ -492,14 +687,65 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   PricingVariableBinding__c:
+    DeltaCheckMatchingKey:
+    - Name
+    - DestinationSObjectType__c
     NonUnique: true
+  PricingPlan__c:
+    DeltaQueryChildren:
+      PricingPlanStep__c:
+        PricingPlanId__c: Id
+    SourceKeyDefinition:
+    - Name    
   PricingVariable__c:
+    DeltaQueryChildren:
+      PricingVariableBinding__c:
+        PricingVariableId__c: Id 
     FolderName:
     - Code__c
     SourceKeyDefinition:
     - Code__c
   Product2:
+    DeltaQueryChildren:
+      ProductChildItem__c: 
+        ParentProductId__c: Id
+      PricebookEntry:
+        Product2Id: Id
+      AttributeAssignment__c:
+        ObjectId__c: Id
+      CompiledAttributeOverride__c:
+        ProductId__c: Id
+      OverrideDefinition__c:
+        ProductId__c: Id
+        OverridingPriceListEntryId__c: 'null'
+        PromotionId__c: 'null'
+      ProductConfigurationProcedure__c:
+        ProductId__c: Id
+      ProductRelationship__c:
+        Product2Id__c: Id
+      ProductEligibility__c:
+        Product2Id__c: Id  
+      ProductAvailability__c:
+        Product2Id__c: Id
+      ProductRequirement__c:
+        Product2Id__c: Id
+      ObjectFieldAttribute__c:
+        SubClassId__c: Id
+      PricingElement__c:
+        OfferId__c: Id
+      PriceListEntry__c:
+        ProductId__c: Id
+        PromotionItemId__c: 'null'
+        OfferId__c: 'null'
+      RuleAssignment__c:
+        ObjectId__c: Id
+      DecompositionRelationship__c:
+        SourceProductId__c: Id
+      OrchestrationScenario__c:
+        Product2Id__c: Id
     FilterFields:
+    - CategoryData__c.id
+    - CategoryData__c.childCategories.id
     - ImageId__c
     - JSONAttribute__c
     FolderName:
@@ -515,6 +761,9 @@ SObjects:
   ProductAvailability__c:
     NonUnique: true
   ProductChildItem__c:
+    DeltaQueryChildren:
+      AttributeAssignment__c:
+        ObjectId__c: Id
     SortFields:
     - GlobalKey__c
     SourceKeyDefinition:
@@ -536,6 +785,15 @@ SObjects:
     - PromotionId__c
     - ProductId__c
   Promotion__c:
+    DeltaQueryChildren:
+      PromotionItem__c:
+        PromotionId__c: Id
+      PriceListEntry__c:
+        PromotionId__c: Id
+      RuleAssignment__c:
+        ObjectId__c: Id
+      OverrideDefinition__c:
+        PromotionId__c: Id    
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
@@ -563,11 +821,32 @@ SObjects:
   RuleVariable__c:
     SortFields:
     - Index__c
+    SourceKeyDefinition:
+    - Name
   Rule__c:
+    DeltaQueryChildren:
+      RuleVariable__c:
+        RuleId__c: Id
+      RuleAction__c:
+        RuleId__c: Id
+      RuleFilter__c:
+        RuleId__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
+  StoryObjectConfiguration__c:
+    SourceKeyDefinition:
+    - Name
+  String__c:
+    DeltaQueryChildren:
+      StringTranslation__c:
+        StringId__c: Id
+    SourceKeyDefinition:
+    - Name
+  System__c:
+    SourceKeyDefinition:
+    - Name
   SystemInterface__c:
     MatchingSourceKeyDefinition:
     - Name
@@ -599,6 +878,8 @@ SObjects:
   VlocityAction__c:
     FilterFields:
     - IsActive__c
+    SourceKeyDefinition:
+    - Name
   VlocityAttachment__c: 
     FolderName:
     - GlobalKey__c
@@ -608,6 +889,10 @@ SObjects:
     Definition__c: json
     FilterFields:
     - Active__c
+    JsonFields:
+    - Datasource__c
+    SourceKeyDefinition:
+    - Name
     UnhashableFields:
     - Author__c
     - GlobalKey__c
@@ -615,19 +900,54 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   VlocityFunction__c:
+    DeltaQueryChildren:
+      VlocityFunctionArgument__c:
+        VlocityFunctionId__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
-  VlocitySearchWidgetSetup__c: {}
-  VlocityStateModel__c: {}
+  VlocityScheduledJobs__c: 
+    SourceKeyDefinition:
+    - Name  
+  VlocitySearchWidgetSetup__c: 
+    SourceKeyDefinition:
+    - Name
+  VlocityStateModel__c: 
+    DeltaQueryChildren:
+      VlocityStateModelVersion__c:
+        StateModelId__c: Id
+        CurrentStatus__c: _Active
+        IsEnabled__c: true
+        OrderBy: ORDER BY %vlocity_namespace%__Priority__c DESC LIMIT 1
+      VlocityState__c:
+        StateModelId__c: Id
+    SourceKeyDefinition:
+    - ObjectAPIName__c
+    - FieldAPIName__c 
+    - TypeFieldName__c 
+    - TypeFieldValue__c
   VlocityStateTransition__c:
     NonUnique: true
-  VlocityState__c: {}
+  VlocityState__c: 
+    SourceKeyDefinition:
+    - Name
+    - DTPStateModelName__c
+  VlocityStateModelVersion__c:
+    DeltaQueryChildren:
+      VlocityStateTransition__c:
+        StateModelVersionId__c: Id
+    SourceKeyDefinition:
+    - StateModelId__c
+    - VersionNumber__c
   VlocityUILayout__c:
     Definition__c: json
     FilterFields:
     - Active__c
+    JsonFields:
+    - Datasource__c
+    SourceKeyDefinition:
+    - Name
     UnhashableFields:
     - Author__c
     - GlobalKey__c
@@ -645,15 +965,34 @@ SObjects:
     Sass__c:
       CompiledField: CSS__c
       FileType: scss
+    SourceKeyDefinition:
+    - Name
     UnhashableFields:
     - SampleJson__c
     - Author__c
-  VqMachine__c: {}
+    - CSS__c
+  VqMachine__c:
+    DeltaCheckQueryChildren:
+      VqMachineResource__c:
+        VqMachineId__c: Id
+    FilterFields:
+    - Config__c.Id
+    JsonFields:
+    - Config__c
+    SourceKeyDefinition:
+    - Name
   VqMachineResource__c: 
     ReplacementFields:
       Name: _MachineResource
-  VqResource__c: {}
+    SourceKeyDefinition:
+    - VqMachineId__c
+    - VqResourceId__c
+  VqResource__c: 
+    SourceKeyDefinition:
+    - Name  
 SObjectsDefault:
+  DisplayName:
+  - Name
   FileName:
   - Name
   FileType: json
@@ -663,12 +1002,21 @@ SObjectsDefault:
   - LastViewedDate
   - LastReferencedDate
   - HierarchyKey
+  - OwnerId
+  - IsDeleted
+  - CreatedDate
+  - CreatedById
+  - LastModifiedDate
+  - LastModifiedById
+  - SystemModstamp
   FolderName:
+  - Name
+  RecordLabel:
   - Name
   ReplacementFields: {}
   SortFields:
   - Hash
-  SourceKeyDefinition:
-  - Name
-  SourceKeyGenerationFields: []
   SummaryFields: []
+FieldLabels:
+  All:
+    id: Id  

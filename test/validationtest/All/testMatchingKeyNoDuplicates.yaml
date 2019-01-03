@@ -1,0 +1,4 @@
+- Action: Local
+- Action: validateDataPackFields
+  Assert:
+    matchingKey: NoDuplicates

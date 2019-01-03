@@ -1,0 +1,15 @@
+NotFound:
+  SearchStrings:
+  - Not Found
+SObjectUniqueness:
+  SearchStrings:
+  - "duplicate value found:"
+MissingReference:
+  SearchStrings:
+  - No match found for
+WereNotProcessed:
+  SearchStrings:
+  - Some records were not processed.
+IncorrectImportData:
+  SearchStrings:
+  - Incorrect Import Data

@@ -1,0 +1,18 @@
+- Action: Org
+- Action: createSObject
+  SObject: Account
+- Action: createCart
+  Type: Order
+- Action: getCartsProducts
+  Assert:
+    totalSize: "> 0"
+- Action: addProduct
+  TimeTrack: true
+- Action: getCartItems
+  Assert:
+    totalSize: "> 0"
+- Action: deleteCartItems
+  TimeTrack: true
+- Action: getCartItems
+  Assert:
+    totalSize: 0

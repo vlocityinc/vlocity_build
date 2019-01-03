@@ -1,4 +1,4 @@
-List<vlocity_namespace__AttributeAssignment__c> toDelete = new List<vlocity_namespace__AttributeAssignment__c>();
+Map<Id, vlocity_namespace__AttributeAssignment__c> toDelete = new Map<Id, vlocity_namespace__AttributeAssignment__c>();
 
 Set<Id> allIds = new Set<Id>();
 Set<Schema.SObjectType> types = new Set<Schema.SObjectType>();
@@ -16,14 +16,14 @@ for (vlocity_namespace__AttributeAssignment__c att : [ SELECT vlocity_namespace_
         }
         else 
         {
-           toDelete.add(att);
+           toDelete.put(att.Id, att);
         }
     }
     catch (Exception e)
     {
         System.debug(e);
 
-        toDelete.add(att);
+        toDelete.put(att.Id, att);
     }
 }
 
@@ -43,11 +43,11 @@ for (vlocity_namespace__AttributeAssignment__c att : [ SELECT vlocity_namespace_
 {
     if (!allFoundIds.contains((Id)att.vlocity_namespace__ObjectId__c))
     {
-        toDelete.add(att);
+        toDelete.put(att.Id, att);
         allDeletedIds.add(att.Id);
     }
 }
 
 delete [ SELECT Id FROM vlocity_namespace__OverrideDefinition__c WHERE vlocity_namespace__OverriddenAttributeAssignmentId__c in :allDeletedIds OR vlocity_namespace__OverridingAttributeAssignmentId__c in :allDeletedIds ];
 
-delete toDelete;
+delete toDelete.values();
