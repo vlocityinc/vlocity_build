@@ -4,10 +4,22 @@ set -e
 if [ $CI_BRANCH == "master" ]; then
     CURRENT_VERSION=`npm show vlocity version`
     npm version $CURRENT_VERSION --no-git-tag-version --allow-same-version
-    npm version patch --no-git-tag-version
+
+    if [[ $CI_COMMIT_MESSAGE == *"New Minor Version"* ]]; then
+        npm version minor --no-git-tag-version
+    else
+        npm version patch --no-git-tag-version
+    fi
 else 
     CURRENT_VERSION=`npm show vlocity@$CI_BRANCH version`
     npm version $CURRENT_VERSION --no-git-tag-version
+
+    echo $CI_COMMIT_MESSAGE
+
+    if [[ $CI_COMMIT_MESSAGE == *"New Minor Version"* ]]; then
+        npm version minor --no-git-tag-version
+    fi
+
     npm version prerelease --no-git-tag-version
 fi
 
