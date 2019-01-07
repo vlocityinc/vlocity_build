@@ -23,6 +23,10 @@ DataPacks:
         FileName:
         - _SampleInput
         FileType: json
+      DisplayName:
+      - Type__c
+      - SubType__c
+      - Language__c   
       FileName:
       - Type__c
       - SubType__c
@@ -428,6 +432,8 @@ SObjects:
   Element__c:
     BuildOnlyFields:
       Order__c: index
+    DiffFields:
+      PropertySet__c.show: object    
     FileName:
     - _Element
     - Name
@@ -583,7 +589,11 @@ SObjects:
     - IsActive__c: true
     DeltaQueryChildren:
       Element__c:
-        OmniScriptId__c: Id   
+        OmniScriptId__c: Id     
+    DisplayName:
+    - Type__c
+    - SubType__c
+    - Language__c    
     Element__c: object
     FileName:
     - Type__c
@@ -748,6 +758,9 @@ SObjects:
     - CategoryData__c.childCategories.id
     - ImageId__c
     - JSONAttribute__c
+    - AttributeMetadata__c
+    - AttributeDefaultValues__c
+    - AttributeRules__c
     FolderName:
     - GlobalKey__c
     JsonFields:
@@ -757,7 +770,7 @@ SObjects:
     UnhashableFields:
     - JSONAttribute__c
     - CategoryData__c
-    - IsConfigurable__c
+    - IsConfigurable__c 
   ProductAvailability__c:
     NonUnique: true
   ProductChildItem__c:
