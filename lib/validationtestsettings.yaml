@@ -1,0 +1,8 @@
+Order:
+  Name: ORDER_BUILD_TOOL
+  EffectiveDate: TODAY()
+  Status: Draft
+  AccountId: ACCOUNT()
+  "%vlocity_namespace%__PriceListId__c": PRICELIST()
+Account:
+  Name: ACCOUNT_BUILD_TOOL

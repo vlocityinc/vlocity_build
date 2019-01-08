@@ -17,6 +17,10 @@ CalculationProcedure:
 Catalog:
   VlocityDataPackType: Catalog
   query: Select Id, Name from %vlocity_namespace%__Catalog__c     
+ContentVersion:
+  VlocityDataPackType: ContentVersion
+  query: Select Id, Name, Title, %vlocity_namespace%__GlobalKey__c from ContentVersion where %vlocity_namespace%__GlobalKey__c != null
+  manifestOnly: true
 ContextAction:
   VlocityDataPackType: ContextAction
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ContextAction__c
@@ -29,9 +33,21 @@ ContextScope:
 ContractType:
   VlocityDataPackType: ContractType
   query: Select Id, Name from %vlocity_namespace%__ContractType__c
+CustomFieldMap:
+  VlocityDataPackType: CustomFieldMap
+  query: Select Id, Name from %vlocity_namespace%__CustomFieldMap__c 
+  manifestOnly: true
 DataRaptor:
   VlocityDataPackType: DataRaptor
   query: Select Id, Name from %vlocity_namespace%__DRBundle__c where %vlocity_namespace%__Type__c != 'Migration'
+DataRaptorMigration:
+  VlocityDataPackType: DataRaptor
+  query: Select Id, Name from %vlocity_namespace%__DRBundle__c WHERE %vlocity_namespace%__Type__c = 'Migration'
+  manifestOnly: true
+Document:
+  VlocityDataPackType: Document
+  query: Select Id, DeveloperName from Document
+  manifestOnly: true
 DocumentClause:
   VlocityDataPackType: DocumentClause
   query: Select Id, Name from %vlocity_namespace%__DocumentClause__c
@@ -102,6 +118,10 @@ Rule:
 StoryObjectConfiguration:
   VlocityDataPackType: StoryObjectConfiguration
   query: Select Id, Name from %vlocity_namespace%__StoryObjectConfiguration__c
+String:
+  VlocityDataPackType: String
+  query: Select Id, Name from %vlocity_namespace%__String__c
+  manifestOnly: true
 System:
   VlocityDataPackType: System
   query: Select Id, Name from %vlocity_namespace%__System__c
@@ -120,6 +140,10 @@ UISection:
 VlocityAction:
   VlocityDataPackType: VlocityAction
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c = true
+VlocityAttachment:
+  VlocityDataPackType: VlocityAttachment
+  query: SELECT Id, Name, %vlocity_namespace%__GlobalKey__c FROM %vlocity_namespace%__VlocityAttachment__c
+  manifestOnly: true
 VlocityCard:
   VlocityDataPackType: VlocityCard
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c where %vlocity_namespace%__Active__c = true
@@ -129,6 +153,9 @@ VlocityFunction:
 VlocityPicklist:
   VlocityDataPackType: VlocityPicklist
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Picklist__c
+VlocityScheduledJob:
+  VlocityDataPackType: VlocityScheduledJob
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityScheduledJob__c
 VlocitySearchWidgetSetup:
   VlocityDataPackType: VlocitySearchWidgetSetup
   query: Select Id, Name from %vlocity_namespace%__VlocitySearchWidgetSetup__c

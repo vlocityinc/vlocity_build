@@ -1,0 +1,379 @@
+{
+    "projectPath": "./example_vlocity_build",
+    "useAllRelationships": true,
+    "queries": [
+    {
+        "VlocityDataPackType": "OmniScript",
+        "query": "Select Id from %vlocity_namespace%__OmniScript__c WHERE Id = 'a1if4000000sCubAAE' OR Id = 'a1if4000000s8lHAAQ'"
+    }],
+    "job": "exportJob2.yaml",
+    "propertyfile": "build_source.properties",
+    "jobName": "exportJob2.yaml",
+    "jobAction": "Export",
+    "expansionPath": ".",
+    "buildFile": "AllDataPacks.json",
+    "preStepApex":
+    {
+        "Deploy":
+        {
+            "VlocityUITemplate": "DeactivateTemplatesAndLayouts.cls",
+            "VlocityUILayout": "DeactivateTemplatesAndLayouts.cls"
+        }
+    },
+    "postStepApex":
+    {
+        "Deploy":
+        {
+            "Product2": "EPCProductJSONUpdate.cls"
+        }
+    },
+    "delete": true,
+    "activate": true,
+    "compileOnBuild": true,
+    "maxDepth": -1,
+    "defaultMaxParallel": 10,
+    "exportPacksMaxSize": 10,
+    "ignoreAllErrors": false,
+    "addSourceKeys": false,
+    "maximumDeployCount": 1000,
+    "manifestOnly": false,
+    "continueAfterError": true,
+    "supportHeadersOnly": true,
+    "supportForceDeploy": true,
+    "strict": false,
+    "startTime": 1536361414995,
+    "originalAction": "Export",
+    "logName": "exportJob2-yaml-2018-09-07T23-03-34-995Z-Export.yaml",
+    "alreadyExportedKeys": ["5af6d927e853f1e4eb9daa82e00166e8", "d9186e4ea7b93c8b11d1f3c728a8cd20"],
+    "allParents": ["OmniScript/Type_subtypeme_English", "OmniScript/second_os_English"],
+    "errors": ["OmniScript/Type_subtypeme_English references DataRaptor/test which was not found.", "VlocityUITemplate --- blah --- Not Found"],
+    "report": [],
+    "postDeployResults": [],
+    "preDeployDataSummary": [],
+    "refreshVlocityBase": [],
+    "currentStatus":
+    {
+        "5af6d927e853f1e4eb9daa82e00166e8": "Success",
+        "d9186e4ea7b93c8b11d1f3c728a8cd20": "Success",
+        "ba2320c7638165031955b55dbc9c9cf6": "Error",
+        "81371f9c768f32a290db400f1062809a": "Error"
+    },
+    "currentErrors":
+    {
+        "ba2320c7638165031955b55dbc9c9cf6": "DataRaptor --- test --- Not Found",
+        "81371f9c768f32a290db400f1062809a": "VlocityUITemplate --- blah --- Not Found"
+    },
+    "sourceKeysByParent":
+    {
+        "%vlocity_namespace%__OmniScript__c/Type/subtypeme/English": ["OmniScript/Type_subtypeme_English", "5af6d927e853f1e4eb9daa82e00166e8"],
+        "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/DataRaptorPostAction1": ["OmniScript/Type_subtypeme_English", "5af6d927e853f1e4eb9daa82e00166e8"],
+        "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/Step2": ["OmniScript/Type_subtypeme_English", "5af6d927e853f1e4eb9daa82e00166e8"],
+        "%vlocity_namespace%__OmniScript__c/second/os/English": ["OmniScript/second_os_English", "d9186e4ea7b93c8b11d1f3c728a8cd20"],
+        "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/second/os/English/Step1": ["OmniScript/second_os_English", "d9186e4ea7b93c8b11d1f3c728a8cd20"]
+    },
+    "alreadyExportedIdsByType":
+    {
+        "OmniScript": ["a1if4000000s8lHAAQ", "a1if4000000s8lH", "a1if4000000sCubAAE", "a1if4000000sCub"],
+        "VlocityUITemplate": []
+    },
+    "alreadyErroredIdsByType":
+    {
+        "OmniScript": [],
+        "DataRaptor": ["test"],
+        "VlocityUITemplate": ["blah"]
+    },
+    "alreadyRetriedIdsByType":
+    {},
+    "vlocityKeysToNewNamesMap":
+    {
+        "VlocityRecordSourceKey:a1if4000000s8lHAAQ": "%vlocity_namespace%__OmniScript__c/Type/subtypeme/English",
+        "VlocityRecordSourceKey:a1ff4000005H9W6AAK": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/DataRaptorPostAction1",
+        "VlocityRecordSourceKey:a1ff4000005H9WBAA0": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/Step2",
+        "5af6d927e853f1e4eb9daa82e00166e8": "OmniScript/Type_subtypeme_English",
+        "OmniScript/Type_subtypeme_English": "OmniScript/Type_subtypeme_English",
+        "VlocityRecordSourceKey:a1if4000000sCubAAE": "%vlocity_namespace%__OmniScript__c/second/os/English",
+        "VlocityRecordSourceKey:a1ff4000005H9WLAA0": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/second/os/English/Step1",
+        "d9186e4ea7b93c8b11d1f3c728a8cd20": "OmniScript/second_os_English",
+        "OmniScript/second_os_English": "OmniScript/second_os_English"
+    },
+    "vlocityRecordSourceKeyMap":
+    {
+        "VlocityRecordSourceKey:a1if4000000s8lHAAQ":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1if4000000s8lHAAQ",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__OmniScript__c/Type/subtypeme/English",
+            "%vlocity_namespace%__Type__c": "Type",
+            "%vlocity_namespace%__SubType__c": "subtypeme",
+            "%vlocity_namespace%__Language__c": "English"
+        },
+        "a1if4000000s8lHAAQ":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1if4000000s8lHAAQ",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__OmniScript__c/Type/subtypeme/English",
+            "%vlocity_namespace%__Type__c": "Type",
+            "%vlocity_namespace%__SubType__c": "subtypeme",
+            "%vlocity_namespace%__Language__c": "English"
+        },
+        "VlocityRecordSourceKey:a1ff4000005H9W6AAK":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1ff4000005H9W6AAK",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/DataRaptorPostAction1",
+            "%vlocity_namespace%__OmniScriptId__c":
+            {
+                "Name": "New OmniScript",
+                "VlocityDataPackType": "VlocityMatchingKeyObject",
+                "VlocityMatchingRecordSourceKey": "VlocityRecordSourceKey:a1if4000000s8lHAAQ",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c"
+            },
+            "Name": "DataRaptorPostAction1"
+        },
+        "a1ff4000005H9W6AAK":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1ff4000005H9W6AAK",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/DataRaptorPostAction1",
+            "%vlocity_namespace%__OmniScriptId__c":
+            {
+                "Name": "New OmniScript",
+                "VlocityDataPackType": "VlocityMatchingKeyObject",
+                "VlocityMatchingRecordSourceKey": "VlocityRecordSourceKey:a1if4000000s8lHAAQ",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c"
+            },
+            "Name": "DataRaptorPostAction1"
+        },
+        "VlocityRecordSourceKey:a1ff4000005H9WBAA0":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1ff4000005H9WBAA0",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/Step2",
+            "%vlocity_namespace%__OmniScriptId__c":
+            {
+                "Name": "New OmniScript",
+                "VlocityDataPackType": "VlocityMatchingKeyObject",
+                "VlocityMatchingRecordSourceKey": "VlocityRecordSourceKey:a1if4000000s8lHAAQ",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c"
+            },
+            "Name": "Step2"
+        },
+        "a1ff4000005H9WBAA0":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1ff4000005H9WBAA0",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/Type/subtypeme/English/Step2",
+            "%vlocity_namespace%__OmniScriptId__c":
+            {
+                "Name": "New OmniScript",
+                "VlocityDataPackType": "VlocityMatchingKeyObject",
+                "VlocityMatchingRecordSourceKey": "VlocityRecordSourceKey:a1if4000000s8lHAAQ",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c"
+            },
+            "Name": "Step2"
+        },
+        "VlocityRecordSourceKey:a1if4000000sCubAAE":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1if4000000sCubAAE",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__OmniScript__c/second/os/English",
+            "%vlocity_namespace%__Type__c": "second",
+            "%vlocity_namespace%__SubType__c": "os",
+            "%vlocity_namespace%__Language__c": "English"
+        },
+        "a1if4000000sCubAAE":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1if4000000sCubAAE",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__OmniScript__c/second/os/English",
+            "%vlocity_namespace%__Type__c": "second",
+            "%vlocity_namespace%__SubType__c": "os",
+            "%vlocity_namespace%__Language__c": "English"
+        },
+        "VlocityRecordSourceKey:a1ff4000005H9WLAA0":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1ff4000005H9WLAA0",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/second/os/English/Step1",
+            "%vlocity_namespace%__OmniScriptId__c":
+            {
+                "Name": "secondos",
+                "VlocityDataPackType": "VlocityMatchingKeyObject",
+                "VlocityMatchingRecordSourceKey": "VlocityRecordSourceKey:a1if4000000sCubAAE",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c"
+            },
+            "Name": "Step1"
+        },
+        "a1ff4000005H9WLAA0":
+        {
+            "VlocityRecordSourceKeyOriginal": "VlocityRecordSourceKey:a1ff4000005H9WLAA0",
+            "VlocityRecordSourceKeyNew": "%vlocity_namespace%__Element__c/%vlocity_namespace%__OmniScript__c/second/os/English/Step1",
+            "%vlocity_namespace%__OmniScriptId__c":
+            {
+                "Name": "secondos",
+                "VlocityDataPackType": "VlocityMatchingKeyObject",
+                "VlocityMatchingRecordSourceKey": "VlocityRecordSourceKey:a1if4000000sCubAAE",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c"
+            },
+            "Name": "Step1"
+        }
+    },
+    "VlocityDataPackIds":
+    {
+        "a17f4000002lKojAAE": "Error",
+        "a17f4000002lKpmAAE": "Error"
+    },
+    "generatedKeysToNames":
+    {},
+    "sourceKeyToRecordId":
+    {},
+    "dataPackKeyToPrimarySourceKey":
+    {},
+    "diffStatus":
+    {},
+    "fullManifest":
+    {
+        "OmniScript":
+        {
+            "a1if4000000s8lHAAQ":
+            {
+                "Id": "a1if4000000s8lHAAQ",
+                "VlocityDataPackType": "OmniScript",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c",
+                "VlocityDataPackDisplayLabel": "a1if4000000s8lHAAQ"
+            },
+            "a1if4000000sCubAAE":
+            {
+                "Id": "a1if4000000sCubAAE",
+                "VlocityDataPackType": "OmniScript",
+                "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c",
+                "VlocityDataPackDisplayLabel": "a1if4000000sCubAAE"
+            }
+        },
+        "VlocityUITemplate":
+        {
+            "81371f9c768f32a290db400f1062809a":
+            {
+                "Id": "blah",
+                "VlocityDataPackKey": "81371f9c768f32a290db400f1062809a",
+                "VlocityDataPackLabel": "Vlocity UI Template",
+                "VlocityDataPackRelationshipType": "Parent",
+                "VlocityDataPackType": "VlocityUITemplate"
+            }
+        }
+    },
+    "manifestFound":
+    {},
+    "dataPackDisplayLabels":
+    {},
+    "allDataSummary":
+    {
+        "5af6d927e853f1e4eb9daa82e00166e8":
+        {
+            "VlocityDataPackDisplayLabel": "Type subtypeme English",
+            "VlocityDataPackType": "OmniScript"
+        },
+        "d9186e4ea7b93c8b11d1f3c728a8cd20":
+        {
+            "VlocityDataPackDisplayLabel": "second os English",
+            "VlocityDataPackType": "OmniScript"
+        }
+    },
+    "pendingFromManifest":
+    {},
+    "keysToDirectories":
+    {},
+    "errorHandling":
+    {
+        "ba2320c7638165031955b55dbc9c9cf6":
+        {
+            "dataPack":
+            {
+                "VlocityPrimarySourceId": null,
+                "VlocityPreviousPageKey": null,
+                "VlocityMultiPackParentKey": null,
+                "VlocityDepthFromPrimary": 0,
+                "VlocityDataPackType": "DataRaptor",
+                "VlocityDataPackStatus": "Error",
+                "VlocityDataPackRelationshipType": "Sibling",
+                "VlocityDataPackRecords": [],
+                "VlocityDataPackParents": [],
+                "VlocityDataPackName": "test",
+                "VlocityDataPackMessage": "Not Found",
+                "VlocityDataPackLabel": "DataRaptor",
+                "VlocityDataPackKey": "ba2320c7638165031955b55dbc9c9cf6",
+                "VlocityDataPackIsNotSupported": false,
+                "VlocityDataPackIsIncluded": true,
+                "VlocityDataPackData":
+                {
+                    "Id": "test",
+                    "VlocityDataPackType": "DataRaptor",
+                    "VlocityDataPackLabel": "DataRaptor",
+                    "VlocityDataPackKey": "ba2320c7638165031955b55dbc9c9cf6",
+                    "VlocityDataPackRelationshipType": "Sibling"
+                },
+                "VlocityDataPackAllRelationships":
+                {
+                    "5af6d927e853f1e4eb9daa82e00166e8": "Reference by Name"
+                },
+                "DataPackAttachmentSize": 922,
+                "DataPackAttachmentParentId": "a17f4000002lKojAAE",
+                "DataPackAttachmentId": "00Pf4000006Qs0XEAS",
+                "ActivationStatus": "NA"
+            },
+            "errorMessage": "DataRaptor --- test --- Not Found",
+            "processed": true
+        },
+        "81371f9c768f32a290db400f1062809a":
+        {
+            "dataPack":
+            {
+                "VlocityPrimarySourceId": null,
+                "VlocityPreviousPageKey": null,
+                "VlocityMultiPackParentKey": null,
+                "VlocityDepthFromPrimary": 0,
+                "VlocityDataPackType": "VlocityUITemplate",
+                "VlocityDataPackStatus": "Error",
+                "VlocityDataPackRelationshipType": "Sibling",
+                "VlocityDataPackRecords": [],
+                "VlocityDataPackParents": [],
+                "VlocityDataPackName": "blah",
+                "VlocityDataPackMessage": "Not Found",
+                "VlocityDataPackLabel": "Vlocity UI Template",
+                "VlocityDataPackKey": "81371f9c768f32a290db400f1062809a",
+                "VlocityDataPackIsNotSupported": false,
+                "VlocityDataPackIsIncluded": true,
+                "VlocityDataPackData":
+                {
+                    "Id": "blah",
+                    "VlocityDataPackKey": "81371f9c768f32a290db400f1062809a",
+                    "VlocityDataPackLabel": "Vlocity UI Template",
+                    "VlocityDataPackRelationshipType": "Parent",
+                    "VlocityDataPackType": "VlocityUITemplate"
+                },
+                "VlocityDataPackAllRelationships":
+                {},
+                "DataPackAttachmentSize": 902,
+                "DataPackAttachmentParentId": "a17f4000002lKpmAAE",
+                "DataPackAttachmentId": "00Pf4000006Qs2oEAC",
+                "ActivationStatus": "Ready"
+            },
+            "errorMessage": "VlocityUITemplate --- blah --- Not Found",
+            "processed": false
+        }
+    },
+    "relationshipKeyToChildKeys":
+    {
+        "ba2320c7638165031955b55dbc9c9cf6": ["5af6d927e853f1e4eb9daa82e00166e8"],
+        "81371f9c768f32a290db400f1062809a": ["5af6d927e853f1e4eb9daa82e00166e8", "d9186e4ea7b93c8b11d1f3c728a8cd20"],
+        "5af6d927e853f1e4eb9daa82e00166e8": ["ba2320c7638165031955b55dbc9c9cf6", "81371f9c768f32a290db400f1062809a"]
+    },
+    "addedToExportBuildFile": [],
+    "supportParallel": true,
+    "specificManifestObjects": null,
+    "initialized": true,
+    "toExportGroups": [
+        [
+        {
+            "Id": "blah",
+            "VlocityDataPackKey": "81371f9c768f32a290db400f1062809a",
+            "VlocityDataPackLabel": "Vlocity UI Template",
+            "VlocityDataPackRelationshipType": "Parent",
+            "VlocityDataPackType": "VlocityUITemplate"
+        }]
+    ],
+    "hasError": true,
+    "exportRemaining": 1,
+    "errorMessage": "OmniScript/Type_subtypeme_English references DataRaptor/test which was not found."
+}

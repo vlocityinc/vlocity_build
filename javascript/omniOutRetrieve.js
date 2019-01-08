@@ -19,12 +19,14 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             vlocity.jsForceConnection.apex.post('/' + vlocity.namespace + '/v1/GenericInvoke/', body, function(err, prefilledJson) {
                 if (err) { return console.error(err); }
 
+                if (!record[vlocity.namespace + '__Type__c'] || !record[vlocity.namespace + '__SubType__c'] ||  !record[vlocity.namespace + '__Language__c']) return;
+
                 var filename = record[vlocity.namespace + '__Type__c'] + '_' + record[vlocity.namespace + '__SubType__c'] + '_' + record[vlocity.namespace + '__Language__c'];
 
                 vlocity.datapacksexpand.targetPath = jobInfo.projectPath + '/' + jobInfo.expansionPath;
                 var file = vlocity.datapacksexpand.writeFile('OmniOut', 'OmniOut', filename, 'json', prefilledJson, false);
 
-                VlocityUtils.success('Created file:', path.join(vlocity.datapacksexpand.targetPath, 'OmniOut', 'scripts',file));
+                VlocityUtils.success('Created file:', path.join(vlocity.datapacksexpand.targetPath, 'OmniOut', 'OmniOut', filename));
                 seriesCallback();
             }, function(err, result) {
                 seriesCallback();

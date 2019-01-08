@@ -1,5 +1,6 @@
 build_*.properties
 dataPacksJobs/
+coverage/
 !dataPacksJobs/Example.yaml
 !dataPacksJobs/QueryDefinitions.yaml
 !dataPacksJobs/ReadMeExample.yaml
@@ -8,6 +9,7 @@ node_modules/
 vlocity-temp/
 example_vlocity_build/
 test/testJobRunning/
+.nyc_output/
 .vscode/
 .sfdx/
 .npmrc
