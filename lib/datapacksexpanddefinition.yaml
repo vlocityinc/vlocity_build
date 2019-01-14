@@ -509,7 +509,7 @@ SObjects:
     DeltaQueryChildren:
       ObjectFieldAttribute__c:
         ObjectClassId__c: Id
-        SubClassId__c: 'null'
+        SubclassId__c: 'null'
       AttributeBinding__c: 
         ObjectClassId__c: Id
       AttributeAssignment__c:
@@ -740,7 +740,7 @@ SObjects:
       ProductRequirement__c:
         Product2Id__c: Id
       ObjectFieldAttribute__c:
-        SubClassId__c: Id
+        SubclassId__c: Id
       PricingElement__c:
         OfferId__c: Id
       PriceListEntry__c:
