@@ -432,8 +432,11 @@ SObjects:
   Element__c:
     BuildOnlyFields:
       Order__c: index
-    DiffFields:
-      PropertySet__c.show: object    
+    FieldDisplayType:
+      PropertySet__c.show: object  
+    FieldImportance:
+      High: 
+        - PropertySet__c.show
     FileName:
     - _Element
     - Name
