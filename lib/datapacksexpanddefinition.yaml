@@ -205,8 +205,10 @@ SObjects:
     - IsIncludedInResult__c
     DiffKeys:
       1: 
-        - CalculationFormulaLong__c
+        - OutputJSON__c
       2: 
+        - CalculationFormulaLong__c
+      3: 
         - Sequence__c
     FilterFields:
     - Name
