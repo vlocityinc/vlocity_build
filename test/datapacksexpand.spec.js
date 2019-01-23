@@ -81,7 +81,7 @@ describe('DataPacksExpand', () =>
       '!CalculationMatrix/test2',
       'OmniScript*',
       '!OmniScript/test1',
-      '!IngrationProcedure/'
+      '!IntegrationProcedure/'
     ];
     datapacksexpand.vlocity.datapacksutils = new _datapacksutils({tempFolder: '../vlocity-temp'});
     datapacksexpand.targetPath = './example_vlocity_build/';
@@ -104,9 +104,10 @@ describe('DataPacksExpand', () =>
       it('should ignore OmniScript/test2', () => {
         expect(datapacksexpand.writeFile('OmniScript','test2','test2_Version','json','abcd')).to.be.undefined;
       })
-      it('should not ignore IngrationProcedure/test1', () => {
-        expect(datapacksexpand.writeFile('IngrationProcedure','test1','test1_Version','','abcd',false,'')).to.be.equal('test1_Version');
+      it('should not ignore IntegrationProcedure/test1', () => {
+        expect(datapacksexpand.writeFile('IntegrationProcedure','test1','test1_Version','','abcd',false,'')).to.be.equal('test1_Version');
       })
     }
   })
 })
+
