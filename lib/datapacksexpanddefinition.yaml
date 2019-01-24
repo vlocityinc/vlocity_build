@@ -1,7 +1,7 @@
 DataPacks:
   Attachment:
     ChildrenLimit: 10
-    IsDiffable: false
+    IsDiffable: true
   CalculationMatrix:
     UniqueByName: true
   CalculationProcedure:
@@ -33,6 +33,9 @@ DataPacks:
       FolderName:
       - Type__c
       - SubType__c
+      TitleFields:
+      - Type__c
+      - SubType__c
       UnhashableFields:
       - CustomJavaScript__c
       - Order__c
@@ -57,6 +60,7 @@ DataPacks:
     HeadersOnly: All
     PaginationSize: 500
   Product2:
+    HeadersOnly: true
     IgnoreExpand:
     - StandardPricebookEntry
     ApexSObjectTypeList:
@@ -107,6 +111,8 @@ SObjects:
     SourceKeyDefinition:
     - ParentId
     - Name
+    TitleFields:
+    - Name
   AttributeAssignmentRule__c:
     DeltaQueryChildren:
       AttributeAssignment__c:
@@ -144,6 +150,9 @@ SObjects:
     - Code__c
     SourceKeyDefinition:
     - Code__c
+    TitleFields:
+    - Name
+    - UIControlType__c
   Attribute__c:
     FilterFields:
     - AutoCode__c
@@ -197,6 +206,7 @@ SObjects:
     SourceKeyDefinition:
     - Name
   CalculationProcedureStep__c:
+    DeletedDuringDeploy: true
     DeltaCheckTextIdField:
     - CalculationProcedureId__c
     DeltaCheckMatchingKey:
@@ -205,9 +215,11 @@ SObjects:
     - IsIncludedInResult__c
     DiffKeys:
       1: 
-        - CalculationFormulaLong__c
+        - OutputJSON__c
       2: 
-        - Sequence__c
+        - CalculationFormulaLong__c
+      3: 
+        - CalculationFormula__c
     FilterFields:
     - Name
     JsonFields:
@@ -220,14 +232,21 @@ SObjects:
     - _Steps
     NonUnique: true
     SortFields:
+    - TaskType__c
     - Sequence__c
     UnhashableFields:
     - CalculationProcedureVersionId__c
   CalculationProcedureVariable__c:
+    DeletedDuringDeploy: true
     DeltaCheckMatchingKey:
     - Name
     - DataType__c
     - Alias__c
+    DiffKeys:
+      1: 
+        - Name
+      2:
+        - Alias__c
     ListFileName:
     - _Variables
     UnhashableFields:
@@ -287,6 +306,8 @@ SObjects:
       FileExt: FileExtension
       FilePrefix: Title
       FileType: base64
+    TitleFields:
+    - Title
   ContextAction__c:
     FolderName:
     - GlobalKey__c
@@ -344,6 +365,9 @@ SObjects:
       FileName:
       - _TargetOutXml
       FileType: xml
+    TitleFields:
+    - Name
+    - Type__c
     UnhashableFields:
     - InputJson__c
     - InputXml__c
@@ -398,6 +422,9 @@ SObjects:
     FolderName:
     - DeveloperName
     SourceKeyDefinition:
+    - DeveloperName
+    TitleFields:
+    - Name
     - DeveloperName
   DocumentClause__c: 
     SourceKeyDefinition:
@@ -624,6 +651,10 @@ SObjects:
       FileName:
       - _HTMLTemplates
       FileType: html
+    TitleFields:
+    - Type__c
+    - SubType__c
+    - Language__c
   OrchestrationDependencyDefinition__c:
     FilterFields:
     - OrchestrationPlanDefinition__c
@@ -654,6 +685,25 @@ SObjects:
     - Name
     - Product2Id__c
   OverrideDefinition__c:
+    DiffKeys:
+      1: 
+        - OverriddenAttributeAssignmentId__c
+        - OverrideType__c
+      2:
+        - OverriddenProductChildItemId__c
+        - OverrideType__c
+      3: 
+        - OverriddenPriceListEntryId__c
+        - OverrideType__c
+      4: 
+        - OverriddingAttributeAssignmentId__c
+        - OverrideType__c
+      5:
+        - OverriddingProductChildItemId__c
+        - OverrideType__c
+      6: 
+        - OverriddingPriceListEntryId__c
+        - OverrideType__c 
     NonUnique: true
     ReplacementFields:
       Name: _OverrideDefinition
@@ -683,6 +733,9 @@ SObjects:
     FolderName:
     - Code__c
     SourceKeyDefinition:
+    - Code__c
+    TitleFields:
+    - Name
     - Code__c
   Pricebook2:
     CustomJavaScript__c:
@@ -773,10 +826,14 @@ SObjects:
     - CategoryData__c
     SourceKeyDefinition:
     - GlobalKey__c
+    TitleFields:
+    - Name
+    - ProductCode
+    - GlobalKey__c
     UnhashableFields:
     - JSONAttribute__c
     - CategoryData__c
-    - IsConfigurable__c 
+    - IsConfigurable__c
   ProductAvailability__c:
     NonUnique: true
   ProductChildItem__c:
@@ -1036,6 +1093,8 @@ SObjectsDefault:
   SortFields:
   - Hash
   SummaryFields: []
+  TitleFields:
+  - Name
 FieldLabels:
   All:
-    id: Id  
+    id: Id
