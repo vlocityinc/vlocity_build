@@ -552,7 +552,7 @@ SObjects:
       Name: GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
-    DeltaMetadataCheck:
+    MetadataCheck:
       SObjectType: 'ObjectType__c'
       FieldApiName: 'FieldApiName__c'
   ObjectLayout__c:
