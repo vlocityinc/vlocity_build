@@ -12,7 +12,7 @@ activate: true
 compileOnBuild: true
 maxDepth: -1
 defaultMaxParallel: 50
-exportPacksMaxSize: 10
+exportPacksMaxSize: 20
 useAllRelationships: false
 ignoreAllErrors: false
 addSourceKeys: false
@@ -25,3 +25,5 @@ cleanTestData: true
 tests:
   - Local
   - Org
+salesforceMetadataTypesBlacklist:
+  - TopicsForObjects  
