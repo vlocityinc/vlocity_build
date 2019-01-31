@@ -30,6 +30,22 @@
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__VlocityScheduledJob__c",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
+        "%vlocity_namespace%__ConfigurationProcess__c": "All",
+        "%vlocity_namespace%__ConfigurationType__c": "Action",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__AsyncApexJobId__c",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 1,
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job2",
+        "Name": "Vlocity Scheduled Job",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
         "%vlocity_namespace%__ConfigurationAttribute__c": "IntegrationProcedure",
         "%vlocity_namespace%__ConfigurationCategory__c": "Sibling",
         "%vlocity_namespace%__ConfigurationGroup__c": "Integration Procedure",
@@ -41,7 +57,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job2",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job3",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -59,7 +75,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job3",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job4",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -73,7 +89,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job14",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job15",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -87,7 +103,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job16",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job17",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -101,7 +117,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job15",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job16",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -115,7 +131,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job17",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job18",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -129,7 +145,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job7",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job8",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -143,7 +159,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job6",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job7",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -157,7 +173,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job10",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job11",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -171,7 +187,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job5",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job6",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -185,7 +201,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job11",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job12",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -199,7 +215,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job12",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job13",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -213,7 +229,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job8",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job9",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -227,7 +243,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job4",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job5",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -241,7 +257,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job13",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job14",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -255,7 +271,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job9",
+        "%vlocity_namespace%__MapId__c": "Vlocity Scheduled Job10",
         "Name": "Vlocity Scheduled Job",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"

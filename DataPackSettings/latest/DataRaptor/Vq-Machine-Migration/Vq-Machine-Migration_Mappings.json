@@ -45,6 +45,21 @@
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "%vlocity_namespace%__VqMachine__c:%vlocity_namespace%__VqMachineResource__c",
+        "%vlocity_namespace%__FilterGroup__c": 1,
+        "%vlocity_namespace%__FilterOperator__c": "!=",
+        "%vlocity_namespace%__FilterValue__c": "'$Vlocity.NULL'",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__VqResourceId__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__VqMachineResource__c",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration3",
+        "Name": "Vq Machine Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
         "%vlocity_namespace%__ConfigurationAttribute__c": "VqResource",
         "%vlocity_namespace%__ConfigurationCategory__c": "Parent",
         "%vlocity_namespace%__ConfigurationProcess__c": "Export",
@@ -54,7 +69,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration3",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration4",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -68,7 +83,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration14",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration15",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -82,7 +97,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration16",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration17",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -96,7 +111,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration15",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration16",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -110,7 +125,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration17",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration18",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -124,7 +139,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration7",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration8",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -138,7 +153,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration6",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration7",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -152,7 +167,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration10",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration11",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -166,7 +181,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration5",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration6",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -180,7 +195,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration11",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration12",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -194,7 +209,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration12",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration13",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -208,7 +223,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration8",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration9",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -222,7 +237,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration4",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration5",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -236,7 +251,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration13",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration14",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -250,7 +265,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Vq Machine Migration9",
+        "%vlocity_namespace%__MapId__c": "Vq Machine Migration10",
         "Name": "Vq Machine Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
