@@ -57,6 +57,7 @@ DataPacks:
     HeadersOnly: All
     PaginationSize: 500
   Product2:
+    HeadersOnly: true
     IgnoreExpand:
     - StandardPricebookEntry
     ApexSObjectTypeList:
