@@ -1,10 +1,119 @@
 # Vlocity Build
---------
-
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
+- [Vlocity Build](#vlocity-build)
+- [Recent Features](#recent-features)
+  - [v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings](#v18---delta-deploys--exports-error-message-enhancements-git-changes-based-deploys-and-auto-update-settings)
+    - [Delta Deploys / Exports](#delta-deploys--exports)
+    - [Error Message Enhancements](#error-message-enhancements)
+        - [Previous:](#previous)
+        - [New:](#new)
+    - [Git Changes Based Deploys](#git-changes-based-deploys)
+    - [Auto Update Settings](#auto-update-settings)
+  - [v1.7](#v17)
+    - [OmniScript and IntegrationProcedure](#omniscript-and-integrationprocedure)
+    - [SFDX](#sfdx)
+- [Recent Data Model Changes](#recent-data-model-changes)
+  - [v1.8 - No Changes](#v18---no-changes)
+  - [v1.7 - OmniScript and IntegrationProcedure](#v17---omniscript-and-integrationprocedure)
+  - [v1.6 - Enterprise Product Catalog - Product2, Pricebook and PriceList](#v16---enterprise-product-catalog---product2-pricebook-and-pricelist)
+  - [Rolling Back Changes to the Vlocity Build Tool](#rolling-back-changes-to-the-vlocity-build-tool)
+- [Installation Instructions](#installation-instructions)
+  - [Install Node.js](#install-nodejs)
+  - [Install Vlocity Build through NPM](#install-vlocity-build-through-npm)
+  - [Releases](#releases)
+    - [Installing Older Releases](#installing-older-releases)
+    - [Cloning Vlocity Build - Not Recommended](#cloning-vlocity-build---not-recommended)
+- [Getting Started](#getting-started)
+  - [Running the Process](#running-the-process)
+  - [Property File](#property-file)
+  - [Job File](#job-file)
+- [Step by Step Guide](#step-by-step-guide)
+  - [Simple Export](#simple-export)
+  - [Simple Deploy](#simple-deploy)
+  - [Org to Org Migration](#org-to-org-migration)
+    - [Summary of Org to Org Migration](#summary-of-org-to-org-migration)
+    - [New Sandbox Orgs](#new-sandbox-orgs)
+- [Automation Quick Guide](#automation-quick-guide)
+  - [Vlocity Build + Salesforce DX](#vlocity-build--salesforce-dx)
+    - [Vlocity Managed Package](#vlocity-managed-package)
+  - [Running in Jenkins](#running-in-jenkins)
+- [The Job File](#the-job-file)
+  - [What will be Exported?](#what-will-be-exported)
+  - [Example Job File](#example-job-file)
+      - [dataPacksJobs/Example.yaml](#datapacksjobsexampleyaml)
+  - [Predefined vs Explicit Queries](#predefined-vs-explicit-queries)
+  - [Query All](#query-all)
+- [Troubleshooting](#troubleshooting)
+  - [Log Files](#log-files)
+  - [Data Quality](#data-quality)
+  - [Errors](#errors)
+    - [Not Found](#not-found)
+    - [No Match Found](#no-match-found)
+    - [SASS Compilation Error](#sass-compilation-error)
+    - [Validation Errors](#validation-errors)
+    - [Duplicate Value Found](#duplicate-value-found)
+    - [Multiple Imported Records will incorrecty create the same Saleforce Record](#multiple-imported-records-will-incorrecty-create-the-same-saleforce-record)
+    - [Some records were not processed](#some-records-were-not-processed)
+  - [Cleaning Bad Data](#cleaning-bad-data)
+  - [External Ids and Global Keys](#external-ids-and-global-keys)
+  - [Validation](#validation)
+- [All Commands](#all-commands)
+  - [Primary](#primary)
+  - [Troubleshooting](#troubleshooting-1)
+  - [Additional](#additional)
+  - [Example Commands](#example-commands)
+    - [packExport](#packexport)
+    - [packExportSingle](#packexportsingle)
+    - [packExportAllDefault](#packexportalldefault)
+    - [packDeploy](#packdeploy)
+    - [cleanOrgData](#cleanorgdata)
+    - [validateLocalData](#validatelocaldata)
+    - [refreshProject](#refreshproject)
+    - [packContinue](#packcontinue)
+    - [packRetry](#packretry)
+    - [packGetDiffs](#packgetdiffs)
+    - [packGetDiffsAndDeploy](#packgetdiffsanddeploy)
+- [Additional Command Line Options](#additional-command-line-options)
+  - [Job Options](#job-options)
+  - [Vlocity Build Options](#vlocity-build-options)
+- [Developer Workflow](#developer-workflow)
+  - [Manifest Driven Workflow](#manifest-driven-workflow)
+    - [VlocityDataPackKey Overview](#vlocitydatapackkey-overview)
+    - [Using the VlocityDataPackKey in the Manifest](#using-the-vlocitydatapackkey-in-the-manifest)
+    - [Adding to Job Files](#adding-to-job-files)
+      - [Export Job File](#export-job-file)
+      - [Deploy Job File](#deploy-job-file)
+- [Other Job File Settings](#other-job-file-settings)
+  - [Basic](#basic)
+  - [Export](#export)
+  - [Export by Queries](#export-by-queries)
+  - [Export Results](#export-results)
+  - [Advanced: Export by Manifest](#advanced-export-by-manifest)
+  - [Advanced: Export Individual SObject Records](#advanced-export-individual-sobject-records)
+  - [BuildFile](#buildfile)
+  - [Anonymous Apex](#anonymous-apex)
+- [Supported DataPack Types](#supported-datapack-types)
+- [Advanced](#advanced)
+  - [Anonymous Apex and JavaScript](#anonymous-apex-and-javascript)
+    - [Namespace](#namespace)
+    - [Loading Apex Code](#loading-apex-code)
+    - [BaseUtilities.cls](#baseutilitiescls)
+    - [PreJobApex](#prejobapex)
+    - [preJobApex vs preStepApex](#prejobapex-vs-prestepapex)
+      - [Pre and Post Job JavaScript](#pre-and-post-job-javascript)
+        - [Export by Queries](#export-by-queries-1)
+        - [Deploy](#deploy)
+      - [PostJobApex Replacement Format](#postjobapex-replacement-format)
+        - [Deploy](#deploy-1)
+  - [Matching Keys](#matching-keys)
+    - [Creating Custom Matching Keys](#creating-custom-matching-keys)
+    - [Current Matching Keys](#current-matching-keys)
+    - [CLI API](#cli-api)
+    - [Overriding DataPack Settings](#overriding-datapack-settings)
+- [OmniOut](#omniout)
+- [Known Issues](#known-issues)
 
 # Recent Features
---------
 
 ## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
 ### Delta Deploys / Exports
@@ -33,9 +142,8 @@ The OmniScript and IntegrationProcedure DataPacks have been modified to remove t
 Authentication with Salesforce DX credentials is now possible. Use `-sfdx.username` to use a Salesforce DX Authorized Org for `vlocity` commands. Once you are passing this parameter you will not need a password or any other propertyfile information. The Salesforce DX Authorization from `sfdx force:org:display -u <username>` will handle all the information. Passing an alias will work as well.
 
 # Recent Data Model Changes
---------
 
-## v1.8
+## v1.8 - No Changes
 There were no data model changes for v1.8
 
 ## v1.7 - OmniScript and IntegrationProcedure
@@ -49,7 +157,7 @@ All existing data is still compatible, and issues will only arise when an OmniSc
 
 Please ensure everyone on your project is using the same version of this build tool.
 
-## v1.6.0 - Enterprise Product Catalog - Product2, Pricebook and PriceList 
+## v1.6 - Enterprise Product Catalog - Product2, Pricebook and PriceList 
 The Product2 DataPack has been modified to include all Pricebook and PriceList Entries for the Product. This means that a Product can be migrated from one org to another along with its Pricing Information without migrating the other Products in the Pricebook and Price List. 
 
 Running `packUpdateSettings` and re-exporting the Product2, Pricebook and PriceList is necessary to migrate to the new format, however existing data should still be deployable with the new changes.
@@ -60,31 +168,7 @@ If you have any issues with these changes you can install the previous version o
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 ```
 
-# Table of Contents
------------
-* [Installation Instructions](#installation-instructions)
-* [Getting Started](#getting-started)
-* [Step by Step Guide](#step-by-step-guide)
-  * [Simple Export](#simple-export)
-  * [Simple Deploy](#simple-deploy)
-  * [Org to Org Migration](#org-to-org-migration)
-* [Automation Guide](#automation-quick-guide)
-* [The Job File](#the-job-file)
-  * [Example Job File](#example-job-file)
-* [Troubleshooting](#troubleshooting)
-* [All Commands](#all-commands)
-  * [Example Commands](#example-commands)
-  * [Additional Command Line Options ](#additional-command-line-options)
-* [Developer Workflow](#developer-workflow)
-* [Other Job File Settings](#other-job-file-settings)
-* [Supported DataPack Types](#supported-datapack-types)
-* [Advanced](#advanced)
-  * [Matching Keys](#matching-keys)
-* [OmniOut](#omniout)
-* [Known Issues](#known-issues)
-
 # Installation Instructions
------------
 
 ## Install Node.js
 Download and Install Node at:
@@ -134,7 +218,7 @@ npm install
 ```
 
 # Getting Started
-------------
+
 If you are using Salesforce DX, you can use `-sfdx.username` to use a Salesforce DX Authorized Org for authentication. The Vlocity Build Tool will use the Salesforce DX information from `sfdx force:org:display -u <username or alias>`. This can be a Scratch Org, or one Authorized through `sfdx force:auth:web:login`.
 
 Otherwise, create your own property files for your Source and Target Salesforce Orgs with the following:
@@ -167,7 +251,6 @@ The propertyfile is used to provide the credentials of the org you will connect 
 The Job File used to define the project location and the various settings for running a DataPacks Export / Deploy.
 
 # Step by Step Guide
-------------
 Once you have your `build_source.properties` file setup, you can get started with mirgation with the following: 
 
 ## Simple Export
@@ -309,7 +392,6 @@ vlocity -propertyfile build_target.properties --nojob packUpdateSettings install
 This will install the Base UI Templates, CPQ Base Templates, EPC Default Objects and any other default data delivered through Vlocity DataPacks. This command should only be run if the Org was not previously used for Vlocity Development.
 
 # Automation Quick Guide
-------------
 
 ## Vlocity Build + Salesforce DX
 
@@ -376,7 +458,6 @@ Then adding the build step:
 ![Build](doc/Build.png)
 
 # The Job File
-------------
 A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
 
 **The Default Job Settings will automatically be used if not explicitly specified in your file, and it is best to not add settings to the file unless you want to change them from the defaults.**
@@ -441,7 +522,6 @@ When Exporting, the DataPacks API will additionally export all dependencies of t
 Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queires defined, you can also run: `packExportAllDefault` to specify running all the default queries.
 
 # Troubleshooting
-------------
 
 ## Log Files
 Three log files are generated for every command run.
@@ -456,6 +536,8 @@ Three log files are generated for every command run.
 Once Exported it is very important to validate that your data is in state that is ready to be deployed. The Vlocity Build tool primarily relies on unique data in fields across the different objects to prevent duplicate data being uploaded.
 
 ## Errors
+
+### Not Found
 Generally errors will be due to missing or incorrect references to other objects. 
 ```
 Error >> DataRaptor --- GetProducts --- Not Found
@@ -464,13 +546,22 @@ Error >> VlocityUITemplate --- ShowProducts --- Not Found
 
 This "VlocityUITemplate --- ShowProducts --- Not Found" error during Export means that something, likely an OmniScript, has a reference to a VlocityUITemplate that is not currently Active or does not exist in the org as a VlocityUITemplate. In some cases the VlocityUITemplate for an OmniScript can actually be included inside the Visualforce Page in which the OmniScript is displayed. In that case, this error can be completely ignored. The DataRaptor Not Found means that likely someone deleted or changed the name of the DataRaptor being referenced without updating the OmniScript using it.
 
-## Common Error Messages
+### No Match Found
 Errors occurring during Export will likely result in Errors during deploy. But not always. Errors during Deploy will occur when a Salesforce Id reference is not found in the target system:  
 `Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- No match found for vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c - vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02`
 
 In this Error the Product being deployed is the iPhone with Global Key `02d3feaf-a390-2f57-a08c-2bfc3f9b7333` and the error is stating that one of the Product Child Items could not find the referenced product with Global Key `db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This means the other Product must also be deployed. 
 
 In the error, after `No match found for` it is signifying a Reference Field on the SObject with the missing data `<SObject>.<FieldName>` or in this example `vlocity_cmt__ProductChildItem__c.vlocity_cmt__ChildProductId__c`. After this it is indicating what Data is in the DataPack's saved reference: `vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02`. This is the Global Key of the Product2 being referenced by the field `ChildProductId__c` on the SObject `ProductChildItem__c`. If it is clear that the referenced data does exist, in this case a Product2 with `vlocity_cmt__GlobalKey__c=db65c1c5-ada4-7952-6aa5-8a6b2455ea02`, make sure that the Matching Key for this SObject type is correctly aligned between your two environments. 
+
+### SASS Compilation Error
+```
+SASS Compilation Error VlocityUITemplate/cpq-total-card Failed to compile SCSS: .\VlocityUITemplate\cpq-total-card\cpq-total-card.scss SASS compilation failed, see error message for details: Error: 
+on line 2 of /stdin 
+>> @import "cpq-theme-variables";
+```
+When SASS Fails to compile the issue is generally related to the export not including VlocityUITemplates that are referenced as part of the SASS compilation. Export the missing data with the command:
+`vlocity -job <JobFile> packExport -key cpq-theme-variables`
 
 ### Validation Errors
 Deploys will run all of the Triggers associated with Objects during their import. As there are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
@@ -482,6 +573,7 @@ While not clear from the wording, this error indicates that one of the Child Pro
 
 `vlocity packDeploy -manifest '["Pricebook2/2018 Pricebook"]'`
 
+### Duplicate Value Found
 Some errors are related to conflicting data. For Attribute Category Display Sequence you will receive the following:
 
 `Error >> AttributeCategory/Product_Attributes --- Product Attributes --- duplicate value found: <unknown> duplicates value on record with id: <unknown>`
@@ -493,10 +585,12 @@ Records with the same Display Sequence can be found via the SOQL query:
 Select Id, Name from %vlocity_namespace%__AttributeCategory__c 
 where %vlocity_namespace%__DisplaySequence__c = %DisplaySequence__c from DataPack.json file%
 
+### Multiple Imported Records will incorrecty create the same Saleforce Record
 `Catalog/Data – Datapack >> Data – Error Message – Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. vlocity_cmt__CatalogProductRelationship__c: 20MB Plan`
 
 These errors mean there are duplicates in the data. Multiple records with the same data for `vlocity_cmt__CatalogProductRelationship__c: 20MB Plan` (this is the Name). The Matching Key for a CatalogProductRelationship__c object is `%vlocity_namespace%__CatalogId__c, %vlocity_namespace%__Product2Id__c` (See [Current Matching Keys](#current-matching-keys)). Therefore, this error means that there are two references to the same product inside the same Catalog, which is not allowed. The Duplicates must be removed from the Source Org and Re-Exported.
 
+### Some records were not processed
 `Product2/adac7afa-f741-80dd-9a69-f8a5aa61eb56 -- Datapack >> IPhone Charger -- Error Message -- Some records were not processed. Please validate imported data types.`
 
 This error means that during the Deploy some of the Records that exist as part of the DataPack Data were not upserted into Salesforce. This generally means that there is a mismatch between the Configuration Data in the target org compared to the Source Org. Re-running `packUpdateSettings` in both orgs is the best way to solve this issue.
@@ -541,7 +635,6 @@ vlocity -propertyfile build_uat.properties -job Example.yaml packGetDiffs
 This will provide a list of files that are different locally than in the org. In the future more features will be added to view the actual diffs.
 
 # All Commands
------------
 
 ## Primary  
 `packExport`: Export from a Salesforce org into a DataPack Directory    
@@ -694,7 +787,6 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | verbose | Show additional logging statements | Boolean | false |
 
 # Developer Workflow
-------
 When developing on a large project, exporting DataPacks through Queires is not the ideal process. Instead, each developer should keep track of the major items that they are working on and extract those items as needed to commit to Version Control.
 
 ## Manifest Driven Workflow
@@ -786,7 +878,6 @@ expansionPath: vlocity
 Running `packDeploy -job Deploy.yaml` will then deploy all of the DataPacks in the `vlocity` folder as there is no manifest being defined.
 
 # Other Job File Settings
-------------
 The Job File has a number of additonal runtime settings that can be used to define your project and aid in making Exports / Deploys run successfully. However, the Default settings should only be modified to account for unique issues in your Org. 
 
 ## Basic  
@@ -932,7 +1023,6 @@ These types are what would be specified when creating a Query or Manifest for th
 | VqResource<br>(Vlocity Intelligence Resource) | VqResource__c<br>Attachment<br>AttributeAssignment__c |
 
 # Advanced
----------------------
 
 ## Anonymous Apex and JavaScript
 In order to make the Anonymous Apex part reusable, you can include multiple Apex files with "//include FileName.cls;" in your .cls file. This allows you to write Utility files that can be reused. The BaseUtilities.cls file includes an additional feature that will send the data as a JSON to your Anonymous Apex.
@@ -1225,8 +1315,6 @@ The following full list of settings are supported:
 | ExportGroupSize | Integer | 5 | Specify the maximum number of DataPacks which should be Exported in a single transaction. Potentially large DataPacks like Matrix or Attachments could be set to 1 if necessary
 
 # OmniOut
------------
-
 In order to Retrieve the OmniScripts that will be deployed as part of the OmniOut deployment, run the following command:
 
 `vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js omniOutRetrieve.js`
@@ -1234,7 +1322,17 @@ In order to Retrieve the OmniScripts that will be deployed as part of the OmniOu
 This will export the retrieved files into the folder `OmniOut/scripts` in your Project.
 
 # Known Issues
------------
-
 * When Multi Currency is enabled, you can only deploy data exported from another Multi Currency Org or to deploy to another Multi Currency Org. Non Multi Currency to Multi Currency Export / Deploy will not work as expected.  
+
+
 * OmniScripts that are embedded in many other OmniScripts cannot be activated due to SOQL Query limits.
+
+
+* Attribute Assignment Matching Key when using Override Definitions is not correct. In order to correctly have the GlobalKey field on an Attribute Assignment be its unique key, you must add a Vlocity Matching Key record with the following information:
+ ![MatchingKeyAA](doc/MatchingKeyForAA.png)
+Without this Matching Key you will receive the following error during deployment:
+`Product2/4e5828c2-4832-10c8-c343-88934cc2cb1c – DataPack >> Amount Discount Product – Error Message – Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. %vlocity_namespace%__AttributeAssignment__c: TempAA-ATT_INS_PRICE`
+
+
+* Orchestration Dependency Definition - In the Managed Package this Object does not have a Matching Key. Add the following Matching Key if you are using Order Management:
+ ![MatchingKeyOrch](doc/MatchingKeyForOrch.png)
