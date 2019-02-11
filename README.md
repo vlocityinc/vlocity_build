@@ -1326,7 +1326,8 @@ This will export the retrieved files into the folder `OmniOut/scripts` in your P
 
 
 * OmniScripts that are embedded in many other OmniScripts cannot be activated due to SOQL Query limits.
-
+`Error: System.LimitException: vlocity_cmt:Too many SOQL queries: 101`
+The datapacks will be deployed, however a manual activation of the latest OmniScript after deployment is required.
 
 * Attribute Assignment Matching Key when using Override Definitions is not correct. In order to correctly have the GlobalKey field on an Attribute Assignment be its unique key, you must add a Vlocity Matching Key record with the following information:
  ![MatchingKeyAA](doc/MatchingKeyForAA.png)
@@ -1334,5 +1335,7 @@ Without this Matching Key you will receive the following error during deployment
 `Product2/4e5828c2-4832-10c8-c343-88934cc2cb1c – DataPack >> Amount Discount Product – Error Message – Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. %vlocity_namespace%__AttributeAssignment__c: TempAA-ATT_INS_PRICE`
 
 
-* Orchestration Dependency Definition - In the Managed Package this Object does not have a Matching Key. Add the following Matching Key if you are using Order Management:
+* Orchestration Dependency Definition - In the Managed Package this Object does not have a Matching Key and creates duplicate records. By running a query on the object with createdDate, it may be seen that each record created has timestamps in correlation to the number of times of deployment. This gives indication that the datapacks have been configured correctly, however the missing Matching Key causes VBT to create new records.
+`vlocity_cmt__OrchestrationDependencyDefinition__c found duplicates for vlocity_cmt__GlobalKey__c: 00527b2d-08a6-c069-33cf-88de9d25a2de`
+Add the following Matching Key if you are using Order Management:
  ![MatchingKeyOrch](doc/MatchingKeyForOrch.png)
