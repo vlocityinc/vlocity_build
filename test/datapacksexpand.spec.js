@@ -8,7 +8,7 @@ const _vlocityutils = require('../lib/vlocityutils');
 
 const expect = require('chai').expect;
 
-describe('DataPacksExpand', () => 
+describe('DataPacksExpand', async () => 
 {
   var datapacksexpand = new _datapacksexpand();
   
@@ -89,23 +89,23 @@ describe('DataPacksExpand', () =>
 
     if(datapacksexpand.vlocity.datapacksutils.ignoreFileMap)
     {
-      it('should ignore DataRaptor/test1', () => {
-        expect(datapacksexpand.writeFile('DataRaptor','test1','test1_Version','json','abcd')).to.be.undefined;
+      it('should ignore DataRaptor/test1', async () => {
+        expect(await datapacksexpand.writeFile('DataRaptor','test1','test1_Version','json','abcd')).to.be.undefined;
       })
-      it('should ignore CalculationMatrix/test1', () => {
-        expect(datapacksexpand.writeFile('CalculationMatrix','test1','test1_Version','json','abcd')).to.be.undefined;
+      it('should ignore CalculationMatrix/test1', async () => {
+        expect(await datapacksexpand.writeFile('CalculationMatrix','test1','test1_Version','json','abcd')).to.be.undefined;
       })
-      it('should not ignore CalculationMatrix/test2', () => {
-        expect(datapacksexpand.writeFile('CalculationMatrix','test2','test2_Version','','abcd',false,'')).to.be.equal('test2_Version');
+      it('should not ignore CalculationMatrix/test2', async () => {
+        expect(await datapacksexpand.writeFile('CalculationMatrix','test2','test2_Version','','abcd',false,'')).to.be.equal('test2_Version');
       })
-      it('should ignore OmniScript/test1', () => {
-        expect(datapacksexpand.writeFile('OmniScript','test1','test1_Version','json','abcd')).to.be.undefined;
+      it('should ignore OmniScript/test1', async () => {
+        expect(await datapacksexpand.writeFile('OmniScript','test1','test1_Version','json','abcd')).to.be.undefined;
       })
-      it('should ignore OmniScript/test2', () => {
-        expect(datapacksexpand.writeFile('OmniScript','test2','test2_Version','json','abcd')).to.be.undefined;
+      it('should ignore OmniScript/test2', async () => {
+        expect(await datapacksexpand.writeFile('OmniScript','test2','test2_Version','json','abcd')).to.be.undefined;
       })
-      it('should not ignore IntegrationProcedure/test1', () => {
-        expect(datapacksexpand.writeFile('IntegrationProcedure','test1','test1_Version','','abcd',false,'')).to.be.equal('test1_Version');
+      it('should not ignore IntegrationProcedure/test1', async () => {
+        expect(await datapacksexpand.writeFile('IntegrationProcedure','test1','test1_Version','','abcd',false,'')).to.be.equal('test1_Version');
       })
     }
   })
