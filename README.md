@@ -1339,3 +1339,8 @@ Without this Matching Key you will receive the following error during deployment
 `vlocity_cmt__OrchestrationDependencyDefinition__c found duplicates for vlocity_cmt__GlobalKey__c: 00527b2d-08a6-c069-33cf-88de9d25a2de`
 Add the following Matching Key if you are using Order Management:
  ![MatchingKeyOrch](doc/MatchingKeyForOrch.png)
+
+* STRING_TOO_LONG, JSONAttribute -
+`first error: STRING_TOO_LONG, JSONAttribute: data value too large`
+Likely due to duplicated records (duplicate or changing global keys), ensure the target org and source branch does not have duplicates. VBT will attempt to load the new records within the target org which will exceed the max character count in the JSONAttribute.
+`QUERY: select Id, vlocity_cmt_globalkeyc, vlocity_cmtattributeidr.name from vlocity_cmtAttributeAssignmentc where vlocity_cmtobjectid_c='XYZ'`
