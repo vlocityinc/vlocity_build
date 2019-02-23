@@ -29,6 +29,7 @@
     },
     "files": [
         "/DataPackSettings",
+        "/DataPackMetadata",
         "/apex",
         "/test",
         "/javascript",
