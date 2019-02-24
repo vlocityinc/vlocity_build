@@ -66,6 +66,7 @@ DataPacks:
     ApexSObjectTypeList:
     - Product2
     SupportParallel: false
+    MaxDeploy: 5
   ProductChildItem:
     ProductChildItem__c:
       FolderName:

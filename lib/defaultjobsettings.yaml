@@ -23,7 +23,7 @@ supportForceDeploy: true
 strict: false
 cleanTestData: true
 autoFixPicklists: false
-reactivateOmniScriptsWhenEmbeddedTemplateFound: true
+reactivateOmniScriptsWhenEmbeddedTemplateFound: false
 tests:
   - Local
   - Org
