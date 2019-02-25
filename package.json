@@ -79,7 +79,8 @@
         "runJavaScript": "vlocity runJavaScript -job DataPacksJob.yaml",
         "test": "vlocity runTestJob",
         "unitTest": "mocha test/**/**.spec.js",
-        "build": "pkg . --out-path ./dist"
+        "build": "pkg . --out-path ./dist",
+        "nyctest": "nyc mocha test/**/**.spec.js"
     },
     "version": "0.0.1"
 }

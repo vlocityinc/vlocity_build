@@ -29,7 +29,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             } else if (typeof currentData === 'object') {
 
                 if (currentData.VlocityDataPackType == 'SObject') {
-                    if (ignoreTypes.indexOf(currentData.VlocityRecordSObjectType) == -1) {
+                    if (ignoreTypes.indexOf(currentData.VlocityRecordSObjectType) == -1 && !vlocity.datapacksutils.isNonUnique(null, currentData.VlocityRecordSObjectType)) {
                         validateGlobalKey(currentData, dataPackKey);
                     }
                 }

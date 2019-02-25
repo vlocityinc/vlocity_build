@@ -66,6 +66,7 @@ DataPacks:
     ApexSObjectTypeList:
     - Product2
     SupportParallel: false
+    MaxDeploy: 5
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
@@ -148,6 +149,8 @@ SObjects:
         AttributeCategoryId__c: Id
     FolderName:
     - Code__c
+    ReplacementFields:
+      GlobalKey__c: Code__c
     SourceKeyDefinition:
     - Code__c
     TitleFields:
@@ -192,6 +195,8 @@ SObjects:
         - _Version
     FileName:
     - _Version
+    ReplacementFields:
+      GlobalKey__c: Name
     SourceKeyDefinition:
     - VersionNumber__c
     - CalculationMatrixId__c
@@ -203,6 +208,8 @@ SObjects:
         CurrentStatus__c: _Active
         IsEnabled__c: true
         OrderBy: ORDER BY %vlocity_namespace%__Priority__c DESC LIMIT 1
+    ReplacementFields:
+      GlobalKey__c: Name    
     SourceKeyDefinition:
     - Name
   CalculationProcedureStep__c:
@@ -260,6 +267,8 @@ SObjects:
     JsonFields:
     - Constants__c
     - Variables__c
+    ReplacementFields:
+      GlobalKey__c: Name
     SourceKeyDefinition:
     - VersionNumber__c
     - CalculationProcedureId__c
@@ -271,6 +280,8 @@ SObjects:
         IsEnabled__c: true
         OrderBy: ORDER BY %vlocity_namespace%__Priority__c DESC LIMIT 1
     CalculationProcedureVersion__c: object
+    ReplacementFields:
+      GlobalKey__c: Name
     SourceKeyDefinition:
     - Name
     UnhashableFields:
@@ -349,6 +360,8 @@ SObjects:
     InputJson__c:
       FileName:
       - _InputJson
+    ReplacementFields:
+      GlobalKey__c: Name  
     SampleInputJSON__c:
       FileName:
       - _SampleInputJson
