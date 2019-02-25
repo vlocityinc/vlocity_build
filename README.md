@@ -1,7 +1,16 @@
+
 # Vlocity Build
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
+
 - [Vlocity Build](#vlocity-build)
 - [Recent Features](#recent-features)
+	- [v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements](#v19---auto-update-restricted-picklists-support-for-large-matrix-and-omniscripts-auto-re-activate-omniscripts-with-embedded-templates-auto-retry-stale-references-check-performance-enhancements)
+      - [Auto Update Restricted Picklists](#auto-update-restricted-picklists)
+      - [Support for Large Calculation Matrix and OmniScripts](#support-for-large-calculation-matrix-and-omniscripts)
+      - [Auto Re-Activate OmniScripts with Embedded Templates](#auto-re-activate-omniscripts-with-embedded-templates)
+      - [Auto Retry](#auto-retry)
+      - [Stale References Check](#stale-references-check)
+      - [Performance Enhancements](#performance-enhancements)	
   - [v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings](#v18---delta-deploys--exports-error-message-enhancements-git-changes-based-deploys-and-auto-update-settings)
     - [Delta Deploys / Exports](#delta-deploys--exports)
     - [Error Message Enhancements](#error-message-enhancements)
