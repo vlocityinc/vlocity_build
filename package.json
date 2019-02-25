@@ -4,29 +4,32 @@
     "dependencies": {
         "async": "2.6.1",
         "diff2html": "2.5.0",
+        "file-type": "^10.7.0",
         "fs-extra": "7.0.0",
         "git-diff": "2.0.6",
+        "ignore": "^5.0.4",
+        "is-utf8": "^0.2.1",
         "js-yaml": "^3.12.0",
         "jsforce": "1.9.1",
         "json-stable-stringify": "1.0.1",
         "mustache": "^3.0.0",
         "nopt": "4.0.1",
         "properties": "1.2.1",
+        "salesforce-alm": "^44.14.0",
         "sass.js": "0.10.6",
-        "sfdx-node": "1.0.0",
         "unidecode": "0.1.8"
     },
     "description": "Enable Continuous Integration for Vlocity",
     "devDependencies": {
         "chai": "^4.1.2",
-        "mocha": "^5.2.0",
-        "pkg": "^4.2.0"
+        "mocha": "^5.2.0"
     },
     "engines": {
         "node": ">=8"
     },
     "files": [
         "/DataPackSettings",
+        "/DataPackMetadata",
         "/apex",
         "/test",
         "/javascript",
@@ -47,12 +50,11 @@
             "lib/*.json",
             "lib/*.yaml",
             "dataPacksJobs/*",
-            "node_modules/sfdx-node/node_modules/salesforce-alm/dist/*",
-            "node_modules/sfdx-node/node_modules/salesforce-alm/dist/**/*"
+            "node_modules/salesforce-alm/**/*"
         ],
         "scripts": [
             "lib/*.js",
-            "node_modules/sfdx-node/node_modules/salesforce-alm/dist/**/*.js"
+            "node_modules/salesforce-alm/**/*.js"
         ],
         "targets": [
             "win-x64",
@@ -77,7 +79,8 @@
         "runJavaScript": "vlocity runJavaScript -job DataPacksJob.yaml",
         "test": "vlocity runTestJob",
         "unitTest": "mocha test/**/**.spec.js",
-        "build": "pkg . --out-path ./dist"
+        "build": "pkg . --out-path ./dist",
+        "nyctest": "nyc mocha test/**/**.spec.js"
     },
-    "version": "1.7.6"
+    "version": "0.0.1"
 }

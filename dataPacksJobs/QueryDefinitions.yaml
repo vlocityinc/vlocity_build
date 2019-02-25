@@ -43,7 +43,7 @@ EntityFilter:
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
 IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
-  query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
     = true AND %vlocity_namespace%__IsProcedure__c = true
 InterfaceImplementation:
   VlocityDataPackType: InterfaceImplementation

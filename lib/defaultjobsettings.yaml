@@ -11,7 +11,7 @@ delete: true
 activate: true
 compileOnBuild: true
 maxDepth: -1
-defaultMaxParallel: 50
+defaultMaxParallel: 10
 exportPacksMaxSize: 10
 useAllRelationships: false
 ignoreAllErrors: false
@@ -22,6 +22,10 @@ supportHeadersOnly: true
 supportForceDeploy: true
 strict: false
 cleanTestData: true
+autoFixPicklists: false
+reactivateOmniScriptsWhenEmbeddedTemplateFound: false
 tests:
   - Local
   - Org
+salesforceMetadataTypesBlacklist:
+  - TopicsForObjects  

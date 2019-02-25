@@ -1,9 +1,14 @@
 'use strict'
 
 const _datapacksexpand = require('../lib/datapacksexpand');
+const _datapacksutils = require('../lib/datapacksutils');
+const _vlocityutils = require('../lib/vlocityutils');
+
+
+
 const expect = require('chai').expect;
 
-describe('DataPacksExpand', () => 
+describe('DataPacksExpand', async () => 
 {
   var datapacksexpand = new _datapacksexpand();
   
@@ -66,4 +71,43 @@ describe('DataPacksExpand', () =>
       expect(datapacksexpand.getNameWithFields(names, data)).to.be.eq('2/1/2');
     })
   })
+
+  describe('ignoreDataPacks', () => {
+
+    var ignore = require( 'ignore');
+    const data = [
+      'DataRaptor/',
+      'CalculationMatrix/*',
+      '!CalculationMatrix/test2',
+      'OmniScript*',
+      '!OmniScript/test1',
+      '!IntegrationProcedure/'
+    ];
+    datapacksexpand.vlocity.datapacksutils = new _datapacksutils({tempFolder: '../vlocity-temp'});
+    datapacksexpand.targetPath = './example_vlocity_build/';
+    datapacksexpand.vlocity.datapacksutils.ignoreFileMap = ignore().add(data);
+
+    if(datapacksexpand.vlocity.datapacksutils.ignoreFileMap)
+    {
+      it('should ignore DataRaptor/test1', async () => {
+        expect(await datapacksexpand.writeFile('DataRaptor','test1','test1_Version','json','abcd')).to.be.undefined;
+      })
+      it('should ignore CalculationMatrix/test1', async () => {
+        expect(await datapacksexpand.writeFile('CalculationMatrix','test1','test1_Version','json','abcd')).to.be.undefined;
+      })
+      it('should not ignore CalculationMatrix/test2', async () => {
+        expect(await datapacksexpand.writeFile('CalculationMatrix','test2','test2_Version','','abcd',false,'')).to.be.equal('test2_Version');
+      })
+      it('should ignore OmniScript/test1', async () => {
+        expect(await datapacksexpand.writeFile('OmniScript','test1','test1_Version','json','abcd')).to.be.undefined;
+      })
+      it('should ignore OmniScript/test2', async () => {
+        expect(await datapacksexpand.writeFile('OmniScript','test2','test2_Version','json','abcd')).to.be.undefined;
+      })
+      it('should not ignore IntegrationProcedure/test1', async () => {
+        expect(await datapacksexpand.writeFile('IntegrationProcedure','test1','test1_Version','','abcd',false,'')).to.be.equal('test1_Version');
+      })
+    }
+  })
 })
+
