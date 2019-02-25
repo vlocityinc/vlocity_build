@@ -115,6 +115,25 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 
 # Recent Features
 
+## v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements
+### Auto Update Restricted Picklists
+By default the Vlocity Build Tool will automatically add Restircted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File.
+
+### Support for Large Calculation Matrix and OmniScripts
+Large Calculation Matrix which would take a long time to deploy and OmniScripts which could previously fail due to heap size issues, will now be deployed through Salesforce Bulk Uploads to eliminate potential issues.
+
+### Auto Re-Activate OmniScripts with Embedded Templates
+When VLocityUITemplates that can be embedded in OmniScripts are deployed you now have the option of enabling a job that will reactivate all currently active OmniScripts post deploy. To enable this feature add `reactivateOmniScriptsWhenEmbeddedTemplateFound: true`. *Note:* This will run activate for all OmniScripts and for now requires that you are logged in via [SFDX Authentication](#getting-started).
+
+### Auto Retry
+Auto Retry will enable the Vlocity Build Tool to retry errors which may have been caused by incorrect deploy order or transient issues. Add `autoRetryErrors: true` to your Job File.
+
+### Stale References Check
+Use the new command `vlocity checkStaleObjects` to ensure that all references in your project exist in either the org or locally. This is meant to ensure that you will see any missing reference errors before your deployment.
+
+### Performance Enhancements
+Elimination of a wasteful file writing process and more reliance on Node Async Processing will improve performance for larger projects.
+
 ## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
 ### Delta Deploys / Exports
 Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not gauranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
