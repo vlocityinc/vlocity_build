@@ -1344,3 +1344,8 @@ Add the following Matching Key if you are using Order Management:
 `first error: STRING_TOO_LONG, JSONAttribute: data value too large`
 Likely due to duplicated records (duplicate or changing global keys), ensure the target org and source branch does not have duplicates. VBT will attempt to load the new records within the target org which will exceed the max character count in the JSONAttribute.
 `QUERY: select Id, vlocity_cmt_globalkeyc, vlocity_cmtattributeidr.name from vlocity_cmtAttributeAssignmentc where vlocity_cmtobjectid_c='XYZ'`
+
+* No Data without Parent Dependencies -
+Error: `Product2/00527b2d-08a6-c069-33cf-88de9d25a2de -- Datapack >> Mobile Service -- Error Message -- No Data without Parent Dependencies`
+Likely due to circular references or where data may have already exist. Possible solution is to deploy with specific query of force deploy and allow headers set to off.
+`-supportForceDeploy true -supportHeadersOnly false packDeploy -key Product2/00527b2d-08a6-c069-33cf-88de9d25a2de`
