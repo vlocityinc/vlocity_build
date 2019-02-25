@@ -9,6 +9,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             'SELECT Id FROM vlocity_namespace__ProductChildItem__c where vlocity_namespace__ParentProductId__c = null OR (vlocity_namespace__ChildProductId__c = null AND vlocity_namespace__IsRootProductChildItem__c = false)',
             //'SELECT Id FROM vlocity_namespace__OverrideDefinition__c where (vlocity_namespace__OverriddenProductChildItemId__c = null AND vlocity_namespace__OverridingProductChildItemId__c != null) OR (vlocity_namespace__OverriddenProductChildItemId__c != null AND vlocity_namespace__OverridingProductChildItemId__c = null) OR (vlocity_namespace__OverriddenAttributeAssignmentId__c = null AND vlocity_namespace__OverridingAttributeAssignmentId__c != null) OR (vlocity_namespace__OverriddenAttributeAssignmentId__c != null AND vlocity_namespace__OverridingAttributeAssignmentId__c = null) OR (vlocity_namespace__OverridingPriceListEntryId__c = null AND vlocity_namespace__OverriddenPriceListEntryId__c != null) OR (vlocity_namespace__OverridingPriceListEntryId__c != null AND vlocity_namespace__OverriddenPriceListEntryId__c = null) OR ( vlocity_namespace__OverriddenProductChildItemId__c = null AND vlocity_namespace__OverridingProductChildItemId__c = null AND vlocity_namespace__OverriddenAttributeAssignmentId__c = null AND vlocity_namespace__OverridingAttributeAssignmentId__c = null AND vlocity_namespace__OverridingPriceListEntryId__c = null AND vlocity_namespace__OverriddenPriceListEntryId__c = null)',
             'SELECT Id FROM vlocity_namespace__AttributeAssignment__c where vlocity_namespace__AttributeId__c = null',
+            'SELECT Id FROM vlocity_namespace__PriceListEntry__c where vlocity_namespace__ProductId__c = null AND vlocity_namespace__PromotionId__c = null',
             'SELECT Id FROM vlocity_namespace__VqMachineResource__c where vlocity_namespace__VqResourceId__c = null OR vlocity_namespace__VqMachineId__c = null',
             'SELECT Id FROM vlocity_namespace__VlocityDataPack__c where vlocity_namespace__Status__c in (\'Ready\',\'InProgress\',\'Complete\') AND CreatedDate != TODAY',
 
@@ -25,6 +26,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             'SELECT Id FROM vlocity_namespace__ObjectElement__c WHERE vlocity_namespace__GlobalKey__c = null',
             'SELECT Id FROM vlocity_namespace__ObjectFieldAttribute__c WHERE vlocity_namespace__GlobalKey__c = null',
             'SELECT Id FROM vlocity_namespace__ObjectLayout__c WHERE vlocity_namespace__GlobalKey__c = null',
+            'SELECT Id FROM vlocity_namespace__ObjectFacet__c WHERE vlocity_namespace__GlobalKey__c = null',
             'SELECT Id FROM vlocity_namespace__ObjectRuleAssignment__c WHERE vlocity_namespace__GlobalKey__c = null',
             'SELECT Id FROM vlocity_namespace__ObjectSection__c WHERE vlocity_namespace__GlobalKey__c = null',
             'SELECT Id FROM vlocity_namespace__OrchestrationDependencyDefinition__c WHERE vlocity_namespace__GlobalKey__c = null',
@@ -58,6 +60,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__EntityFilter__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
             'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectClass__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
             'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectLayout__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
+            'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectFacet__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
             'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__ObjectRuleAssignment__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
             'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__OrchestrationDependencyDefinition__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
             'SELECT vlocity_namespace__GlobalKey__c, count(Id) FROM vlocity_namespace__OrchestrationItemDefinition__c GROUP BY vlocity_namespace__GlobalKey__c HAVING count(Id) > 1',
