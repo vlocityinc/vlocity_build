@@ -22,7 +22,8 @@ supportHeadersOnly: true
 supportForceDeploy: true
 strict: false
 cleanTestData: true
-autoFixPicklists: true
+autoFixPicklists: false
+reactivateOmniScriptsWhenEmbeddedTemplateFound: false
 tests:
   - Local
   - Org
