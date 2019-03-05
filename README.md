@@ -1,7 +1,16 @@
+
 # Vlocity Build
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
+
 - [Vlocity Build](#vlocity-build)
 - [Recent Features](#recent-features)
+	- [v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements](#v19---auto-update-restricted-picklists-support-for-large-matrix-and-omniscripts-auto-re-activate-omniscripts-with-embedded-templates-auto-retry-stale-references-check-performance-enhancements)
+      - [Auto Update Restricted Picklists](#auto-update-restricted-picklists)
+      - [Support for Large Calculation Matrix and OmniScripts](#support-for-large-calculation-matrix-and-omniscripts)
+      - [Auto Re-Activate OmniScripts with Embedded Templates](#auto-re-activate-omniscripts-with-embedded-templates)
+      - [Auto Retry](#auto-retry)
+      - [Stale References Check](#stale-references-check)
+      - [Performance Enhancements](#performance-enhancements)	
   - [v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings](#v18---delta-deploys--exports-error-message-enhancements-git-changes-based-deploys-and-auto-update-settings)
     - [Delta Deploys / Exports](#delta-deploys--exports)
     - [Error Message Enhancements](#error-message-enhancements)
@@ -114,6 +123,25 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 - [Known Issues](#known-issues)
 
 # Recent Features
+
+## v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements
+### Auto Update Restricted Picklists
+By default the Vlocity Build Tool will automatically add Restircted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File.
+
+### Support for Large Calculation Matrix and OmniScripts
+Large Calculation Matrix which would take a long time to deploy and OmniScripts which could previously fail due to heap size issues, will now be deployed through Salesforce Bulk Uploads to eliminate potential issues.
+
+### Auto Re-Activate OmniScripts with Embedded Templates
+When VLocityUITemplates that can be embedded in OmniScripts are deployed you now have the option of enabling a job that will reactivate all currently active OmniScripts post deploy. To enable this feature add `reactivateOmniScriptsWhenEmbeddedTemplateFound: true`. *Note:* This will run activate for all OmniScripts and for now requires that you are logged in via [SFDX Authentication](#getting-started).
+
+### Auto Retry
+Auto Retry will enable the Vlocity Build Tool to retry errors which may have been caused by incorrect deploy order or transient issues. Add `autoRetryErrors: true` to your Job File.
+
+### Stale References Check
+Use the new command `vlocity checkStaleObjects` to ensure that all references in your project exist in either the org or locally. This is meant to ensure that you will see any missing reference errors before your deployment.
+
+### Performance Enhancements
+Elimination of a wasteful file writing process and more reliance on Node Async Processing will improve performance for larger projects.
 
 ## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
 ### Delta Deploys / Exports
@@ -1334,7 +1362,6 @@ The datapacks will be deployed, however a manual activation of the latest OmniSc
 Without this Matching Key you will receive the following error during deployment:
 `Product2/4e5828c2-4832-10c8-c343-88934cc2cb1c – DataPack >> Amount Discount Product – Error Message – Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. %vlocity_namespace%__AttributeAssignment__c: TempAA-ATT_INS_PRICE`
 
-
 * Orchestration Dependency Definition - In the Managed Package this Object does not have a Matching Key and creates duplicate records. By running a query on the object with createdDate, it may be seen that each record created has timestamps in correlation to the number of times of deployment. This gives indication that the datapacks have been configured correctly, however the missing Matching Key causes VBT to create new records.
 `vlocity_cmt__OrchestrationDependencyDefinition__c found duplicates for vlocity_cmt__GlobalKey__c: 00527b2d-08a6-c069-33cf-88de9d25a2de`
 Add the following Matching Key if you are using Order Management:
@@ -1344,3 +1371,8 @@ Add the following Matching Key if you are using Order Management:
 `first error: STRING_TOO_LONG, JSONAttribute: data value too large`
 Likely due to duplicated records (duplicate or changing global keys), ensure the target org and source branch does not have duplicates. VBT will attempt to load the new records within the target org which will exceed the max character count in the JSONAttribute.
 `QUERY: select Id, vlocity_cmt_globalkeyc, vlocity_cmtattributeidr.name from vlocity_cmtAttributeAssignmentc where vlocity_cmtobjectid_c='XYZ'`
+
+* No Data without Parent Dependencies -
+Error: `Product2/00527b2d-08a6-c069-33cf-88de9d25a2de -- Datapack >> Mobile Service -- Error Message -- No Data without Parent Dependencies`
+Likely due to circular references or where data may have already exist. Possible solution is to deploy with specific query of force deploy and allow headers set to off.
+`packDeploy -key Product2/00527b2d-08a6-c069-33cf-88de9d25a2de`

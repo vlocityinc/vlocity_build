@@ -44,7 +44,7 @@ DataPacks:
   ObjectLayout:
     DoNotExpand: true
   OmniScript:
-    PaginationSize: 5000
+    PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
   PriceList:
