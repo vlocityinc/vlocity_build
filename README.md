@@ -8,8 +8,10 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
       - [Auto Update Restricted Picklists](#auto-update-restricted-picklists)
       - [Support for Large Calculation Matrix and OmniScripts](#support-for-large-calculation-matrix-and-omniscripts)
       - [Auto Re-Activate OmniScripts with Embedded Templates](#auto-re-activate-omniscripts-with-embedded-templates)
+      - [Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation](#fix-reusable-omniscripts-embedded-in-multiple-other-omniscripts-from-failing-activation)
       - [Auto Retry](#auto-retry)
       - [Stale References Check](#stale-references-check)
+      - [VlocityUITemplate SCSS Includes now Auto Export](#vlocityuitemplate-scss-includes-now-auto-export)
       - [Performance Enhancements](#performance-enhancements)	
   - [v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings](#v18---delta-deploys--exports-error-message-enhancements-git-changes-based-deploys-and-auto-update-settings)
     - [Delta Deploys / Exports](#delta-deploys--exports)
@@ -132,13 +134,19 @@ By default the Vlocity Build Tool will automatically add Restircted Picklist val
 Large Calculation Matrix which would take a long time to deploy and OmniScripts which could previously fail due to heap size issues, will now be deployed through Salesforce Bulk Uploads to eliminate potential issues.
 
 ### Auto Re-Activate OmniScripts with Embedded Templates
-When VLocityUITemplates that can be embedded in OmniScripts are deployed you now have the option of enabling a job that will reactivate all currently active OmniScripts post deploy. To enable this feature add `reactivateOmniScriptsWhenEmbeddedTemplateFound: true`. *Note:* This will run activate for all OmniScripts and for now requires that you are logged in via [SFDX Authentication](#getting-started).
+When VlocityUITemplates that can be embedded in OmniScripts are deployed you now have the option of enabling a job that will reactivate all currently active OmniScripts post deploy. To enable this feature add `reactivateOmniScriptsWhenEmbeddedTemplateFound: true`. *Note:* This will run activate for all OmniScripts and for now requires that you are logged in via [SFDX Authentication](#getting-started).
+
+### Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation
+Previously if activating a Reusable OmniScript caused too many other OmniScripts to activate it would fail. *Note:* This requires that you are logged in via [SFDX Authentication](#getting-started).
 
 ### Auto Retry
 Auto Retry will enable the Vlocity Build Tool to retry errors which may have been caused by incorrect deploy order or transient issues. Add `autoRetryErrors: true` to your Job File.
 
 ### Stale References Check
 Use the new command `vlocity checkStaleObjects` to ensure that all references in your project exist in either the org or locally. This is meant to ensure that you will see any missing reference errors before your deployment.
+
+### VlocityUITemplate SCSS Includes now Auto Export
+When another VlocityUITemplate includes references to a SCSS Mixin or Variables VlocityUITemplate it will automatically be exported as a dependency. 
 
 ### Performance Enhancements
 Elimination of a wasteful file writing process and more reliance on Node Async Processing will improve performance for larger projects.
@@ -1353,7 +1361,7 @@ This will export the retrieved files into the folder `OmniOut/scripts` in your P
 * When Multi Currency is enabled, you can only deploy data exported from another Multi Currency Org or to deploy to another Multi Currency Org. Non Multi Currency to Multi Currency Export / Deploy will not work as expected.  
 
 
-* OmniScripts that are embedded in many other OmniScripts cannot be activated due to SOQL Query limits.
+* *Fixed in v1.9* OmniScripts that are embedded in many other OmniScripts cannot be activated due to SOQL Query limits.
 `Error: System.LimitException: vlocity_cmt:Too many SOQL queries: 101`
 The datapacks will be deployed, however a manual activation of the latest OmniScript after deployment is required.
 
