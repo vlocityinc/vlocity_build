@@ -169,7 +169,11 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
                 .on('response', function(rets) {
                     if (rets) {
                         for (var i = 0; i < rets.length; i += 1) {
-                            VlocityUtils.log(item.type, rets[i].success ? 'Success' : 'error', rets[i].id);
+                            if (rets[i].success) {
+                                VlocityUtils.log(item.type, 'Success', rets[i].id);
+                            } else {
+                                VlocityUtils.error(item.type, 'Error', rets[i]);
+                            }
                         }
                     }
 
