@@ -165,7 +165,7 @@ Error messages have been improved to give more instrution on how to fix issues. 
 `Error >> AttributeCategory/ATTRIBUTE_CATEGORY -- DataPack >> ATTRIBUTE_CATEGORY -- Error Message --  duplicate field value found: 100 on the field: vlocity_cmt__DisplaySequence__c on record with id: a0K0b00000XabWUEAZ -- Change the vlocity_cmt__DisplaySequence__c field value of the vlocity_cmt__AttributeCategory__c on record with id: a0K0b00000XabWUEAZ in the target org to resolve the issue.`
 
 ### Git Changes Based Deploys
-Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. 
+Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. Add the key `gitCheckKey: Folder1` to your individual Job Files if you have more than one folder in your repo that contains DataPacks.
 
 ### Auto Update Settings
 Add `autoUpdateSettings: true` to your job file to enable checking that you have the latest DataPack settings before every export and deploy. This check is very fast and it is advised that this is enabled. 
