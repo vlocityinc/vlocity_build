@@ -1,6 +1,6 @@
 var async = require('async');
 
-module.exports = async function(vlocity, currentContextData, jobInfo, callback) {
+module.exports = function(vlocity, currentContextData, jobInfo, callback) {
     // Delete
     var healthCheckItems = {
         Delete: [
