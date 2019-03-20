@@ -128,7 +128,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 
 ## v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements
 ### Auto Update Restricted Picklists
-By default the Vlocity Build Tool will automatically add Restircted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File.
+By default the Vlocity Build Tool will automatically add Restircted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File. Does not work for Managed Global Value Sets - Like Vlocity's CurrencyCode field.
 
 ### Support for Large Calculation Matrix and OmniScripts
 Large Calculation Matrix which would take a long time to deploy and OmniScripts which could previously fail due to heap size issues, will now be deployed through Salesforce Bulk Uploads to eliminate potential issues.
@@ -165,7 +165,7 @@ Error messages have been improved to give more instrution on how to fix issues. 
 `Error >> AttributeCategory/ATTRIBUTE_CATEGORY -- DataPack >> ATTRIBUTE_CATEGORY -- Error Message --  duplicate field value found: 100 on the field: vlocity_cmt__DisplaySequence__c on record with id: a0K0b00000XabWUEAZ -- Change the vlocity_cmt__DisplaySequence__c field value of the vlocity_cmt__AttributeCategory__c on record with id: a0K0b00000XabWUEAZ in the target org to resolve the issue.`
 
 ### Git Changes Based Deploys
-Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. 
+Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. Add the key `gitCheckKey: Folder1` to your individual Job Files if you have more than one folder in your repo that contains DataPacks.
 
 ### Auto Update Settings
 Add `autoUpdateSettings: true` to your job file to enable checking that you have the latest DataPack settings before every export and deploy. This check is very fast and it is advised that this is enabled. 
@@ -1384,3 +1384,6 @@ Likely due to duplicated records (duplicate or changing global keys), ensure the
 Error: `Product2/00527b2d-08a6-c069-33cf-88de9d25a2de -- Datapack >> Mobile Service -- Error Message -- No Data without Parent Dependencies`
 Likely due to circular references or where data may have already exist. Possible solution is to deploy with specific query of force deploy and allow headers set to off.
 `packDeploy -key Product2/00527b2d-08a6-c069-33cf-88de9d25a2de`
+
+* Cannot Update CurrencyCode GlobalValueSet 
+Updating Managed Package Global Value Sets is not possible without using the UI.
