@@ -45,6 +45,7 @@
     "pkg": {
         "assets": [
             "DataPackSettings/**/*",
+            "DataPackMetadata/**/*",
             "apex/*",
             "test/**/*",
             "javascript/*",
