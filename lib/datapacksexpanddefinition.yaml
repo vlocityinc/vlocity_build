@@ -1046,6 +1046,10 @@ SObjects:
     CustomJavascript__c: js
     FilterFields:
     - Active__c
+    IgnoreFieldDiffs:
+    - CustomJavascript__c
+    - HTML__c
+    - Sass__c
     HTML__c: html
     SampleJson__c:
       FileName:
