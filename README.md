@@ -151,6 +151,9 @@ When another VlocityUITemplate includes references to a SCSS Mixin or Variables 
 ### Performance Enhancements
 Elimination of a wasteful file writing process and more reliance on Node Async Processing will improve performance for larger projects.
 
+### Global Key Changes
+AttributeCategory__c, CalculationMatrixVersion__c, CalculationMatrix__c, CalculationProcedureVersion__c, CalculationProcedure__c, DRBundle__c now use their unique field of Name or Code as the GlobalKey__c field.
+
 ## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
 ### Delta Deploys / Exports
 Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not gauranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
