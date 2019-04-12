@@ -1,10 +1,15 @@
-
 # Vlocity Build
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
 - [Vlocity Build](#vlocity-build)
 - [Recent Features](#recent-features)
-	- [v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements](#v19---auto-update-restricted-picklists-support-for-large-matrix-and-omniscripts-auto-re-activate-omniscripts-with-embedded-templates-auto-retry-stale-references-check-performance-enhancements)
+  - [v1.10 - Auto Fix Duplicate Attribute Category Sequence, Improve Clean Org Data to report actual duplicates based on DataPack Metadata, Fix Reusable OmniScripts, Fix OmniScript Issue when two Elements had the Same Name with Different Case, Change Deployment Strategy to fix potential Concurrency issues](#v110---auto-fix-duplicate-attribute-category-sequence-improve-clean-org-data-to-report-actual-duplicates-based-on-datapack-metadata-fix-reusable-omniscripts-fix-omniscript-issue-when-two-elements-had-the-same-name-with-different-case-change-deployment-strategy-to-fix-potential-concurrency-issues)
+    - [Auto Fix Duplicate Attribute Category Sequence](#auto-fix-duplicate-attribute-category-sequence)
+    - [Improve Clean Org Data to report actual duplicates based on DataPack Metadata](#improve-clean-org-data-to-report-actual-duplicates-based-on-datapack-metadata)
+    - [Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation](#fix-reusable-omniscripts-embedded-in-multiple-other-omniscripts-from-failing-activation)
+    - [Fix OmniScript Issue when two Elements had the Same Name with Different Case](#fix-omniscript-issue-when-two-elements-had-the-same-name-with-different-case)
+    - [Change Deployment Strategy to fix potential Concurrency issues](#change-deployment-strategy-to-fix-potential-concurrency-issues)
+  - [v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements](#v19---auto-update-restricted-picklists-support-for-large-matrix-and-omniscripts-auto-re-activate-omniscripts-with-embedded-templates-auto-retry-stale-references-check-performance-enhancements)
       - [Auto Update Restricted Picklists](#auto-update-restricted-picklists)
       - [Support for Large Calculation Matrix and OmniScripts](#support-for-large-calculation-matrix-and-omniscripts)
       - [Auto Re-Activate OmniScripts with Embedded Templates](#auto-re-activate-omniscripts-with-embedded-templates)
@@ -126,6 +131,23 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 
 # Recent Features
 
+## v1.10 - Auto Fix Duplicate Attribute Category Sequence, Improve Clean Org Data to report actual duplicates based on DataPack Metadata, Fix Reusable OmniScripts, Fix OmniScript Issue when two Elements had the Same Name with Different Case, Change Deployment Strategy to fix potential Concurrency issues
+
+### Auto Fix Duplicate Attribute Category Sequence
+Fix for Attribute Categories that have the same Sequence automatically during the deployment.
+
+### Improve Clean Org Data to report actual duplicates based on DataPack Metadata
+Now uses Matching Keys to accurately report the Duplicates instead of only reporting the ones with durplicate Global Keys.
+
+### Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation
+Previously if activating a Reusable OmniScript caused too many other OmniScripts to activate it would fail. *Note:* This requires that you are logged in via [SFDX Authentication](#getting-started). *Was Previously reported to have been fixed in v1.9, but there was an error preventing the actual changes to be reflected if made to the Reusable OmniScript.*
+
+### Fix OmniScript Issue when two Elements had the Same Name with Different Case
+Previously one of the OmniScript Elements would dissapear when deployed.
+
+### Change Deployment Strategy to fix potential Concurrency issues
+Changes to deployment to make it remove some parallel processing.
+
 ## v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements
 ### Auto Update Restricted Picklists
 By default the Vlocity Build Tool will automatically add Restircted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File. Does not work for Managed Global Value Sets - Like Vlocity's CurrencyCode field.
@@ -135,9 +157,6 @@ Large Calculation Matrix which would take a long time to deploy and OmniScripts 
 
 ### Auto Re-Activate OmniScripts with Embedded Templates
 When VlocityUITemplates that can be embedded in OmniScripts are deployed you now have the option of enabling a job that will reactivate all currently active OmniScripts post deploy. To enable this feature add `reactivateOmniScriptsWhenEmbeddedTemplateFound: true`. *Note:* This will run activate for all OmniScripts and for now requires that you are logged in via [SFDX Authentication](#getting-started).
-
-### Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation
-Previously if activating a Reusable OmniScript caused too many other OmniScripts to activate it would fail. *Note:* This requires that you are logged in via [SFDX Authentication](#getting-started).
 
 ### Auto Retry
 Auto Retry will enable the Vlocity Build Tool to retry errors which may have been caused by incorrect deploy order or transient issues. Add `autoRetryErrors: true` to your Job File.
