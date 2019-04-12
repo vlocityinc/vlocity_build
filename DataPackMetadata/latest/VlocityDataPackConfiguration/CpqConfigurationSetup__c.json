@@ -22,14 +22,9 @@
             "field": "%vlocity_namespace%__ImportType__c", 
             "value": "Vlocity DataRaptor"
         },
-
         { 
             "field": "%vlocity_namespace%__DefaultActivateLimit__c", 
             "value": 1
-        },
-        { 
-            "field": "%vlocity_namespace%__DefaultActivateService__c", 
-            "value": true
         },
         { 
             "field": "%vlocity_namespace%__ActivateLimit__c", 
@@ -50,10 +45,6 @@
         { 
             "field": "%vlocity_namespace%__DefaultImportLimit__c", 
             "value": 10
-        },
-        { 
-            "field": "%vlocity_namespace%__DefaultImportPostProcess__c", 
-            "value": true
         },
         { 
             "field": "%vlocity_namespace%__PrimarySObjectType__c", 
