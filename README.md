@@ -1382,7 +1382,6 @@ This will export the retrieved files into the folder `OmniOut/scripts` in your P
 # Known Issues
 * When Multi Currency is enabled, you can only deploy data exported from another Multi Currency Org or to deploy to another Multi Currency Org. Non Multi Currency to Multi Currency Export / Deploy will not work as expected.  
 
-
 * *Fixed in v1.9* OmniScripts that are embedded in many other OmniScripts cannot be activated due to SOQL Query limits.
 `Error: System.LimitException: vlocity_cmt:Too many SOQL queries: 101`
 The datapacks will be deployed, however a manual activation of the latest OmniScript after deployment is required.
