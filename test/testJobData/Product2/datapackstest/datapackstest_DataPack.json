@@ -57,37 +57,6 @@
     "RecordTypeId": "",
     "RevenueInstallmentPeriod": "",
     "RevenueScheduleType": "",
-    "StandardPricebookEntry": [
-        {
-            "%vlocity_namespace%__FloorPrice__c": "",
-            "%vlocity_namespace%__OverageCharge__c": "",
-            "%vlocity_namespace%__OverageUOM__c": "",
-            "%vlocity_namespace%__RecurringPrice__c": "",
-            "%vlocity_namespace%__RecurringUOM__c": "Monthly",
-            "IsActive": true,
-            "Name": "datapackstest",
-            "Pricebook2.Name": "Standard Price Book",
-            "Pricebook2Id": {
-                "Name": "Standard Price Book",
-                "VlocityDataPackType": "VlocityLookupMatchingKeyObject",
-                "VlocityLookupRecordSourceKey": "Pricebook2/Standard Price Book",
-                "VlocityRecordSObjectType": "Pricebook2"
-            },
-            "Product2.%vlocity_namespace%__GlobalKey__c": "datapackstest",
-            "Product2Id": {
-                "%vlocity_namespace%__GlobalKey__c": "datapackstest",
-                "VlocityDataPackType": "VlocityMatchingKeyObject",
-                "VlocityMatchingRecordSourceKey": "Product2/datapackstest",
-                "VlocityRecordSObjectType": "Product2"
-            },
-            "ProductCode": "datapackstest",
-            "UnitPrice": 100,
-            "UseStandardPrice": false,
-            "VlocityDataPackType": "SObject",
-            "VlocityRecordSObjectType": "PricebookEntry",
-            "VlocityRecordSourceKey": "PricebookEntry/Pricebook2/Standard Price Book/Product2/datapackstest"
-        }
-    ],
     "VlocityDataPackType": "SObject",
     "VlocityRecordSObjectType": "Product2",
     "VlocityRecordSourceKey": "Product2/datapackstest"

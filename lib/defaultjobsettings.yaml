@@ -6,7 +6,7 @@ preStepApex:
     VlocityUILayout: DeactivateTemplatesAndLayouts.cls
 postStepApex:
   Deploy: 
-    Product2: EPCProductJSONUpdate.cls
+    ProductAttributes: EPCProductJSONUpdate.cls
 delete: true
 activate: true
 compileOnBuild: true

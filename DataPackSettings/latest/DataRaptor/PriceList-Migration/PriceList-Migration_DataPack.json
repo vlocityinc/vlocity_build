@@ -5,7 +5,7 @@
     "%vlocity_namespace%__DRMapName__c": "PriceList Migration",
     "%vlocity_namespace%__DeleteOnSuccess__c": false,
     "%vlocity_namespace%__Description__c": "",
-    "%vlocity_namespace%__GlobalKey__c": "",
+    "%vlocity_namespace%__GlobalKey__c": "PriceList Migration",
     "%vlocity_namespace%__IgnoreErrors__c": false,
     "%vlocity_namespace%__InputJson__c": "",
     "%vlocity_namespace%__InputType__c": "",

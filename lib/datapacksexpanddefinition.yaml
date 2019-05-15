@@ -65,6 +65,7 @@ DataPacks:
     - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
+    ExportGroupSize: 1
     SupportParallel: false
   ProductChildItem:
     ProductChildItem__c:
@@ -72,7 +73,10 @@ DataPacks:
       - Name
       - ParentProductId__r.Name
       - ChildProductId__r.Name
-    SupportParallel: false
+    SupportParallel: false    
+  ProductPricing:
+    IgnoreExpand:
+    - StandardPricebookEntry
   SObject:
     HeadersOnly: Identical
     SupportParallel: false
@@ -136,9 +140,6 @@ SObjects:
     JsonFields:
     - ValidValuesData__c
     SourceKeyDefinition:
-    - AttributeId__c
-    - ObjectId__c
-    - _GlobalKey
     - GlobalKey__c
   AttributeBinding__c:
     NonUnique: true
