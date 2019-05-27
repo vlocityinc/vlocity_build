@@ -116,13 +116,16 @@ ProductHierarchy:
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from Product2
 ProductPricing:   
   VlocityDataPackType: ProductPricing
-  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from Product2            
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from Product2       
 Promotion:
   VlocityDataPackType: Promotion
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Promotion__c
 QueryBuilder:
   VlocityDataPackType: QueryBuilder
   query: Select Id from %vlocity_namespace%__QueryBuilder__c
+RateBand:
+  VlocityDataPackType: RateBand
+  query: Select Id, Name from %vlocity_namespace%__RateBand__c
 Rule:
   VlocityDataPackType: Rule
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Rule__c
@@ -139,15 +142,19 @@ System:
 TimePlan:
   VlocityDataPackType: TimePlan
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__TimePlan__c
+  manifestOnly: true
 TimePolicy:
   VlocityDataPackType: TimePolicy
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__TimePolicy__c
+  manifestOnly: true
 UIFacet:
   VlocityDataPackType: UIFacet
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__UIFacet__c
+  manifestOnly: true
 UISection:
   VlocityDataPackType: UISection
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__UISection__c
+  manifestOnly: true
 VlocityAction:
   VlocityDataPackType: VlocityAction
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c = true

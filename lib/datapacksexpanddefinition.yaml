@@ -73,10 +73,34 @@ DataPacks:
       - Name
       - ParentProductId__r.Name
       - ChildProductId__r.Name
-    SupportParallel: false    
+    SupportParallel: false
+  ProductAttributes:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
+  ProductConfiguration:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
+  ProductDecomposition:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
+  ProductHierarchy:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c            
   ProductPricing:
     IgnoreExpand:
     - StandardPricebookEntry
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
   SObject:
     HeadersOnly: Identical
     SupportParallel: false
@@ -102,6 +126,14 @@ DataPacksDefault:
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
+  Account:
+    FolderName:
+    - Name
+    KeepOnlyFields: 
+    - Name
+    - RecordTypeId
+    SourceKeyDefinition:
+    - Name
   Attachment:
     UnhashableFields:
     - Body
@@ -293,6 +325,8 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   CompiledAttributeOverride__c:
+    FilterFields:
+    - Name 
     SourceKeyDefinition: 
     - JSONAttribute__c
   ContentVersion:
@@ -523,6 +557,13 @@ SObjects:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
+  Formulary__c:
+    FolderName:
+    - Name
+    KeepOnlyFields:
+    - Name
+    SourceKeyDefinition:
+    - Name
   InterfaceImplementation__c:
     DeltaQueryChildren:
       InterfaceImplementationDetail__c:
@@ -882,11 +923,23 @@ SObjects:
       RuleAssignment__c:
         ObjectId__c: Id
       OverrideDefinition__c:
-        PromotionId__c: Id    
+        PromotionId__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
+  ProviderNetwork__c:
+    FolderName:
+    - Name
+    KeepOnlyFields: 
+    - Name
+    SourceKeyDefinition:
+    - Name
+  RateBand__c:
+    FolderName:
+    - Name
+    SourceKeyDefinition:
+    - Name
   RecordType:
     SourceKeyDefinition:
     - SobjectType

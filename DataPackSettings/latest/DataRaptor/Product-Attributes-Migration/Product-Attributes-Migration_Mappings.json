@@ -20,8 +20,8 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Product2",
         "%vlocity_namespace%__FilterGroup__c": 2,
         "%vlocity_namespace%__FilterOperator__c": "=",
-        "%vlocity_namespace%__FilterValue__c": "Product2Id",
-        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Id",
+        "%vlocity_namespace%__FilterValue__c": "ProductGlobalKey",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__GlobalKey__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 1,
         "%vlocity_namespace%__InterfaceObjectName__c": "Product2",
         "%vlocity_namespace%__MapId__c": "Product Attributes Migration1",
@@ -42,7 +42,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration4",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration5",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -57,6 +57,20 @@
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
         "%vlocity_namespace%__MapId__c": "Product Attributes Migration3",
+        "Name": "Product Attributes Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Product2:%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__FilterOperator__c": "=",
+        "%vlocity_namespace%__FilterValue__c": "'$Vlocity.FALSE'",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__IsOverride__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration4",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -86,7 +100,7 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 3,
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration6",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration8",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -100,7 +114,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ProductId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 3,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__CompiledAttributeOverride__c",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration5",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration7",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -115,7 +129,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__OverridingPriceListEntryId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__OverrideDefinition__c",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration9",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration11",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -130,7 +144,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ProductId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__OverrideDefinition__c",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration7",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration9",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -145,7 +159,7 @@
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__PromotionId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__OverrideDefinition__c",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration8",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration10",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -161,7 +175,35 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration10",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration12",
+        "Name": "Product Attributes Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Product2:%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__FilterOperator__c": "!=",
+        "%vlocity_namespace%__FilterValue__c": "'$Vlocity.NULL'",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__AttributeId__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration14",
+        "Name": "Product Attributes Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Product2:%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__FilterOperator__c": "=",
+        "%vlocity_namespace%__FilterValue__c": "Product2:%vlocity_namespace%__OverrideDefinition__c:%vlocity_namespace%__OverridingAttributeAssignmentId__c",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectId__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration13",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -174,9 +216,9 @@
         "%vlocity_namespace%__FilterOperator__c": "=",
         "%vlocity_namespace%__FilterValue__c": "Product2:Id",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__SubClassId__c",
-        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 6,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__ObjectFieldAttribute__c",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration11",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration15",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -191,8 +233,8 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration12",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 6,
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration16",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -207,7 +249,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration13",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration17",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -222,7 +264,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration16",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration20",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -237,7 +279,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration15",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration19",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -252,7 +294,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration17",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration21",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -267,7 +309,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration14",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration18",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -281,7 +323,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration28",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration32",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -295,7 +337,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration30",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration34",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -309,7 +351,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration29",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration33",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -323,7 +365,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration31",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration35",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -337,7 +379,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration21",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration25",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -351,7 +393,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration20",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration24",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -365,7 +407,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration24",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration28",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -379,7 +421,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration19",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration23",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -393,7 +435,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration25",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration29",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -407,7 +449,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration26",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration30",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -421,7 +463,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration22",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration26",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -435,7 +477,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration18",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration22",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -449,7 +491,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration27",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration31",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -463,7 +505,7 @@
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Product Attributes Migration23",
+        "%vlocity_namespace%__MapId__c": "Product Attributes Migration27",
         "Name": "Product Attributes Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
