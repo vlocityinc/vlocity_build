@@ -124,15 +124,19 @@ System:
 TimePlan:
   VlocityDataPackType: TimePlan
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__TimePlan__c
+  manifestOnly: true
 TimePolicy:
   VlocityDataPackType: TimePolicy
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__TimePolicy__c
+  manifestOnly: true
 UIFacet:
   VlocityDataPackType: UIFacet
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__UIFacet__c
+  manifestOnly: true
 UISection:
   VlocityDataPackType: UISection
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__UISection__c
+  manifestOnly: true
 VlocityAction:
   VlocityDataPackType: VlocityAction
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityAction__c where %vlocity_namespace%__IsActive__c = true

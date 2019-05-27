@@ -24,6 +24,8 @@ strict: false
 cleanTestData: true
 autoFixPicklists: false
 reactivateOmniScriptsWhenEmbeddedTemplateFound: false
+autoFixDeployErrors:
+  AttributeCategoryDisplaySequence: true
 tests:
   - Local
   - Org
