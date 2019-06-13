@@ -3,9 +3,8 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 
 - [Vlocity Build](#vlocity-build)
  - [Recent Features](#recent-features)
- 	- [v1.11 - Clean Org Data Automation Improved, Embedded OmniScript full Fix, Fix Install / Refresh Vlocity Base Errors, Better Handling for Missing Matching Key Type References](#v111---clean-org-data-automation-improved-embedded-omniscript-full-fix-fix-install--refresh-vlocity-base-errors-better-handling-for-missing-matching-key-type-references)
+ 	- [v1.11 - Clean Org Data Automation Improved, Fix Install / Refresh Vlocity Base Errors, Better Handling for Missing Matching Key Type References](#v111---clean-org-data-automation-improved-embedded-omniscript-full-fix-fix-install--refresh-vlocity-base-errors-better-handling-for-missing-matching-key-type-references)
  		- [Clean Org Data Automation Improved](#clean-org-data-automation-improved)
- 		- [Embedded OmniScript full Fix - Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation](#embedded-omniscript-full-fix---fix-reusable-omniscripts-embedded-in-multiple-other-omniscripts-from-failing-activation)
  		- [Fix Install / Refresh Vlocity Base Errors](#fix-install--refresh-vlocity-base-errors)
  		- [Better Handling for Missing Matching Key Type References](#better-handling-for-missing-matching-key-type-references)
  	- [v1.10 - Auto Fix Duplicate Attribute Category Sequence, Improve Clean Org Data to report actual duplicates based on DataPack Metadata, Fix Reusable OmniScripts, Fix OmniScript Issue when two Elements had the Same Name with Different Case, Change Deployment Strategy to fix potential Concurrency issues](#v110---auto-fix-duplicate-attribute-category-sequence-improve-clean-org-data-to-report-actual-duplicates-based-on-datapack-metadata-fix-reusable-omniscripts-fix-omniscript-issue-when-two-elements-had-the-same-name-with-different-case-change-deployment-strategy-to-fix-potential-concurrency-issues)
@@ -140,9 +139,6 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 
 ### Clean Org Data Automation Improved
 CleanOrgData now queries for a larger set of records and will fix Duplicate Global Keys Automatically in your org when possible.
-
-### Embedded OmniScript full Fix - Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation
-Previously if activating a Reusable OmniScript caused too many other OmniScripts to activate it would fail. *Note:* This requires that you are logged in via [SFDX Authentication](#getting-started). *Was Previously reported to have been fixed in v1.9, but there was an error preventing the actual changes to be reflected if made to the Reusable OmniScript.*
 
 ### Fix Install / Refresh Vlocity Base Errors
 When refreshVlocityBase or installVlocityInitial encountered errors it would kill the whole process. It now better handles these errors and installs all the DataPacks that did not fail.
