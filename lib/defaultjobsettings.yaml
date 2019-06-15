@@ -22,7 +22,7 @@ supportHeadersOnly: true
 supportForceDeploy: true
 strict: false
 cleanTestData: true
-autoFixPicklists: false
+autoFixPicklists: true
 reactivateOmniScriptsWhenEmbeddedTemplateFound: false
 autoFixDeployErrors:
   AttributeCategoryDisplaySequence: true
@@ -30,4 +30,5 @@ tests:
   - Local
   - Org
 salesforceMetadataTypesBlacklist:
-  - TopicsForObjects  
+  - TopicsForObjects
+  - Audience

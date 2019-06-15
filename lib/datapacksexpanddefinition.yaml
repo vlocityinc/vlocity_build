@@ -530,6 +530,7 @@ SObjects:
     UnhashableFields:
     - Order__c
     - OmniScriptId__c
+    - PropertySet__c.documentNames
   EntityFilterConditionArgument__c:
     SortFields:
     - ArgumentSequence__c
