@@ -17,7 +17,6 @@
         "properties": "1.2.1",
         "salesforce-alm": "^44.16.0",
         "sass.js": "0.10.6",
-        "sfdx-cli": "7.8.1",
         "simple-git": "^1.107.0",
         "unidecode": "0.1.8"
     },
