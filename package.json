@@ -15,7 +15,7 @@
         "mustache": "^3.0.0",
         "nopt": "4.0.1",
         "properties": "1.2.1",
-        "salesforce-alm": "^44.16.0",
+        "salesforce-alm": "44.16.0",
         "sass.js": "0.10.6",
         "simple-git": "^1.107.0",
         "unidecode": "0.1.8"
