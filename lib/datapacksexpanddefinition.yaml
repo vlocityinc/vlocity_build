@@ -506,11 +506,64 @@ SObjects:
   Element__c:
     BuildOnlyFields:
       Order__c: index
+    DataPackReferences:
+    - Type: DataRaptor
+      Field: PropertySet__c.postTransformBundle
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.integrationProcedureKey
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.preIP
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.postIP
+    - Type: DataRaptor
+      Field: PropertySet__c:postTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.preTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.xmlPreTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.xmlPostTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.transformBundle
+    - Type: Named Credential
+      Field: PropertySet__c.namedCredential
+    - Type: DocuSign Template
+      Field: PropertySet__c.docuSignTemplate
+    - Type: DataRaptor
+      Field: PropertySet__c.remoteOptions.postTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.remoteOptions.preTransformBundle
+    - Type: CalculationProcedure
+      Field: PropertySet__c.remoteOptions.configurationName
+    - Type: CalculationMatrix
+      Field: PropertySet__c.remoteOptions.matrixName
+    - Type: DataRaptor
+      Field: PropertySet__c.docuSignTemplatesGroup.transformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.docuSignTemplatesGroupSig.transformBundle
+    - Type: Document
+      Field: PropertySet__c.templateName
+    - Type: Document
+      Field: PropertySet__c.documentNames
+    - Type: Apex Class
+      Field: PropertySet__c.remoteClass
+    - Type: DataRaptor
+      Field: PropertySet__c.bundle
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.HTMLTemplateId
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.modalHTMLTemplateId
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.confirmRedirectTemplateUrl
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.modalConfigurationSetting.modalHTMLTemplateId
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.redirectTemplateUrl
     FieldDisplayType:
-      PropertySet__c.show: object  
+      PropertySet__c.show: object
     FieldImportance:
       High: 
-        - PropertySet__c.show
+      - PropertySet__c.show
     FileName:
     - _Element
     - Name
@@ -670,6 +723,21 @@ SObjects:
       FileName:
       - _JavaScript
       FileType: js
+    DataPackReferences:
+    - Type: VlocityUITemplate
+      Field: ElementTypeToHTMLTemplateList__c.ElementTypeToHTMLTemplateList
+    - Type: Apex Class
+      Field: PropertySet__c.persistentComponent.remoteClass
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.preTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.postTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.remoteOptions.preTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.remoteOptions.postTransformBundle
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.persistentComponent.modalConfigurationSetting.modalHTMLTemplateId
     DeltaCheckMatchingKey:
     - Type__c
     - SubType__c
@@ -1029,6 +1097,17 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   VlocityCard__c:
+    DataPackReferences:
+    - Type: VlocityUILayout
+      Field: Definition__c.states.flyout.layout
+    - Type: DataRaptor
+      Field: Definition__c.dataSource.value.bundle
+    - Type: Apex Class
+      Field: Definition__c.dataSource.value.remoteClass
+    - Type: VlocityUITemplate
+      Field: Definition__c.states.templateUrl
+    - Type: VlocityAction
+      Field: Definition__c.states.definedActions.actions.id
     Definition__c: json
     FilterFields:
     - Active__c
@@ -1084,6 +1163,15 @@ SObjects:
     - StateModelId__c
     - VersionNumber__c
   VlocityUILayout__c:
+    DataPackReferences:
+    - Type: VlocityCard
+      Field: Definition__c.Cards
+    - Type: DataRaptor
+      Field: Definition__c.dataSource.value.bundle
+    - Type: Apex Class
+      Field: Definition__c.dataSource.value.remoteClass
+    - Type: VlocityUITemplate
+      Field: Definition__c.templates.0.templateUrl
     Definition__c: json
     FilterFields:
     - Active__c
