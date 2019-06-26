@@ -248,7 +248,7 @@ Download and Install Node at:
 
 https://nodejs.org/
 
-This project requires Node Version 8+.
+This tool requires Node Version 10+.
 
 Use `node -v` to find out which version you are on.
 
