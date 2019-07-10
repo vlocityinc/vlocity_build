@@ -15,6 +15,7 @@ DataPacks:
     UniqueByName: true  
   DataRaptor:
     UniqueByName: true
+    MaxDeploy: 5
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
