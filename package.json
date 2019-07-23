@@ -17,7 +17,7 @@
         "properties": "1.2.1",
         "salesforce-alm": "44.16.0",
         "sass.js": "0.10.6",
-        "semver": "^6.1.2",
+        "semver": "6.2.0",
         "simple-git": "1.107.0",
         "unidecode": "0.1.8"
     },
