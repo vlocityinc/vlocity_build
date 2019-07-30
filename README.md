@@ -37,9 +37,9 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
  	- [v1.7 - OmniScript and IntegrationProcedure](#v17---omniscript-and-integrationprocedure) 
  	- [v1.6 - Enterprise Product Catalog - Product2, Pricebook and PriceList](#v16---enterprise-product-catalog---product2-pricebook-and-pricelist) 
  	- [Rolling Back Changes to the Vlocity Build Tool](#rolling-back-changes-to-the-vlocity-build-tool) 
- - [Installation Instructions](#installation-instructions) 
+ - [Installation and Update Instructions](#installation-and-update-instructions) 
  	- [Install Node.js](#install-nodejs) 
- 	- [Install Vlocity Build through NPM](#install-vlocity-build-through-npm) 
+ 	- [Install or Update Vlocity Build through NPM](#install-or-update-vlocity-build-through-npm) 
  	- [Releases](#releases) 
  		- [Installing Older Releases](#installing-older-releases) 
  		- [Cloning Vlocity Build - Not Recommended](#cloning-vlocity-build---not-recommended) 
@@ -241,7 +241,7 @@ If you have any issues with these changes you can install the previous version o
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 ```
 
-# Installation Instructions
+# Installation and Update Instructions
 
 ## Install Node.js
 Download and Install Node at:
@@ -252,14 +252,14 @@ This tool requires Node Version 10+.
 
 Use `node -v` to find out which version you are on.
 
-## Install Vlocity Build through NPM
-You can install this package like any other Node Package! *Do not clone the repo!*
+## Install or Update Vlocity Build through NPM
+You can install or update this package like any other Node Package! *Do not clone the repo!*
 ```bash
 npm install --global vlocity
 vlocity help
 ```
 
-This should show a list of all available commands confirming that the project has been setup successfully. You can now run this command from any folder.
+This should show a list of all available commands confirming that the project has been installed or updated successfully. You can now run this command from any folder.
 
 ## Releases
 All releases for this Project can be found at:
@@ -271,13 +271,19 @@ MacOS
 Windows x64  
 Windows x86  
 
-### Installing Older Releases
+### Installing Older Release Versions
 To Install an Older Version of the Vlocity Build Tool use the following command:
+```bash
+npm install --global https://github.com/vlocityinc/vlocity_build@v1.9.1
+vlocity help
+```
+
+v1.7 is the first version available as an official Node Package, so use this syntax to install versions before v1.7.
 ```bash
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 vlocity help
 ```
-v1.7 is the first version available as an official Node Package, so use this syntax to install older versions for now.
+
 
 ### Cloning Vlocity Build - Not Recommended
 It is no longer advised to clone the Vlocity Build Repository directly. If you have previously cloned the Vlocity Build Project and are having issues with the alias `vlocity` still being used as the cloned project, please use the following command in the cloned `vlocity_build` folder:

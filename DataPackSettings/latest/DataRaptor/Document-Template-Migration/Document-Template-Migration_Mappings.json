@@ -72,36 +72,6 @@
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
-        "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__DocumentTemplate__c",
-        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
-        "%vlocity_namespace%__ConfigurationProcess__c": "Import",
-        "%vlocity_namespace%__ConfigurationType__c": "Action",
-        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__IsActive__c",
-        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
-        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
-        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Document Template Migration11",
-        "Name": "Document Template Migration",
-        "VlocityDataPackType": "SObject",
-        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
-    },
-    {
-        "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__DocumentTemplate__c",
-        "%vlocity_namespace%__ConfigurationCategory__c": "Ignore Field",
-        "%vlocity_namespace%__ConfigurationProcess__c": "Import",
-        "%vlocity_namespace%__ConfigurationType__c": "Action",
-        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__Status__c",
-        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
-        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
-        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "Document Template Migration12",
-        "Name": "Document Template Migration",
-        "VlocityDataPackType": "SObject",
-        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
-    },
-    {
         "%vlocity_namespace%__ConfigurationAttribute__c": "Apex Class",
         "%vlocity_namespace%__ConfigurationCategory__c": "Metadata",
         "%vlocity_namespace%__ConfigurationProcess__c": "Export",
