@@ -33,6 +33,9 @@ ContextScope:
 ContractType:
   VlocityDataPackType: ContractType
   query: Select Id, Name from %vlocity_namespace%__ContractType__c
+CpqConfigurationSetup:
+  VlocityDataPackType: CpqConfigurationSetup
+  query: Select Id, Name from %vlocity_namespace%__CpqConfigurationSetup__c
 CustomFieldMap:
   VlocityDataPackType: CustomFieldMap
   query: Select Id, Name from %vlocity_namespace%__CustomFieldMap__c 
