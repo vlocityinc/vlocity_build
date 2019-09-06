@@ -1,9 +1,5 @@
 expansionPath: .
 buildFile: AllDataPacks.json
-preStepApex:
-  Deploy: 
-    VlocityUITemplate: DeactivateTemplatesAndLayouts.cls
-    VlocityUILayout: DeactivateTemplatesAndLayouts.cls
 postStepApex:
   Deploy: 
     Product2: EPCProductJSONUpdate.cls
