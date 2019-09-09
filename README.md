@@ -37,9 +37,9 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
  	- [v1.7 - OmniScript and IntegrationProcedure](#v17---omniscript-and-integrationprocedure) 
  	- [v1.6 - Enterprise Product Catalog - Product2, Pricebook and PriceList](#v16---enterprise-product-catalog---product2-pricebook-and-pricelist) 
  	- [Rolling Back Changes to the Vlocity Build Tool](#rolling-back-changes-to-the-vlocity-build-tool) 
- - [Installation Instructions](#installation-instructions) 
+ - [Installation and Update Instructions](#installation-and-update-instructions) 
  	- [Install Node.js](#install-nodejs) 
- 	- [Install Vlocity Build through NPM](#install-vlocity-build-through-npm) 
+ 	- [Install or Update Vlocity Build through NPM](#install-or-update-vlocity-build-through-npm) 
  	- [Releases](#releases) 
  		- [Installing Older Releases](#installing-older-releases) 
  		- [Cloning Vlocity Build - Not Recommended](#cloning-vlocity-build---not-recommended) 
@@ -72,7 +72,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
  		- [SASS Compilation Error](#sass-compilation-error) 
  		- [Validation Errors](#validation-errors) 
  		- [Duplicate Value Found](#duplicate-value-found) 
- 		- [Multiple Imported Records will incorrecty create the same Saleforce Record](#multiple-imported-records-will-incorrecty-create-the-same-saleforce-record) 
+ 		- [Multiple Imported Records will incorrectly create the same Salesforce Record](#multiple-imported-records-will-incorrectly-create-the-same-salesforce-record) 
  		- [Some records were not processed](#some-records-were-not-processed) 
  	- [Cleaning Bad Data](#cleaning-bad-data) 
  	- [External Ids and Global Keys](#external-ids-and-global-keys) 
@@ -152,20 +152,20 @@ If an Id is being moved from one environment to another and No Matching Key exis
 Fix for Attribute Categories that have the same Sequence automatically during the deployment.
 
 ### Improve Clean Org Data to report actual duplicates based on DataPack Metadata
-Now uses Matching Keys to accurately report the Duplicates instead of only reporting the ones with durplicate Global Keys.
+Now uses Matching Keys to accurately report the Duplicates instead of only reporting the ones with duplicate Global Keys.
 
 ### Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation
 Previously if activating a Reusable OmniScript caused too many other OmniScripts to activate it would fail. *Note:* This requires that you are logged in via [SFDX Authentication](#getting-started). *Was Previously reported to have been fixed in v1.9, but there was an error preventing the actual changes to be reflected if made to the Reusable OmniScript.*
 
 ### Fix OmniScript Issue when two Elements had the Same Name with Different Case
-Previously one of the OmniScript Elements would dissapear when deployed.
+Previously one of the OmniScript Elements would disappear when deployed.
 
 ### Change Deployment Strategy to fix potential Concurrency issues
 Changes to deployment to make it remove some parallel processing.
 
 ## v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements
 ### Auto Update Restricted Picklists
-By default the Vlocity Build Tool will automatically add Restircted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File. Does not work for Managed Global Value Sets - Like Vlocity's CurrencyCode field.
+By default the Vlocity Build Tool will automatically add Restricted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File. Does not work for Managed Global Value Sets - Like Vlocity's CurrencyCode field.
 
 ### Support for Large Calculation Matrix and OmniScripts
 Large Calculation Matrix which would take a long time to deploy and OmniScripts which could previously fail due to heap size issues, will now be deployed through Salesforce Bulk Uploads to eliminate potential issues.
@@ -190,10 +190,10 @@ AttributeCategory__c, CalculationMatrixVersion__c, CalculationMatrix__c, Calcula
 
 ## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
 ### Delta Deploys / Exports
-Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not gauranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
+Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not guaranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
 
 ### Error Message Enhancements
-Error messages have been improved to give more instrution on how to fix issues. An example change is as follows:
+Error messages have been improved to give more instruction on how to fix issues. An example change is as follows:
 
 ##### Previous:
 `Error >> AttributeCategory/ATTRIBUTE_CATEGORY --- ATTRIBUTE_CATEGORY --- duplicate value found: <unknown> duplicates value on record with id: <unknown>`
@@ -241,25 +241,25 @@ If you have any issues with these changes you can install the previous version o
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 ```
 
-# Installation Instructions
+# Installation and Update Instructions
 
 ## Install Node.js
 Download and Install Node at:
 
 https://nodejs.org/
 
-This project requires Node Version 8+.
+This tool requires Node Version 10+.
 
 Use `node -v` to find out which version you are on.
 
-## Install Vlocity Build through NPM
-You can install this package like any other Node Package! *Do not clone the repo!*
+## Install or Update Vlocity Build through NPM
+You can install or update this package like any other Node Package! *Do not clone the repo!*
 ```bash
 npm install --global vlocity
 vlocity help
 ```
 
-This should show a list of all available commands confirming that the project has been setup successfully. You can now run this command from any folder.
+This should show a list of all available commands confirming that the project has been installed or updated successfully. You can now run this command from any folder.
 
 ## Releases
 All releases for this Project can be found at:
@@ -271,13 +271,19 @@ MacOS
 Windows x64  
 Windows x86  
 
-### Installing Older Releases
+### Installing Older Release Versions
 To Install an Older Version of the Vlocity Build Tool use the following command:
+```bash
+npm install --global https://github.com/vlocityinc/vlocity_build@v1.9.1
+vlocity help
+```
+
+v1.7 is the first version available as an official Node Package, so use this syntax to install versions before v1.7.
 ```bash
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 vlocity help
 ```
-v1.7 is the first version available as an official Node Package, so use this syntax to install older versions for now.
+
 
 ### Cloning Vlocity Build - Not Recommended
 It is no longer advised to clone the Vlocity Build Repository directly. If you have previously cloned the Vlocity Build Project and are having issues with the alias `vlocity` still being used as the cloned project, please use the following command in the cloned `vlocity_build` folder:
@@ -324,7 +330,7 @@ The propertyfile is used to provide the credentials of the org you will connect 
 The Job File used to define the project location and the various settings for running a DataPacks Export / Deploy.
 
 # Step by Step Guide
-Once you have your `build_source.properties` file setup, you can get started with mirgation with the following: 
+Once you have your `build_source.properties` file setup, you can get started with migration with the following: 
 
 ## Simple Export
 Example.yaml shows the most Simple Job File that can be used to setup a project:
@@ -658,8 +664,8 @@ Records with the same Display Sequence can be found via the SOQL query:
 Select Id, Name from %vlocity_namespace%__AttributeCategory__c 
 where %vlocity_namespace%__DisplaySequence__c = %DisplaySequence__c from DataPack.json file%
 
-### Multiple Imported Records will incorrecty create the same Saleforce Record
-`Catalog/Data – Datapack >> Data – Error Message – Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. vlocity_cmt__CatalogProductRelationship__c: 20MB Plan`
+### Multiple Imported Records will incorrectly create the same Salesforce Record
+`Catalog/Data – Datapack >> Data – Error Message – Incorrect Import Data. Multiple Imported Records will incorrectly create the same Salesforce Record. vlocity_cmt__CatalogProductRelationship__c: 20MB Plan`
 
 These errors mean there are duplicates in the data. Multiple records with the same data for `vlocity_cmt__CatalogProductRelationship__c: 20MB Plan` (this is the Name). The Matching Key for a CatalogProductRelationship__c object is `%vlocity_namespace%__CatalogId__c, %vlocity_namespace%__Product2Id__c` (See [Current Matching Keys](#current-matching-keys)). Therefore, this error means that there are two references to the same product inside the same Catalog, which is not allowed. The Duplicates must be removed from the Source Org and Re-Exported.
 
