@@ -75,6 +75,9 @@ ObjectContextRule:
 ObjectLayout:
   VlocityDataPackType: ObjectLayout
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ObjectLayout__c
+OfferMigrationPlan:
+  VlocityDataPackType: OfferMigrationPlan
+  query: Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__OfferMigrationPlan__c
 OmniScript:
   VlocityDataPackType: OmniScript
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
