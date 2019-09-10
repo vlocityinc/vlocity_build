@@ -622,6 +622,17 @@ SObjects:
     UnhashableFields:
     - GlobalKey__c
     - Name
+  OfferMigrationComponentMapping__c:
+    SourceKeyDefinition:
+    - Name
+    - OfferMigrationPlanId__c
+    - SourceProductId__c
+    - TargetProductId__c
+  OfferMigrationPlan__c:
+    FolderName:
+    - Code__c
+    SourceKeyDefinition:
+    - Code__c  
   OmniScript__c:
     CustomJavaScript__c:
       FileName:
