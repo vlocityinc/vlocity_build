@@ -235,12 +235,6 @@ The Product2 DataPack has been modified to include all Pricebook and PriceList E
 
 Running `packUpdateSettings` and re-exporting the Product2, Pricebook and PriceList is necessary to migrate to the new format, however existing data should still be deployable with the new changes.
 
-## Rolling Back Changes to the Vlocity Build Tool
-If you have any issues with these changes you can install the previous version of the tool with:
-```bash
-npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
-```
-
 # Installation and Update Instructions
 
 ## Install Node.js
@@ -272,13 +266,13 @@ Windows x64
 Windows x86  
 
 ### Installing Older Release Versions
-To Install an Older Version of the Vlocity Build Tool use the following command:
+To Install an Older Version of the Vlocity Build Tool use the following NPM command for installing by version:
 ```bash
-npm install --global https://github.com/vlocityinc/vlocity_build@v1.9.1
+npm install --global vlocity@1.9.1
 vlocity help
 ```
 
-v1.7 is the first version available as an official Node Package, so use this syntax to install versions before v1.7.
+Only if you need to install a version before v1.7 use the following syntax:
 ```bash
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 vlocity help
