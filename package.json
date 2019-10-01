@@ -15,11 +15,13 @@
         "mustache": "3.0.0",
         "nopt": "4.0.1",
         "properties": "1.2.1",
-        "salesforce-alm": "46.10.0",
+        "salesforce-alm": "46.17.0",
         "sass.js": "0.10.6",
         "semver": "6.2.0",
         "simple-git": "1.107.0",
-        "unidecode": "0.1.8"
+        "unidecode": "0.1.8",
+        "xml2js": "0.4.22",
+        "xmlbuilder": "13.0.2"
     },
     "description": "Enable Continuous Integration for Vlocity",
     "devDependencies": {
