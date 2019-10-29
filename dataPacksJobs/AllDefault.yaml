@@ -61,3 +61,4 @@ exportPacksMaxSize: 10
 useAllRelationships: false
 supportHeadersOnly: true
 supportForceDeploy: true
+includeSalesforceMetadata: true
