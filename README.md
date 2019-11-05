@@ -1066,6 +1066,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | ObjectContextRule<br>(Vlocity Object Rule Assignment) | ObjectRuleAssignment__c |
 | ObjectLayout | ObjectLayout__c<br>ObjectFacet__c<br>ObjectSection__c<br>ObjectElement__c |
 | OmniScript | OmniScript__c<br>Element__c |
+| OfferMigrationPlan | OfferMigrationPlan__c<br>OfferMigrationComponentMapping__c |
 | OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
 | OrchestrationItemDefinition | OrchestrationItemDefinition__c |
 | OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
@@ -1078,6 +1079,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | QueryBuilder | QueryBuilder__c<br>QueryBuilderDetail__c |
 | Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
 | StoryObjectConfiguration<br>(Custom Setting) | StoryObjectConfiguration__c |
+| String | String__c<br>StringTranslation__c |
 | System | System__c<br>SystemInterface__c |
 | TimePlan | TimePlan__c |
 | TimePolicy | TimePolicy__c |
