@@ -1,15 +1,21 @@
-latest: 2
+latest: 3
 vlocity_cmt:
 - version: latest
   PackageMajorVersion: 900
-  PackageMinorVersion: 85
+  PackageMinorVersion: 280
+- version: 2
+  PackageMajorVersion: 900
+  PackageMinorVersion: 85  
 - version: 1
   PackageMajorVersion: 0
   PackageMinorVersion: 0
 vlocity_ins:
 - version: latest
   PackageMajorVersion: 890
-  PackageMinorVersion: 56
+  PackageMinorVersion: 177
+- version: 2
+  PackageMajorVersion: 890
+  PackageMinorVersion: 56  
 - version: 1
   PackageMajorVersion: 0
   PackageMinorVersion: 0
