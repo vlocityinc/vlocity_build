@@ -546,7 +546,7 @@ SObjects:
       Field: PropertySet__c.templateName
     - Type: Document
       Field: PropertySet__c.documentNames
-    - Type: Apex Class
+    - Type: ApexClass
       Field: PropertySet__c.remoteClass
     - Type: DataRaptor
       Field: PropertySet__c.bundle
@@ -719,6 +719,17 @@ SObjects:
     UnhashableFields:
     - GlobalKey__c
     - Name
+  OfferMigrationComponentMapping__c:
+    SourceKeyDefinition:
+    - Name
+    - OfferMigrationPlanId__c
+    - SourceProductId__c
+    - TargetProductId__c
+  OfferMigrationPlan__c:
+    FolderName:
+    - Code__c
+    SourceKeyDefinition:
+    - Code__c  
   OmniScript__c:
     CustomJavaScript__c:
       FileName:
@@ -727,7 +738,7 @@ SObjects:
     DataPackReferences:
     - Type: VlocityUITemplate
       Field: ElementTypeToHTMLTemplateList__c.ElementTypeToHTMLTemplateList
-    - Type: Apex Class
+    - Type: ApexClass
       Field: PropertySet__c.persistentComponent.remoteClass
     - Type: DataRaptor
       Field: PropertySet__c.persistentComponent.preTransformBundle
@@ -1103,7 +1114,7 @@ SObjects:
       Field: Definition__c.states.flyout.layout
     - Type: DataRaptor
       Field: Definition__c.dataSource.value.bundle
-    - Type: Apex Class
+    - Type: ApexClass
       Field: Definition__c.dataSource.value.remoteClass
     - Type: VlocityUITemplate
       Field: Definition__c.states.templateUrl
@@ -1169,7 +1180,7 @@ SObjects:
       Field: Definition__c.Cards
     - Type: DataRaptor
       Field: Definition__c.dataSource.value.bundle
-    - Type: Apex Class
+    - Type: ApexClass
       Field: Definition__c.dataSource.value.remoteClass
     - Type: VlocityUITemplate
       Field: Definition__c.templates.0.templateUrl
