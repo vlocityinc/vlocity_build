@@ -361,7 +361,7 @@ SObjects:
     - GlobalKey__c
   ContextDimension__c:
     DeltaQueryChildren:
-      Contextmapping__c:
+      ContextMapping__c:
         Dimension__c: Id
     FolderName:
     - GlobalKey__c
@@ -560,19 +560,27 @@ SObjects:
       Field: PropertySet__c.modalConfigurationSetting.modalHTMLTemplateId
     - Type: VlocityUITemplate
       Field: PropertySet__c.redirectTemplateUrl
+    DiffParentField: ParentElementId__c
+    DiffDisplayParentField: ParentElementId__c
     FieldDisplayType:
       PropertySet__c.show: object
     FieldImportance:
       High: 
       - PropertySet__c.show
+    FieldLabels:
+        PropertySet__c.show: Conditional View
     FileName:
     - _Element
     - Name
     FilterFields:
     - OmniScriptVersion__c
     - Level__c
+    - ReusableOmniScript__c
     JsonFields:
     - PropertySet__c
+    RecordLabel:
+    - Name
+    - Type__c
     RemoveNullValues: true
     SortFields:
     - HierarchicalKey
@@ -955,6 +963,7 @@ SObjects:
     - AttributeMetadata__c
     - AttributeDefaultValues__c
     - AttributeRules__c
+    - LastSimulationInput__c
     FolderName:
     - GlobalKey__c
     JsonFields:
@@ -1201,7 +1210,7 @@ SObjects:
     CustomJavascript__c: js
     FilterFields:
     - Active__c
-    IgnoreFieldDiffs:
+    DISABLEDIgnoreFieldDiffs:
     - CustomJavascript__c
     - HTML__c
     - Sass__c
