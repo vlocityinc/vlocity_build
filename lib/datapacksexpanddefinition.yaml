@@ -16,6 +16,8 @@ DataPacks:
   DataRaptor:
     UniqueByName: true
     MaxDeploy: 5
+    DefaultVisualforcePage:
+    - drmapper
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -45,6 +47,8 @@ DataPacks:
   ObjectLayout:
     DoNotExpand: true
   OmniScript:
+    DefaultVisualforcePage:
+    - omniscriptdesigner
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
