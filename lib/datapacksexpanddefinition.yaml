@@ -17,7 +17,7 @@ DataPacks:
     UniqueByName: true
     MaxDeploy: 5
     DefaultVisualforcePage:
-    - /apex/drmapper?id=%Id%
+    - /apex/%vlocity_namespace%__drmapper?id=%Id%
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -48,7 +48,7 @@ DataPacks:
     DoNotExpand: true
   OmniScript:
     DefaultVisualforcePage:
-    - /apex/omniscriptdesigner?id=%Id%
+    - /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
