@@ -17,7 +17,7 @@ DataPacks:
     UniqueByName: true
     MaxDeploy: 5
     DefaultVisualforcePage:
-    - drmapper
+    - /apex/drmapper?id=%Id%
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -48,7 +48,7 @@ DataPacks:
     DoNotExpand: true
   OmniScript:
     DefaultVisualforcePage:
-    - omniscriptdesigner
+    - /apex/omniscriptdesigner?id=%Id%
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
