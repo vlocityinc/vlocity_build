@@ -60,6 +60,8 @@ DataPacks:
     HeadersOnly: All
     PaginationSize: 500
   Product2:
+    HeadersExclusions:
+    - ProductChildItem__c
     HeadersOnly: true
     IgnoreExpand:
     - StandardPricebookEntry
