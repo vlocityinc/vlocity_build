@@ -1053,6 +1053,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | ContextDimension | ContextDimension__c<br>ContextMapping__c<br>ContextMappingArgument__c |
 | ContextScope | ContextScope__c |
 | ContractType | ContractType__c<br>ContractTypeSetting__c |
+| CpqConfigurationSetup | CpqConfigurationSetup__c |
 | DataRaptor | DRBundle__c<br>DRMapItem__c |
 | Document<br>(Salesforce Standard Object) | Document |
 | DocumentClause | DocumentClause__c |
