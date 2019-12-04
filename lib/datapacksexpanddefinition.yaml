@@ -61,6 +61,8 @@ DataPacks:
     HeadersOnly: All
     PaginationSize: 500
   Product2:
+    HeadersExclusions:
+    - ProductChildItem__c
     HeadersOnly: true
     IgnoreExpand:
     - StandardPricebookEntry
@@ -208,6 +210,7 @@ SObjects:
         - InputData__c.columnKey
     FilterFields:
     - InputData__c.lineItemId
+    - IsCalculationMatrixVersionEnabled__c
     JsonFields:
     - InputData__c
     - OutputData__c

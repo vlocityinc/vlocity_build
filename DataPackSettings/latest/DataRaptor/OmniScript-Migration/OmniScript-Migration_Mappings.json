@@ -206,7 +206,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__MapId__c": "OmniScript Migration28",
+        "%vlocity_namespace%__MapId__c": "OmniScript Migration228",
         "Name": "OmniScript Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
@@ -618,6 +618,21 @@
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__MapId__c": "OmniScript Migration11",
+        "Name": "OmniScript Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__ConfigurationAttribute__c": "VlocityScheduledJob",
+        "%vlocity_namespace%__ConfigurationCategory__c": "Sibling",
+        "%vlocity_namespace%__ConfigurationProcess__c": "Export",
+        "%vlocity_namespace%__ConfigurationType__c": "Relationship",
+        "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__OmniScript__c:%vlocity_namespace%__Element__c:%vlocity_namespace%__PropertySet__c:scheduledJobId",
+        "%vlocity_namespace%__DomainObjectAPIName__c": "Configuration",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
+        "%vlocity_namespace%__MapId__c": "OmniScript Migration28",
         "Name": "OmniScript Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
