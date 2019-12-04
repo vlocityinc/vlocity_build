@@ -176,6 +176,7 @@ SObjects:
         - InputData__c.columnKey
     FilterFields:
     - InputData__c.lineItemId
+    - IsCalculationMatrixVersionEnabled__c
     JsonFields:
     - InputData__c
     - OutputData__c
