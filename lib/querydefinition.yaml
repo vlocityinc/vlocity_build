@@ -11,6 +11,10 @@ AttributeCategory:
 CalculationMatrix:
   VlocityDataPackType: CalculationMatrix
   query: Select Id, Name from %vlocity_namespace%__CalculationMatrix__c
+CalculationMatrixVersion:
+  VlocityDataPackType: CalculationMatrixVersion
+  query: Select Id, Name from %vlocity_namespace%__CalculationMatrixVersion__c where %vlocity_namespace%__IsEnabled__c = true
+  requiredSetting: separateMatrixVersions
 CalculationProcedure:
   VlocityDataPackType: CalculationProcedure
   query: Select Id, Name from %vlocity_namespace%__CalculationProcedure__c
