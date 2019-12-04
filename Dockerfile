@@ -13,7 +13,7 @@ RUN pkg-fetch -n node10 -p win -a x64
 RUN pkg-fetch -n node10 -p linux -a x64
 RUN pkg-fetch -n node10 -p macos -a x64
 
-RUN npm install --global pkg
+RUN npm install --global pkg@4.3.8
 
 # declare /vlocity_build as working directory of image
 WORKDIR /vlocity_build
