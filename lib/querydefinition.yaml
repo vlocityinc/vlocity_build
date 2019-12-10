@@ -19,7 +19,7 @@ Catalog:
   query: Select Id, Name from %vlocity_namespace%__Catalog__c     
 ContentVersion:
   VlocityDataPackType: ContentVersion
-  query: Select Id, Name, Title, %vlocity_namespace%__GlobalKey__c from ContentVersion where %vlocity_namespace%__GlobalKey__c != null
+  query: Select Id, Title, %vlocity_namespace%__GlobalKey__c from ContentVersion where %vlocity_namespace%__GlobalKey__c != null
   manifestOnly: true
 ContextAction:
   VlocityDataPackType: ContextAction
