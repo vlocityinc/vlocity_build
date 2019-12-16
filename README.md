@@ -646,6 +646,12 @@ While not clear from the wording, this error indicates that one of the Child Pro
 
 `vlocity packDeploy -manifest '["Pricebook2/2018 Pricebook"]'`
 
+### No Configuration Found
+If you see this error on any DataPack Type:
+`AttributeCategory/Something -- DataPack >> Something -- Error Message -- No Configuration Found: Attribute Category Migration`
+
+Run packUpdateSettings or add `autoUpdateSettings: true` to your job file. 
+
 ### Duplicate Value Found
 Some errors are related to conflicting data. For Attribute Category Display Sequence you will receive the following:
 
