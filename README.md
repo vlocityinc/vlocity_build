@@ -190,7 +190,7 @@ AttributeCategory__c, CalculationMatrixVersion__c, CalculationMatrix__c, Calcula
 
 ## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
 ### Delta Deploys / Exports
-Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not guaranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
+Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not guaranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
 
 ### Error Message Enhancements
 Error messages have been improved to give more instruction on how to fix issues. An example change is as follows:
@@ -235,12 +235,6 @@ The Product2 DataPack has been modified to include all Pricebook and PriceList E
 
 Running `packUpdateSettings` and re-exporting the Product2, Pricebook and PriceList is necessary to migrate to the new format, however existing data should still be deployable with the new changes.
 
-## Rolling Back Changes to the Vlocity Build Tool
-If you have any issues with these changes you can install the previous version of the tool with:
-```bash
-npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
-```
-
 # Installation and Update Instructions
 
 ## Install Node.js
@@ -272,13 +266,13 @@ Windows x64
 Windows x86  
 
 ### Installing Older Release Versions
-To Install an Older Version of the Vlocity Build Tool use the following command:
+To Install an Older Version of the Vlocity Build Tool use the following NPM command for installing by version:
 ```bash
-npm install --global https://github.com/vlocityinc/vlocity_build@v1.9.1
+npm install --global vlocity@1.9.1
 vlocity help
 ```
 
-v1.7 is the first version available as an official Node Package, so use this syntax to install versions before v1.7.
+Only if you need to install a version before v1.7 use the following syntax:
 ```bash
 npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
 vlocity help
@@ -306,7 +300,7 @@ sf.username = < Salesforce Username >
 sf.password = < Salesforce Password + Security Token >
 sf.loginUrl = < https://login.salesforce.com or https://test.salesforce.com for Sandbox >
 ```
-When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the below line to your property file:
+When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the following line to your property file:
 ```java
 sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy hostname>[:<Proxy Port>]
 ```
@@ -427,7 +421,7 @@ This step will deliver changes to the DataPack settings outside the Vlocity Mana
 `vlocity -propertyfile build_source.properties -job EPC.yaml packExport`  
 6. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packRetry`  
-If your Export fails midway through due to conenction issues, you can also use the following to pick the export back up where it left off:  
+If your Export fails midway through due to connection issues, you can also use the following to pick the export back up where it left off:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
 7. Check the Exported Data for Potential Issues:  
 `vlocity -propertyfile build_source.properties -job EPC.yaml validateLocalData`  
@@ -598,16 +592,16 @@ The WHERE clauses show that these Queries will Export all DataRaptors that are n
 When Exporting, the DataPacks API will additionally export all dependencies of the Vlocity DataPacks which are being exported. So Exporting just the OmniScripts from an Org will also bring in all referenced DataRaptors, VlocityUITemplates, etc, so that the OmniScript will be fully usable once deployed.
 
 ## Query All
-Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queires defined, you can also run: `packExportAllDefault` to specify running all the default queries.
+Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queries defined, you can also run: `packExportAllDefault` to specify running all the default queries.
 
 # Troubleshooting
 
 ## Log Files
 Three log files are generated for every command run.
 
-`VlocityBuildLog.yaml` - This file is a summary of what was executed during the command just run. It will appear in directory you are running the command.
+`VlocityBuildLog.yaml` - This file is a summary of what was executed during the command just run. It will appear in the directory you are running the command.
 
-`VlocityBuildErrors.log` - This file will contain the errors during the job. It will appear in directory you are running the command. 
+`VlocityBuildErrors.log` - This file will contain the errors during the job. It will appear in the directory you are running the command. 
 
 `vlocity-temp/logs/<JobName>-<Timestamp>-<Command>.yaml` - This is a saved version of the VlocityBuildLog.yaml in the logs folder for every command run.
 
@@ -651,6 +645,12 @@ Some errors are related to potential data quality issues:
 While not clear from the wording, this error indicates that one of the Child Products being added to this Product will potentially cause issues because the Child Product is not in the 2018 Pricebook. To workaround this issue it is most simple to disable temporarily disable the listed Pricebook. This error is generally caused by a cascading failure and can also be solved by deploying the listed pricebook on its own with the command:
 
 `vlocity packDeploy -manifest '["Pricebook2/2018 Pricebook"]'`
+
+### No Configuration Found
+If you see this error on any DataPack Type:
+`AttributeCategory/Something -- DataPack >> Something -- Error Message -- No Configuration Found: Attribute Category Migration`
+
+Run packUpdateSettings or add `autoUpdateSettings: true` to your job file. 
 
 ### Duplicate Value Found
 Some errors are related to conflicting data. For Attribute Category Display Sequence you will receive the following:
@@ -753,7 +753,7 @@ vlocity -propertyfile <filepath> -job <filepath> packExport
 vlocity -propertyfile <filepath> -job <filepath> packExportSingle -type <VlocityDataPackType> -id <Salesforce Id> -depth <Integer>
 ```
 
-Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level depedencies.
+Max Depth is optional and a value of 0 will only export the single DataPack. Max Depth of 1 will export the single DataPack along with its first level dependencies.
 
 ### packExportAllDefault
 `packExportAllDefault` will retrieve all Vlocity Metadata instead of using the Job File definition.  
@@ -780,7 +780,7 @@ vlocity -propertyfile <filepath> -job <filepath> validateLocalData --fixLocalGlo
 ```
 
 ### refreshProject
-`refreshProject` will rebuild the folders for the Data at the projectPath. Additonally, it will resolve any missing references between the files to ensure they deploy in the correct order.  
+`refreshProject` will rebuild the folders for the Data at the projectPath. Additionally, it will resolve any missing references between the files to ensure they deploy in the correct order.  
 ```bash
 vlocity -propertyfile <filepath> -job <filepath> refreshProject
 ```
@@ -826,7 +826,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
 | exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
 | expansionPath | Secondary path after projectPath to expand the data for the Job | String | . |
-| ignoreAllErrors | Ignore Errors during Job. *It is recommeneded to NOT use this setting.* | Boolean | false |
+| ignoreAllErrors | Ignore Errors during Job. *It is recommended to NOT use this setting.* | Boolean | false |
 | manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
 | maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
@@ -866,7 +866,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | verbose | Show additional logging statements | Boolean | false |
 
 # Developer Workflow
-When developing on a large project, exporting DataPacks through Queires is not the ideal process. Instead, each developer should keep track of the major items that they are working on and extract those items as needed to commit to Version Control.
+When developing on a large project, exporting DataPacks through Queries is not the ideal process. Instead, each developer should keep track of the major items that they are working on and extract those items as needed to commit to Version Control.
 
 ## Manifest Driven Workflow
 The `manifest` section of the Job File can be used to create a collection of DataPacks to be exported or deployed. Manifests are based on the VlocityDataPackKey of each DataPack.
@@ -944,7 +944,7 @@ manifest:
 Running `packExport -job Export.yaml` would also export any DataPacks that these Products depend on by default. To only export the exact manifest you can use `-depth 0` to your command. 
 
 #### Deploy Job File
-The manifest is also used to control what is deployed, but in the deploy case it will only deploy waht is specified. This allows deploying only a specific set of local folders to the Org, as the VlocityDataPackKeys are the Folder Paths of the DataPacks.
+The manifest is also used to control what is deployed, but in the deploy case it will only deploy what is specified. This allows deploying only a specific set of local folders to the Org, as the VlocityDataPackKeys are the Folder Paths of the DataPacks.
 
 Therefore, it is best to create a second job file for Deploy. This job file only needs projectPath as it will deploy the entire contents of the project by default.
 
@@ -957,7 +957,7 @@ expansionPath: vlocity
 Running `packDeploy -job Deploy.yaml` will then deploy all of the DataPacks in the `vlocity` folder as there is no manifest being defined.
 
 # Other Job File Settings
-The Job File has a number of additonal runtime settings that can be used to define your project and aid in making Exports / Deploys run successfully. However, the Default settings should only be modified to account for unique issues in your Org. 
+The Job File has a number of additional runtime settings that can be used to define your project and aid in making Exports / Deploys run successfully. However, the Default settings should only be modified to account for unique issues in your Org. 
 
 ## Basic  
 ```yaml
@@ -982,7 +982,7 @@ queries:
     query: Select Id from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'campaign%'
 ```    
 
-**Export by Predefined Queries is the recommened approach for defining your Project and you can mix the predefined and explicit queries as shown above**
+**Export by Predefined Queries is the recommended approach for defining your Project and you can mix the predefined and explicit queries as shown above**
 
 ## Export Results 
 The primary use of this tool is to write the results of the Export to the local folders at the expansionPath. There is a large amount of post processing to make the results from Salesforce as Version Control friendly as possible. 
@@ -1059,6 +1059,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | ContextDimension | ContextDimension__c<br>ContextMapping__c<br>ContextMappingArgument__c |
 | ContextScope | ContextScope__c |
 | ContractType | ContractType__c<br>ContractTypeSetting__c |
+| CpqConfigurationSetup | CpqConfigurationSetup__c |
 | DataRaptor | DRBundle__c<br>DRMapItem__c |
 | Document<br>(Salesforce Standard Object) | Document |
 | DocumentClause | DocumentClause__c |
@@ -1072,6 +1073,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | ObjectContextRule<br>(Vlocity Object Rule Assignment) | ObjectRuleAssignment__c |
 | ObjectLayout | ObjectLayout__c<br>ObjectFacet__c<br>ObjectSection__c<br>ObjectElement__c |
 | OmniScript | OmniScript__c<br>Element__c |
+| OfferMigrationPlan | OfferMigrationPlan__c<br>OfferMigrationComponentMapping__c |
 | OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
 | OrchestrationItemDefinition | OrchestrationItemDefinition__c |
 | OrchestrationPlanDefinition | OrchestrationPlanDefinition__c |
@@ -1084,6 +1086,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | QueryBuilder | QueryBuilder__c<br>QueryBuilderDetail__c |
 | Rule | Rule__c<br>RuleVariable__c<br>RuleAction__c<br>RuleFilter__c |
 | StoryObjectConfiguration<br>(Custom Setting) | StoryObjectConfiguration__c |
+| String | String__c<br>StringTranslation__c |
 | System | System__c<br>SystemInterface__c |
 | TimePlan | TimePlan__c |
 | TimePolicy | TimePolicy__c |
@@ -1138,7 +1141,7 @@ preStepApex will send only the DataPack context data for the currently running A
 postStepApex can be used to run any compilation steps in Apex that are not automatically run inside triggers. EPCProductJSONUpdate.cls is recommended to be run when Deploying Products.
 
 #### Pre and Post Job JavaScript
-Like Pre and Post Job Apex you can also run JavaScript against the project with the preJobJavaScript, postJobJavaScript in tyour Job File. 
+Like Pre and Post Job Apex you can also run JavaScript against the project with the preJobJavaScript, postJobJavaScript in your Job File. 
 
 Your JavaScript file should implement:
 ```javascript
@@ -1316,7 +1319,7 @@ The tool will return JSON is sent the argument `--json` or `--json-pretty` and w
 
 Where each record contains the VlocityDataPackKey that was Exported / Deployed, and the Export / Deploy will be limited to only VlocityDataPackKeys passed in as part of the manifest if it is supplied. 
 
-A Deploy will always only include the `-manifest` keys, however for an Export it will be defauly include dependencies unless `-maxDepth 0` is used as an argument.
+A Deploy will always only include the `-manifest` keys, however for an Export it will by default include dependencies unless `-maxDepth 0` is used as an argument.
 
 ### Overriding DataPack Settings
 It is possible to change the settings that are used to define the behavior of each DataPack is Imported, Deployed, and written to the files. Settings overrides are added inside the Job File definition with the following syntax which is also found in the actual `lib/datapacksexpandeddefinition.yaml`:
@@ -1410,16 +1413,16 @@ The datapacks will be deployed, however a manual activation of the latest OmniSc
 * Attribute Assignment Matching Key when using Override Definitions is not correct. In order to correctly have the GlobalKey field on an Attribute Assignment be its unique key, you must add a Vlocity Matching Key record with the following information:
  ![MatchingKeyAA](doc/MatchingKeyForAA.png)
 Without this Matching Key you will receive the following error during deployment:
-`Product2/4e5828c2-4832-10c8-c343-88934cc2cb1c – DataPack >> Amount Discount Product – Error Message – Incorrect Import Data. Multiple Imported Records will incorrecty create the same Saleforce Record. %vlocity_namespace%__AttributeAssignment__c: TempAA-ATT_INS_PRICE`
+`Product2/4e5828c2-4832-10c8-c343-88934cc2cb1c – DataPack >> Amount Discount Product – Error Message – Incorrect Import Data. Multiple Imported Records will incorrectly create the same Saleforce Record. %vlocity_namespace%__AttributeAssignment__c: TempAA-ATT_INS_PRICE`
 
-* Orchestration Dependency Definition - In the Managed Package this Object does not have a Matching Key and creates duplicate records. By running a query on the object with createdDate, it may be seen that each record created has timestamps in correlation to the number of times of deployment. This gives indication that the datapacks have been configured correctly, however the missing Matching Key causes VBT to create new records.
+* Orchestration Dependency Definition - In the Managed Package this Object does not have a Matching Key and creates duplicate records. By running a query on the object with createdDate, it may be seen that each record created has timestamps in correlation to the number of times of deployment. This gives an indication that the datapacks have been configured correctly, however the missing Matching Key causes VBT to create new records.
 `vlocity_cmt__OrchestrationDependencyDefinition__c found duplicates for vlocity_cmt__GlobalKey__c: 00527b2d-08a6-c069-33cf-88de9d25a2de`
 Add the following Matching Key if you are using Order Management:
  ![MatchingKeyOrch](doc/MatchingKeyForOrch.png)
 
 * STRING_TOO_LONG, JSONAttribute -
 `first error: STRING_TOO_LONG, JSONAttribute: data value too large`
-Likely due to duplicated records (duplicate or changing global keys), ensure the target org and source branch does not have duplicates. VBT will attempt to load the new records within the target org which will exceed the max character count in the JSONAttribute.
+Likely due to duplicate records (duplicate or changing global keys), ensure the target org and source branch does not have duplicates. VBT will attempt to load the new records within the target org which will exceed the max character count in the JSONAttribute.
 `QUERY: select Id, vlocity_cmt_globalkeyc, vlocity_cmtattributeidr.name from vlocity_cmtAttributeAssignmentc where vlocity_cmtobjectid_c='XYZ'`
 
 * No Data without Parent Dependencies -
