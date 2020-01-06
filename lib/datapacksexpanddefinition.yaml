@@ -122,6 +122,7 @@ DataPacks:
   VlocityAttachment:
     SupportParallel: true
     ChildrenLimit: 10
+    MaxDeploy: 5
 DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
