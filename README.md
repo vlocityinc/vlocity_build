@@ -131,6 +131,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
  		- [CLI API](#cli-api) 
  		- [Overriding DataPack Settings](#overriding-datapack-settings) 
  - [OmniOut](#omniout) 
+ - [Required Version Check](#required-version-check) 
  - [Known Issues](#known-issues) 
 
 # Recent Features
@@ -1402,6 +1403,13 @@ In order to Retrieve the OmniScripts that will be deployed as part of the OmniOu
 `vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js omniOutRetrieve.js`
 
 This will export the retrieved files into the folder `OmniOut/scripts` in your Project.
+
+# Required Version Check
+You can lock the version in any org by adding the following Custom Setting value:
+Custom Setting -> General Setting -> Name = VBTRequiredVersion
+
+From then on, any user on a version that is not the same as this required version will get the error:
+`Login Failed >> Must Use Vlocity Build Tool version: 1.11.19 - Use npm install -g vlocity@1.11.19`
 
 # Known Issues
 * When Multi Currency is enabled, you can only deploy data exported from another Multi Currency Org or to deploy to another Multi Currency Org. Non Multi Currency to Multi Currency Export / Deploy will not work as expected.  
