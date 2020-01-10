@@ -829,7 +829,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | expansionPath | Secondary path after projectPath to expand the data for the Job | String | . |
 | ignoreAllErrors | Ignore Errors during Job. *It is recommended to NOT use this setting.* | Boolean | false |
 | manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
-| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 |
+| maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 (All) |
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
 | processMultiple | When false each Export or Import will run individually | Boolean | true |
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
