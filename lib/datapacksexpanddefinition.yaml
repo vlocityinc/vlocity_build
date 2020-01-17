@@ -1,6 +1,6 @@
 DataPacks:
   Attachment:
-    ChildrenLimit: 10
+    ChildrenLimit: 500
     IsDiffable: true
   CalculationMatrix:
     UniqueByName: true
@@ -72,7 +72,7 @@ DataPacks:
     - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
-    ExportGroupSize: 1
+    ExportGroupSize: 3
     SupportParallel: false
   ProductChildItem:
     ProductChildItem__c:
@@ -121,7 +121,7 @@ DataPacks:
     UniqueByName: true
   VlocityAttachment:
     SupportParallel: true
-    ChildrenLimit: 10
+    ChildrenLimit: 500
     MaxDeploy: 5
 DataPacksDefault:
   HeadersOnly: false
