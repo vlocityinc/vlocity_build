@@ -60,6 +60,10 @@ IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
     = true AND %vlocity_namespace%__IsProcedure__c = true
+IntegrationProcedureVersion:
+  VlocityDataPackType: IntegrationProcedure
+  query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c, %vlocity_namespace%__Version__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsProcedure__c = true
+  versionCompare: true
 InterfaceImplementation:
   VlocityDataPackType: InterfaceImplementation
   query: Select Id, Name from %vlocity_namespace%__InterfaceImplementation__c    
@@ -84,6 +88,10 @@ OfferMigrationPlan:
 OmniScript:
   VlocityDataPackType: OmniScript
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
+OmniScriptVersion:
+  VlocityDataPackType: OmniScript
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c, %vlocity_namespace%__Version__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsProcedure__c = false
+  versionCompare: true
 OrchestrationDependencyDefinition:
   VlocityDataPackType: OrchestrationDependencyDefinition
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__OrchestrationDependencyDefinition__c
