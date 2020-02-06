@@ -20,12 +20,12 @@ DataPacks:
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
     OmniScript__c:
       CustomJavaScript__c:
         FileName:
         - _SampleInput
         FileType: json
-      DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
       DisplayName:
       - Type__c
       - SubType__c
@@ -114,13 +114,19 @@ DataPacks:
   VlocityCard:
     UniqueByName: true  
   VlocityUILayout:
-    UniqueByName: true  
+    UniqueByName: true
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__carddesignernew?id=?id=%Id%
   VlocityUITemplate:
     UniqueByName: true
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__uitemplatedesigner?id=%Id%
   VlocityAttachment:
     SupportParallel: true
     ChildrenLimit: 500
     MaxDeploy: 5
+  VqMachine:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceMachineEdit?id=%Id%
+  VqResource:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id% 
 DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
