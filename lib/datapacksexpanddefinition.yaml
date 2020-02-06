@@ -16,8 +16,7 @@ DataPacks:
   DataRaptor:
     UniqueByName: true
     MaxDeploy: 5
-    DefaultVisualforcePage:
-    - /apex/%vlocity_namespace%__drmapper?id=%Id%
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__drmapper?id=%Id%
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -26,6 +25,7 @@ DataPacks:
         FileName:
         - _SampleInput
         FileType: json
+      DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
       DisplayName:
       - Type__c
       - SubType__c
@@ -46,8 +46,7 @@ DataPacks:
   ObjectLayout:
     DoNotExpand: true
   OmniScript:
-    DefaultVisualforcePage:
-    - /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
