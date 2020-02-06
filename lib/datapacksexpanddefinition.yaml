@@ -29,7 +29,6 @@ DataPacks:
       DisplayName:
       - Type__c
       - SubType__c
-      - Language__c   
       FileName:
       - Type__c
       - SubType__c
@@ -758,6 +757,8 @@ SObjects:
       Field: PropertySet__c.persistentComponent.remoteOptions.postTransformBundle
     - Type: VlocityUITemplate
       Field: PropertySet__c.persistentComponent.modalConfigurationSetting.modalHTMLTemplateId
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.integrationProcedureKey
     DeltaCheckMatchingKey:
     - Type__c
     - SubType__c
