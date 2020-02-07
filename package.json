@@ -3,6 +3,7 @@
     "bin": "lib/vlocitybuild.js",
     "dependencies": {
         "diff2html": "2.5.0",
+        "electron-google-analytics": "^0.1.0",
         "file-type": "10.9.0",
         "filterxml": "1.1.4",
         "fs-extra": "8.0.1",
@@ -13,6 +14,7 @@
         "jsforce": "1.9.1",
         "json-stable-stringify": "1.0.1",
         "mustache": "3.0.0",
+        "node-machine-id": "^1.1.12",
         "nopt": "4.0.1",
         "properties": "1.2.1",
         "salesforce-alm": "46.17.0",
