@@ -648,6 +648,11 @@ SObjects:
     SourceKeyDefinition:
     - InterfaceId__c
     - Name
+  IntegrationRetryPolicy__c:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c  
   ItemImplementation__c:
     FolderName:
     - Name
@@ -833,6 +838,11 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - Product2Id__c
+  OrchestrationQueueAssignmentRule:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c    
   OverrideDefinition__c:
     DiffKeys:
       1: 
@@ -1092,6 +1102,11 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - SystemId__c
+  ThorOrchestrationQueue__c:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c 
   TimePlan__c:
     FolderName:
     - GlobalKey__c
@@ -1144,6 +1159,9 @@ SObjects:
     UnhashableFields:
     - Author__c
     - GlobalKey__c
+  VlocityDataStore__c:
+    SourceKeyDefinition:
+    - Name
   VlocityFunctionArgument__c:
     SourceKeyDefinition:
     - GlobalKey__c
