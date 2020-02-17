@@ -399,6 +399,9 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - ContractTypeId__c
+  CpqConfigurationSetup__c:
+    SourceKeyDefinition:
+      - Name
   DRBundle__c:
     DeltaQueryChildren:
       DRMapItem__c:
@@ -846,23 +849,7 @@ SObjects:
   OverrideDefinition__c:
     DiffKeys:
       1: 
-        - OverriddenAttributeAssignmentId__c
-        - OverrideType__c
-      2:
-        - OverriddenProductChildItemId__c
-        - OverrideType__c
-      3: 
-        - OverriddenPriceListEntryId__c
-        - OverrideType__c
-      4: 
-        - OverriddingAttributeAssignmentId__c
-        - OverrideType__c
-      5:
-        - OverriddingProductChildItemId__c
-        - OverrideType__c
-      6: 
-        - OverriddingPriceListEntryId__c
-        - OverrideType__c 
+        - ProductHierarchyGlobalKeyPath__c
     NonUnique: true
     ReplacementFields:
       Name: _OverrideDefinition
@@ -1203,6 +1190,9 @@ SObjects:
     DeltaQueryChildren:
       VlocityStateTransition__c:
         StateModelVersionId__c: Id
+    DiffKeys:
+      1: 
+        - Name     
     SourceKeyDefinition:
     - StateModelId__c
     - VersionNumber__c

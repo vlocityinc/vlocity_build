@@ -5,7 +5,7 @@ RUN apt-get update
 RUN apt-get install -y jq
 RUN apt-get install -y libc6:i386 libstdc++6:i386
 
-RUN npm install --global sfdx-cli 
+RUN npm install --global sfdx-cli@7.45.1
 RUN npm install --global publish-release 
 
 RUN npm install --global pkg-fetch
