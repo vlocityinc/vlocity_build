@@ -1,0 +1,23 @@
+
+<svg  viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 45 (43475) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Telecom---VISUAL" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01---Nav" transform="translate(-996.000000, -278.000000)" stroke-width="2" stroke="#0070D2">
+            <g id="Group-4" transform="translate(234.000000, 175.000000)">
+                <g id="Group-18">
+                    <g id="secondary-menu" transform="translate(0.000000, 64.000000)">
+                        <g id="icon" transform="translate(763.000000, 40.000000)">
+                            <circle id="Oval-7" cx="22" cy="22" r="22"></circle>
+                            <g id="Group-25" transform="translate(11.000000, 11.000000)" stroke-linecap="square">
+                                <path d="M11.76,0.42 L11.76,23.1621371" id="Line"></path>
+                                <path d="M23.1,11.76 L0.357862897,11.76" id="Line"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

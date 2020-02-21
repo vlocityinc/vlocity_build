@@ -1,6 +1,6 @@
 DataPacks:
   Attachment:
-    ChildrenLimit: 10
+    ChildrenLimit: 500
     IsDiffable: true
   CalculationMatrix:
     UniqueByName: true
@@ -16,9 +16,11 @@ DataPacks:
   DataRaptor:
     UniqueByName: true
     MaxDeploy: 5
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__drmapper?id=%Id%
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
     OmniScript__c:
       CustomJavaScript__c:
         FileName:
@@ -27,7 +29,6 @@ DataPacks:
       DisplayName:
       - Type__c
       - SubType__c
-      - Language__c   
       FileName:
       - Type__c
       - SubType__c
@@ -45,6 +46,7 @@ DataPacks:
   ObjectLayout:
     DoNotExpand: true
   OmniScript:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
@@ -68,7 +70,7 @@ DataPacks:
     - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
-    ExportGroupSize: 1
+    ExportGroupSize: 3
     SupportParallel: false
   ProductChildItem:
     ProductChildItem__c:
@@ -112,12 +114,19 @@ DataPacks:
   VlocityCard:
     UniqueByName: true  
   VlocityUILayout:
-    UniqueByName: true  
+    UniqueByName: true
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__carddesignernew?id=?id=%Id%
   VlocityUITemplate:
     UniqueByName: true
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__uitemplatedesigner?id=%Id%
   VlocityAttachment:
     SupportParallel: true
-    ChildrenLimit: 10
+    ChildrenLimit: 500
+    MaxDeploy: 5
+  VqMachine:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceMachineEdit?id=%Id%
+  VqResource:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id% 
 DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
@@ -390,6 +399,9 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - ContractTypeId__c
+  CpqConfigurationSetup__c:
+    SourceKeyDefinition:
+      - Name
   DRBundle__c:
     DeltaQueryChildren:
       DRMapItem__c:
@@ -549,7 +561,7 @@ SObjects:
       Field: PropertySet__c.templateName
     - Type: Document
       Field: PropertySet__c.documentNames
-    - Type: Apex Class
+    - Type: ApexClass
       Field: PropertySet__c.remoteClass
     - Type: DataRaptor
       Field: PropertySet__c.bundle
@@ -639,6 +651,11 @@ SObjects:
     SourceKeyDefinition:
     - InterfaceId__c
     - Name
+  IntegrationRetryPolicy__c:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c  
   ItemImplementation__c:
     FolderName:
     - Name
@@ -741,7 +758,7 @@ SObjects:
     DataPackReferences:
     - Type: VlocityUITemplate
       Field: ElementTypeToHTMLTemplateList__c.ElementTypeToHTMLTemplateList
-    - Type: Apex Class
+    - Type: ApexClass
       Field: PropertySet__c.persistentComponent.remoteClass
     - Type: DataRaptor
       Field: PropertySet__c.persistentComponent.preTransformBundle
@@ -753,6 +770,8 @@ SObjects:
       Field: PropertySet__c.persistentComponent.remoteOptions.postTransformBundle
     - Type: VlocityUITemplate
       Field: PropertySet__c.persistentComponent.modalConfigurationSetting.modalHTMLTemplateId
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.integrationProcedureKey
     DeltaCheckMatchingKey:
     - Type__c
     - SubType__c
@@ -822,26 +841,15 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - Product2Id__c
+  OrchestrationQueueAssignmentRule:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c    
   OverrideDefinition__c:
     DiffKeys:
       1: 
-        - OverriddenAttributeAssignmentId__c
-        - OverrideType__c
-      2:
-        - OverriddenProductChildItemId__c
-        - OverrideType__c
-      3: 
-        - OverriddenPriceListEntryId__c
-        - OverrideType__c
-      4: 
-        - OverriddingAttributeAssignmentId__c
-        - OverrideType__c
-      5:
-        - OverriddingProductChildItemId__c
-        - OverrideType__c
-      6: 
-        - OverriddingPriceListEntryId__c
-        - OverrideType__c 
+        - ProductHierarchyGlobalKeyPath__c
     NonUnique: true
     ReplacementFields:
       Name: _OverrideDefinition
@@ -1081,6 +1089,11 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - SystemId__c
+  ThorOrchestrationQueue__c:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c 
   TimePlan__c:
     FolderName:
     - GlobalKey__c
@@ -1117,7 +1130,7 @@ SObjects:
       Field: Definition__c.states.flyout.layout
     - Type: DataRaptor
       Field: Definition__c.dataSource.value.bundle
-    - Type: Apex Class
+    - Type: ApexClass
       Field: Definition__c.dataSource.value.remoteClass
     - Type: VlocityUITemplate
       Field: Definition__c.states.templateUrl
@@ -1133,6 +1146,9 @@ SObjects:
     UnhashableFields:
     - Author__c
     - GlobalKey__c
+  VlocityDataStore__c:
+    SourceKeyDefinition:
+    - Name
   VlocityFunctionArgument__c:
     SourceKeyDefinition:
     - GlobalKey__c
@@ -1174,6 +1190,9 @@ SObjects:
     DeltaQueryChildren:
       VlocityStateTransition__c:
         StateModelVersionId__c: Id
+    DiffKeys:
+      1: 
+        - Name     
     SourceKeyDefinition:
     - StateModelId__c
     - VersionNumber__c
@@ -1183,7 +1202,7 @@ SObjects:
       Field: Definition__c.Cards
     - Type: DataRaptor
       Field: Definition__c.dataSource.value.bundle
-    - Type: Apex Class
+    - Type: ApexClass
       Field: Definition__c.dataSource.value.remoteClass
     - Type: VlocityUITemplate
       Field: Definition__c.templates.0.templateUrl

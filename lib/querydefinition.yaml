@@ -62,8 +62,15 @@ EntityFilter:
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
 IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
-  query: Select Id, %vlocity_namespace%__Type__c,  %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c
     = true AND %vlocity_namespace%__IsProcedure__c = true
+IntegrationProcedureVersion:
+  VlocityDataPackType: IntegrationProcedure
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Version__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsProcedure__c = true
+  versionCompare: true
+IntegrationRetryPolicy:
+  VlocityDataPackType: IntegrationRetryPolicy
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__IntegrationRetryPolicy__c
 InterfaceImplementation:
   VlocityDataPackType: InterfaceImplementation
   query: Select Id, Name from %vlocity_namespace%__InterfaceImplementation__c    
@@ -88,6 +95,10 @@ OfferMigrationPlan:
 OmniScript:
   VlocityDataPackType: OmniScript
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
+OmniScriptVersion:
+  VlocityDataPackType: OmniScript
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c, %vlocity_namespace%__Version__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsProcedure__c = false
+  versionCompare: true
 OrchestrationDependencyDefinition:
   VlocityDataPackType: OrchestrationDependencyDefinition
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__OrchestrationDependencyDefinition__c
@@ -97,6 +108,9 @@ OrchestrationItemDefinition:
 OrchestrationPlanDefinition:
   VlocityDataPackType: OrchestrationPlanDefinition
   query: Select Id, Name from %vlocity_namespace%__OrchestrationPlanDefinition__c
+OrchestrationQueueAssignmentRule:
+  VlocityDataPackType: OrchestrationQueueAssignmentRule
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__OrchestrationQueueAssignmentRule__c
 PriceList:
   VlocityDataPackType: PriceList
   query: Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__PriceList__c
@@ -134,6 +148,9 @@ String:
 System:
   VlocityDataPackType: System
   query: Select Id, Name from %vlocity_namespace%__System__c
+ThorOrchestrationQueue:
+  VlocityDataPackType: ThorOrchestrationQueue
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ThorOrchestrationQueue__c
 TimePlan:
   VlocityDataPackType: TimePlan
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__TimePlan__c
@@ -160,6 +177,9 @@ VlocityAttachment:
 VlocityCard:
   VlocityDataPackType: VlocityCard
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c where %vlocity_namespace%__Active__c = true
+VlocityDataStore:
+  VlocityDataPackType: VlocityDataStore
+  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityDataStore__c
 VlocityFunction:
   VlocityDataPackType: VlocityFunction
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityFunction__c
