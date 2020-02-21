@@ -635,7 +635,7 @@ on line 2 of /stdin
 >> @import "cpq-theme-variables";
 ```
 When SASS Fails to compile the issue is generally related to the export not including VlocityUITemplates that are referenced as part of the SASS compilation. Export the missing data with the command:
-`vlocity -job <JobFile> packExport -key cpq-theme-variables`
+`vlocity -job <JobFile> packExport -key VlocityUITemplate/cpq-theme-variables`
 
 ### Validation Errors
 Deploys will run all of the Triggers associated with Objects during their import. As there are various rules across the Vlocity Data Model, sometimes errors will occur due to attempts to create what is considered "bad data". These issues must be fixed on a case by case basis.
