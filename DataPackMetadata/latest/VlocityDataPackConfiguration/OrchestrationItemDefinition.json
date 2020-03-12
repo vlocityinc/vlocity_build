@@ -1,0 +1,34 @@
+{
+    "fullName": "%vlocity_namespace%__VlocityDataPackConfiguration__mdt.OrchestrationItemDefinition",
+    "label": "Orchestration Item Definition",
+    "values": [
+        { 
+            "field": "%vlocity_namespace%__DefaultExportService__c", 
+            "value": "Orchestration Item Definition Migration"
+        },
+        { 
+            "field": "%vlocity_namespace%__DefaultImportService__c",
+            "value": "Orchestration Item Definition Migration"
+        },
+        { 
+            "field": "%vlocity_namespace%__ExportType__c", 
+            "value": "Vlocity DataRaptor"
+        },
+        { 
+            "field": "%vlocity_namespace%__ImportType__c", 
+            "value": "Vlocity DataRaptor"
+        },
+        { 
+            "field": "%vlocity_namespace%__DefaultExportLimit__c", 
+            "value": 10
+        },
+        { 
+            "field": "%vlocity_namespace%__DefaultImportLimit__c", 
+            "value": 5
+        },
+        { 
+            "field": "%vlocity_namespace%__PrimarySObjectType__c", 
+            "value": "OrchestrationItemDefinition__c"
+        }
+    ]
+}

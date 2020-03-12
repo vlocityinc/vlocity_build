@@ -50,6 +50,12 @@ DataPacks:
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
+  OrchestrationDependencyDefinition:
+    ExportGroupSize: 10
+  OrchestrationItemDefinition:
+    ExportGroupSize: 10
+  OrchestrationPlanDefinition:
+    ExportGroupSize: 10
   PriceList:
     HeadersOnly: true
     PaginationSize: 500
@@ -401,7 +407,9 @@ SObjects:
     - ContractTypeId__c
   CpqConfigurationSetup__c:
     SourceKeyDefinition:
-      - Name
+    - Name
+    TitleFields:
+    - SetupValue__c
   DRBundle__c:
     DeltaQueryChildren:
       DRMapItem__c:
