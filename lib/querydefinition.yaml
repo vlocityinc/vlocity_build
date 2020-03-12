@@ -126,6 +126,9 @@ PricingVariable:
 Product2:   
   VlocityDataPackType: Product2
   query: Select Id, Name, ProductCode, %vlocity_namespace%__GlobalKey__c from Product2
+Project:   
+  VlocityDataPackType: Project
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Project__c
 Promotion:
   VlocityDataPackType: Promotion
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Promotion__c
