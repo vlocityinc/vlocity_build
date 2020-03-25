@@ -68,6 +68,7 @@ DataPacks:
     ApexSObjectTypeList:
     - Product2
     SupportParallel: false
+    PaginationSize: 300    
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
