@@ -78,6 +78,7 @@ DataPacks:
     - Product2
     ExportGroupSize: 3
     SupportParallel: false
+    PaginationSize: 300    
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
