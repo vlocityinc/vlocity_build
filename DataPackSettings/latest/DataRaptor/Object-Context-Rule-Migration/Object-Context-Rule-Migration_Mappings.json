@@ -15,6 +15,21 @@
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "%vlocity_namespace%__ObjectRuleAssignment__c",
+        "%vlocity_namespace%__FilterGroup__c": 2,
+        "%vlocity_namespace%__FilterOperator__c": "=",
+        "%vlocity_namespace%__FilterValue__c": "Id",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__RuleId__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 1,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__ObjectRuleAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Object Context Rule Migration32423432",
+        "Name": "Object Context Rule Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
         "%vlocity_namespace%__ConfigurationAttribute__c": "Rule",
         "%vlocity_namespace%__ConfigurationCategory__c": "Parent",
         "%vlocity_namespace%__ConfigurationProcess__c": "Export",

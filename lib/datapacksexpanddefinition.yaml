@@ -71,6 +71,7 @@ DataPacks:
   Product2:
     HeadersExclusions:
     - ProductChildItem__c
+    - AttributeAssignment__c
     HeadersOnly: true
     IgnoreExpand:
     - StandardPricebookEntry
@@ -175,6 +176,7 @@ SObjects:
     SourceKeyDefinition:
     - Name
   AttributeAssignment__c:
+    EnsureGlobalKey: true
     FilterFields:
     - ObjectLink__c
     - AttributeName__c
@@ -186,8 +188,10 @@ SObjects:
     - AttributeDisplayName__c
     - AttributeFilterable__c
     - AttributeName__c
+    - AttributeGroupType__c
     - CategoryDisplaySequence__c
     - ValueInNumber__c
+    - IsActive__c
     JsonFields:
     - ValidValuesData__c
     SourceKeyDefinition:
