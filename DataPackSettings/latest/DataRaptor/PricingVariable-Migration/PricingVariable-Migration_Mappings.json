@@ -32,6 +32,7 @@
     {
         "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__PricingVariableBinding__c",
         "%vlocity_namespace%__ConfigurationCategory__c": "PUT",
+        "%vlocity_namespace%__ConfigurationKey__c": "PUTUpsert",
         "%vlocity_namespace%__ConfigurationProcess__c": "Import",
         "%vlocity_namespace%__ConfigurationType__c": "Action",
         "%vlocity_namespace%__ConfigurationValue__c": "%vlocity_namespace%__PricingVariableId__c",
