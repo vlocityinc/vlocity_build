@@ -178,7 +178,6 @@ SObjects:
     SourceKeyDefinition:
     - Name
   AttributeAssignment__c:
-    EnsureGlobalKey: true
     FilterFields:
     - ObjectLink__c
     - AttributeName__c
