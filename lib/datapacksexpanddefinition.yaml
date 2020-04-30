@@ -1,6 +1,6 @@
 DataPacks:
   Attachment:
-    ChildrenLimit: 500
+    ChildrenLimit: 100
     IsDiffable: true
   CalculationMatrix:
     UniqueByName: true
@@ -118,7 +118,8 @@ DataPacks:
     HeadersOnly: Identical
     SupportParallel: false
   VlocityAction:
-    UniqueByName: true  
+    UniqueByName: true
+    HeadersOnly: true
   VlocityCard:
     UniqueByName: true  
   VlocityUILayout:
@@ -128,13 +129,14 @@ DataPacks:
     UniqueByName: true
     DefaultVisualforcePage: /apex/%vlocity_namespace%__uitemplatedesigner?id=%Id%
   VlocityAttachment:
-    SupportParallel: true
-    ChildrenLimit: 500
+    ChildrenLimit: 100
     MaxDeploy: 5
   VqMachine:
     DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceMachineEdit?id=%Id%
   VqResource:
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id% 
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id%
+  VlocityState:
+    HeadersOnly: All
 DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
@@ -353,6 +355,7 @@ SObjects:
     - Name 
     SourceKeyDefinition: 
     - JSONAttribute__c
+    - ProductChildItemId__c
   ContentVersion:
     DisplayName:
     - Title
@@ -1132,6 +1135,9 @@ SObjects:
     - IsActive__c
     SourceKeyDefinition:
     - Name
+    HeadersRemoval:
+    - VlocityStateModelVersionId__c
+    - StateModelId__c
   VlocityAttachment__c: 
     FolderName:
     - GlobalKey__c
@@ -1194,8 +1200,11 @@ SObjects:
     - TypeFieldName__c 
     - TypeFieldValue__c
   VlocityStateTransition__c:
-    NonUnique: true
-  VlocityState__c: 
+    SourceKeyDefinition:
+      - From__c
+      - To__c
+      - StateModelVersionId__c	
+  VlocityState__c:
     SourceKeyDefinition:
     - Name
     - DTPStateModelName__c

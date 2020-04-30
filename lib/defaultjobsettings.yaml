@@ -12,7 +12,7 @@ exportPacksMaxSize: 10
 useAllRelationships: false
 ignoreAllErrors: false
 addSourceKeys: false
-maximumDeployCount: 1000
+maximumDeployCount: 10
 manifestOnly: false
 supportHeadersOnly: true
 supportForceDeploy: true
