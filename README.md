@@ -336,9 +336,9 @@ queries:
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1
 ```
 
-Run the following command to export this Job File:
+After creating the Example.yaml file, run the following command to export this Job File:
 ```bash
-vlocity -propertyfile build_source.properties -job dataPacksJobs/Example.yaml packExport
+vlocity -propertyfile build_source.properties -job Example.yaml packExport
 ```
 
 Which will produce the following output:
