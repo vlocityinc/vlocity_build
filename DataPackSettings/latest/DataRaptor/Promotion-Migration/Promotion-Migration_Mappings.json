@@ -84,7 +84,7 @@
         "%vlocity_namespace%__FilterOperator__c": "=",
         "%vlocity_namespace%__FilterValue__c": "%vlocity_namespace%__Promotion__c:%vlocity_namespace%__PriceListEntry__c:Id",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectId__c",
-        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 6,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__RuleAssignment__c",
         "%vlocity_namespace%__MapId__c": "Promotion Migration313232",
         "Name": "Promotion Migration",
