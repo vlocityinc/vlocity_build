@@ -7,14 +7,15 @@ delete: true
 activate: true
 compileOnBuild: true
 maxDepth: -1
-defaultMaxParallel: 10
-exportPacksMaxSize: 10
+defaultMaxParallel: 100
+exportPacksMaxSize: 5
 useAllRelationships: false
 ignoreAllErrors: false
 addSourceKeys: false
 maximumDeployCount: 10
 manifestOnly: false
 supportHeadersOnly: true
+allowHeadersPartial: true
 supportForceDeploy: true
 strict: false
 cleanTestData: true

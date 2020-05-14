@@ -4,11 +4,16 @@ DataPacks:
     IsDiffable: true
   CalculationMatrix:
     UniqueByName: true
+    ExportGroupSize: 1
+  CalculationMatrixVersion:
+    ExportGroupSize: 1
   CalculationProcedure:
     UniqueByName: true
+    SoloExport: true
+    ExportGroupSize: 1
   Catalog:
     MaxDeploy: 1
-    SupportParallel: false
+    SupportParallelDeploy: false
   ContentVersion:
     ExportGroupSize: 1
   ContractType:
@@ -45,6 +50,7 @@ DataPacks:
     HeadersOnly: true
   ObjectLayout:
     DoNotExpand: true
+    SupportParallelDeploy: false
   OmniScript:
     DefaultVisualforcePage: /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
     PaginationSize: 1000
@@ -77,9 +83,11 @@ DataPacks:
     - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
-    ExportGroupSize: 3
-    SupportParallel: false
-    PaginationSize: 300    
+    ExportGroupSize: 1
+    MaxDeploy: 5
+    SupportParallelDeploy: false
+    PaginationSize: 300
+    SoloExport: true
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
@@ -116,7 +124,7 @@ DataPacks:
       - GlobalKey__c
   SObject:
     HeadersOnly: Identical
-    SupportParallel: false
+    SupportParallelDeploy: false
   VlocityAction:
     UniqueByName: true
     HeadersOnly: true
@@ -141,6 +149,7 @@ DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
+  SupportParallelDeploy: true
   ChildrenLimit: 20
   IsDiffable: true
   DisplayName:
@@ -807,6 +816,7 @@ SObjects:
     FilterFields:
     - Version__c
     - IsActive__c
+    - LwcId__c
     FolderName:
     - Type__c
     - SubType__c

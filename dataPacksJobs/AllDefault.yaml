@@ -53,7 +53,7 @@ activate: true
 compileOnBuild: true
 maxDepth: -1
 continueAfterError: true
-defaultMaxParallel: 10
+defaultMaxParallel: 100
 exportPacksMaxSize: 10
 useAllRelationships: false
 supportHeadersOnly: true
