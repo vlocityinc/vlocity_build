@@ -26,6 +26,7 @@ DataPacks:
     MaxDeploy: 1
   IntegrationProcedure:
     DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
+    ExportGroupSize: 1
     OmniScript__c:
       CustomJavaScript__c:
         FileName:
@@ -53,6 +54,7 @@ DataPacks:
     SupportParallelDeploy: false
   OmniScript:
     DefaultVisualforcePage: /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
+    ExportGroupSize: 1
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
@@ -361,9 +363,16 @@ SObjects:
   CompiledAttributeOverride__c:
     FilterFields:
     - Name 
+    - AttributeMetadata__c.records.id
+    - AttributeMetadata__c.records.productAttributes.records.attributeId
     SourceKeyDefinition: 
     - JSONAttribute__c
     - ProductChildItemId__c
+    - AttributeMetadata__c
+    JsonFields:
+    - AttributeDefaultValues__c
+    - AttributeMetadata__c
+    - AttributeRules__c
   ContentVersion:
     DisplayName:
     - Title
@@ -988,13 +997,14 @@ SObjects:
     - CategoryData__c.childCategories.id
     - ImageId__c
     - JSONAttribute__c
-    - AttributeMetadata__c
-    - AttributeDefaultValues__c
-    - AttributeRules__c
+    - AttributeMetadata__c.records.id
+    - AttributeMetadata__c.records.productAttributes.records.attributeId
     FolderName:
     - GlobalKey__c
     JsonFields:
     - CategoryData__c
+    - AttributeDefaultValues__c
+    - AttributeMetadata__c
     SourceKeyDefinition:
     - GlobalKey__c
     TitleFields:
