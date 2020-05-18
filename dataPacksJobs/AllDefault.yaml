@@ -1,10 +1,6 @@
 projectPath: ./example_vlocity_build
 expansionPath: .
 buildFile: AllDataPacks.json
-preStepApex:
-  Deploy: 
-    VlocityUITemplate: DeactivateTemplatesAndLayouts.cls
-    VlocityUILayout: DeactivateTemplatesAndLayouts.cls
 postStepApex:
   Deploy: 
     Product2: EPCProductJSONUpdate.cls      
@@ -57,7 +53,7 @@ activate: true
 compileOnBuild: true
 maxDepth: -1
 continueAfterError: true
-defaultMaxParallel: 10
+defaultMaxParallel: 100
 exportPacksMaxSize: 10
 useAllRelationships: false
 supportHeadersOnly: true
