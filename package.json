@@ -10,7 +10,7 @@
         "ignore": "5.0.4",
         "is-utf8": "0.2.1",
         "js-yaml": "3.13.1",
-        "jsforce": "1.9.1",
+        "jsforce": "1.9.3",
         "json-stable-stringify": "1.0.1",
         "mustache": "3.0.0",
         "nopt": "4.0.1",

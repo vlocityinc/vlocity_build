@@ -336,9 +336,9 @@ queries:
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1
 ```
 
-Run the following command to export this Job File:
+After creating the Example.yaml file, run the following command to export this Job File:
 ```bash
-vlocity -propertyfile build_source.properties -job dataPacksJobs/Example.yaml packExport
+vlocity -propertyfile build_source.properties -job Example.yaml packExport
 ```
 
 Which will produce the following output:
@@ -1332,19 +1332,19 @@ OverrideSettings:
   SObjects:
     Product2:
       FilterFields:
-      - AttributeMetadata__c
-      - ImageId__c
-      - JSONAttribute__c
+      - vlocity_namespace__AttributeMetadata__c
+      - vlocity_namespace__ImageId__c
+      - vlocity_namespace__JSONAttribute__c
       FolderName:
-      - GlobalKey__c
+      - vlocity_namespace__GlobalKey__c
       JsonFields:
-      - CategoryData__c
+      - vlocity_namespace__CategoryData__c
       SourceKeyDefinition:
-      - GlobalKey__c
+      - vlocity_namespace__GlobalKey__c
       UnhashableFields:
-      - JSONAttribute__c
-      - CategoryData__c
-      - IsConfigurable__c
+      - vlocity_namespace__JSONAttribute__c
+      - vlocity_namespace__CategoryData__c
+      - vlocity_namespace__IsConfigurable__c
     vlocity_namespace__DRMapItem__c:
       FilterFields: 
         - vlocity_namespace__UpsertKey__c

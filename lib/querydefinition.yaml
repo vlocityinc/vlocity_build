@@ -169,7 +169,6 @@ VlocityAction:
 VlocityAttachment:
   VlocityDataPackType: VlocityAttachment
   query: SELECT Id, Name, %vlocity_namespace%__GlobalKey__c FROM %vlocity_namespace%__VlocityAttachment__c
-  manifestOnly: true
 VlocityCard:
   VlocityDataPackType: VlocityCard
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c where %vlocity_namespace%__Active__c = true
