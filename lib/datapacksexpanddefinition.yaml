@@ -1,14 +1,19 @@
 DataPacks:
   Attachment:
-    ChildrenLimit: 500
+    ChildrenLimit: 100
     IsDiffable: true
   CalculationMatrix:
     UniqueByName: true
+    ExportGroupSize: 1
+  CalculationMatrixVersion:
+    ExportGroupSize: 1
   CalculationProcedure:
     UniqueByName: true
+    SoloExport: true
+    ExportGroupSize: 1
   Catalog:
     MaxDeploy: 1
-    SupportParallel: false
+    SupportParallelDeploy: false
   ContentVersion:
     ExportGroupSize: 1
   ContractType:
@@ -21,6 +26,7 @@ DataPacks:
     MaxDeploy: 1
   IntegrationProcedure:
     DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
+    ExportGroupSize: 1
     OmniScript__c:
       CustomJavaScript__c:
         FileName:
@@ -45,8 +51,10 @@ DataPacks:
     HeadersOnly: true
   ObjectLayout:
     DoNotExpand: true
+    SupportParallelDeploy: false
   OmniScript:
     DefaultVisualforcePage: /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
+    ExportGroupSize: 1
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
@@ -77,9 +85,11 @@ DataPacks:
     - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
-    ExportGroupSize: 3
-    SupportParallel: false
-    PaginationSize: 300    
+    ExportGroupSize: 1
+    MaxDeploy: 5
+    SupportParallelDeploy: false
+    PaginationSize: 300
+    SoloExport: true
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
@@ -116,9 +126,10 @@ DataPacks:
       - GlobalKey__c
   SObject:
     HeadersOnly: Identical
-    SupportParallel: false
+    SupportParallelDeploy: false
   VlocityAction:
-    UniqueByName: true  
+    UniqueByName: true
+    HeadersOnly: true
   VlocityCard:
     UniqueByName: true  
   VlocityUILayout:
@@ -128,17 +139,19 @@ DataPacks:
     UniqueByName: true
     DefaultVisualforcePage: /apex/%vlocity_namespace%__uitemplatedesigner?id=%Id%
   VlocityAttachment:
-    SupportParallel: true
-    ChildrenLimit: 500
+    ChildrenLimit: 100
     MaxDeploy: 5
   VqMachine:
     DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceMachineEdit?id=%Id%
   VqResource:
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id% 
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id%
+  VlocityState:
+    HeadersOnly: All
 DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
+  SupportParallelDeploy: true
   ChildrenLimit: 20
   IsDiffable: true
   DisplayName:
@@ -351,8 +364,16 @@ SObjects:
   CompiledAttributeOverride__c:
     FilterFields:
     - Name 
+    - AttributeMetadata__c.records.id
+    - AttributeMetadata__c.records.productAttributes.records.attributeId
     SourceKeyDefinition: 
     - JSONAttribute__c
+    - ProductChildItemId__c
+    - AttributeMetadata__c
+    JsonFields:
+    - AttributeDefaultValues__c
+    - AttributeMetadata__c
+    - AttributeRules__c
   ContentVersion:
     DisplayName:
     - Title
@@ -805,6 +826,7 @@ SObjects:
     FilterFields:
     - Version__c
     - IsActive__c
+    - LwcId__c
     FolderName:
     - Type__c
     - SubType__c
@@ -976,13 +998,14 @@ SObjects:
     - CategoryData__c.childCategories.id
     - ImageId__c
     - JSONAttribute__c
-    - AttributeMetadata__c
-    - AttributeDefaultValues__c
-    - AttributeRules__c
+    - AttributeMetadata__c.records.id
+    - AttributeMetadata__c.records.productAttributes.records.attributeId
     FolderName:
     - GlobalKey__c
     JsonFields:
     - CategoryData__c
+    - AttributeDefaultValues__c
+    - AttributeMetadata__c
     SourceKeyDefinition:
     - GlobalKey__c
     TitleFields:
@@ -1134,6 +1157,9 @@ SObjects:
     - IsActive__c
     SourceKeyDefinition:
     - Name
+    HeadersRemoval:
+    - VlocityStateModelVersionId__c
+    - StateModelId__c
   VlocityAttachment__c: 
     FolderName:
     - GlobalKey__c
@@ -1196,8 +1222,11 @@ SObjects:
     - TypeFieldName__c 
     - TypeFieldValue__c
   VlocityStateTransition__c:
-    NonUnique: true
-  VlocityState__c: 
+    SourceKeyDefinition:
+      - From__c
+      - To__c
+      - StateModelVersionId__c	
+  VlocityState__c:
     SourceKeyDefinition:
     - Name
     - DTPStateModelName__c
