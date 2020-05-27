@@ -43,7 +43,6 @@ CpqConfigurationSetup:
 CustomFieldMap:
   VlocityDataPackType: CustomFieldMap
   query: Select Id, Name from %vlocity_namespace%__CustomFieldMap__c 
-  manifestOnly: true
 DataRaptor:
   VlocityDataPackType: DataRaptor
   query: Select Id, Name from %vlocity_namespace%__DRBundle__c WHERE %vlocity_namespace%__Type__c != 'Migration'
