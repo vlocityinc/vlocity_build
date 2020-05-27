@@ -3,6 +3,7 @@
     "bin": "lib/vlocitybuild.js",
     "dependencies": {
         "diff2html": "2.5.0",
+        "fast-json-stable-stringify": "2.1.0",
         "file-type": "10.9.0",
         "filterxml": "1.1.4",
         "fs-extra": "8.0.1",
