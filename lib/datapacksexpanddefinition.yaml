@@ -189,6 +189,7 @@ SObjects:
     SourceKeyDefinition:
     - Name
   AttributeAssignment__c:
+    EnsureGlobalKey: true
     FilterFields:
     - ObjectLink__c
     - AttributeName__c
@@ -1015,6 +1016,8 @@ SObjects:
     - JSONAttribute__c
     - CategoryData__c
     - IsConfigurable__c
+    SpecificDisplayLabels:
+    - ProductCode
   ProductAvailability__c:
     NonUnique: true
   ProductChildItem__c:
