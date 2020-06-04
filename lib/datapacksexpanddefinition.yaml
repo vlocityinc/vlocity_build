@@ -5,8 +5,13 @@ DataPacks:
   CalculationMatrix:
     UniqueByName: true
     ExportGroupSize: 1
+    MaxDeploy: 1
   CalculationMatrixVersion:
     ExportGroupSize: 1
+    MaxDeploy: 1
+    CalculationMatrixVersion__c:
+      FileName:
+      - Name
   CalculationProcedure:
     UniqueByName: true
     SoloExport: true
