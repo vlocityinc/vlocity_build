@@ -62,6 +62,19 @@
     {
         "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "%vlocity_namespace%__PriceList__c:%vlocity_namespace%__PricingElement__c",
+        "%vlocity_namespace%__FilterOperator__c": "LIMIT",
+        "%vlocity_namespace%__FilterValue__c": "2000",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 2,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__PricingElement__c",
+        "%vlocity_namespace%__MapId__c": "PriceList Migration3232323",
+        "Name": "PriceList Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "%vlocity_namespace%__PriceList__c:%vlocity_namespace%__PriceListEntry__c",
         "%vlocity_namespace%__FilterGroup__c": 1,
         "%vlocity_namespace%__FilterOperator__c": "=",
