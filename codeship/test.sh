@@ -3,6 +3,8 @@ set -e
 
 ./codeship/decryptFiles.sh
 
+sfdx
+
 SF_AUTH_ORG=`sfdx force:auth:sfdxurl:store -f codeship/unencrypted_files/test.sfdx --json`
 SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
 
