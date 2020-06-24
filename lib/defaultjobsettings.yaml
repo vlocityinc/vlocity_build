@@ -2,7 +2,9 @@ expansionPath: .
 buildFile: AllDataPacks.json
 postStepApex:
   Deploy: 
-    Product2: EPCProductJSONUpdate.cls
+    Product2: 
+      apexClass: EPCProductJSONUpdate.cls
+      namespace: vlocity_cmt
 delete: true
 activate: true
 compileOnBuild: true

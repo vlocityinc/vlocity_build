@@ -684,7 +684,7 @@ vlocity -propertyfile <propertyfile> -job <job> cleanOrgData
 This will run Node.js script that Adds Global Keys to all SObjects missing them, and deletes a number of Stale data records that are missing data to make them useful. 
 
 ## External Ids and Global Keys 
-Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:  
+Most objects being deployed have a field or set of fields used to find unique records like an External Id in Salesforce. For many Vlocity Objects this is the Global Key field. If a Deploy finds 1 object matching the Global Key then it will overwrite that object during deploy. If it finds more than 1 then it will throw an error:  
 
 `Deploy Error >> Product2/02d3feaf-a390-2f57-a08c-2bfc3f9b7333 --- iPhone --- Duplicate Results found for Product2 WHERE vlocity_cmt__GlobalKey__c=02d3feaf-a390-2f57-a08c-2bfc3f9b7333 - Related Ids: 01t1I000001ON3qQAG,01t1I000001ON3xQAG`
 
