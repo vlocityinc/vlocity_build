@@ -264,7 +264,6 @@ Each release includes a Binary for:
 Linux  
 MacOS  
 Windows x64  
-Windows x86  
 
 ### Installing Older Release Versions
 To Install an Older Version of the Vlocity Build Tool use the following NPM command for installing by version:
@@ -272,13 +271,6 @@ To Install an Older Version of the Vlocity Build Tool use the following NPM comm
 npm install --global vlocity@1.9.1
 vlocity help
 ```
-
-Only if you need to install a version before v1.7 use the following syntax:
-```bash
-npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
-vlocity help
-```
-
 
 ### Cloning Vlocity Build - Not Recommended
 It is no longer advised to clone the Vlocity Build Repository directly. If you have previously cloned the Vlocity Build Project and are having issues with the alias `vlocity` still being used as the cloned project, please use the following command in the cloned `vlocity_build` folder:
@@ -306,12 +298,14 @@ When you (or your CI/CD server) is behind a proxy you can specify the proxy URL 
 sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy hostname>[:<Proxy Port>]
 ```
 
+It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
+
 Additionally there is support for OAuth style information sent through the command line or property file:
 ```bash
 vlocity packExport -sf.authToken <authToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
 ```
+If you are using this method also include `oauthConnection: true` in your Job File.
 
-It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
 ## Running the Process
 Commands follow the syntax:
@@ -336,7 +330,7 @@ queries:
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1
 ```
 
-After creating the Example.yaml file, run the following command to export this Job File:
+After creating the Example.yaml file, run the following command to export with this Job File:
 ```bash
 vlocity -propertyfile build_source.properties -job Example.yaml packExport
 ```
@@ -391,27 +385,9 @@ When Exporting and Deploying between two Orgs use the following action plan:
 ```yaml
 projectPath: vlocity
 queries:
-  - AttributeCategory
-  - CalculationProcedure
-  - ContextAction
-  - ContextDimension
-  - ContextScope
-  - EntityFilter
-  - ObjectClass
-  - ObjectContextRule
-  - ObjectLayout
-  - Pricebook2
-  - PriceList
-  - PricingVariable
-  - Product2
-  - Promotion
-  - Rule
-  - TimePlan
-  - TimePolicy
-  - UIFacet
-  - UISection
-  - VlocityFunction
-  - VlocityPicklist
+  - OmniScript
+  - IntegrationProcedure
+  - DataRaptor
 ```
 3. Ensure High Data Quality in the Source Org by running:   
 `vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData`  
