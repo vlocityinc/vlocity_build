@@ -29,6 +29,3 @@ autoFixDeployErrors:
 tests:
   - Local
   - Org
-salesforceMetadataTypesBlacklist:
-  - TopicsForObjects
-  - Audience
