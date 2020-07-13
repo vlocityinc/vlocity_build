@@ -14,9 +14,9 @@ if [ $CI_BRANCH == "master" ]; then
 else 
     echo $CI_COMMIT_MESSAGE
 
-    COMMITS=`git rev-list --count HEAD`
+    TOTAL_COMMITS_COUNT=`git rev-list --count HEAD`
 
-    npm version ${CURRENT_VERSION}-${CI_BRANCH}-${COMMITS} --no-git-tag-version
+    npm version ${CURRENT_VERSION}-${CI_BRANCH}-${TOTAL_COMMITS_COUNT} --no-git-tag-version
 fi
 
 ./codeship/decryptFiles.sh
