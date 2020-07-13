@@ -60,6 +60,21 @@
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
     {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "%vlocity_namespace%__Promotion__c:%vlocity_namespace%__RuleAssignment__c",
+        "%vlocity_namespace%__FilterGroup__c": 1,
+        "%vlocity_namespace%__FilterOperator__c": "=",
+        "%vlocity_namespace%__FilterValue__c": "%vlocity_namespace%__Promotion__c:%vlocity_namespace%__PriceListEntry__c:Id",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectId__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 6,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__RuleAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Promotion Migration313232",
+        "Name": "Promotion Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
         "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__RuleAssignment__c",
         "%vlocity_namespace%__ConfigurationCategory__c": "PUT",
         "%vlocity_namespace%__ConfigurationProcess__c": "Import",
@@ -69,7 +84,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Configuration",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "Configuration",
-        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 4,
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 6,
         "%vlocity_namespace%__MapId__c": "Promotion Migration4",
         "Name": "Promotion Migration",
         "VlocityDataPackType": "SObject",

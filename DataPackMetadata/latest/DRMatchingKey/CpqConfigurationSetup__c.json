@@ -3,10 +3,6 @@
     "label": "CpqConfigurationSetupCustom",
     "values": [
         {
-            "field": "%vlocity_namespace%__CompositeUniqueFieldName__c",
-            "value": true
-        },
-        {
             "field": "%vlocity_namespace%__MatchingKeyFields__c",
             "value": "Name"
         },

@@ -1,23 +1,39 @@
 DataPacks:
   Attachment:
-    ChildrenLimit: 10
+    ChildrenLimit: 100
     IsDiffable: true
+  AttributeCategory:
+    PaginationSize: 50
   CalculationMatrix:
     UniqueByName: true
+    ExportGroupSize: 1
+    MaxDeploy: 1
+  CalculationMatrixVersion:
+    ExportGroupSize: 1
+    MaxDeploy: 1
+    CalculationMatrixVersion__c:
+      FileName:
+      - Name
   CalculationProcedure:
     UniqueByName: true
+    SoloExport: true
+    ExportGroupSize: 1
   Catalog:
     MaxDeploy: 1
-    SupportParallel: false
+    SupportParallelDeploy: false
   ContentVersion:
     ExportGroupSize: 1
   ContractType:
     UniqueByName: true  
   DataRaptor:
     UniqueByName: true
+    MaxDeploy: 5
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__drmapper?id=%Id%
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
+    ExportGroupSize: 1
     OmniScript__c:
       CustomJavaScript__c:
         FileName:
@@ -26,7 +42,6 @@ DataPacks:
       DisplayName:
       - Type__c
       - SubType__c
-      - Language__c   
       FileName:
       - Type__c
       - SubType__c
@@ -43,10 +58,19 @@ DataPacks:
     HeadersOnly: true
   ObjectLayout:
     DoNotExpand: true
+    SupportParallelDeploy: false
   OmniScript:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
+    ExportGroupSize: 1
     PaginationSize: 1000
     SupportParallel: 
       IsReusable__c: false
+  OrchestrationDependencyDefinition:
+    ExportGroupSize: 10
+  OrchestrationItemDefinition:
+    ExportGroupSize: 10
+  OrchestrationPlanDefinition:
+    ExportGroupSize: 10
   PriceList:
     HeadersOnly: true
     PaginationSize: 500
@@ -62,13 +86,17 @@ DataPacks:
   Product2:
     HeadersExclusions:
     - ProductChildItem__c
+    - AttributeAssignment__c
     HeadersOnly: true
     IgnoreExpand:
     - StandardPricebookEntry
     ApexSObjectTypeList:
     - Product2
-    SupportParallel: false
-    PaginationSize: 300    
+    ExportGroupSize: 1
+    MaxDeploy: 5
+    SupportParallelDeploy: false
+    PaginationSize: 300
+    SoloExport: true
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
@@ -76,24 +104,61 @@ DataPacks:
       - ParentProductId__r.Name
       - ChildProductId__r.Name
     SupportParallel: false
+  ProductAttributes:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
+  ProductConfiguration:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
+  ProductDecomposition:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
+  ProductHierarchy:
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c            
+  ProductPricing:
+    IgnoreExpand:
+    - StandardPricebookEntry
+    Product2:
+      KeepOnlyFields: 
+      - Name
+      - GlobalKey__c
   SObject:
     HeadersOnly: Identical
-    SupportParallel: false
+    SupportParallelDeploy: false
   VlocityAction:
-    UniqueByName: true  
+    UniqueByName: true
+    HeadersOnly: true
   VlocityCard:
     UniqueByName: true  
   VlocityUILayout:
-    UniqueByName: true  
+    UniqueByName: true
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__carddesignernew?id=?id=%Id%
   VlocityUITemplate:
     UniqueByName: true
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__uitemplatedesigner?id=%Id%
   VlocityAttachment:
-    SupportParallel: true
-    ChildrenLimit: 10
+    ChildrenLimit: 100
+    MaxDeploy: 5
+  VqMachine:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceMachineEdit?id=%Id%
+  VqResource:
+    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id%
+  VlocityState:
+    HeadersOnly: All
 DataPacksDefault:
   HeadersOnly: false
   PaginationSize: 1000
   SupportParallel: true
+  SupportParallelDeploy: true
   ChildrenLimit: 20
   IsDiffable: true
   DisplayName:
@@ -101,6 +166,14 @@ DataPacksDefault:
 GuaranteedParentKeys:
 - Pricebook2/Standard Price Book
 SObjects:
+  Account:
+    FolderName:
+    - Name
+    KeepOnlyFields: 
+    - Name
+    - RecordTypeId
+    SourceKeyDefinition:
+    - Name
   Attachment:
     UnhashableFields:
     - Body
@@ -123,6 +196,7 @@ SObjects:
     SourceKeyDefinition:
     - Name
   AttributeAssignment__c:
+    EnsureGlobalKey: true
     FilterFields:
     - ObjectLink__c
     - AttributeName__c
@@ -134,14 +208,13 @@ SObjects:
     - AttributeDisplayName__c
     - AttributeFilterable__c
     - AttributeName__c
+    - AttributeGroupType__c
     - CategoryDisplaySequence__c
     - ValueInNumber__c
+    - IsActive__c
     JsonFields:
     - ValidValuesData__c
     SourceKeyDefinition:
-    - AttributeId__c
-    - ObjectId__c
-    - _GlobalKey
     - GlobalKey__c
   AttributeBinding__c:
     NonUnique: true
@@ -296,8 +369,18 @@ SObjects:
     SourceKeyDefinition:
     - GlobalKey__c
   CompiledAttributeOverride__c:
+    FilterFields:
+    - Name 
+    - AttributeMetadata__c.records.id
+    - AttributeMetadata__c.records.productAttributes.records.attributeId
     SourceKeyDefinition: 
     - JSONAttribute__c
+    - ProductChildItemId__c
+    - AttributeMetadata__c
+    JsonFields:
+    - AttributeDefaultValues__c
+    - AttributeMetadata__c
+    - AttributeRules__c
   ContentVersion:
     DisplayName:
     - Title
@@ -355,6 +438,11 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - ContractTypeId__c
+  CpqConfigurationSetup__c:
+    SourceKeyDefinition:
+    - Name
+    TitleFields:
+    - SetupValue__c
   DRBundle__c:
     DeltaQueryChildren:
       DRMapItem__c:
@@ -475,11 +563,64 @@ SObjects:
   Element__c:
     BuildOnlyFields:
       Order__c: index
+    DataPackReferences:
+    - Type: DataRaptor
+      Field: PropertySet__c.postTransformBundle
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.integrationProcedureKey
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.preIP
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.postIP
+    - Type: DataRaptor
+      Field: PropertySet__c:postTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.preTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.xmlPreTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.xmlPostTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.transformBundle
+    - Type: Named Credential
+      Field: PropertySet__c.namedCredential
+    - Type: DocuSign Template
+      Field: PropertySet__c.docuSignTemplate
+    - Type: DataRaptor
+      Field: PropertySet__c.remoteOptions.postTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.remoteOptions.preTransformBundle
+    - Type: CalculationProcedure
+      Field: PropertySet__c.remoteOptions.configurationName
+    - Type: CalculationMatrix
+      Field: PropertySet__c.remoteOptions.matrixName
+    - Type: DataRaptor
+      Field: PropertySet__c.docuSignTemplatesGroup.transformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.docuSignTemplatesGroupSig.transformBundle
+    - Type: Document
+      Field: PropertySet__c.templateName
+    - Type: Document
+      Field: PropertySet__c.documentNames
+    - Type: ApexClass
+      Field: PropertySet__c.remoteClass
+    - Type: DataRaptor
+      Field: PropertySet__c.bundle
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.HTMLTemplateId
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.modalHTMLTemplateId
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.confirmRedirectTemplateUrl
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.modalConfigurationSetting.modalHTMLTemplateId
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.redirectTemplateUrl
     FieldDisplayType:
-      PropertySet__c.show: object  
+      PropertySet__c.show: object
     FieldImportance:
       High: 
-        - PropertySet__c.show
+      - PropertySet__c.show
     FileName:
     - _Element
     - Name
@@ -499,6 +640,7 @@ SObjects:
     UnhashableFields:
     - Order__c
     - OmniScriptId__c
+    - PropertySet__c.documentNames
   EntityFilterConditionArgument__c:
     SortFields:
     - ArgumentSequence__c
@@ -526,6 +668,13 @@ SObjects:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
+  Formulary__c:
+    FolderName:
+    - Name
+    KeepOnlyFields:
+    - Name
+    SourceKeyDefinition:
+    - Name
   InterfaceImplementation__c:
     DeltaQueryChildren:
       InterfaceImplementationDetail__c:
@@ -543,6 +692,11 @@ SObjects:
     SourceKeyDefinition:
     - InterfaceId__c
     - Name
+  IntegrationRetryPolicy__c:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c  
   ItemImplementation__c:
     FolderName:
     - Name
@@ -642,6 +796,23 @@ SObjects:
       FileName:
       - _JavaScript
       FileType: js
+    DataPackReferences:
+    - Type: VlocityUITemplate
+      Field: ElementTypeToHTMLTemplateList__c.ElementTypeToHTMLTemplateList
+    - Type: ApexClass
+      Field: PropertySet__c.persistentComponent.remoteClass
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.preTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.postTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.remoteOptions.preTransformBundle
+    - Type: DataRaptor
+      Field: PropertySet__c.persistentComponent.remoteOptions.postTransformBundle
+    - Type: VlocityUITemplate
+      Field: PropertySet__c.persistentComponent.modalConfigurationSetting.modalHTMLTemplateId
+    - Type: IntegrationProcedure
+      Field: PropertySet__c.integrationProcedureKey
     DeltaCheckMatchingKey:
     - Type__c
     - SubType__c
@@ -662,6 +833,7 @@ SObjects:
     FilterFields:
     - Version__c
     - IsActive__c
+    - LwcId__c
     FolderName:
     - Type__c
     - SubType__c
@@ -711,26 +883,15 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - Product2Id__c
+  OrchestrationQueueAssignmentRule:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c    
   OverrideDefinition__c:
     DiffKeys:
       1: 
-        - OverriddenAttributeAssignmentId__c
-        - OverrideType__c
-      2:
-        - OverriddenProductChildItemId__c
-        - OverrideType__c
-      3: 
-        - OverriddenPriceListEntryId__c
-        - OverrideType__c
-      4: 
-        - OverriddingAttributeAssignmentId__c
-        - OverrideType__c
-      5:
-        - OverriddingProductChildItemId__c
-        - OverrideType__c
-      6: 
-        - OverriddingPriceListEntryId__c
-        - OverrideType__c 
+        - ProductHierarchyGlobalKeyPath__c
     NonUnique: true
     ReplacementFields:
       Name: _OverrideDefinition
@@ -844,13 +1005,14 @@ SObjects:
     - CategoryData__c.childCategories.id
     - ImageId__c
     - JSONAttribute__c
-    - AttributeMetadata__c
-    - AttributeDefaultValues__c
-    - AttributeRules__c
+    - AttributeMetadata__c.records.id
+    - AttributeMetadata__c.records.productAttributes.records.attributeId
     FolderName:
     - GlobalKey__c
     JsonFields:
     - CategoryData__c
+    - AttributeDefaultValues__c
+    - AttributeMetadata__c
     SourceKeyDefinition:
     - GlobalKey__c
     TitleFields:
@@ -861,6 +1023,8 @@ SObjects:
     - JSONAttribute__c
     - CategoryData__c
     - IsConfigurable__c
+    SpecificDisplayLabels:
+    - ProductCode
   ProductAvailability__c:
     NonUnique: true
   ProductChildItem__c:
@@ -896,11 +1060,23 @@ SObjects:
       RuleAssignment__c:
         ObjectId__c: Id
       OverrideDefinition__c:
-        PromotionId__c: Id    
+        PromotionId__c: Id
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
+  ProviderNetwork__c:
+    FolderName:
+    - Name
+    KeepOnlyFields: 
+    - Name
+    SourceKeyDefinition:
+    - Name
+  RateBand__c:
+    FolderName:
+    - Name
+    SourceKeyDefinition:
+    - Name
   RecordType:
     SourceKeyDefinition:
     - SobjectType
@@ -958,6 +1134,11 @@ SObjects:
     SourceKeyDefinition:
     - Name
     - SystemId__c
+  ThorOrchestrationQueue__c:
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c 
   TimePlan__c:
     FolderName:
     - GlobalKey__c
@@ -983,12 +1164,26 @@ SObjects:
     - IsActive__c
     SourceKeyDefinition:
     - Name
+    HeadersRemoval:
+    - VlocityStateModelVersionId__c
+    - StateModelId__c
   VlocityAttachment__c: 
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
     - GlobalKey__c
   VlocityCard__c:
+    DataPackReferences:
+    - Type: VlocityUILayout
+      Field: Definition__c.states.flyout.layout
+    - Type: DataRaptor
+      Field: Definition__c.dataSource.value.bundle
+    - Type: ApexClass
+      Field: Definition__c.dataSource.value.remoteClass
+    - Type: VlocityUITemplate
+      Field: Definition__c.states.templateUrl
+    - Type: VlocityAction
+      Field: Definition__c.states.definedActions.actions.id
     Definition__c: json
     FilterFields:
     - Active__c
@@ -999,6 +1194,9 @@ SObjects:
     UnhashableFields:
     - Author__c
     - GlobalKey__c
+  VlocityDataStore__c:
+    SourceKeyDefinition:
+    - Name
   VlocityFunctionArgument__c:
     SourceKeyDefinition:
     - GlobalKey__c
@@ -1031,8 +1229,11 @@ SObjects:
     - TypeFieldName__c 
     - TypeFieldValue__c
   VlocityStateTransition__c:
-    NonUnique: true
-  VlocityState__c: 
+    SourceKeyDefinition:
+      - From__c
+      - To__c
+      - StateModelVersionId__c	
+  VlocityState__c:
     SourceKeyDefinition:
     - Name
     - DTPStateModelName__c
@@ -1040,10 +1241,22 @@ SObjects:
     DeltaQueryChildren:
       VlocityStateTransition__c:
         StateModelVersionId__c: Id
+    DiffKeys:
+      1: 
+        - Name     
     SourceKeyDefinition:
     - StateModelId__c
     - VersionNumber__c
   VlocityUILayout__c:
+    DataPackReferences:
+    - Type: VlocityCard
+      Field: Definition__c.Cards
+    - Type: DataRaptor
+      Field: Definition__c.dataSource.value.bundle
+    - Type: ApexClass
+      Field: Definition__c.dataSource.value.remoteClass
+    - Type: VlocityUITemplate
+      Field: Definition__c.templates.0.templateUrl
     Definition__c: json
     FilterFields:
     - Active__c

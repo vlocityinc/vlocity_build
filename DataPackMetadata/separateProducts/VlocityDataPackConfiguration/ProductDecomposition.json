@@ -1,22 +1,22 @@
 {
-    "fullName": "%vlocity_namespace%__VlocityDataPackConfiguration__mdt.CpqConfigurationSetup",
-    "label": "CpqConfigurationSetupCustom",
+    "fullName": "%vlocity_namespace%__VlocityDataPackConfiguration__mdt.ProductDecomposition",
+    "label": "Product Decomposition",
     "values": [
         { 
             "field": "%vlocity_namespace%__DefaultExportService__c", 
-            "value": "CPQ Configuration Setup Migration"
+            "value": "Product Decomposition Migration"
         },
         { 
             "field": "%vlocity_namespace%__DefaultImportService__c",
-            "value": "CPQ Configuration Setup Migration"
+            "value": "Product Decomposition Migration"
         },
         { 
             "field": "%vlocity_namespace%__ImportService__c", 
-            "value": "CPQ Configuration Setup Migration"
+            "value": "Product Decomposition Migration"
         },
         { 
             "field": "%vlocity_namespace%__ExportService__c", 
-            "value": "CPQ Configuration Setup Migration"
+            "value": "Product Decomposition Migration"
         },
         { 
             "field": "%vlocity_namespace%__ImportType__c", 
@@ -45,10 +45,6 @@
         { 
             "field": "%vlocity_namespace%__DefaultImportLimit__c", 
             "value": 10
-        },
-        { 
-            "field": "%vlocity_namespace%__PrimarySObjectType__c", 
-            "value": "CpqConfigurationSetup__c"
         }
     ]
 }

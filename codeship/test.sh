@@ -14,7 +14,7 @@ npm run-script unitTest
 
 npm link
 
-vlocity -sfdx.username $SF_USERNAME runTestJob
+vlocity -sfdx.username $SF_USERNAME runTestJob --verbose
 
 echo 'Running JSON Jobs - Takes up to 10 minutes with no output'
 
