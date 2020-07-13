@@ -1344,28 +1344,28 @@ IPActionsConfig:
   DataRaptor Post Action:
     type: DataRaptor
     nameField: bundle
-    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%nameFieldValue%'
   DataRaptor Extract Action:
     type: DataRaptor
     nameField: bundle
-    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%nameFieldValue%'
   DataRaptor Transform Action:
     type: DataRaptor
     nameField: bundle
-    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%nameFieldValue%'
   DataRaptor Turbo Action:
     type: DataRaptor
     nameField: bundle
-    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%nameFieldValue%'
   Integration Procedure Action:
     type: IntegrationProcedure
     nameField: integrationProcedureKey
-    query: SELECT Id FROM %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true
+    query: SELECT Id FROM %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true AND %vlocity_namespace%__ProcedureKey__c  = '%nameFieldValue%'
   Matrix Action:
     type: CalculationMatrix
-    nameField: matrixName
-    query: SELECT Id FROM %vlocity_namespace%__CalculationMatrix__c
+    nameField: remoteOptions.matrixName
+    query: SELECT Id FROM %vlocity_namespace%__CalculationMatrix__c  WHERE Name = '%nameFieldValue%'
   Remote Action:
     type: ApexClass
     nameField: remoteClass
-    query: SELECT Id FROM ApexClass
+    query: SELECT Id FROM ApexClass WHERE Name = '%nameFieldValue%'
