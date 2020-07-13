@@ -1,8 +1,9 @@
 #!/usr/bin/env bash 
 set -e
 
+CURRENT_VERSION=`npm show vlocity version`
+
 if [ $CI_BRANCH == "master" ]; then
-    CURRENT_VERSION=`npm show vlocity version`
     npm version $CURRENT_VERSION --no-git-tag-version --allow-same-version
 
     if [[ $CI_COMMIT_MESSAGE == *"New Minor Version"* ]]; then
@@ -11,16 +12,11 @@ if [ $CI_BRANCH == "master" ]; then
         npm version patch --no-git-tag-version
     fi
 else 
-    CURRENT_VERSION=`npm show vlocity@$CI_BRANCH version`
-    npm version $CURRENT_VERSION --no-git-tag-version
-
     echo $CI_COMMIT_MESSAGE
 
-    if [[ $CI_COMMIT_MESSAGE == *"New Minor Version"* ]]; then
-        npm version minor --no-git-tag-version
-    fi
+    COMMITS=`git rev-list --count HEAD`
 
-    npm version prerelease --no-git-tag-version
+    npm version ${CURRENT_VERSION}-${CI_BRANCH}-${COMMITS} --no-git-tag-version
 fi
 
 ./codeship/decryptFiles.sh
