@@ -1340,3 +1340,32 @@ SObjectsDefault:
 FieldLabels:
   All:
     id: Id
+IPActionsConfig:
+  DataRaptor Post Action:
+    type: DataRaptor
+    nameField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+  DataRaptor Extract Action:
+    type: DataRaptor
+    nameField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+  DataRaptor Transform Action:
+    type: DataRaptor
+    nameField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+  DataRaptor Turbo Action:
+    type: DataRaptor
+    nameField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c
+  Integration Procedure Action:
+    type: IntegrationProcedure
+    nameField: integrationProcedureKey
+    query: SELECT Id FROM %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true
+  Matrix Action:
+    type: CalculationMatrix
+    nameField: matrixName
+    query: SELECT Id FROM %vlocity_namespace%__CalculationMatrix__c
+  Remote Action:
+    type: ApexClass
+    nameField: remoteClass
+    query: SELECT Id FROM ApexClass
