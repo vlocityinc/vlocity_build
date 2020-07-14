@@ -1,6 +1,6 @@
-#- name: test
-#  service: vlocitybuild
-#  command: ./codeship/test.sh
+- name: test
+  service: vlocitybuild
+  command: ./codeship/test.sh
 - name: publish
   service: vlocitybuild
   tag: ^(master|alpha|beta)
