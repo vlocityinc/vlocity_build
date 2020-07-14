@@ -14,8 +14,12 @@ if [ $CI_BRANCH == "master" ]; then
 else 
     echo $CI_COMMIT_MESSAGE
 
-    npm version ${CURRENT_VERSION}-${CI_BRANCH}-${CI_BUILD_NUMBER} --no-git-tag-version
+    echo ${CURRENT_VERSION}-${CI_BRANCH}-${CI_BUILD_ID}
+
+    npm version ${CURRENT_VERSION}-${CI_BRANCH}-${CI_BUILD_ID} --no-git-tag-version
 fi
+
+exit
 
 ./codeship/decryptFiles.sh
 
