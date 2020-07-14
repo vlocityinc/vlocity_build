@@ -2,239 +2,121 @@
 Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a source control friendly format through a YAML Manifest describing your project. Its primary goal is to enable Continuous Integration for Vlocity Metadata through source control. It is written as a Node.js Command Line Tool.
 
 - [Vlocity Build](#vlocity-build)
- - [Recent Features](#recent-features)
- 	- [v1.11 - Clean Org Data Automation Improved, Fix Install / Refresh Vlocity Base Errors, Better Handling for Missing Matching Key Type References](#v111---clean-org-data-automation-improved-embedded-omniscript-full-fix-fix-install--refresh-vlocity-base-errors-better-handling-for-missing-matching-key-type-references)
- 		- [Clean Org Data Automation Improved](#clean-org-data-automation-improved)
- 		- [Fix Install / Refresh Vlocity Base Errors](#fix-install--refresh-vlocity-base-errors)
- 		- [Better Handling for Missing Matching Key Type References](#better-handling-for-missing-matching-key-type-references)
- 	- [v1.10 - Auto Fix Duplicate Attribute Category Sequence, Improve Clean Org Data to report actual duplicates based on DataPack Metadata, Fix Reusable OmniScripts, Fix OmniScript Issue when two Elements had the Same Name with Different Case, Change Deployment Strategy to fix potential Concurrency issues](#v110---auto-fix-duplicate-attribute-category-sequence-improve-clean-org-data-to-report-actual-duplicates-based-on-datapack-metadata-fix-reusable-omniscripts-fix-omniscript-issue-when-two-elements-had-the-same-name-with-different-case-change-deployment-strategy-to-fix-potential-concurrency-issues)
- 		- [Auto Fix Duplicate Attribute Category Sequence](#auto-fix-duplicate-attribute-category-sequence)
- 		- [Improve Clean Org Data to report actual duplicates based on DataPack Metadata](#improve-clean-org-data-to-report-actual-duplicates-based-on-datapack-metadata)
- 		- [Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation](#fix-reusable-omniscripts-embedded-in-multiple-other-omniscripts-from-failing-activation)
- 		- [Fix OmniScript Issue when two Elements had the Same Name with Different Case](#fix-omniscript-issue-when-two-elements-had-the-same-name-with-different-case)
- 		- [Change Deployment Strategy to fix potential Concurrency issues](#change-deployment-strategy-to-fix-potential-concurrency-issues)
- 	- [v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements](#v19---auto-update-restricted-picklists-support-for-large-matrix-and-omniscripts-auto-re-activate-omniscripts-with-embedded-templates-auto-retry-stale-references-check-performance-enhancements)
- 		- [Auto Update Restricted Picklists](#auto-update-restricted-picklists)
- 		- [Support for Large Calculation Matrix and OmniScripts](#support-for-large-calculation-matrix-and-omniscripts) 
- 		- [Auto Re-Activate OmniScripts with Embedded Templates](#auto-re-activate-omniscripts-with-embedded-templates) 
- 		- [Auto Retry](#auto-retry) 
- 		- [Stale References Check](#stale-references-check) 
- 		- [VlocityUITemplate SCSS Includes now Auto Export](#vlocityuitemplate-scss-includes-now-auto-export) 
- 		- [Performance Enhancements](#performance-enhancements) 
- 		- [Global Key Changes](#global-key-changes) 
- 	- [v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings](#v18---delta-deploys--exports-error-message-enhancements-git-changes-based-deploys-and-auto-update-settings) 
- 		- [Delta Deploys / Exports](#delta-deploys--exports) 
- 		- [Error Message Enhancements](#error-message-enhancements) 
- 				- [Previous:](#previous) 
- 				- [New:](#new) 
- 		- [Git Changes Based Deploys](#git-changes-based-deploys) 
- 		- [Auto Update Settings](#auto-update-settings) 
- 	- [v1.7](#v17) 
- 		- [OmniScript and IntegrationProcedure](#omniscript-and-integrationprocedure) 
- 		- [SFDX](#sfdx) 
- - [Recent Data Model Changes](#recent-data-model-changes) 
- 	- [v1.8 - No Changes](#v18---no-changes) 
- 	- [v1.7 - OmniScript and IntegrationProcedure](#v17---omniscript-and-integrationprocedure) 
- 	- [v1.6 - Enterprise Product Catalog - Product2, Pricebook and PriceList](#v16---enterprise-product-catalog---product2-pricebook-and-pricelist) 
- 	- [Rolling Back Changes to the Vlocity Build Tool](#rolling-back-changes-to-the-vlocity-build-tool) 
- - [Installation and Update Instructions](#installation-and-update-instructions) 
- 	- [Install Node.js](#install-nodejs) 
- 	- [Install or Update Vlocity Build through NPM](#install-or-update-vlocity-build-through-npm) 
- 	- [Releases](#releases) 
- 		- [Installing Older Releases](#installing-older-releases) 
- 		- [Cloning Vlocity Build - Not Recommended](#cloning-vlocity-build---not-recommended) 
- - [Getting Started](#getting-started) 
- 	- [Running the Process](#running-the-process) 
- 	- [Property File](#property-file) 
- 	- [Job File](#job-file) 
- - [Step by Step Guide](#step-by-step-guide) 
- 	- [Simple Export](#simple-export) 
- 	- [Simple Deploy](#simple-deploy) 
- 	- [Org to Org Migration](#org-to-org-migration) 
- 		- [Summary of Org to Org Migration](#summary-of-org-to-org-migration) 
- 		- [New Sandbox Orgs](#new-sandbox-orgs) 
- - [Automation Quick Guide](#automation-quick-guide) 
- 	- [Vlocity Build + Salesforce DX](#vlocity-build--salesforce-dx) 
- 		- [Vlocity Managed Package](#vlocity-managed-package) 
- 	- [Running in Jenkins](#running-in-jenkins) 
- - [The Job File](#the-job-file) 
- 	- [What will be Exported?](#what-will-be-exported) 
- 	- [Example Job File](#example-job-file) 
- 			- [dataPacksJobs/Example.yaml](#datapacksjobsexampleyaml) 
- 	- [Predefined vs Explicit Queries](#predefined-vs-explicit-queries) 
- 	- [Query All](#query-all) 
- - [Troubleshooting](#troubleshooting) 
- 	- [Log Files](#log-files) 
- 	- [Data Quality](#data-quality) 
- 	- [Errors](#errors) 
- 		- [Not Found](#not-found) 
- 		- [No Match Found](#no-match-found) 
- 		- [SASS Compilation Error](#sass-compilation-error) 
- 		- [Validation Errors](#validation-errors) 
- 		- [Duplicate Value Found](#duplicate-value-found) 
- 		- [Multiple Imported Records will incorrectly create the same Salesforce Record](#multiple-imported-records-will-incorrectly-create-the-same-salesforce-record) 
- 		- [Some records were not processed](#some-records-were-not-processed) 
- 	- [Cleaning Bad Data](#cleaning-bad-data) 
- 	- [External Ids and Global Keys](#external-ids-and-global-keys) 
- 	- [Validation](#validation) 
- - [All Commands](#all-commands) 
- 	- [Primary](#primary) 
- 	- [Troubleshooting](#troubleshooting-1) 
- 	- [Additional](#additional) 
- 	- [Example Commands](#example-commands) 
- 		- [packExport](#packexport) 
- 		- [packExportSingle](#packexportsingle) 
- 		- [packExportAllDefault](#packexportalldefault) 
- 		- [packDeploy](#packdeploy) 
- 		- [cleanOrgData](#cleanorgdata) 
- 		- [validateLocalData](#validatelocaldata) 
- 		- [refreshProject](#refreshproject) 
- 		- [packContinue](#packcontinue) 
- 		- [packRetry](#packretry) 
- 		- [packGetDiffs](#packgetdiffs) 
- 		- [packGetDiffsAndDeploy](#packgetdiffsanddeploy) 
- - [Additional Command Line Options](#additional-command-line-options) 
- 	- [Job Options](#job-options) 
- 	- [Vlocity Build Options](#vlocity-build-options) 
- - [Developer Workflow](#developer-workflow) 
- 	- [Manifest Driven Workflow](#manifest-driven-workflow) 
- 		- [VlocityDataPackKey Overview](#vlocitydatapackkey-overview) 
- 		- [Using the VlocityDataPackKey in the Manifest](#using-the-vlocitydatapackkey-in-the-manifest) 
- 		- [Adding to Job Files](#adding-to-job-files) 
- 			- [Export Job File](#export-job-file) 
- 			- [Deploy Job File](#deploy-job-file) 
- - [Other Job File Settings](#other-job-file-settings) 
- 	- [Basic](#basic) 
- 	- [Export](#export) 
- 	- [Export by Queries](#export-by-queries) 
- 	- [Export Results](#export-results) 
- 	- [Advanced: Export by Manifest](#advanced-export-by-manifest) 
- 	- [Advanced: Export Individual SObject Records](#advanced-export-individual-sobject-records) 
- 	- [BuildFile](#buildfile) 
- 	- [Anonymous Apex](#anonymous-apex) 
- - [Supported DataPack Types](#supported-datapack-types) 
- - [Advanced](#advanced) 
- 	- [Anonymous Apex and JavaScript](#anonymous-apex-and-javascript) 
- 		- [Namespace](#namespace) 
- 		- [Loading Apex Code](#loading-apex-code) 
- 		- [BaseUtilities.cls](#baseutilitiescls) 
- 		- [PreJobApex](#prejobapex) 
- 		- [preJobApex vs preStepApex](#prejobapex-vs-prestepapex) 
- 			- [Pre and Post Job JavaScript](#pre-and-post-job-javascript) 
- 				- [Export by Queries](#export-by-queries-1) 
- 				- [Deploy](#deploy) 
- 			- [PostJobApex Replacement Format](#postjobapex-replacement-format) 
- 				- [Deploy](#deploy-1) 
- 	- [Matching Keys](#matching-keys) 
- 		- [Creating Custom Matching Keys](#creating-custom-matching-keys) 
- 		- [Current Matching Keys](#current-matching-keys) 
- 		- [CLI API](#cli-api) 
- 		- [Overriding DataPack Settings](#overriding-datapack-settings) 
- - [OmniOut](#omniout) 
- - [Required Version Check](#required-version-check) 
- - [Known Issues](#known-issues) 
+- [Recent Features](#recent-features)
+- [Vlocity DX Desktop Application](#vlocity-dx-desktop-application)
+- [Installation and Update Instructions](#installation-and-update-instructions)
+  - [Install Node.js](#install-nodejs)
+  - [Install or Update Vlocity Build through NPM](#install-or-update-vlocity-build-through-npm)
+  - [Releases](#releases)
+    - [Installing Older Release Versions](#installing-older-release-versions)
+    - [Cloning Vlocity Build - Not Recommended](#cloning-vlocity-build---not-recommended)
+- [Getting Started](#getting-started)
+  - [Running the Process](#running-the-process)
+  - [Property File](#property-file)
+  - [Job File](#job-file)
+- [Step by Step Guide](#step-by-step-guide)
+  - [Simple Export](#simple-export)
+  - [Simple Deploy](#simple-deploy)
+  - [Org to Org Migration](#org-to-org-migration)
+    - [Summary of Org to Org Migration](#summary-of-org-to-org-migration)
+    - [New Sandbox Orgs](#new-sandbox-orgs)
+- [Automation Quick Guide](#automation-quick-guide)
+  - [Vlocity Build + Salesforce DX](#vlocity-build--salesforce-dx)
+    - [Vlocity Managed Package](#vlocity-managed-package)
+  - [Running in Jenkins](#running-in-jenkins)
+- [The Job File](#the-job-file)
+  - [What will be Exported?](#what-will-be-exported)
+  - [Example Job File](#example-job-file)
+      - [dataPacksJobs/Example.yaml](#datapacksjobsexampleyaml)
+  - [Predefined vs Explicit Queries](#predefined-vs-explicit-queries)
+  - [DataPack Key Based Export](#datapack-key-based-export)
+  - [Query All](#query-all)
+  - [Git Changes Based Deploys](#git-changes-based-deploys)
+- [Troubleshooting](#troubleshooting)
+  - [Log Files](#log-files)
+  - [Data Quality](#data-quality)
+  - [Errors](#errors)
+    - [Not Found](#not-found)
+    - [No Match Found](#no-match-found)
+    - [SASS Compilation Error](#sass-compilation-error)
+    - [Validation Errors](#validation-errors)
+    - [No Configuration Found](#no-configuration-found)
+    - [Duplicate Value Found](#duplicate-value-found)
+    - [Multiple Imported Records will incorrectly create the same Salesforce Record](#multiple-imported-records-will-incorrectly-create-the-same-salesforce-record)
+    - [Some records were not processed](#some-records-were-not-processed)
+  - [Cleaning Bad Data](#cleaning-bad-data)
+  - [External Ids and Global Keys](#external-ids-and-global-keys)
+  - [Validation](#validation)
+- [All Commands](#all-commands)
+  - [Primary](#primary)
+  - [Troubleshooting](#troubleshooting-1)
+  - [Additional](#additional)
+  - [Example Commands](#example-commands)
+    - [packExport](#packexport)
+    - [packExportSingle](#packexportsingle)
+    - [packExportAllDefault](#packexportalldefault)
+    - [packDeploy](#packdeploy)
+    - [cleanOrgData](#cleanorgdata)
+    - [validateLocalData](#validatelocaldata)
+    - [refreshProject](#refreshproject)
+    - [packContinue](#packcontinue)
+    - [packRetry](#packretry)
+    - [packGetDiffs](#packgetdiffs)
+    - [packGetDiffsAndDeploy](#packgetdiffsanddeploy)
+- [Additional Command Line Options](#additional-command-line-options)
+  - [Job Options](#job-options)
+  - [Vlocity Build Options](#vlocity-build-options)
+- [Developer Workflow](#developer-workflow)
+  - [Manifest Driven Workflow](#manifest-driven-workflow)
+    - [VlocityDataPackKey Overview](#vlocitydatapackkey-overview)
+    - [Using the VlocityDataPackKey in the Manifest](#using-the-vlocitydatapackkey-in-the-manifest)
+    - [Adding to Job Files](#adding-to-job-files)
+      - [Export Job File](#export-job-file)
+      - [Deploy Job File](#deploy-job-file)
+- [Other Job File Settings](#other-job-file-settings)
+  - [Basic](#basic)
+  - [Export](#export)
+  - [Export by Queries](#export-by-queries)
+  - [Export Results](#export-results)
+  - [Advanced: Export by Manifest](#advanced-export-by-manifest)
+  - [Advanced: Export Individual SObject Records](#advanced-export-individual-sobject-records)
+  - [BuildFile](#buildfile)
+  - [Anonymous Apex](#anonymous-apex)
+- [Supported DataPack Types](#supported-datapack-types)
+- [Advanced](#advanced)
+  - [Anonymous Apex and JavaScript](#anonymous-apex-and-javascript)
+    - [Namespace](#namespace)
+    - [Loading Apex Code](#loading-apex-code)
+    - [BaseUtilities.cls](#baseutilitiescls)
+    - [PreJobApex](#prejobapex)
+    - [preJobApex vs preStepApex](#prejobapex-vs-prestepapex)
+      - [Pre and Post Job JavaScript](#pre-and-post-job-javascript)
+        - [Export by Queries](#export-by-queries-1)
+        - [Deploy](#deploy)
+      - [PostJobApex Replacement Format](#postjobapex-replacement-format)
+        - [Deploy](#deploy-1)
+  - [Matching Keys](#matching-keys)
+    - [Creating Custom Matching Keys](#creating-custom-matching-keys)
+    - [Current Matching Keys](#current-matching-keys)
+    - [CLI API](#cli-api)
+    - [Overriding DataPack Settings](#overriding-datapack-settings)
+- [OmniOut](#omniout)
+- [Required Version Check](#required-version-check)
+- [Known Issues](#known-issues)
 
 # Recent Features
+[See Release Notes for Recent Features](https://github.com/vlocityinc/vlocity_build/releases)
 
-## v1.11 - Clean Org Data Automation Improved, Embedded OmniScript full Fix, Fix Install / Refresh Vlocity Base Errors, Better Handling for Missing Matching Key Type References
+# Vlocity DX Desktop Application
+[Vlocity DX Documentation in the Success Community](https://docs.vlocity.com/en/Vlocity-DX-Desktop-Application.html)
 
-### Clean Org Data Automation Improved
-CleanOrgData now queries for a larger set of records and will fix Duplicate Global Keys Automatically in your org when possible.
+Vlocity DX is a desktop application that allows exporting and deploying DataPacks and includes a graphical representation fo differences between orgs and the ability to revert changes before deploying.
 
-### Fix Install / Refresh Vlocity Base Errors
-When refreshVlocityBase or installVlocityInitial encountered errors it would kill the whole process. It now better handles these errors and installs all the DataPacks that did not fail.
+Org to Org Comparison
+![Org to Org Comparison](doc/VlocityDX.png)
 
-### Better Handling for Missing Matching Key Type References
-If an Id is being moved from one environment to another and No Matching Key exists for its type, the Id will be automatically ignored as it was guaranteed to fail.
-
-## v1.10 - Auto Fix Duplicate Attribute Category Sequence, Improve Clean Org Data to report actual duplicates based on DataPack Metadata, Fix Reusable OmniScripts, Fix OmniScript Issue when two Elements had the Same Name with Different Case, Change Deployment Strategy to fix potential Concurrency issues
-
-### Auto Fix Duplicate Attribute Category Sequence
-Fix for Attribute Categories that have the same Sequence automatically during the deployment.
-
-### Improve Clean Org Data to report actual duplicates based on DataPack Metadata
-Now uses Matching Keys to accurately report the Duplicates instead of only reporting the ones with duplicate Global Keys.
-
-### Fix Reusable OmniScripts embedded in multiple other OmniScripts from failing Activation
-Previously if activating a Reusable OmniScript caused too many other OmniScripts to activate it would fail. *Note:* This requires that you are logged in via [SFDX Authentication](#getting-started). *Was Previously reported to have been fixed in v1.9, but there was an error preventing the actual changes to be reflected if made to the Reusable OmniScript.*
-
-### Fix OmniScript Issue when two Elements had the Same Name with Different Case
-Previously one of the OmniScript Elements would disappear when deployed.
-
-### Change Deployment Strategy to fix potential Concurrency issues
-Changes to deployment to make it remove some parallel processing.
-
-## v1.9 - Auto Update Restricted Picklists, Support for Large Matrix and OmniScripts, Auto Re-Activate OmniScripts with Embedded Templates, Auto Retry, Stale References Check, Performance Enhancements
-### Auto Update Restricted Picklists
-By default the Vlocity Build Tool will automatically add Restricted Picklist values to the fields that are being deployed to. This makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. To turn off this feature add `autoFixPicklists: false` to your Job File. Does not work for Managed Global Value Sets - Like Vlocity's CurrencyCode field.
-
-### Support for Large Calculation Matrix and OmniScripts
-Large Calculation Matrix which would take a long time to deploy and OmniScripts which could previously fail due to heap size issues, will now be deployed through Salesforce Bulk Uploads to eliminate potential issues.
-
-### Auto Re-Activate OmniScripts with Embedded Templates
-When VlocityUITemplates that can be embedded in OmniScripts are deployed you now have the option of enabling a job that will reactivate all currently active OmniScripts post deploy. To enable this feature add `reactivateOmniScriptsWhenEmbeddedTemplateFound: true`. *Note:* This will run activate for all OmniScripts and for now requires that you are logged in via [SFDX Authentication](#getting-started).
-
-### Auto Retry
-Auto Retry will enable the Vlocity Build Tool to retry errors which may have been caused by incorrect deploy order or transient issues. Add `autoRetryErrors: true` to your Job File.
-
-### Stale References Check
-Use the new command `vlocity checkStaleObjects` to ensure that all references in your project exist in either the org or locally. This is meant to ensure that you will see any missing reference errors before your deployment.
-
-### VlocityUITemplate SCSS Includes now Auto Export
-When another VlocityUITemplate includes references to a SCSS Mixin or Variables VlocityUITemplate it will automatically be exported as a dependency. 
-
-### Performance Enhancements
-Elimination of a wasteful file writing process and more reliance on Node Async Processing will improve performance for larger projects.
-
-### Global Key Changes
-AttributeCategory__c, CalculationMatrixVersion__c, CalculationMatrix__c, CalculationProcedureVersion__c, CalculationProcedure__c, DRBundle__c now use their unique field of Name or Code as the GlobalKey__c field.
-
-## v1.8 - Delta Deploys / Exports, Error Message Enhancements, Git Changes Based Deploys, and Auto Update Settings   
-### Delta Deploys / Exports
-Add `deltaCheck: true` to your job file to enable checking to see if there are changes to the items you are about to deploy or export. This check will run much faster than the getDiffsAndDeploy check, but at this time 100% consistency is not guaranteed for all DataPack Types. The checks will error on the side of caution and run the deploy /export automatically for any DataPack Type that may have changes.
-
-### Error Message Enhancements
-Error messages have been improved to give more instruction on how to fix issues. An example change is as follows:
-
-##### Previous:
-`Error >> AttributeCategory/ATTRIBUTE_CATEGORY --- ATTRIBUTE_CATEGORY --- duplicate value found: <unknown> duplicates value on record with id: <unknown>`
-
-##### New:
-`Error >> AttributeCategory/ATTRIBUTE_CATEGORY -- DataPack >> ATTRIBUTE_CATEGORY -- Error Message --  duplicate field value found: 100 on the field: vlocity_cmt__DisplaySequence__c on record with id: a0K0b00000XabWUEAZ -- Change the vlocity_cmt__DisplaySequence__c field value of the vlocity_cmt__AttributeCategory__c on record with id: a0K0b00000XabWUEAZ in the target org to resolve the issue.`
-
-### Git Changes Based Deploys
-Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. Add the key `gitCheckKey: Folder1` to your individual Job Files if you have more than one folder in your repo that contains DataPacks.
-
-### Auto Update Settings
-Add `autoUpdateSettings: true` to your job file to enable checking that you have the latest DataPack settings before every export and deploy. This check is very fast and it is advised that this is enabled. 
-
-## v1.7
-### OmniScript and IntegrationProcedure
-The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level. This means that merging changes for these objects is now much easier.
-
-### SFDX
-Authentication with Salesforce DX credentials is now possible. Use `-sfdx.username` to use a Salesforce DX Authorized Org for `vlocity` commands. Once you are passing this parameter you will not need a password or any other propertyfile information. The Salesforce DX Authorization from `sfdx force:org:display -u <username>` will handle all the information. Passing an alias will work as well.
-
-# Recent Data Model Changes
-
-## v1.8 - No Changes
-There were no data model changes for v1.8
-
-## v1.7 - OmniScript and IntegrationProcedure
-The OmniScript and IntegrationProcedure DataPacks have been modified to remove the Order and Level fields which previously controlled how the OmniScript Elements were ordered in the UI. Now the Elements__c Array in the OmniScript `_DataPack.json` file is ordered in the display order of the UI.
-
-This change will affect any newly exported OmniScript and IntegrationProcedure, and all files in the newly exported DataPacks should be committed to version control. 
-
-This change can be applied to all OmniScripts and IntegrationProcedures immediately by running the `refreshProject` command. 
-
-All existing data is still compatible, and issues will only arise when an OmniScript or IntegrationProcedure exported with Vlocity Build 1.7+ is deployed with an earlier version of the Vlocity Build Tool. 
-
-Please ensure everyone on your project is using the same version of this build tool.
-
-## v1.6 - Enterprise Product Catalog - Product2, Pricebook and PriceList 
-The Product2 DataPack has been modified to include all Pricebook and PriceList Entries for the Product. This means that a Product can be migrated from one org to another along with its Pricing Information without migrating the other Products in the Pricebook and Price List. 
-
-Running `packUpdateSettings` and re-exporting the Product2, Pricebook and PriceList is necessary to migrate to the new format, however existing data should still be deployable with the new changes.
+Same Org OmniScript Comparison
+![Same Org OmniScript Comparison](doc/VlocityDXOmniScriptVersionCompare.png)
 
 # Installation and Update Instructions
 
@@ -264,7 +146,6 @@ Each release includes a Binary for:
 Linux  
 MacOS  
 Windows x64  
-Windows x86  
 
 ### Installing Older Release Versions
 To Install an Older Version of the Vlocity Build Tool use the following NPM command for installing by version:
@@ -272,13 +153,6 @@ To Install an Older Version of the Vlocity Build Tool use the following NPM comm
 npm install --global vlocity@1.9.1
 vlocity help
 ```
-
-Only if you need to install a version before v1.7 use the following syntax:
-```bash
-npm install --global https://github.com/vlocityinc/vlocity_build#v1.5.7
-vlocity help
-```
-
 
 ### Cloning Vlocity Build - Not Recommended
 It is no longer advised to clone the Vlocity Build Repository directly. If you have previously cloned the Vlocity Build Project and are having issues with the alias `vlocity` still being used as the cloned project, please use the following command in the cloned `vlocity_build` folder:
@@ -306,12 +180,14 @@ When you (or your CI/CD server) is behind a proxy you can specify the proxy URL 
 sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy hostname>[:<Proxy Port>]
 ```
 
+It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
+
 Additionally there is support for OAuth style information sent through the command line or property file:
 ```bash
 vlocity packExport -sf.authToken <authToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
 ```
+If you are using this method also include `oauthConnection: true` in your Job File.
 
-It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
 ## Running the Process
 Commands follow the syntax:
@@ -336,7 +212,7 @@ queries:
     query: Select Id from %vlocity_namespace%__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1
 ```
 
-After creating the Example.yaml file, run the following command to export this Job File:
+After creating the Example.yaml file, run the following command to export with this Job File:
 ```bash
 vlocity -propertyfile build_source.properties -job Example.yaml packExport
 ```
@@ -387,57 +263,36 @@ Salesforce Org >> target_org@vlocity.com
 ## Org to Org Migration
 When Exporting and Deploying between two Orgs use the following action plan:  
 1. Create Property Files for each Org. `build_source.properties` and `build_target.properties`  
-2. Create a Job File which identifies your projectPath and the queries for the DataPack Types you would like to export. To export the Vlocity Product Catalog, use the following EPC.yaml file:
+2. Create a Job File which identifies your projectPath and the queries for the DataPack Types you would like to export. To export the Vlocity Product Catalog, use the following Platform.yaml file:
 ```yaml
 projectPath: vlocity
 queries:
-  - AttributeCategory
-  - CalculationProcedure
-  - ContextAction
-  - ContextDimension
-  - ContextScope
-  - EntityFilter
-  - ObjectClass
-  - ObjectContextRule
-  - ObjectLayout
-  - Pricebook2
-  - PriceList
-  - PricingVariable
-  - Product2
-  - Promotion
-  - Rule
-  - TimePlan
-  - TimePolicy
-  - UIFacet
-  - UISection
-  - VlocityFunction
-  - VlocityPicklist
+  - OmniScript
+  - IntegrationProcedure
+  - DataRaptor
+  - VlocityUILayout
+  - VlocityUITemplate
 ```
 3. Ensure High Data Quality in the Source Org by running:   
-`vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData`  
-4. Update your DataPack Settings in the source Org to the latest in the Vlocity Build Tool by running:  
-`vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings`  
-This step will deliver changes to the DataPack settings outside the Vlocity Managed Package installation flow and should be run after upgrading/installing the package or on new Sandbox orgs.  
-5. Run the Export:  
-`vlocity -propertyfile build_source.properties -job EPC.yaml packExport`  
-6. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
-`vlocity -propertyfile build_source.properties -job EPC.yaml packRetry`  
+`vlocity -propertyfile build_source.properties -job Platform.yaml cleanOrgData`  
+4. Run the Export:  
+`vlocity -propertyfile build_source.properties -job Platform.yaml packExport` 
+Settings will automatically be deployed if it is the first time you are deploying to this org. This will take 30 seconds and will only need to be rerun when the settings change. 
+5. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
+`vlocity -propertyfile build_source.properties -job Platform.yaml packRetry`  
 If your Export fails midway through due to connection issues, you can also use the following to pick the export back up where it left off:  
-`vlocity -propertyfile build_source.properties -job EPC.yaml packContinue` 
-7. Check the Exported Data for Potential Issues:  
-`vlocity -propertyfile build_source.properties -job EPC.yaml validateLocalData`  
+`vlocity -propertyfile build_source.properties -job Platform.yaml packContinue` 
+6. Check the Exported Data for Potential Issues:  
+`vlocity -propertyfile build_source.properties -job Platform.yaml validateLocalData`  
 This will give a summary of Duplicate and Missing Global Keys. Use the argument `--fixLocalGlobalKeys` to automatically add missing and change duplicate keys. However it is generally better to fix the data in the Org itself.
-8. Ensure High Data Quality in the Target Org by running:  
-`vlocity -propertyfile build_target.properties -job EPC.yaml cleanOrgData`  
-9. Ensure your Vlocity Metadata is high quality by running:  
-`vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject` 
-This command helps fix any broken references in the project.  
-10. Update the DataPack Settings in the Target Org:  
-`vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings`
-11. Run the deploy:  
-`vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy`
-12. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
-`vlocity -propertyfile build_target.properties -job EPC.yaml packRetry`  
+7. Ensure High Data Quality in the Target Org by running:  
+`vlocity -propertyfile build_target.properties -job Platform.yaml cleanOrgData`   
+8. Update the DataPack Settings in the Target Org:  
+`vlocity -propertyfile build_target.properties -job Platform.yaml packUpdateSettings`
+9. Run the deploy:  
+`vlocity -propertyfile build_target.properties -job Platform.yaml packDeploy`
+10. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+`vlocity -propertyfile build_target.properties -job Platform.yaml packRetry`  
 Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
 
 ### Summary of Org to Org Migration
@@ -445,15 +300,11 @@ All together the commands are:
 ```bash
 # Source Org
 vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData
-vlocity -propertyfile build_source.properties -job EPC.yaml packUpdateSettings
 vlocity -propertyfile build_source.properties -job EPC.yaml packExport
 vlocity -propertyfile build_source.properties -job EPC.yaml packRetry # If any errors
-vlocity -propertyfile build_source.properties -job EPC.yaml validateLocalData
 
 # Target Org
 vlocity -propertyfile build_target.properties -job EPC.yaml cleanOrgData
-vlocity -propertyfile build_target.properties -job EPC.yaml refreshProject
-vlocity -propertyfile build_target.properties -job EPC.yaml packUpdateSettings
 vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
 vlocity -propertyfile build_target.properties -job EPC.yaml packRetry # If any errors
 ```
@@ -461,7 +312,7 @@ vlocity -propertyfile build_target.properties -job EPC.yaml packRetry # If any e
 ### New Sandbox Orgs
 If you have recently installed the Vlocity Managed Package or created a Sandbox Org that is not a Full Copy Sandbox and have done *no* development this Salesforce Org, you should run the following command to load all the default Vlocity Metadata:
 ```bash
-vlocity -propertyfile build_target.properties --nojob packUpdateSettings installVlocityInitial
+vlocity -propertyfile build_target.properties --nojob installVlocityInitial
 ```
 This will install the Base UI Templates, CPQ Base Templates, EPC Default Objects and any other default data delivered through Vlocity DataPacks. This command should only be run if the Org was not previously used for Vlocity Development.
 
@@ -503,9 +354,6 @@ sfdx force:source:push --targetusername $SF_USERNAME
 
 # Refresh Vlocity Base - Installs all the Vlocity Authored Vlocity Cards and Vlocity UI Templates
 vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml refreshVlocityBase
-
-# Update Settings
-vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml packUpdateSettings
 
 # Deploy Vlocity folder
 vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml packDeploy
@@ -592,8 +440,19 @@ The WHERE clauses show that these Queries will Export all DataRaptors that are n
 
 When Exporting, the DataPacks API will additionally export all dependencies of the Vlocity DataPacks which are being exported. So Exporting just the OmniScripts from an Org will also bring in all referenced DataRaptors, VlocityUITemplates, etc, so that the OmniScript will be fully usable once deployed.
 
+## DataPack Key Based Export
+You can export DataPacks by their Vlocity DataPack Key which is the same as the Folder that they live in after being exported. For a Product the DataPack Key is `Product2/${GlobalKey__c}`. You can get a full list of Vlocity DataPack Keys by running getAllAvailableExports.
+
+This video has more information:  
+[Manifest Driven Workflow](https://drive.google.com/file/d/1FRKBrPqtfB2I_U57lJToHvWcR3Tld74s/view?usp=sharing)
+
 ## Query All
 Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queries defined, you can also run: `packExportAllDefault` to specify running all the default queries.
+
+## Git Changes Based Deploys
+Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. Add the key `gitCheckKey: Folder1` to your individual Job Files if you have more than one folder in your repo that contains DataPacks.
+
+This will greatly speed up Deployment when used consistently.
 
 # Troubleshooting
 
@@ -605,6 +464,8 @@ Three log files are generated for every command run.
 `VlocityBuildErrors.log` - This file will contain the errors during the job. It will appear in the directory you are running the command. 
 
 `vlocity-temp/logs/<JobName>-<Timestamp>-<Command>.yaml` - This is a saved version of the VlocityBuildLog.yaml in the logs folder for every command run.
+
+Run commands with --verbose to include all logging into the log files.
 
 ## Data Quality
 Once Exported it is very important to validate that your data is in state that is ready to be deployed. The Vlocity Build tool primarily relies on unique data in fields across the different objects to prevent duplicate data being uploaded.
@@ -728,6 +589,7 @@ This will provide a list of files that are different locally than in the org. In
 `validateLocalData`:  Check for Missing Global Keys in Data.    
 `cleanOrgData`: Run Scripts to Clean Data in the Org and Add Global Keys to SObjects missing them    
 `refreshProject`: Refresh the Project's Data to the latest format for this tool    
+`checkStaleObjects`: Ensure that all references in your project exist in either the org or locally. This is meant to ensure that you will see any missing reference errors before your deployment.  
 
 ## Additional 
 `packGetDiffsAndDeploy`: Deploy only files that are modified compared to the target Org  
@@ -820,6 +682,9 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | ------------- |------------- |----- | -----|
 | activate | Will Activate everything after it is imported / deployed | Boolean | false |
 | addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
+| autoFixPicklists | Makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. Does not work for Managed Global Value Sets - Like Vlocity's CurrencyCode field. | Boolean | true |
+| autoRetryErrors | Will automatically retry after a deploy to see if any errors can be fixed by retrying due primarily to references that did not correctly resolve | Boolean | false |
+| autoUpdateSettings | Automatically run packUpdateSettings before deploy | Boolean | true |
 | buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
 | defaultMaxParallel | The number of parallel processes to use for export | Integer | 1 |
 | compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
@@ -827,11 +692,14 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
 | exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
 | expansionPath | Secondary path after projectPath to expand the data for the Job | String | . |
+| gitCheck | Allows using Git Hashes to determine changes and greatly speed up Deployment. See [Git Changes Based Deploys](#git-changes-based-deploys) | Boolean | false |
+| gitCheckKey | See [Git Changes Based Deploys](#git-changes-based-deploys) | String | null |
 | ignoreAllErrors | Ignore Errors during Job. *It is recommended to NOT use this setting.* | Boolean | false |
 | manifestOnly | If true, an Export job will only save items specifically listed in the manifest | Boolean | false |
 | maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 (All) |
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
 | processMultiple | When false each Export or Import will run individually | Boolean | true |
+| reactivateOmniScriptsWhenEmbeddedTemplateFound | false | This will run activate for *ALL* OmniScripts and requires that you are logged in via [SFDX Authentication](#getting-started). |
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
 | supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |

@@ -16,6 +16,7 @@ ignoreAllErrors: false
 addSourceKeys: false
 maximumDeployCount: 10
 manifestOnly: false
+autoUpdateSettings: true
 supportHeadersOnly: true
 allowHeadersPartial: true
 supportForceDeploy: true
@@ -28,6 +29,3 @@ autoFixDeployErrors:
 tests:
   - Local
   - Org
-salesforceMetadataTypesBlacklist:
-  - TopicsForObjects
-  - Audience

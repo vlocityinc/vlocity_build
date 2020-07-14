@@ -2,6 +2,8 @@ DataPacks:
   Attachment:
     ChildrenLimit: 100
     IsDiffable: true
+  AttributeCategory:
+    PaginationSize: 50
   CalculationMatrix:
     UniqueByName: true
     ExportGroupSize: 1
