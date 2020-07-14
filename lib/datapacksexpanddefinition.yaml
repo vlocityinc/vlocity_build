@@ -1342,3 +1342,40 @@ SObjectsDefault:
 FieldLabels:
   All:
     id: Id
+IPActionsConfig:
+  Batch Action:
+    type: VlocityScheduledJob
+    dataField: scheduledJobId
+    query: SELECT Id FROM %vlocity_namespace%__VlocityScheduledJob__c WHERE %vlocity_namespace%__GlobalKey__c = '%dataFieldValue%'
+  Calculation Action:
+    type: CalculationProcedure
+    dataField: remoteOptions.configurationName
+    query: Select Id from %vlocity_namespace%__CalculationProcedure__c WHERE Name = '%dataFieldValue%'
+  DataRaptor Post Action:
+    type: DataRaptor
+    dataField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%dataFieldValue%'
+  DataRaptor Extract Action:
+    type: DataRaptor
+    dataField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%dataFieldValue%'
+  DataRaptor Transform Action:
+    type: DataRaptor
+    dataField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%dataFieldValue%'
+  DataRaptor Turbo Action:
+    type: DataRaptor
+    dataField: bundle
+    query: SELECT Id FROM %vlocity_namespace%__DRBundle__c WHERE Name = '%dataFieldValue%'
+  Integration Procedure Action:
+    type: IntegrationProcedure
+    dataField: integrationProcedureKey
+    query: SELECT Id FROM %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true AND %vlocity_namespace%__ProcedureKey__c  = '%dataFieldValue%'
+  Matrix Action:
+    type: CalculationMatrix
+    dataField: remoteOptions.matrixName
+    query: SELECT Id FROM %vlocity_namespace%__CalculationMatrix__c  WHERE Name = '%dataFieldValue%'
+  Remote Action:
+    type: ApexClass
+    dataField: remoteClass
+    query: SELECT Id FROM ApexClass WHERE Name = '%dataFieldValue%'
