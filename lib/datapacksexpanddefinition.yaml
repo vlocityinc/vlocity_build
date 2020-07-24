@@ -18,6 +18,12 @@ DataPacks:
     UniqueByName: true
     SoloExport: true
     ExportGroupSize: 1
+  CalculationProcedureVersion:
+    ExportGroupSize: 1
+    MaxDeploy: 1
+    CalculationProcedureVersion__c:
+      FileName:
+      - Name  
   Catalog:
     MaxDeploy: 1
     SupportParallelDeploy: false

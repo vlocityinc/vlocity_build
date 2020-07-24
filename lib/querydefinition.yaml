@@ -18,6 +18,10 @@ CalculationMatrixVersion:
 CalculationProcedure:
   VlocityDataPackType: CalculationProcedure
   query: Select Id, Name from %vlocity_namespace%__CalculationProcedure__c
+CalculationProcedureVersion:
+  VlocityDataPackType: CalculationProcedureVersion
+  query: Select Id, Name from %vlocity_namespace%__CalculationProcedureVersion__c WHERE %vlocity_namespace%__IsEnabled__c = true
+  requiredSetting: separateCalculationProcedureVersions
 Catalog:
   VlocityDataPackType: Catalog
   query: Select Id, Name from %vlocity_namespace%__Catalog__c     
