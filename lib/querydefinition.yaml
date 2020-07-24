@@ -63,6 +63,9 @@ DocumentTemplate:
 EntityFilter:
   VlocityDataPackType: EntityFilter
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
+GeneralSettings:
+  VlocityDataPackType: GeneralSettings
+  query: Select Name from %vlocity_namespace%__GeneralSettings__c  
 IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c
@@ -141,9 +144,15 @@ QueryBuilder:
 RateBand:
   VlocityDataPackType: RateBand
   query: Select Id, Name from %vlocity_namespace%__RateBand__c
+RelationshipGraph:
+  VlocityDataPackType: RelationshipGraph
+  query: Select Id from %vlocity_namespace%__RelationshipGraph__c
 Rule:
   VlocityDataPackType: Rule
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Rule__c
+SpecTemplateMapping:
+  VlocityDataPackType: SpecTemplateMapping
+  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__SpecTemplateMapping__c
 StoryObjectConfiguration:
   VlocityDataPackType: StoryObjectConfiguration
   query: Select Id, Name from %vlocity_namespace%__StoryObjectConfiguration__c
@@ -202,6 +211,12 @@ VlocityUILayout:
 VlocityUITemplate:
   VlocityDataPackType: VlocityUITemplate
   query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c WHERE %vlocity_namespace%__Active__c = true
+VlocityWebTrackingConfiguration:
+  VlocityDataPackType: VlocityWebTrackingConfiguration
+  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityWebTrackingConfiguration__c
+VlocityTrackingGroup:
+  VlocityDataPackType: VlocityTrackingGroup
+  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%____VlocityTrackingGroup__c
 VqMachine:
   VlocityDataPackType: VqMachine
   query: Select Id, Name from %vlocity_namespace%__VqMachine__c
