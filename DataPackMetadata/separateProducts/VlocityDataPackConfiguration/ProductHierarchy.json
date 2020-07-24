@@ -11,14 +11,6 @@
             "value": "Product Hierarchy Migration"
         },
         { 
-            "field": "%vlocity_namespace%__ImportService__c", 
-            "value": "Product Hierarchy Migration"
-        },
-        { 
-            "field": "%vlocity_namespace%__ExportService__c", 
-            "value": "Product Hierarchy Migration"
-        },
-        { 
             "field": "%vlocity_namespace%__ImportType__c", 
             "value": "Vlocity DataRaptor"
         },
