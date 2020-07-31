@@ -34,11 +34,11 @@ DataPacks:
   DataRaptor:
     UniqueByName: true
     MaxDeploy: 5
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__drmapper?id=%Id%
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__drmapper?id=%Id%
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
     ExportGroupSize: 1
     OmniScript__c:
       CustomJavaScript__c:
@@ -66,7 +66,7 @@ DataPacks:
     DoNotExpand: true
     SupportParallelDeploy: false
   OmniScript:
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
     ExportGroupSize: 1
     PaginationSize: 1000
     SupportParallel: 
@@ -147,17 +147,17 @@ DataPacks:
     UniqueByName: true  
   VlocityUILayout:
     UniqueByName: true
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__carddesignernew?id=?id=%Id%
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__carddesignernew?id=?id=%Id%
   VlocityUITemplate:
     UniqueByName: true
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__uitemplatedesigner?id=%Id%
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__uitemplatedesigner?id=%Id%
   VlocityAttachment:
     ChildrenLimit: 100
     MaxDeploy: 5
   VqMachine:
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceMachineEdit?id=%Id%
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__VlocityIntelligenceMachineEdit?id=%Id%
   VqResource:
-    DefaultVisualforcePage: /apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id%
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__VlocityIntelligenceResourceEdit?id=%Id%
   VlocityState:
     HeadersOnly: All
 DataPacksDefault:
