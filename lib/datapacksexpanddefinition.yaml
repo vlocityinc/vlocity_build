@@ -67,6 +67,7 @@ DataPacks:
     SupportParallelDeploy: false
   OmniScript:
     DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__omniscriptdesigner?id=%Id%
+    LwcEnabledPage: /lightning/cmp/%vlocity_namespace%__OmniDesignerAuraWrapper?c__recordId=%Id%
     ExportGroupSize: 1
     PaginationSize: 1000
     SupportParallel: 
