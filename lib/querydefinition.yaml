@@ -70,6 +70,10 @@ IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c
     = true AND %vlocity_namespace%__IsProcedure__c = true
+TestProc:
+  VlocityDataPackType: TestProc
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c
+    = true AND %vlocity_namespace%__IsProcedure__c = true AND %vlocity_namespace%__IsTest__c = true
 IntegrationProcedureVersion:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Version__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsProcedure__c = true

@@ -60,6 +60,8 @@ DataPacks:
       UnhashableFields:
       - CustomJavaScript__c
       - Order__c
+  TestProc:
+    DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__integrationproceduredesigner?id=%Id%
   ObjectClass:
     HeadersOnly: true
   ObjectLayout:
