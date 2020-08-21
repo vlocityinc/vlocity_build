@@ -32712,7 +32712,7 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>Account-vlocity_cmt__Billing %28Vlocity Telecommunication Services%29 Layout</layout>
-        <recordType>Account.vlocity_cmt__Billing</recordType>
+        <recordType>Account.TESTBADRECORDTYPE</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Account-vlocity_cmt__Billing Aggregator %28Vlocity Telecommunication Services%29 Layout</layout>
