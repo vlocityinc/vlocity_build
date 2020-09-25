@@ -118,3 +118,46 @@ OmniScript:
       TestHTMLTemplates__c: CustomHtmlTemplates__c
       Type__c: Type__c
       Version__c: VersionNumber__c
+IntegrationProcedure: 
+  Element__c:
+    objectName: OmniProcessElement__c
+    fieldNames:
+      Active__c: IsActive__c
+      InternalNotes__c: Description__c
+      Level__c: Level__c
+      Name: Name
+      OmniScriptId__c: OmniProcessId__c
+      OmniScriptVersion__c: OmniProcessVersionNumber__c
+      Order__c: SequenceNumber__c
+      ParentElementId__c: ParentElementId__c
+      ParentElementName__c: ParentElementName__c
+      ParentElementType__c: ParentElementType__c
+      PropertySet__c: PropertySetConfig__c
+      ReusableOmniScript__c: IsOmniScriptEmbeddable__c
+      SearchKey__c: EmbeddedOmniScriptKey__c
+      Type__c: Type__c
+  OmniScript__c:
+    objectName: OmniProcess__c
+    fieldNames:
+      AdditionalInformation__c: Description__c
+      CustomJavaScript__c: CustomJavaScript__c
+      DisableMetadataCache__c: IsMetadataCacheDisabled__c
+      ElementTypeToHTMLTemplateList__c: ElementTypeComponentMapping__c
+      IsActive__c: IsActive__c
+      IsLwcEnabled__c: IsLightningWebCompEnabled__c
+      IsProcedure__c: IsIntegrationProcedure__c
+      IsReusable__c: IsOmniScriptEmbeddable__c
+      IsTest__c: IsTestProcedure__c
+      Language__c: Language__c
+      LastPreviewPage__c: LastPreviewPage__c
+      LwcId__c: LightningWebComponentId__c
+      Name: Name
+      OmniProcessType__c: OmniProcessType__c
+      ProcedureKey__c: OmniProcessKey__c
+      ProcedureResponseCacheType__c: ResponseCacheType__c
+      PropertySet__c: PropertySetConfig__c
+      RequiredPermission__c: RequiredPermission__c
+      SubType__c: SubType__c
+      TestHTMLTemplates__c: CustomHtmlTemplates__c
+      Type__c: Type__c
+      Version__c: VersionNumber__c
