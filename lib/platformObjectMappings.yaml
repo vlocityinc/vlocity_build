@@ -1,4 +1,4 @@
-Mappings:
+DataRaptor:
   DRBundle__c:
     objectName: OmniDataTransform__c
     fieldNames:
@@ -75,6 +75,7 @@ Mappings:
       Name: Name
       TransformValuesMap__c: TransformValueMappings__c
       UpsertKey__c: IsUpsertKey__c
+OmniScript: 
   Element__c:
     objectName: OmniProcessElement__c
     fieldNames:
@@ -92,11 +93,6 @@ Mappings:
       ReusableOmniScript__c: IsOmniScriptEmbeddable__c
       SearchKey__c: EmbeddedOmniScriptKey__c
       Type__c: Type__c
-  GeneralSettings__c:
-    objectName: OmniInteractionSettings__c
-    fieldNames:
-      Name: Name
-      Value__c: Value__c
   OmniScript__c:
     objectName: OmniProcess__c
     fieldNames:
@@ -122,32 +118,3 @@ Mappings:
       TestHTMLTemplates__c: CustomHtmlTemplates__c
       Type__c: Type__c
       Version__c: VersionNumber__c
-  OmniScriptDefinition__c:
-    objectName: OmniProcessCompilation__c
-    fieldNames:
-      Content__c: Content__c
-      Name: Name
-      OmniScriptId__c: OmniProcessId__c
-      Sequence__c: Sequence__c
-  OmniScriptInstance__c:
-    objectName: OmniScriptSavedSession__c
-    fieldNames:
-      IsContentEncoded__c: IsContentEncoded__c
-      IsLwcEnabled__c: IsLightningWebCompEnabled__c
-      LastSaved__c: LastSavedDateTime__c
-      Name: Name
-      NewStatus__c: Status__c
-      ObjectId__c: RelatedRecordId__c
-      ObjectLabel__c: RelatedLabel__c
-      ObjectName__c: RelatedName__c
-      ObjectType__c: RelatedType__c
-      OmniScriptId__c: OmniScriptId__c
-      OmniScriptLanguage__c: OmniScriptLanguage__c
-      OmniScriptLanguageCode__c: OmniScriptLocaleCode__c
-      OmniScriptSubType__c: OmniScriptSubType__c
-      OmniScriptType__c: OmniScriptType__c
-      OmniScriptVersion__c: OmniScriptVersionNumber__c
-      ReferenceNumber__c: SavedSessionKey__c
-      RelativeResumeLink__c: RelativeResumeUrl__c
-      ResumeLink__c: ResumeUrl__c
-      Status__c: StatusCategory__c
