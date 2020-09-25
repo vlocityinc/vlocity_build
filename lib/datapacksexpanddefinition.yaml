@@ -60,6 +60,26 @@ DataPacks:
       UnhashableFields:
       - CustomJavaScript__c
       - Order__c
+    OmniProcess__c:
+      CustomJavaScript__c:
+        FileName:
+        - _SampleInput
+        FileType: json
+      DisplayName:
+      - Type__c
+      - SubType__c
+      FileName:
+      - Type__c
+      - SubType__c
+      FolderName:
+      - Type__c
+      - SubType__c
+      TitleFields:
+      - Type__c
+      - SubType__c
+      UnhashableFields:
+      - CustomJavaScript__c
+      - Order__c
   ObjectClass:
     HeadersOnly: true
   ObjectLayout:
@@ -560,7 +580,7 @@ SObjects:
     DeletedDuringDeploy: true
     DiffKeys:
       1: 
-        - MapId__c
+        - GlobalKey__c
       2: 
         - OutputFieldName__c
         - OutputCreationSequence__c
@@ -579,7 +599,7 @@ SObjects:
       7:
         - VlocityRecordSourceKey
     ListFileName:
-    - _Mappings
+    - _Items
     NonUnique: true
     SortFields:
     - InputObjectQuerySequence__c
