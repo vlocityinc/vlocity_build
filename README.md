@@ -1308,3 +1308,4 @@ Likely due to circular references or where data may have already exist. Possible
 
 * Cannot Update CurrencyCode GlobalValueSet 
 Updating Managed Package Global Value Sets is not possible without using the UI.
+* If you have more than 300 Attribute Assignments or Product Child Items on a Product and use Override Definitions then there can be issues with OverrideDefintions missing Overridden Attritubtes on records where the Overridden Attribute is related to the Product with more than 300 Attribute Assignments or Product Child Items.
