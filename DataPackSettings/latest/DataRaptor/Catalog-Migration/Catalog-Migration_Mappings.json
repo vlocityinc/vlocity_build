@@ -48,7 +48,7 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "%vlocity_namespace%__Catalog__c:%vlocity_namespace%__CatalogProductRelationship__c",
         "%vlocity_namespace%__FilterOperator__c": "LIMIT",
-        "%vlocity_namespace%__FilterValue__c": "500",
+        "%vlocity_namespace%__FilterValue__c": "250",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 3,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__CatalogProductRelationship__c",
         "%vlocity_namespace%__MapId__c": "Catalog Migration252",
