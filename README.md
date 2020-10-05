@@ -184,7 +184,7 @@ It is best to not rely on a single build.properties file and instead use named p
 
 Additionally there is support for OAuth style information sent through the command line or property file:
 ```bash
-vlocity packExport -sf.authToken <authToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
+vlocity packExport -sf.accessToken <accessToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
 ```
 If you are using this method also include `oauthConnection: true` in your Job File.
 
