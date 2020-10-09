@@ -1613,7 +1613,7 @@ IPActionsConfig:
     query: SELECT Id FROM %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true AND %vlocity_namespace%__ProcedureKey__c  = '%dataFieldValue%'
   Matrix Action:
     type: CalculationMatrix
-    dataField: remoteOptions.matrixName
+    dataField: matrixName
     query: SELECT Id FROM %vlocity_namespace%__CalculationMatrix__c  WHERE Name = '%dataFieldValue%'
   Remote Action:
     type: ApexClass
