@@ -5,7 +5,7 @@ DataRaptor:
       BatchSize__c: BatchSize__c
       CheckFieldLevelSecurity__c: IsFieldLevelSecurityEnabled__c
       CustomInputClass__c: InputParsingClass__c
-      customOutputClass__c: OutputParsingClass__c
+      CustomOutputClass__c: OutputParsingClass__c
       DeleteOnSuccess__c: IsDeletedOnSuccess__c
       Description__c: Description__c
       IgnoreErrors__c: IsErrorIgnored__c
@@ -29,7 +29,7 @@ DataRaptor:
       SampleInputRows__c: PreviewSourceObjectData__c
       SampleInputXML__c: PreviewXmlData__c
       TargetOutCustom__c: ExpectedOutputOtherData__c
-      TargetOutDocuSignTemplateId__c: TargetOutputDocumentId__c
+      TargetOutDocuSignTemplateId__c: TargetOutputDocumentIdentifier__c
       TargetOutJson__c: ExpectedOutputJson__c
       TargetOutPdfDocName__c: TargetOutputFileName__c
       TargetOutXml__c: ExpectedOutputXml__c
@@ -41,14 +41,14 @@ DataRaptor:
   DRMapItem__c:
     objectName: OmniDataTransformItem__c
     fieldNames:
-      configurationAttribute__c: MigrationAttribute__c
-      configurationCategory__c: MigrationCategory__c
-      configurationGroup__c: MigrationGroup__c
-      configurationKey__c: MigrationKey__c
-      configurationPattern__c: MigrationPattern__c
-      configurationProcess__c: MigrationProcess__c
-      configurationType__c: MigrationType__c
-      configurationValue__c: MigrationValue__c
+      ConfigurationAttribute__c: MigrationAttribute__c
+      ConfigurationCategory__c: MigrationCategory__c
+      ConfigurationGroup__c: MigrationGroup__c
+      ConfigurationKey__c: MigrationKey__c
+      ConfigurationPattern__c: MigrationPattern__c
+      ConfigurationProcess__c: MigrationProcess__c
+      ConfigurationType__c: MigrationType__c
+      ConfigurationValue__c: MigrationValue__c
       DefaultValue__c: DefaultValue__c
       DisplayType__c: FilterDataType__c
       DomainObjectAPIName__c: OutputObjectName__c
@@ -93,21 +93,22 @@ OmniScript:
       ReusableOmniScript__c: IsOmniScriptEmbeddable__c
       SearchKey__c: EmbeddedOmniScriptKey__c
       Type__c: Type__c
+      OmniScriptId__r: OmniProcessId__r
   OmniScript__c:
     objectName: OmniProcess__c
     fieldNames:
       AdditionalInformation__c: Description__c
-      customJavaScript__c: customJavaScript__c
+      CustomJavaScript__c: CustomJavaScript__c
       DisableMetadataCache__c: IsMetadataCacheDisabled__c
       ElementTypeToHTMLTemplateList__c: ElementTypeComponentMapping__c
       IsActive__c: IsActive__c
-      IsLwcEnabled__c: IsLightningWebCompEnabled__c
+      IsLwcEnabled__c: IsWebCompEnabled__c
       IsProcedure__c: IsIntegrationProcedure__c
       IsReusable__c: IsOmniScriptEmbeddable__c
       IsTest__c: IsTestProcedure__c
       Language__c: Language__c
       LastPreviewPage__c: LastPreviewPage__c
-      LwcId__c: LightningWebComponentId__c
+      LwcId__c: WebComponentKey__c
       Name: Name
       OmniProcessType__c: OmniProcessType__c
       ProcedureKey__c: OmniProcessKey__c
@@ -115,9 +116,10 @@ OmniScript:
       PropertySet__c: PropertySetConfig__c
       RequiredPermission__c: RequiredPermission__c
       SubType__c: SubType__c
-      TestHTMLTemplates__c: customHtmlTemplates__c
+      TestHTMLTemplates__c: CustomHtmlTemplates__c
       Type__c: Type__c
       Version__c: VersionNumber__c
+      OmniScriptDefinitions__r: OmniProcessCompilations__c
 IntegrationProcedure:
   Element__c:
     objectName: OmniProcessElement__c
@@ -136,21 +138,22 @@ IntegrationProcedure:
       ReusableOmniScript__c: IsOmniScriptEmbeddable__c
       SearchKey__c: EmbeddedOmniScriptKey__c
       Type__c: Type__c
+      OmniScriptId__r: OmniProcessId__r
   OmniScript__c:
     objectName: OmniProcess__c
     fieldNames:
       AdditionalInformation__c: Description__c
-      customJavaScript__c: customJavaScript__c
+      CustomJavaScript__c: CustomJavaScript__c
       DisableMetadataCache__c: IsMetadataCacheDisabled__c
       ElementTypeToHTMLTemplateList__c: ElementTypeComponentMapping__c
       IsActive__c: IsActive__c
-      IsLwcEnabled__c: IsLightningWebCompEnabled__c
+      IsLwcEnabled__c: IsWebCompEnabled__c
       IsProcedure__c: IsIntegrationProcedure__c
       IsReusable__c: IsOmniScriptEmbeddable__c
       IsTest__c: IsTestProcedure__c
       Language__c: Language__c
       LastPreviewPage__c: LastPreviewPage__c
-      LwcId__c: LightningWebComponentId__c
+      LwcId__c: WebComponentKey__c
       Name: Name
       OmniProcessType__c: OmniProcessType__c
       ProcedureKey__c: OmniProcessKey__c
@@ -158,6 +161,7 @@ IntegrationProcedure:
       PropertySet__c: PropertySetConfig__c
       RequiredPermission__c: RequiredPermission__c
       SubType__c: SubType__c
-      TestHTMLTemplates__c: customHtmlTemplates__c
+      TestHTMLTemplates__c: CustomHtmlTemplates__c
       Type__c: Type__c
       Version__c: VersionNumber__c
+      OmniScriptDefinitions__r: OmniProcessCompilations__c
