@@ -184,7 +184,7 @@ It is best to not rely on a single build.properties file and instead use named p
 
 Additionally there is support for OAuth style information sent through the command line or property file:
 ```bash
-vlocity packExport -sf.authToken <authToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
+vlocity packExport -sf.accessToken <accessToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
 ```
 If you are using this method also include `oauthConnection: true` in your Job File.
 
@@ -1308,3 +1308,4 @@ Likely due to circular references or where data may have already exist. Possible
 
 * Cannot Update CurrencyCode GlobalValueSet 
 Updating Managed Package Global Value Sets is not possible without using the UI.
+* If you have more than 300 Attribute Assignments or Product Child Items on a Product and use Override Definitions then there can be issues with OverrideDefintions missing Overridden Attritubtes on records where the Overridden Attribute is related to the Product with more than 300 Attribute Assignments or Product Child Items.
