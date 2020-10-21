@@ -158,6 +158,8 @@ DataPacks:
       KeepOnlyFields: 
       - Name
       - GlobalKey__c
+  Project:
+    DeployLast: true
   SObject:
     HeadersOnly: Identical
     SupportParallelDeploy: false
