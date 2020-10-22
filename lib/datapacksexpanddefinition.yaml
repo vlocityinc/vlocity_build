@@ -97,6 +97,9 @@ DataPacks:
     SupportParallelDeploy: false
     PaginationSize: 300
     SoloExport: true
+    PaginationActions:
+      ObjectFieldAttribute__c: 
+        - Remove
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
