@@ -65,7 +65,7 @@ EntityFilter:
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
 GeneralSettings:
   VlocityDataPackType: GeneralSettings
-  query: Select Name from %vlocity_namespace%__GeneralSettings__c  
+  query: Select Id, Name from %vlocity_namespace%__GeneralSettings__c  
 IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c
