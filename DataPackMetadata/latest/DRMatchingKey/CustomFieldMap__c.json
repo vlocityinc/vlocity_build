@@ -1,18 +1,18 @@
 {
-    "fullName": "%vlocity_namespace%__DRMatchingKey__mdt.Project",
-    "label": "ProjectCustom",
+    "fullName": "%vlocity_namespace%__DRMatchingKey__mdt.CustomFieldMap",
+    "label": "CustomFieldMapCustom",
     "values": [
         {
             "field": "%vlocity_namespace%__MatchingKeyFields__c",
-            "value": "%vlocity_namespace%__GlobalKey__c"
+            "value": "Name"
         },
         {
             "field": "%vlocity_namespace%__MatchingKeyObject__c",
-            "value": "%vlocity_namespace%__Project__c"
+            "value": "%vlocity_namespace%__CustomFieldMap__c"
         },
         {
             "field": "%vlocity_namespace%__ObjectAPIName__c",
-            "value": "%vlocity_namespace%__Project__c"
+            "value": "%vlocity_namespace%__CustomFieldMap__c"
         },
         {
             "field": "%vlocity_namespace%__ReturnKeyField__c",

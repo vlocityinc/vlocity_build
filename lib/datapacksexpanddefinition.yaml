@@ -472,6 +472,11 @@ SObjects:
     - Name
     TitleFields:
     - SetupValue__c
+  CustomFieldMap__c:
+    FolderName:
+    - Name
+    SourceKeyDefinition:
+    - Name  
   DRBundle__c:
     DeltaQueryChildren:
       DRMapItem__c:
@@ -851,6 +856,11 @@ SObjects:
     FolderName:
     - Name
     KeepOnlyFields:
+    - Name
+    SourceKeyDefinition:
+    - Name
+  GeneralSettings__c:
+    FolderName:
     - Name
     SourceKeyDefinition:
     - Name
@@ -1352,6 +1362,11 @@ SObjects:
         RuleId__c: Id
       RuleFilter__c:
         RuleId__c: Id
+    FolderName:
+    - GlobalKey__c
+    SourceKeyDefinition:
+    - GlobalKey__c
+  SpecTemplateMapping__c:
     FolderName:
     - GlobalKey__c
     SourceKeyDefinition:
