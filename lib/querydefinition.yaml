@@ -18,6 +18,10 @@ CalculationMatrixVersion:
 CalculationProcedure:
   VlocityDataPackType: CalculationProcedure
   query: Select Id, Name from %vlocity_namespace%__CalculationProcedure__c
+CalculationProcedureVersion:
+  VlocityDataPackType: CalculationProcedureVersion
+  query: Select Id, Name from %vlocity_namespace%__CalculationProcedureVersion__c WHERE %vlocity_namespace%__IsEnabled__c = true
+  requiredSetting: separateCalculationProcedureVersions
 Catalog:
   VlocityDataPackType: Catalog
   query: Select Id, Name from %vlocity_namespace%__Catalog__c     
@@ -59,6 +63,9 @@ DocumentTemplate:
 EntityFilter:
   VlocityDataPackType: EntityFilter
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
+GeneralSettings:
+  VlocityDataPackType: GeneralSettings
+  query: Select Id, Name from %vlocity_namespace%__GeneralSettings__c  
 IntegrationProcedure:
   VlocityDataPackType: IntegrationProcedure
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c
@@ -93,7 +100,7 @@ OfferMigrationPlan:
   query: Select Id, Name, %vlocity_namespace%__Code__c from %vlocity_namespace%__OfferMigrationPlan__c
 OmniScript:
   VlocityDataPackType: OmniScript
-  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
+  query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c, %vlocity_namespace%__IsLwcEnabled__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false
 OmniScriptVersion:
   VlocityDataPackType: OmniScript
   query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c, %vlocity_namespace%__Version__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsProcedure__c = false
@@ -137,9 +144,15 @@ QueryBuilder:
 RateBand:
   VlocityDataPackType: RateBand
   query: Select Id, Name from %vlocity_namespace%__RateBand__c
+RelationshipGraph:
+  VlocityDataPackType: RelationshipGraph
+  query: Select Id from %vlocity_namespace%__RelationshipGraph__c
 Rule:
   VlocityDataPackType: Rule
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Rule__c
+SpecTemplateMapping:
+  VlocityDataPackType: SpecTemplateMapping
+  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__SpecTemplateMapping__c
 StoryObjectConfiguration:
   VlocityDataPackType: StoryObjectConfiguration
   query: Select Id, Name from %vlocity_namespace%__StoryObjectConfiguration__c
@@ -198,6 +211,12 @@ VlocityUILayout:
 VlocityUITemplate:
   VlocityDataPackType: VlocityUITemplate
   query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c WHERE %vlocity_namespace%__Active__c = true
+VlocityWebTrackingConfiguration:
+  VlocityDataPackType: VlocityWebTrackingConfiguration
+  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityWebTrackingConfiguration__c
+VlocityTrackingGroup:
+  VlocityDataPackType: VlocityTrackingGroup
+  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%____VlocityTrackingGroup__c
 VqMachine:
   VlocityDataPackType: VqMachine
   query: Select Id, Name from %vlocity_namespace%__VqMachine__c

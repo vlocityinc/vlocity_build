@@ -3,7 +3,7 @@
 const _datapacksexpand = require('../lib/datapacksexpand');
 const _datapacksutils = require('../lib/datapacksutils');
 const _vlocityutils = require('../lib/vlocityutils');
-
+const path = require('path');
 
 
 const expect = require('chai').expect;
@@ -48,7 +48,14 @@ describe('DataPacksExpand', async () =>
     it('should trim ()', () => {
       var name = 'a (a-b)';
       expect(datapacksexpand.generateFolderOrFilename(name)).to.be.eq('a-a-b');
-    })    
+    })   
+    
+    it('should be 250 chars', () => {
+      var name = path.join('test','test2','123456789-'.repeat(30));
+
+      console.log(datapacksexpand.generateFolderOrFilename(name));
+      expect(path.basename(datapacksexpand.generateFolderOrFilename(name))).to.have.length(250);
+    })   
   })
 
   describe('getNameWithFields', () => { 

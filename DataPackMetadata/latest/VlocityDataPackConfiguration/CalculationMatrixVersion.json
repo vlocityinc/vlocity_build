@@ -11,35 +11,11 @@
             "value": "Calculation Matrix Version Migration"
         },
         { 
-            "field": "%vlocity_namespace%__ImportService__c", 
-            "value": "Calculation Matrix Version Migration"
-        },
-        { 
-            "field": "%vlocity_namespace%__ExportService__c", 
-            "value": "Calculation Matrix Version Migration"
-        },
-        { 
-            "field": "%vlocity_namespace%__ImportType__c", 
-            "value": "Vlocity DataRaptor"
-        },
-        { 
             "field": "%vlocity_namespace%__DefaultActivateLimit__c", 
             "value": 1
         },
         { 
-            "field": "%vlocity_namespace%__ActivateLimit__c", 
-            "value": 1
-        },
-        { 
-            "field": "%vlocity_namespace%__ExportLimit__c", 
-            "value": 1
-        },
-        { 
             "field": "%vlocity_namespace%__DefaultExportLimit__c", 
-            "value": 1
-        },
-        { 
-            "field": "%vlocity_namespace%__ImportLimit__c", 
             "value": 1
         },
         { 

@@ -1,0 +1,167 @@
+DataRaptor:
+  DRBundle__c:
+    objectName: OmniDataTransform__c
+    fieldNames:
+      BatchSize__c: BatchSize__c
+      CheckFieldLevelSecurity__c: IsFieldLevelSecurityEnabled__c
+      CustomInputClass__c: InputParsingClass__c
+      CustomOutputClass__c: OutputParsingClass__c
+      DeleteOnSuccess__c: IsDeletedOnSuccess__c
+      Description__c: Description__c
+      IgnoreErrors__c: IsErrorIgnored__c
+      InputCustom__c: ExpectedInputOtherData__c
+      InputJson__c: ExpectedInputJson__c
+      InputType__c: InputType__c
+      InputXml__c: ExpectedInputXml__c
+      InterfaceObject__c: SourceObject__c
+      IsDefaultForInterface__c: IsSourceObjectDefault__c
+      IsProcessSuperBulk__c: IsProcessSuperBulk__c
+      Name: Name
+      OutputType__c: OutputType__c
+      OverwriteAllNullValues__c: IsNullInputsIncludedInOutput__c
+      PreprocessorClassName__c: PreprocessorClassName__c
+      ProcessNowThreshold__c: SynchronousProcessThreshold__c
+      RequiredPermission__c: RequiredPermission__c
+      RollbackOnError__c: IsRollbackOnError__c
+      SalesforcePlatformCacheType__c: ResponseCacheType__c
+      SampleInputCustom__c: PreviewOtherData__c
+      SampleInputJSON__c: PreviewJsonData__c
+      SampleInputRows__c: PreviewSourceObjectData__c
+      SampleInputXML__c: PreviewXmlData__c
+      TargetOutCustom__c: ExpectedOutputOtherData__c
+      TargetOutDocuSignTemplateId__c: TargetOutputDocumentIdentifier__c
+      TargetOutJson__c: ExpectedOutputJson__c
+      TargetOutPdfDocName__c: TargetOutputFileName__c
+      TargetOutXml__c: ExpectedOutputXml__c
+      TimeToLiveMinutes__c: ResponseCacheTtlMinutes__c
+      Type__c: Type__c
+      UseAssignmentRules__c: IsAssignmentRulesUsed__c
+      XmlOutputSequence__c: XmlOutputTagsOrder__c
+      XmlRemoveDeclaration__c: IsXmlDeclarationRemoved__c
+  DRMapItem__c:
+    objectName: OmniDataTransformItem__c
+    fieldNames:
+      ConfigurationAttribute__c: MigrationAttribute__c
+      ConfigurationCategory__c: MigrationCategory__c
+      ConfigurationGroup__c: MigrationGroup__c
+      ConfigurationKey__c: MigrationKey__c
+      ConfigurationPattern__c: MigrationPattern__c
+      ConfigurationProcess__c: MigrationProcess__c
+      ConfigurationType__c: MigrationType__c
+      ConfigurationValue__c: MigrationValue__c
+      DefaultValue__c: DefaultValue__c
+      DisplayType__c: FilterDataType__c
+      DomainObjectAPIName__c: OutputObjectName__c
+      DomainObjectCreationOrder__c: OutputCreationSequence__c
+      DomainObjectFieldAPIName__c: OutputFieldName__c
+      DomainObjectFieldType__c: OutputFieldFormat__c
+      FilterGroup__c: FilterGroup__c
+      FilterOperator__c: FilterOperator__c
+      FilterValue__c: FilterValue__c
+      Formula__c: FormulaExpression__c
+      FormulaConverted__c: FormulaConverted__c
+      FormulaOrder__c: FormulaSequence__c
+      FormulaResultPath__c: FormulaResultPath__c
+      InterfaceFieldAPIName__c: InputFieldName__c
+      InterfaceObjectLookupOrder__c: InputObjectQuerySequence__c
+      InterfaceObjectName__c: InputObjectName__c
+      IsDisabled__c: IsDisabled__c
+      IsRequiredForUpsert__c: IsRequiredForUpsert__c
+      LinkCreatedField__c: LinkedFieldName__c
+      LinkCreatedIndex__c: LinkedObjectSequence__c
+      LookupDomainObjectFieldName__c: LookupByFieldName__c
+      LookupDomainObjectName__c: LookupObjectName__c
+      LookupDomainObjectRequestedFieldName__c: LookupReturnedFieldName__c
+      Name: Name
+      TransformValuesMap__c: TransformValueMappings__c
+      UpsertKey__c: IsUpsertKey__c
+OmniScript:
+  Element__c:
+    objectName: OmniProcessElement__c
+    fieldNames:
+      Active__c: IsActive__c
+      InternalNotes__c: Description__c
+      Level__c: Level__c
+      Name: Name
+      OmniScriptId__c: OmniProcessId__c
+      OmniScriptVersion__c: OmniProcessVersionNumber__c
+      Order__c: SequenceNumber__c
+      ParentElementId__c: ParentElementId__c
+      ParentElementName__c: ParentElementName__c
+      ParentElementType__c: ParentElementType__c
+      PropertySet__c: PropertySetConfig__c
+      ReusableOmniScript__c: IsOmniScriptEmbeddable__c
+      SearchKey__c: EmbeddedOmniScriptKey__c
+      Type__c: Type__c
+      OmniScriptId__r: OmniProcessId__r
+  OmniScript__c:
+    objectName: OmniProcess__c
+    fieldNames:
+      AdditionalInformation__c: Description__c
+      CustomJavaScript__c: CustomJavaScript__c
+      DisableMetadataCache__c: IsMetadataCacheDisabled__c
+      ElementTypeToHTMLTemplateList__c: ElementTypeComponentMapping__c
+      IsActive__c: IsActive__c
+      IsLwcEnabled__c: IsWebCompEnabled__c
+      IsProcedure__c: IsIntegrationProcedure__c
+      IsReusable__c: IsOmniScriptEmbeddable__c
+      IsTest__c: IsTestProcedure__c
+      Language__c: Language__c
+      LastPreviewPage__c: LastPreviewPage__c
+      LwcId__c: WebComponentKey__c
+      Name: Name
+      OmniProcessType__c: OmniProcessType__c
+      ProcedureKey__c: OmniProcessKey__c
+      ProcedureResponseCacheType__c: ResponseCacheType__c
+      PropertySet__c: PropertySetConfig__c
+      RequiredPermission__c: RequiredPermission__c
+      SubType__c: SubType__c
+      TestHTMLTemplates__c: CustomHtmlTemplates__c
+      Type__c: Type__c
+      Version__c: VersionNumber__c
+      OmniScriptDefinitions__r: OmniProcessCompilations__c
+IntegrationProcedure:
+  Element__c:
+    objectName: OmniProcessElement__c
+    fieldNames:
+      Active__c: IsActive__c
+      InternalNotes__c: Description__c
+      Level__c: Level__c
+      Name: Name
+      OmniScriptId__c: OmniProcessId__c
+      OmniScriptVersion__c: OmniProcessVersionNumber__c
+      Order__c: SequenceNumber__c
+      ParentElementId__c: ParentElementId__c
+      ParentElementName__c: ParentElementName__c
+      ParentElementType__c: ParentElementType__c
+      PropertySet__c: PropertySetConfig__c
+      ReusableOmniScript__c: IsOmniScriptEmbeddable__c
+      SearchKey__c: EmbeddedOmniScriptKey__c
+      Type__c: Type__c
+      OmniScriptId__r: OmniProcessId__r
+  OmniScript__c:
+    objectName: OmniProcess__c
+    fieldNames:
+      AdditionalInformation__c: Description__c
+      CustomJavaScript__c: CustomJavaScript__c
+      DisableMetadataCache__c: IsMetadataCacheDisabled__c
+      ElementTypeToHTMLTemplateList__c: ElementTypeComponentMapping__c
+      IsActive__c: IsActive__c
+      IsLwcEnabled__c: IsWebCompEnabled__c
+      IsProcedure__c: IsIntegrationProcedure__c
+      IsReusable__c: IsOmniScriptEmbeddable__c
+      IsTest__c: IsTestProcedure__c
+      Language__c: Language__c
+      LastPreviewPage__c: LastPreviewPage__c
+      LwcId__c: WebComponentKey__c
+      Name: Name
+      OmniProcessType__c: OmniProcessType__c
+      ProcedureKey__c: OmniProcessKey__c
+      ProcedureResponseCacheType__c: ResponseCacheType__c
+      PropertySet__c: PropertySetConfig__c
+      RequiredPermission__c: RequiredPermission__c
+      SubType__c: SubType__c
+      TestHTMLTemplates__c: CustomHtmlTemplates__c
+      Type__c: Type__c
+      Version__c: VersionNumber__c
+      OmniScriptDefinitions__r: OmniProcessCompilations__c

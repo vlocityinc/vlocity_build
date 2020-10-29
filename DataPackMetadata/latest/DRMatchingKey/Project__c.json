@@ -1,10 +1,10 @@
 {
     "fullName": "%vlocity_namespace%__DRMatchingKey__mdt.Project",
-    "label": "CpqConfigurationSetupCustom",
+    "label": "ProjectCustom",
     "values": [
         {
             "field": "%vlocity_namespace%__MatchingKeyFields__c",
-            "value": "Name"
+            "value": "%vlocity_namespace%__GlobalKey__c"
         },
         {
             "field": "%vlocity_namespace%__MatchingKeyObject__c",
