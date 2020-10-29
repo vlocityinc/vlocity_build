@@ -16,7 +16,7 @@ mkdir -p codeship/encrypted_files
 for filename in codeship/unencrypted_files/*; do
     BASE=`echo "$(basename $filename)"`
 
-    jet encrypt codeship/unencrypted_files/${BASE} codeship/encrypted_files/${BASE}
+    openssl enc -aes-256-cbc -pass file:codeship.aes -in codeship/unencrypted_files/${BASE} -out codeship/encrypted_files/${BASE}
 done
 
 

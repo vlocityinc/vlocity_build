@@ -4,5 +4,5 @@ for filename in codeship/encrypted_files/*; do
 
     BASE=`echo "$(basename $filename)"`
 
-    jet decrypt codeship/encrypted_files/$BASE codeship/unencrypted_files/$BASE
+    openssl enc -d -aes-256-cbc -pass pass:$AES_KEY -in codeship/encrypted_files/$BASE -out codeship/unencrypted_files/$BASE
 done
