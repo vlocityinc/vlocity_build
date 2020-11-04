@@ -60,26 +60,26 @@ DataPacks:
       UnhashableFields:
       - CustomJavaScript__c
       - Order__c
-    OmniProcess__c:
-      CustomJavaScript__c:
+    OmniProcess:
+      CustomJavaScript:
         FileName:
         - _SampleInput
         FileType: json
       DisplayName:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       FileName:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       FolderName:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       TitleFields:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       UnhashableFields:
-      - CustomJavaScript__c
-      - Order__c
+      - CustomJavaScript
+      - Order
   ObjectClass:
     HeadersOnly: true
   ObjectLayout:
