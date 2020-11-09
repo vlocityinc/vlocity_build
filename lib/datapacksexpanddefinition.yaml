@@ -1650,5 +1650,3 @@ IPActionsConfig:
     dataField: 
       - remoteClass
     query: SELECT Id FROM ApexClass WHERE Name = '%dataFieldValue%'
-StmpaExcludedSObjectsTypes:
-  - '%vlocity_namespace%__OmniScript__c'
