@@ -60,26 +60,26 @@ DataPacks:
       UnhashableFields:
       - CustomJavaScript__c
       - Order__c
-    OmniProcess__c:
-      CustomJavaScript__c:
+    OmniProcess:
+      CustomJavaScript:
         FileName:
         - _SampleInput
         FileType: json
       DisplayName:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       FileName:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       FolderName:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       TitleFields:
-      - Type__c
-      - SubType__c
+      - Type
+      - SubType
       UnhashableFields:
-      - CustomJavaScript__c
-      - Order__c
+      - CustomJavaScript
+      - Order
   ObjectClass:
     HeadersOnly: true
   ObjectLayout:
@@ -517,43 +517,43 @@ SObjects:
     - SampleInputRows__c
     - TargetOutJson__c
     - TargetOutXml__c
-  OmniDataTransform__c:
+  OmniDataTransform:
     DeltaQueryChildren:
-      OmniDataTransformItem__c:
+      OmniDataTransformItem:
         Name : Name
-        IsDisabled__c : false
-    ExpectedInputJson__c:
+        IsDisabled : false
+    ExpectedInputJson:
       FileName:
       - _InputJson
     ReplacementFields:
-      GlobalKey__c: Name  
-    PreviewJsonData__c:
+      GlobalKey: Name  
+    PreviewJsonData:
       FileName:
       - _SampleInputJson
-    PreviewXmlData__c:
+    PreviewXmlData:
       FileName:
       - _SampleInputXML
       FileType: xml
     SourceKeyDefinition:
     - Name
-    ExpectedOutputJson__c:
+    ExpectedOutputJson:
       FileName:
       - _TargetOutJson
-    ExpectedOutputXml__c:
+    ExpectedOutputXml:
       FileName:
       - _TargetOutXml
       FileType: xml
     TitleFields:
     - Name
-    - Type__c
+    - Type
     UnhashableFields:
-    - ExpectedInputJson__c
-    - ExpectedInputXml__c
-    - PreviewJsonData__c
-    - PreviewXmlData__c
-    - PreviewSourceObjectData__c
-    - ExpectedOutputJson__c
-    - ExpectedOutputXml__c
+    - ExpectedInputJson
+    - ExpectedInputXml
+    - PreviewJsonData
+    - PreviewXmlData
+    - PreviewSourceObjectData
+    - ExpectedOutputJson
+    - ExpectedOutputXml
   DRMapItem__c:
     DeletedDuringDeploy: true
     DiffKeys:
@@ -586,38 +586,38 @@ SObjects:
     - DomainObjectAPIName__c
     - DomainObjectFieldAPIName__c
     - InterfaceFieldAPIName__c
-  OmniDataTransformItem__c:
+  OmniDataTransformItem:
     DeletedDuringDeploy: true
     DiffKeys:
       1: 
-        - GlobalKey__c
+        - GlobalKey
       2: 
-        - OutputFieldName__c
-        - OutputCreationSequence__c
+        - OutputFieldName
+        - OutputCreationSequence
       3:
-        - OutputCreationSequence__c
-        - InputFieldName__c 
+        - OutputCreationSequence
+        - InputFieldName
       4: 
-        - InputObjectQuerySequence__c
-        - FilterGroup__c
-        - InputFieldName__c
+        - InputObjectQuerySequence
+        - FilterGroup
+        - InputFieldName
       5: 
-        - FormulaResultPath__c
+        - FormulaResultPath
       6:
-        - FormulaExpression__c
-        - FormulaSequence__c
+        - FormulaExpression
+        - FormulaSequence
       7:
         - VlocityRecordSourceKey
     ListFileName:
     - _Items
     NonUnique: true
     SortFields:
-    - InputObjectQuerySequence__c
-    - FilterGroup__c
-    - OutputCreationSequence__c
-    - OutputObjectName__c
-    - OutputFieldName__c
-    - InputFieldName__c
+    - InputObjectQuerySequence
+    - FilterGroup
+    - OutputCreationSequence
+    - OutputObjectName
+    - OutputFieldName
+    - InputFieldName
   DecompositionRelationship__c:
     SourceKeyDefinition:
     - Name
@@ -750,87 +750,87 @@ SObjects:
   EntityFilterConditionArgument__c:
     SortFields:
     - ArgumentSequence__c
-  OmniProcessElement__c:
+  OmniProcessElement:
     BuildOnlyFields:
-      SequenceNumber__c: index
+      SequenceNumber: index
     DataPackReferences:
     - Type: DataRaptor
-      Field: PropertySetConfig__c.postTransformBundle
+      Field: PropertySetConfig.postTransformBundle
     - Type: IntegrationProcedure
-      Field: PropertySetConfig__c.integrationProcedureKey
+      Field: PropertySetConfig.integrationProcedureKey
     - Type: IntegrationProcedure
-      Field: PropertySetConfig__c.preIP
+      Field: PropertySetConfig.preIP
     - Type: IntegrationProcedure
-      Field: PropertySetConfig__c.postIP
+      Field: PropertySetConfig.postIP
     - Type: DataRaptor
-      Field: PropertySetConfig__c:postTransformBundle
+      Field: PropertySetConfig:postTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.preTransformBundle
+      Field: PropertySetConfig.preTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.xmlPreTransformBundle
+      Field: PropertySetConfig.xmlPreTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.xmlPostTransformBundle
+      Field: PropertySetConfig.xmlPostTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.transformBundle
+      Field: PropertySetConfig.transformBundle
     - Type: Named Credential
-      Field: PropertySetConfig__c.namedCredential
+      Field: PropertySetConfig.namedCredential
     - Type: DocuSign Template
-      Field: PropertySetConfig__c.docuSignTemplate
+      Field: PropertySetConfig.docuSignTemplate
     - Type: DataRaptor
-      Field: PropertySetConfig__c.remoteOptions.postTransformBundle
+      Field: PropertySetConfig.remoteOptions.postTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.remoteOptions.preTransformBundle
+      Field: PropertySetConfig.remoteOptions.preTransformBundle
     - Type: CalculationProcedure
-      Field: PropertySetConfig__c.remoteOptions.configurationName
+      Field: PropertySetConfig.remoteOptions.configurationName
     - Type: CalculationMatrix
-      Field: PropertySetConfig__c.remoteOptions.matrixName
+      Field: PropertySetConfig.remoteOptions.matrixName
     - Type: DataRaptor
-      Field: PropertySetConfig__c.docuSignTemplatesGroup.transformBundle
+      Field: PropertySetConfig.docuSignTemplatesGroup.transformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.docuSignTemplatesGroupSig.transformBundle
+      Field: PropertySetConfig.docuSignTemplatesGroupSig.transformBundle
     - Type: Document
-      Field: PropertySetConfig__c.templateName
+      Field: PropertySetConfig.templateName
     - Type: Document
-      Field: PropertySetConfig__c.documentNames
+      Field: PropertySetConfig.documentNames
     - Type: ApexClass
-      Field: PropertySetConfig__c.remoteClass
+      Field: PropertySetConfig.remoteClass
     - Type: DataRaptor
-      Field: PropertySetConfig__c.bundle
+      Field: PropertySetConfig.bundle
     - Type: VlocityUITemplate
-      Field: PropertySetConfig__c.HTMLTemplateId
+      Field: PropertySetConfig.HTMLTemplateId
     - Type: VlocityUITemplate
-      Field: PropertySetConfig__c.modalHTMLTemplateId
+      Field: PropertySetConfig.modalHTMLTemplateId
     - Type: VlocityUITemplate
-      Field: PropertySetConfig__c.confirmRedirectTemplateUrl
+      Field: PropertySetConfig.confirmRedirectTemplateUrl
     - Type: VlocityUITemplate
-      Field: PropertySetConfig__c.modalConfigurationSetting.modalHTMLTemplateId
+      Field: PropertySetConfig.modalConfigurationSetting.modalHTMLTemplateId
     - Type: VlocityUITemplate
-      Field: PropertySetConfig__c.redirectTemplateUrl
+      Field: PropertySetConfig.redirectTemplateUrl
     FieldDisplayType:
-      PropertySetConfig__c.show: object
+      PropertySetConfig.show: object
     FieldImportance:
       High: 
-      - PropertySetConfig__c.show
+      - PropertySetConfig.show
     FileName:
     - _Element
     - Name
     FilterFields:
-    - OmniProcessVersionNumber__c
-    - Level__c
+    - OmniProcessVersionNumber
+    - Level
     JsonFields:
-    - PropertySetConfig__c
+    - PropertySetConfig
     RemoveNullValues: true
     SortFields:
     - HierarchicalKey
-    - ParentElementId__c
-    - SequenceNumber__c
+    - ParentElementId
+    - SequenceNumber
     SourceKeyDefinition:
-    - OmniProcessId__c
+    - OmniProcessId
     - Name
     UnhashableFields:
-    - SequenceNumber__c
-    - OmniProcessId__c
-    - PropertySetConfig__c.documentNames
+    - SequenceNumber
+    - OmniProcessId
+    - PropertySetConfig.documentNames
   EntityFilterCondition__c:
     DeltaQueryChildren:
       EntityFilterConditionArgument__c:
@@ -1046,69 +1046,69 @@ SObjects:
     - Type__c
     - SubType__c
     - Language__c
-  OmniProcess__c:
-    CustomJavaScript__c:
+  OmniProcess:
+    CustomJavaScript:
       FileName:
       - _JavaScript
       FileType: js
     DataPackReferences:
     - Type: VlocityUITemplate
-      Field: ElementTypeComponentMapping__c.ElementTypeComponentMapping
+      Field: ElementTypeComponentMapping.ElementTypeComponentMapping
     - Type: ApexClass
-      Field: PropertySetConfig__c.persistentComponent.remoteClass
+      Field: PropertySetConfig.persistentComponent.remoteClass
     - Type: DataRaptor
-      Field: PropertySetConfig__c.persistentComponent.preTransformBundle
+      Field: PropertySetConfig.persistentComponent.preTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.persistentComponent.postTransformBundle
+      Field: PropertySetConfig.persistentComponent.postTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.persistentComponent.remoteOptions.preTransformBundle
+      Field: PropertySetConfig.persistentComponent.remoteOptions.preTransformBundle
     - Type: DataRaptor
-      Field: PropertySetConfig__c.persistentComponent.remoteOptions.postTransformBundle
+      Field: PropertySetConfig.persistentComponent.remoteOptions.postTransformBundle
     - Type: VlocityUITemplate
-      Field: PropertySetConfig__c.persistentComponent.modalConfigurationSetting.modalHTMLTemplateId
+      Field: PropertySetConfig.persistentComponent.modalConfigurationSetting.modalHTMLTemplateId
     - Type: IntegrationProcedure
-      Field: PropertySetConfig__c.integrationProcedureKey
+      Field: PropertySetConfig.integrationProcedureKey
     DeltaCheckMatchingKey:
-    - Type__c
-    - SubType__c
-    - Language__c
-    - IsActive__c: true
+    - Type
+    - SubType
+    - Language
+    - IsActive: true
     DeltaQueryChildren:
-      OmniProcessElement__c:
-        OmniScriptId__c: Id     
+      OmniProcessElement:
+        OmniScriptId: Id     
     DisplayName:
-    - Type__c
-    - SubType__c
-    - Language__c    
-    OmniProcessElement__c: object
+    - Type
+    - SubType
+    - Language    
+    OmniProcessElement: object
     FileName:
-    - Type__c
-    - SubType__c
-    - Language__c
+    - Type
+    - SubType
+    - Language
     FilterFields:
-    - VersionNumber__c
-    - IsActive__c
-    - LightningWebComponentId__c
+    - VersionNumber
+    - IsActive
+    - LightningWebComponentId
     FolderName:
-    - Type__c
-    - SubType__c
-    - Language__c
-    PropertySetConfig__c:
+    - Type
+    - SubType
+    - Language
+    PropertySetConfig:
       FileName:
       - _PropertySetConfig
     RemoveNullValues: true
     SourceKeyDefinition:
-    - Type__c
-    - SubType__c
-    - Language__c
-    CustomHtmlTemplates__c:
+    - Type
+    - SubType
+    - Language
+    CustomHtmlTemplates:
       FileName:
       - _HTMLTemplates
       FileType: html
     TitleFields:
-    - Type__c
-    - SubType__c
-    - Language__c
+    - Type
+    - SubType
+    - Language
   OrchestrationDependencyDefinition__c:
     FilterFields:
     - OrchestrationPlanDefinition__c
