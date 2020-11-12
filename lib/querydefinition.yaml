@@ -28,7 +28,6 @@ Catalog:
 ContentVersion:
   VlocityDataPackType: ContentVersion
   query: Select Id, Title, %vlocity_namespace%__GlobalKey__c from ContentVersion WHERE %vlocity_namespace%__GlobalKey__c != null
-  manifestOnly: true
 ContextAction:
   VlocityDataPackType: ContextAction
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__ContextAction__c
@@ -159,7 +158,6 @@ StoryObjectConfiguration:
 String:
   VlocityDataPackType: String
   query: Select Id, Name from %vlocity_namespace%__String__c
-  manifestOnly: true
 System:
   VlocityDataPackType: System
   query: Select Id, Name from %vlocity_namespace%__System__c
