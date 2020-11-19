@@ -3,7 +3,6 @@
     "bin": "lib/vlocitybuild.js",
     "dependencies": {
         "async": "3.2.0",
-        "chromium": "^3.0.2",
         "diff2html": "2.5.0",
         "fast-json-stable-stringify": "2.1.0",
         "file-type": "10.9.0",
