@@ -169,3 +169,23 @@ IntegrationProcedure:
       Type__c: Type
       Version__c: VersionNumber
       OmniScriptDefinitions__r: OmniProcessDefinitions
+VlocityCard:
+  VlocityCard__c:
+    objectName: OmniUiCard
+    fieldNames:
+      Active__c: IsActive
+      Author__c: AuthorName
+      Datasource__c: DataSourceConfig
+      Definition__c: PropertySetConfig
+      Description__c: Description
+      GlobalKey__c: OmniUiCardKey 
+      Name: Name
+      ParentID__c: ClonedFromOmniUiCardKey
+      SampleData__c: SampleDataSourceResponse
+      Styles__c: StylingConfiguration
+      Version__c: VersionNumber
+      
+
+
+
+      
