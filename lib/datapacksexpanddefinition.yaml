@@ -1137,6 +1137,7 @@ SObjects:
   OrchestrationScenario__c:
     SourceKeyDefinition:
     - Name
+    - GlobalKey__c
     - Product2Id__c
   OrchestrationQueueAssignmentRule:
     FolderName:
