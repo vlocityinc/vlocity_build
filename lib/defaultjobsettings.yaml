@@ -10,6 +10,7 @@ activate: true
 compileOnBuild: true
 maxDepth: -1
 defaultMaxParallel: 100
+defaultMinToWaitForLWC: 10
 exportPacksMaxSize: 5
 useAllRelationships: false
 ignoreAllErrors: false
