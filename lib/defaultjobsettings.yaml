@@ -11,7 +11,7 @@ compileOnBuild: true
 maxDepth: -1
 defaultMaxParallel: 100
 defaultMinToWaitForLWCOmniScript: 10
-defaultMinToWaitForLWCClassicCards: 5
+defaultMinToWaitForLWCClassicCards: 10
 defaultMinToWaitForLWCFlexCards: 5
 exportPacksMaxSize: 5
 useAllRelationships: false
