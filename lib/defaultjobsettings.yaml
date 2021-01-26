@@ -14,6 +14,7 @@ defaultMinToWaitForLWCOmniScript: 10
 defaultMinToWaitForLWCClassicCards: 10
 defaultMinToWaitForLWCFlexCards: 5
 defaultLWCPullTimeInSeconds: 5
+lookForParentLayoutsForlWCCards: false
 exportPacksMaxSize: 5
 useAllRelationships: false
 ignoreAllErrors: false
