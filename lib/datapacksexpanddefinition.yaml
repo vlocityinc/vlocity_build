@@ -111,9 +111,6 @@ DataPacks:
     HeadersOnly: All
     PaginationSize: 500
   Product2:
-    HeadersExclusions:
-    - ProductChildItem__c
-    - AttributeAssignment__c
     HeadersOnly: true
     IgnoreExpand:
     - StandardPricebookEntry
@@ -127,6 +124,10 @@ DataPacks:
     PaginationActions:
       ObjectFieldAttribute__c: 
         - Remove
+      AttributeAssignment__c:
+        - RemoveFromInitial
+      OverrideDefinition__c:
+        - RemoveFromInitial
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
@@ -1137,6 +1138,7 @@ SObjects:
   OrchestrationScenario__c:
     SourceKeyDefinition:
     - Name
+    - GlobalKey__c
     - Product2Id__c
   OrchestrationQueueAssignmentRule:
     FolderName:
