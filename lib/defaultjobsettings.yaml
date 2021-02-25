@@ -10,6 +10,12 @@ activate: true
 compileOnBuild: true
 maxDepth: -1
 defaultMaxParallel: 100
+defaultMinToWaitForLWCOmniScript: 10
+defaultMinToWaitForLWCClassicCards: 10
+defaultMinToWaitForLWCFlexCards: 5
+defaultLWCPullTimeInSeconds: 5
+puppeteerHeadless: true
+lookForParentLayoutsForlWCCards: true
 exportPacksMaxSize: 5
 useAllRelationships: false
 ignoreAllErrors: false
