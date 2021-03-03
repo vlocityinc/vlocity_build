@@ -10,6 +10,7 @@ vlocity-temp/
 example_vlocity_build/
 test/testJobRunning/
 test/salesforce_sfdx_test/
+testJobRunning/testBuildFile.*
 .nyc_output/
 .vscode/
 .sfdx/
