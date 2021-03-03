@@ -381,16 +381,20 @@ Then adding the build step:
 ![Build](doc/Build.png)
 
 ## Auto Compilation of LWC OmniScript and Cards
-The Vlocity Build Tool will not automatically compile and deploy OmniScript and Cards LWCs after Activation through Puppeteer or Chrome installed on your local machine. To install puppeteer into a build machine or locally run:
+
+The Vlocity Build Tool will now automatically compile and deploy OmniScript and Cards LWCs after Activation through Puppeteer or Chrome installed on your local machine. To install puppeteer into a build machine or locally run:
+
 ```
 npm install puppeteer -g
 ```
 
-If you system has Chrome installed VBT will automatically start a headless chrome session, authentictae to the deployment org, and use a page in the Vlocity Managed Package to compile and deploy the OmniScript or Card.
+If your system has Chrome installed VBT will automatically start a headless chrome session, authenticate to the deployment org, and use a page in the Vlocity Managed Package to compile and deploy the OmniScript or Card.
 
-To disable this feature add to your Job File:
-ignoreLWCActivationOS: true
+To disable this feature add to your Job File: 
+```
+ignoreLWCActivationOS: true 
 ignoreLWCActivationCards: true
+```
 
 Otherwise these are now on by default.
 
