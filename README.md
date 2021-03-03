@@ -24,6 +24,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
   - [Vlocity Build + Salesforce DX](#vlocity-build--salesforce-dx)
     - [Vlocity Managed Package](#vlocity-managed-package)
   - [Running in Jenkins](#running-in-jenkins)
+  - [Auto Compilation of LWC OmniScript and Cards](#auto-compilation-of-lwc-omniscript-and-cards)
 - [The Job File](#the-job-file)
   - [What will be Exported?](#what-will-be-exported)
   - [Example Job File](#example-job-file)
@@ -379,6 +380,20 @@ The first step of setting up Jenkins for this project is adding the JWT Bindings
 Then adding the build step:
 ![Build](doc/Build.png)
 
+## Auto Compilation of LWC OmniScript and Cards
+The Vlocity Build Tool will not automatically compile and deploy OmniScript and Cards LWCs after Activation through Puppeteer or Chrome installed on your local machine. To install puppeteer into a build machine or locally run:
+```
+npm install puppeteer -g
+```
+
+If you system has Chrome installed VBT will automatically start a headless chrome session, authentictae to the deployment org, and use a page in the Vlocity Managed Package to compile and deploy the OmniScript or Card.
+
+To disable this feature add to your Job File:
+ignoreLWCActivationOS: true
+ignoreLWCActivationCards: true
+
+Otherwise these are now on by default.
+
 # The Job File
 A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
 
@@ -705,6 +720,8 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
 | useVlocityTriggers | Boolean | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | true |
 | disableVlocityTriggers | Boolean | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | false |
+| ignoreLWCActivationOS | Boolean | Do not compile and deploy LWC OmniScripts | false |
+| ignoreLWCActivationCards | Boolean | Do not compile and deploy LWC Cards | false |
 
 ## Vlocity Build Options
 | Option | Description | Type  | Default |
