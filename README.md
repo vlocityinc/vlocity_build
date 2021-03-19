@@ -1293,6 +1293,24 @@ In order to Retrieve the OmniScripts that will be deployed as part of the OmniOu
 
 This will export the retrieved files into the folder `OmniOut/scripts` in your Project.
 
+For LWC Omniscripts:
+
+Define a Job File with the query. 
+
+Example:
+
+```yaml
+projectPath: ./
+queries: 
+  - VlocityDataPackType: OmniScript
+    query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false AND %vlocity_namespace%__Type__c = 'lwc' AND  %vlocity_namespace%__SubType__c in ('oplOmni', 'typeaheadExample')
+```
+Then, Run the following command:
+
+`vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js lwcOmniOutRetrieve.js`
+
+
+
 # Required Version Check
 You can lock the version in any org by adding the following Custom Setting value:
 Custom Setting -> General Setting -> Name = VBTRequiredVersion
