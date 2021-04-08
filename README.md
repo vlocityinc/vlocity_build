@@ -462,9 +462,6 @@ When Exporting, the DataPacks API will additionally export all dependencies of t
 ## DataPack Key Based Export
 You can export DataPacks by their Vlocity DataPack Key which is the same as the Folder that they live in after being exported. For a Product the DataPack Key is `Product2/${GlobalKey__c}`. You can get a full list of Vlocity DataPack Keys by running getAllAvailableExports.
 
-This video has more information:  
-[Manifest Driven Workflow](https://drive.google.com/file/d/1FRKBrPqtfB2I_U57lJToHvWcR3Tld74s/view?usp=sharing)
-
 ## Query All
 Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queries defined, you can also run: `packExportAllDefault` to specify running all the default queries.
 
