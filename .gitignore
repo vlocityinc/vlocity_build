@@ -9,6 +9,7 @@ node_modules/
 vlocity-temp/
 example_vlocity_build/
 test/testJobRunning/
+testJobRunning/
 test/salesforce_sfdx_test/
 .nyc_output/
 .vscode/
