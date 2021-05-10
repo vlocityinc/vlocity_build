@@ -1,0 +1,24 @@
+{
+    "%vlocity_namespace%__CustomJavaScript__c": "{}",
+    "%vlocity_namespace%__DisableMetadataCache__c": false,
+    "%vlocity_namespace%__ElementTypeToHTMLTemplateList__c": "{\"ElementTypeToHTMLTemplateList\":[]}",
+    "%vlocity_namespace%__Element__c": [
+        "DataPackTest_IPTest1_Element_IPInput.json",
+        "DataPackTest_IPTest1_Element_TestIP.json",
+        "DataPackTest_IPTest1_Element_AssertTotal.json",
+        "DataPackTest_IPTest1_Element_TestResponse.json"
+    ],
+    "%vlocity_namespace%__IsLwcEnabled__c": false,
+    "%vlocity_namespace%__IsProcedure__c": true,
+    "%vlocity_namespace%__IsReusable__c": false,
+    "%vlocity_namespace%__IsTest__c": true,
+    "%vlocity_namespace%__Language__c": "Procedure",
+    "%vlocity_namespace%__ProcedureKey__c": "DataPackTest_IPTest1",
+    "%vlocity_namespace%__PropertySet__c": "DataPackTest_IPTest1_PropertySet.json",
+    "%vlocity_namespace%__SubType__c": "IPTest1",
+    "%vlocity_namespace%__Type__c": "DataPackTest",
+    "Name": "IPTest1",
+    "VlocityDataPackType": "SObject",
+    "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c",
+    "VlocityRecordSourceKey": "%vlocity_namespace%__OmniScript__c/DataPackTest/IPTest1/Procedure"
+}
