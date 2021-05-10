@@ -1,0 +1,29 @@
+{
+    "%vlocity_namespace%__CustomJavaScript__c": "DataPackTest_IPCondBlock1_SampleInput.json",
+    "%vlocity_namespace%__DisableMetadataCache__c": false,
+    "%vlocity_namespace%__ElementTypeToHTMLTemplateList__c": "{\"ElementTypeToHTMLTemplateList\":[]}",
+    "%vlocity_namespace%__Element__c": [
+        "DataPackTest_IPCondBlock1_Element_StateSalesTaxes.json",
+        "DataPackTest_IPCondBlock1_Element_IfCA.json",
+        "DataPackTest_IPCondBlock1_Element_IfOR.json",
+        "DataPackTest_IPCondBlock1_Element_IfWA.json",
+        "DataPackTest_IPCondBlock1_Element_IfNV.json",
+        "DataPackTest_IPCondBlock1_Element_IfOtherState.json",
+        "DataPackTest_IPCondBlock1_Element_CalculateTax.json",
+        "DataPackTest_IPCondBlock1_Element_AssembleOutput.json",
+        "DataPackTest_IPCondBlock1_Element_Response.json"
+    ],
+    "%vlocity_namespace%__IsLwcEnabled__c": false,
+    "%vlocity_namespace%__IsProcedure__c": true,
+    "%vlocity_namespace%__IsReusable__c": false,
+    "%vlocity_namespace%__IsTest__c": false,
+    "%vlocity_namespace%__Language__c": "Procedure",
+    "%vlocity_namespace%__ProcedureKey__c": "DataPackTest_IPCondBlock1",
+    "%vlocity_namespace%__PropertySet__c": "DataPackTest_IPCondBlock1_PropertySet.json",
+    "%vlocity_namespace%__SubType__c": "IPCondBlock1",
+    "%vlocity_namespace%__Type__c": "DataPackTest",
+    "Name": "IPCondBlock1",
+    "VlocityDataPackType": "SObject",
+    "VlocityRecordSObjectType": "%vlocity_namespace%__OmniScript__c",
+    "VlocityRecordSourceKey": "%vlocity_namespace%__OmniScript__c/DataPackTest/IPCondBlock1/Procedure"
+}
