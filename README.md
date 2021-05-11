@@ -381,16 +381,20 @@ Then adding the build step:
 ![Build](doc/Build.png)
 
 ## Auto Compilation of LWC OmniScript and Cards
-The Vlocity Build Tool will not automatically compile and deploy OmniScript and Cards LWCs after Activation through Puppeteer or Chrome installed on your local machine. To install puppeteer into a build machine or locally run:
+
+The Vlocity Build Tool will now automatically compile and deploy OmniScript and Cards LWCs after Activation through Puppeteer or Chrome installed on your local machine. To install puppeteer into a build machine or locally run:
+
 ```
 npm install puppeteer -g
 ```
 
-If you system has Chrome installed VBT will automatically start a headless chrome session, authentictae to the deployment org, and use a page in the Vlocity Managed Package to compile and deploy the OmniScript or Card.
+If your system has Chrome installed VBT will automatically start a headless chrome session, authenticate to the deployment org, and use a page in the Vlocity Managed Package to compile and deploy the OmniScript or Card.
 
-To disable this feature add to your Job File:
-ignoreLWCActivationOS: true
+To disable this feature add to your Job File: 
+```
+ignoreLWCActivationOS: true 
 ignoreLWCActivationCards: true
+```
 
 Otherwise these are now on by default.
 
@@ -457,9 +461,6 @@ When Exporting, the DataPacks API will additionally export all dependencies of t
 
 ## DataPack Key Based Export
 You can export DataPacks by their Vlocity DataPack Key which is the same as the Folder that they live in after being exported. For a Product the DataPack Key is `Product2/${GlobalKey__c}`. You can get a full list of Vlocity DataPack Keys by running getAllAvailableExports.
-
-This video has more information:  
-[Manifest Driven Workflow](https://drive.google.com/file/d/1FRKBrPqtfB2I_U57lJToHvWcR3Tld74s/view?usp=sharing)
 
 ## Query All
 Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queries defined, you can also run: `packExportAllDefault` to specify running all the default queries.
@@ -1288,6 +1289,24 @@ In order to Retrieve the OmniScripts that will be deployed as part of the OmniOu
 `vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js omniOutRetrieve.js`
 
 This will export the retrieved files into the folder `OmniOut/scripts` in your Project.
+
+For LWC Omniscripts:
+
+Define a Job File with the query. 
+
+Example:
+
+```yaml
+projectPath: ./
+queries: 
+  - VlocityDataPackType: OmniScript
+    query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c, %vlocity_namespace%__Language__c from %vlocity_namespace%__OmniScript__c where %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = false AND %vlocity_namespace%__Type__c = 'lwc' AND  %vlocity_namespace%__SubType__c in ('oplOmni', 'typeaheadExample')
+```
+Then, Run the following command:
+
+`vlocity -propertyfile <filepath> -job <filepath> runJavaScript -js lwcOmniOutRetrieve.js`
+
+
 
 # Required Version Check
 You can lock the version in any org by adding the following Custom Setting value:
