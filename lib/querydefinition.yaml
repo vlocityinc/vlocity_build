@@ -187,7 +187,7 @@ VlocityCard:
   query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c WHERE %vlocity_namespace%__Active__c = true
 VlocityDataStore:
   VlocityDataPackType: VlocityDataStore
-  query: SELECT Id, Name FROM %vlocity_namespace%__VlocityDataStore__c
+  query: SELECT Id, Name FROM %vlocity_namespace%__Datastore__c
 VlocityFunction:
   VlocityDataPackType: VlocityFunction
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityFunction__c
