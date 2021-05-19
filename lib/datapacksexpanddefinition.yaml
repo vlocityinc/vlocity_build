@@ -1458,6 +1458,28 @@ SObjects:
     UnhashableFields:
     - Author__c
     - GlobalKey__c
+  OmniUiCard:
+    DataPackReferences:
+    - Type: VlocityUILayout
+      Field: PropertySetConfig.states.flyout.layout
+    - Type: DataRaptor
+      Field: PropertySetConfig.dataSource.value.bundle
+    - Type: ApexClass
+      Field: PropertySetConfig.dataSource.value.remoteClass
+    - Type: VlocityUITemplate
+      Field: PropertySetConfig.states.templateUrl
+    - Type: VlocityAction
+      Field: PropertySetConfig.states.definedActions.actions.id
+    PropertySetConfig: json
+    FilterFields:
+    - IsActive
+    JsonFields:
+    - DataSourceConfig
+    SourceKeyDefinition:
+    - Name
+    UnhashableFields:
+    - AuthorName
+    - OmniUiCardKey
   VlocityDataStore__c:
     SourceKeyDefinition:
     - Name
