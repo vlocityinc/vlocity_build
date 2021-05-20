@@ -232,7 +232,6 @@ SObjects:
     EnsureGlobalKey: true
     FilterFields:
     - ObjectLink__c
-    - AttributeName__c
     - CategoryCode__c
     - CategoryName__c
     - AttributeCloneable__c
@@ -240,7 +239,6 @@ SObjects:
     - AttributeConfigurable__c
     - AttributeDisplayName__c
     - AttributeFilterable__c
-    - AttributeName__c
     - AttributeGroupType__c
     - CategoryDisplaySequence__c
     - ValueInNumber__c
