@@ -243,8 +243,6 @@ SObjects:
     - CategoryDisplaySequence__c
     - ValueInNumber__c
     - IsActive__c
-    SortFields:
-    - GlobalKey__c
     JsonFields:
     - ValidValuesData__c
     SourceKeyDefinition:
