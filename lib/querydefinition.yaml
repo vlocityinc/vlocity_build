@@ -214,7 +214,7 @@ VlocityWebTrackingConfiguration:
   query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityWebTrackingConfiguration__c
 VlocityTrackingGroup:
   VlocityDataPackType: VlocityTrackingGroup
-  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%____VlocityTrackingGroup__c
+  query: Select Id, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__VlocityTrackingGroup__c
 VqMachine:
   VlocityDataPackType: VqMachine
   query: Select Id, Name from %vlocity_namespace%__VqMachine__c
