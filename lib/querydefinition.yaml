@@ -46,6 +46,12 @@ CpqConfigurationSetup:
 CustomFieldMap:
   VlocityDataPackType: CustomFieldMap
   query: Select Id, Name from %vlocity_namespace%__CustomFieldMap__c 
+DecisionMatrix:
+  VlocityDataPackType: DecisionMatrix
+  query: Select Id, Name from CalculationMatrix 
+DecisionMatrixVersion:
+  VlocityDataPackType: DecisionMatrixVersion
+  query: Select Id, Name from CalculationMatrixVersion
 DataRaptor:
   VlocityDataPackType: DataRaptor
   query: Select Id, Name from %vlocity_namespace%__DRBundle__c WHERE %vlocity_namespace%__Type__c != 'Migration'
@@ -62,6 +68,12 @@ DocumentTemplate:
 EntityFilter:
   VlocityDataPackType: EntityFilter
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
+ExpressionSet:
+  VlocityDataPackType: ExpressionSet
+  query: Select Id, Name from CalculationProcedure
+ExpressionSetVersion:
+  VlocityDataPackType: ExpressionSetVersion
+  query: Select Id, Name from CalculationProcedureVersion
 GeneralSettings:
   VlocityDataPackType: GeneralSettings
   query: Select Id, Name from %vlocity_namespace%__GeneralSettings__c  

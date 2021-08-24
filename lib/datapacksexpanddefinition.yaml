@@ -35,6 +35,16 @@ DataPacks:
     UniqueByName: true
     MaxDeploy: 5
     DefaultVisualforcePage: /one/one.app#/alohaRedirect/apex/%vlocity_namespace%__drmapper?id=%Id%
+  DecisionMatrix:
+    UniqueByName: true
+    ExportGroupSize: 1
+    MaxDeploy: 1
+  DecisionMatrixVersion:
+    ExportGroupSize: 1
+    MaxDeploy: 1
+    CalculationMatrixVersion:
+      FileName:
+      - Name
   EntityFilter:
     MaxDeploy: 1
   IntegrationProcedure:
@@ -323,6 +333,28 @@ SObjects:
       GlobalKey__c: Name    
     SourceKeyDefinition:
     - Name
+  CalculationMatrix:
+    SourceKeyDefinition:
+    - Name
+  CalculationMatrixRow:
+    DiffKeys:
+      1: 
+        - Name
+    JsonFields:
+    - InputData
+    - OutputData
+    ListFileName:
+    - _Rows
+    NonUnique: true
+    SortFields:
+    - Name=Header
+    - InputData
+    UnhashableFields:
+    - CalculationMatrixVersionId
+  CalculationMatrixVersion:
+    SourceKeyDefinition:
+    - VersionNumber
+    - CalculationMatrixId
   CalculationProcedureStep__c:
     DeletedDuringDeploy: true
     DeltaCheckTextIdField:
@@ -397,6 +429,61 @@ SObjects:
     - Name
     UnhashableFields:
     - LastSimulationInput__c
+  CalcProcStepRelationship:
+    DeletedDuringDeploy: true
+  CalculationProcedureStep:
+    DeletedDuringDeploy: true
+    DiffKeys:
+      1: 
+        - OutputVariablesFormatText
+      2: 
+        - FormulaExpressionText
+    FilterFields:
+    - CalculationProcedure
+    JsonFields:
+    - ConditionsUiFormattedText
+    - InputVariablesFormatText
+    - OutputVariablesFormatText
+    - OutputVariablesMappingText
+    - ReturnMessageValueSet
+    ListFileName:
+    - _Steps
+    NonUnique: true
+    SortFields:
+    - Stage
+    - StageStepSequence
+    UnhashableFields:
+    - CalculationProcedureVersionId
+  CalculationProcedureVariable:
+    DeletedDuringDeploy: true
+    DiffKeys:
+      1: 
+        - Name
+    ListFileName:
+    - _Variables
+    UnhashableFields:
+    - CalculationProcedureVersionId
+  CalculationProcedureVersion:
+    DiffKeys:
+      1: 
+        - _Version
+    FileName:
+    - _Version
+    JsonFields:
+    - Constants
+    - Variables
+    ReplacementFields:
+      GlobalKey__c: Name
+    SourceKeyDefinition:
+    - VersionNumber
+    - CalculationProcedureId
+  CalculationProcedure:
+    CalculationProcedureVersion__c: object
+    FilterFields:
+    - InputVariablesMetadata
+    - OutputVariablesMetadata
+    SourceKeyDefinition:
+    - Name
   Catalog__c:
     DeltaQueryChildren:
       CatalogRelationship__c:
