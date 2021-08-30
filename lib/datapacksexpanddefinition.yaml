@@ -428,7 +428,6 @@ SObjects:
   CalcProcStepRelationship:
     DeletedDuringDeploy: true
   CalculationProcedureStep:
-    DeletedDuringDeploy: true
     DiffKeys:
       1: 
         - OutputVariablesFormatText
@@ -444,7 +443,6 @@ SObjects:
     - ReturnMessageValueSet
     ListFileName:
     - _Steps
-    NonUnique: true
     SortFields:
     - Stage
     - StageStepSequence
