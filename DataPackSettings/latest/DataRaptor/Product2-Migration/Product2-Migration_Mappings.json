@@ -217,6 +217,20 @@
         "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
         "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Product2:%vlocity_namespace%__AttributeAssignment__c",
         "%vlocity_namespace%__FilterOperator__c": "=",
+        "%vlocity_namespace%__FilterValue__c": "'$Vlocity.FALSE'",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__IsOverride__c",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Product2 Migration12432423",
+        "Name": "Product2 Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Product2:%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__FilterOperator__c": "=",
         "%vlocity_namespace%__FilterValue__c": "Product2:Id",
         "%vlocity_namespace%__InterfaceFieldAPIName__c": "%vlocity_namespace%__ObjectId__c",
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 5,
@@ -373,6 +387,7 @@
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
     },
+    
     {
         "%vlocity_namespace%__ConfigurationAttribute__c": "%vlocity_namespace%__OverrideDefinition__c",
         "%vlocity_namespace%__ConfigurationCategory__c": "PUT",
@@ -780,6 +795,20 @@
         "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 20,
         "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__OrchestrationScenario__c",
         "%vlocity_namespace%__MapId__c": "Product2 Migration83",
+        "Name": "Product2 Migration",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
+    },
+    {
+        "%vlocity_namespace%__DomainObjectAPIName__c": "JSON",
+        "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
+        "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Product2:%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__FilterOperator__c": "=",
+        "%vlocity_namespace%__FilterValue__c": "Product2:%vlocity_namespace%__OverrideDefinition__c:%vlocity_namespace%__OverridingAttributeAssignmentId__c",
+        "%vlocity_namespace%__InterfaceFieldAPIName__c": "Id",
+        "%vlocity_namespace%__InterfaceObjectLookupOrder__c": 21,
+        "%vlocity_namespace%__InterfaceObjectName__c": "%vlocity_namespace%__AttributeAssignment__c",
+        "%vlocity_namespace%__MapId__c": "Product2 Migration9231212",
         "Name": "Product2 Migration",
         "VlocityDataPackType": "SObject",
         "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c"
