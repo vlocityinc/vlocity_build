@@ -715,14 +715,18 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | maxDepth | The max distance of Parent or Children Relationships from initial data being exported | Integer | -1 (All) |
 | maximumDeployCount | The maximum number of items in a single Deploy. Setting this to 1 combined with using preStepApex can allow Deploys that act against a single DataPack at a time | Integer | 1000 |
 | processMultiple | When false each Export or Import will run individually | Boolean | true |
-| reactivateOmniScriptsWhenEmbeddedTemplateFound | false | This will run activate for *ALL* OmniScripts and requires that you are logged in via [SFDX Authentication](#getting-started). |
+| reactivateOmniScriptsWhenEmbeddedTemplateFound | This will run activate for *ALL* OmniScripts and requires that you are logged in via [SFDX Authentication](#getting-started). | Boolean | false
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
 | supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
-| useVlocityTriggers | Boolean | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | true |
-| disableVlocityTriggers | Boolean | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | false |
-| ignoreLWCActivationOS | Boolean | Do not compile and deploy LWC OmniScripts | false |
-| ignoreLWCActivationCards | Boolean | Do not compile and deploy LWC Cards | false |
+| useVlocityTriggers | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |true |
+| disableVlocityTriggers | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |false |
+| ignoreLWCActivationOS | Do not compile and deploy LWC OmniScripts | Boolean |false |
+| ignoreLWCActivationCards | Do not compile and deploy LWC Cards | Boolean |false |
+| lwcCompilerNamespace | Overrides the namespace of the installed managed package. Useful when using a developer org. | String | - |
+| lwcCompilerVersion | Overrides the version of the installed managed package. Useful when using a developer org. | String  | - |
+| npmRepository | Overrides the npm repository where the LWC compiler is hosted | String | - |
+| npmAuthKey | Your customer NPM auth key used to install the LWC compiler package | String | - |
 
 ## Vlocity Build Options
 | Option | Description | Type  | Default |

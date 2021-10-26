@@ -36,3 +36,4 @@ autoFixDeployErrors:
 tests:
   - Local
   - Org
+npmRepository: 'https://repo.vlocity.com/repository/vlocity-public/'
