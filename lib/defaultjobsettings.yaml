@@ -37,3 +37,4 @@ tests:
   - Local
   - Org
 npmRepository: 'https://repo.vlocity.com/repository/vlocity-public/'
+tempFolder: ./vlocity-temp

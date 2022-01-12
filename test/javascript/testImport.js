@@ -1,4 +1,4 @@
-module.exports = async function (vlocity) {
+module.exports = async function (vlocity, currentContextData, jobInfo, callback) {
     var data = {
         "VlocityDataPackData": {
             "useVlocityTriggers": true,
@@ -132,5 +132,9 @@ module.exports = async function (vlocity) {
         VlocityUtils.verbose('DataPack deployed successfully');
     } else {
         VlocityUtils.error('DataPack Deployment Failed');
+    }
+
+    if (callback) {
+        callback();
     }
 }
