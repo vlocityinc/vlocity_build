@@ -42,13 +42,13 @@ module.exports = async function(vlocity, currentContextData, jobInfo, callback) 
 
                 // add the OmniScript itself
                 const currentOmniScriptLwc = await fetchOmniOutContents(record[vlocity.namespace + '__Type__c']+record[vlocity.namespace + '__SubType__c']+record[vlocity.namespace + '__Language__c'], vlocity);
-                const parsedOmniScriptRes = await extractSources(currentOmniScriptLwc['compositeResponse'][1]['body']['records']);
+                const parsedOmniScriptRes = await extractSources(currentOmniScriptLwc['compositeResponse'][1]['body']['records'], vlocity.namespace);
                 await createFiles(parsedOmniScriptRes, vlocity, 'modules', `vlocityomniscript/${record[vlocity.namespace + '__Type__c']+record[vlocity.namespace + '__SubType__c']+record[vlocity.namespace + '__Language__c']}`);
 
                 // add all custom LWCs as well
                 for (const element of listOfCustomLwc) {
                     let retrieveLwcFile = await fetchOmniOutContents(element, vlocity);
-                    let parsedSources = await extractSources(retrieveLwcFile['compositeResponse'][1]['body']['records']);
+                    let parsedSources = await extractSources(retrieveLwcFile['compositeResponse'][1]['body']['records'], vlocity.namespace);
                     await createFiles(parsedSources, vlocity, 'modules', `c/${element}`);
                 }
 
@@ -156,9 +156,10 @@ const fetchOmniOutContents = async(lwc, vlocity) => {
 /**
  * 
  * @param {*} items 
+ * @param {*} namespace 
  * @returns 
  */
-const extractSources = async (items) => {
+const extractSources = async (items, namespace) => {
     return new Promise(async (resolve, reject) => {
 
         let parsed = [];
@@ -176,7 +177,7 @@ const extractSources = async (items) => {
                 if (i['Source'] === "(hidden)") {
                     console.log('Skipping path');
                 } else {
-                    parsed[path] = await parseSource(i['Source']);
+                    parsed[path] = await parseSource(i['Source'], namespace);
                 }
             });
         }
@@ -188,12 +189,13 @@ const extractSources = async (items) => {
 /**
  * 
  * @param {*} source 
+ * @param {*} namespace 
  * @returns 
  */
-const parseSource = async (source) => {
+const parseSource = async (source, namespace) => {
     return new Promise((resolve, reject) => {
-        /* Rename imports vlocity_cmt -> c */
-        source = source.replace(new RegExp('vlocity_cmt', 'g'), 'c');
+        /* Rename imports like vlocity_cmt -> c */
+        source = source.replace(new RegExp(namespace, 'g'), 'c');
 
         resolve(source);
     });
