@@ -295,6 +295,7 @@ SObjects:
     JsonFields:
     - InputData__c
     - OutputData__c
+    - OutputDataLong__c
     ListFileName:
     - _Rows
     NonUnique: true
