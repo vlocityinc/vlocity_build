@@ -24,7 +24,10 @@ CalculationProcedureVersion:
   requiredSetting: separateCalculationProcedureVersions
 Catalog:
   VlocityDataPackType: Catalog
-  query: Select Id, Name from %vlocity_namespace%__Catalog__c     
+  query: Select Id, Name from %vlocity_namespace%__Catalog__c   
+ChargeMeasurement:
+  VlocityDataPackType: ChargeMeasurement
+  query: Select Id, Name from %vlocity_namespace%__ChargeMeasurement__c   
 ContentVersion:
   VlocityDataPackType: ContentVersion
   query: Select Id, Title, %vlocity_namespace%__GlobalKey__c from ContentVersion WHERE %vlocity_namespace%__GlobalKey__c != null
