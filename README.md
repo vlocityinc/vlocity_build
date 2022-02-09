@@ -11,8 +11,10 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
     - [Installing Older Release Versions](#installing-older-release-versions)
     - [Cloning Vlocity Build - Not Recommended](#cloning-vlocity-build---not-recommended)
 - [Getting Started](#getting-started)
+      - [Recommended - Salesforce DX CLI](#recommended---salesforce-dx-cli)
+      - [Alternative - Username & Password](#alternative---username--password)
+      - [Alternative - OAuth](#alternative---oauth)
   - [Running the Process](#running-the-process)
-  - [Property File](#property-file)
   - [Job File](#job-file)
 - [Step by Step Guide](#step-by-step-guide)
   - [Simple Export](#simple-export)
@@ -25,12 +27,15 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
     - [Vlocity Managed Package](#vlocity-managed-package)
   - [Running in Jenkins](#running-in-jenkins)
   - [Auto Compilation of LWC OmniScript and Cards](#auto-compilation-of-lwc-omniscript-and-cards)
+  - [Initial Support for OmniScript / FlexCards Local Compilation](#initial-support-for-omniscript--flexcards-local-compilation)
 - [The Job File](#the-job-file)
   - [What will be Exported?](#what-will-be-exported)
+    - [Recommended - DataPack Key Based Export](#recommended---datapack-key-based-export)
+      - [In the Job File to Get all by Type](#in-the-job-file-to-get-all-by-type)
+    - [Alternative - Query Based](#alternative---query-based)
   - [Example Job File](#example-job-file)
       - [dataPacksJobs/Example.yaml](#datapacksjobsexampleyaml)
   - [Predefined vs Explicit Queries](#predefined-vs-explicit-queries)
-  - [DataPack Key Based Export](#datapack-key-based-export)
   - [Query All](#query-all)
   - [Git Changes Based Deploys](#git-changes-based-deploys)
 - [Troubleshooting](#troubleshooting)
@@ -168,14 +173,22 @@ npm install
 
 # Getting Started
 
+#### Recommended - Salesforce DX CLI
 If you are using Salesforce DX, you can use `-sfdx.username` to use a Salesforce DX Authorized Org for authentication. The Vlocity Build Tool will use the Salesforce DX information from `sfdx force:org:display -u <username or alias>`. This can be a Scratch Org, or one Authorized through `sfdx force:auth:web:login`.
 
+#### Alternative - Username & Password
 Otherwise, create your own property files for your Source and Target Salesforce Orgs with the following:
 ```java
 sf.username = < Salesforce Username >
 sf.password = < Salesforce Password + Security Token >
 sf.loginUrl = < https://login.salesforce.com or https://test.salesforce.com for Sandbox >
 ```
+
+Commands using this would be in the form of:
+```bash
+vlocity packExport -propertyfile <filepath> -job <filepath>
+```
+
 When you (or your CI/CD server) is behind a proxy you can specify the proxy URL with a Username and password by adding the following line to your property file:
 ```java
 sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy hostname>[:<Proxy Port>]
@@ -183,49 +196,41 @@ sf.httpProxy: http://[<Proxy server Username>:<Proxy server Password>@]<Proxy ho
 
 It is best to not rely on a single build.properties file and instead use named properties files for each org like `build_source.properties` and `build_target.properties`
 
+#### Alternative - OAuth
 Additionally there is support for OAuth style information sent through the command line or property file:
 ```bash
 vlocity packExport -sf.accessToken <accessToken> -sf.instanceUrl <instanceUrl> -sf.sessionId <sessionId>
 ```
 If you are using this method also include `oauthConnection: true` in your Job File.
 
-
 ## Running the Process
 Commands follow the syntax:
 ```bash
-vlocity packExport -propertyfile <filepath> -job <filepath>
+vlocity packExport -sfdx.username <username> -job <filepath>
 ```
-## Property File
-The propertyfile is used to provide the credentials of the org you will connect to. It will default to build.properties if no file is specified.
 
 ## Job File
 The Job File used to define the project location and the various settings for running a DataPacks Export / Deploy.
 
 # Step by Step Guide
-Once you have your `build_source.properties` file setup, you can get started with migration with the following: 
+Authorize a Source and Target Org with Salesforce CLI or set up `build_source.properties` and `build_target.properties` files to get started with migration.
 
 ## Simple Export
 Example.yaml shows the most Simple Job File that can be used to setup a project:
 ```yaml
 projectPath: ./example_vlocity_build 
-queries: 
-  - VlocityDataPackType: DataRaptor 
-    query: Select Id from %vlocity_namespace%__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1
 ```
 
-After creating the Example.yaml file, run the following command to export with this Job File:
+Export and Deploy commands accept the argument `-key <DataPackType>` or `-key <DataPackType>/<DataPackKey>` to define what is exported. More info at [DataPack Key Based Export](#recommended---datapack-key-based-export)
+
+After creating the Example.yaml file, run the following command to export all DataRaptors in the org:
 ```bash
-vlocity -propertyfile build_source.properties -job Example.yaml packExport
+vlocity -sfdx.username source_org@vlocity.com  -job Example.yaml packExport -key DataRaptor
 ```
 
 Which will produce the following output:
 ```
 Salesforce Org >> source_org@vlocity.com  
-VlocityDataPackType >> DataRaptor  
-Query >> Select Id from vlocity_cmt__DRBundle__c where Name = 'DataRaptor Migration' LIMIT 1  
-Records >> 1  
-Query Total >> 1  
-Initializing Project  
 Exporting >> DataRaptor a191N000012pxsYQAQ  
 Creating file >> example_vlocity_build/DataRaptor/DataRaptor-Migration/DataRaptor-Migration_DataPack.json  
 Salesforce Org >> source_org@vlocity.com   
@@ -239,12 +244,12 @@ Export success:
 1 Completed  
 ```
 
-This has exported data from the org specified in your `build_source.properties` file and written it to the folder `example_vlocity_build` specified in the `Example.yaml` file found at `dataPacksJobs/Example.yaml`
+This has exported data from the org specified and written it to the folder `example_vlocity_build` specified in the `Example.yaml` file found at `dataPacksJobs/Example.yaml`
 
 ## Simple Deploy
 To deploy the data you just exported run the following command:  
 ```bash
-vlocity -propertyfile build_target.properties -job Example.yaml packDeploy
+vlocity -sfdx.username target_org@vlocity.com -job Example.yaml packDeploy
 ```
 
 Which will produce the following output:
@@ -261,59 +266,51 @@ Remaining >> 0
 Elapsed Time >> 0m 4s  
 Salesforce Org >> target_org@vlocity.com   
 ```
+
 ## Org to Org Migration
 When Exporting and Deploying between two Orgs use the following action plan:  
-1. Create Property Files for each Org. `build_source.properties` and `build_target.properties`  
-2. Create a Job File which identifies your projectPath and the queries for the DataPack Types you would like to export. To export the Vlocity Product Catalog, use the following Platform.yaml file:
+1. Authorize with Salesforce CLI or create Property Files for each Org. `build_source.properties` and `build_target.properties`  
+2. Create a Job File which identifies your projectPath and the queries for the DataPack Types you would like to export. To export OmniStudio DataPacks:
 ```yaml
 projectPath: vlocity
 queries:
   - OmniScript
   - IntegrationProcedure
   - DataRaptor
-  - VlocityUILayout
-  - VlocityUITemplate
+  - FlexCard
 ```
-3. Ensure High Data Quality in the Source Org by running:   
-`vlocity -propertyfile build_source.properties -job Platform.yaml cleanOrgData`  
-4. Run the Export:  
-`vlocity -propertyfile build_source.properties -job Platform.yaml packExport` 
+3. Run the Export:  
+`vlocity -sfdx.username source_org@vlocity.com -job Platform.yaml packExport` 
 Settings will automatically be deployed if it is the first time you are deploying to this org. This will take 30 seconds and will only need to be rerun when the settings change. 
-5. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
-`vlocity -propertyfile build_source.properties -job Platform.yaml packRetry`  
+4. If you encounter any Errors during Export please evaluate their importance. Any error during export points to potential errors during deploy. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors. Once errors are fixed, run the following to re-export any failed data:  
+`vlocity -sfdx.username source_org@vlocity.com -job Platform.yaml packRetry`  
 If your Export fails midway through due to connection issues, you can also use the following to pick the export back up where it left off:  
-`vlocity -propertyfile build_source.properties -job Platform.yaml packContinue` 
+`vlocity -sfdx.username source_org@vlocity.com -job Platform.yaml packContinue` 
 6. Check the Exported Data for Potential Issues:  
-`vlocity -propertyfile build_source.properties -job Platform.yaml validateLocalData`  
-This will give a summary of Duplicate and Missing Global Keys. Use the argument `--fixLocalGlobalKeys` to automatically add missing and change duplicate keys. However it is generally better to fix the data in the Org itself.
-7. Ensure High Data Quality in the Target Org by running:  
-`vlocity -propertyfile build_target.properties -job Platform.yaml cleanOrgData`   
-8. Update the DataPack Settings in the Target Org:  
-`vlocity -propertyfile build_target.properties -job Platform.yaml packUpdateSettings`
-9. Run the deploy:  
-`vlocity -propertyfile build_target.properties -job Platform.yaml packDeploy`
-10. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
-`vlocity -propertyfile build_target.properties -job Platform.yaml packRetry`  
+`vlocity -sfdx.username source_org@vlocity.com -job Platform.yaml validateLocalData`  
+This will give a summary of Duplicate and Missing Global Keys. Use the argument `--fixLocalGlobalKeys` to automatically add missing and change duplicate keys. However it is generally better to fix the data in the Org itself. 
+7. Run the deploy:  
+`vlocity -sfdx.username target_org@vlocity.com -job Platform.yaml packDeploy`
+8. If you encounter any Errors during deploy they must be fixed. But first, evaluate whether the error has been mitigated by later uploads of missing data. Run:  
+`vlocity -sfdx.username target_org@vlocity.com -job Platform.yaml packRetry`  
 Which will retry the failed DataPacks, often fixing errors due to issues in the order of deploy or Salesforce Governor limits. `packRetry` should be run until the error count stops going down after each run. See the [troubleshooting](#troubleshooting) section of this document for more details on fixing errors.
 
 ### Summary of Org to Org Migration
 All together the commands are:
 ```bash
 # Source Org
-vlocity -propertyfile build_source.properties -job EPC.yaml cleanOrgData
-vlocity -propertyfile build_source.properties -job EPC.yaml packExport
-vlocity -propertyfile build_source.properties -job EPC.yaml packRetry # If any errors
+vlocity -sfdx.username source_org@vlocity.com -job EPC.yaml packExport
+vlocity -sfdx.username source_org@vlocity.com -job EPC.yaml packRetry # If any errors
 
 # Target Org
-vlocity -propertyfile build_target.properties -job EPC.yaml cleanOrgData
-vlocity -propertyfile build_target.properties -job EPC.yaml packDeploy
-vlocity -propertyfile build_target.properties -job EPC.yaml packRetry # If any errors
+vlocity -sfdx.username target_org@vlocity.com -job EPC.yaml packDeploy
+vlocity -sfdx.username target_org@vlocity.com -job EPC.yaml packRetry # If any errors
 ```
 
 ### New Sandbox Orgs
 If you have recently installed the Vlocity Managed Package or created a Sandbox Org that is not a Full Copy Sandbox and have done *no* development this Salesforce Org, you should run the following command to load all the default Vlocity Metadata:
 ```bash
-vlocity -propertyfile build_target.properties --nojob installVlocityInitial
+vlocity -sfdx.username target_org@vlocity.com --nojob installVlocityInitial
 ```
 This will install the Base UI Templates, CPQ Base Templates, EPC Default Objects and any other default data delivered through Vlocity DataPacks. This command should only be run if the Org was not previously used for Vlocity Development.
 
@@ -398,6 +395,20 @@ ignoreLWCActivationCards: true
 
 Otherwise these are now on by default.
 
+## Initial Support for OmniScript / FlexCards Local Compilation
+
+*This is only supported for Package Versions Winter '22+.*
+
+To setup the local compile you will need to request a Username and Password for the private Vlocity NPM Repo. If you have previously used OmniOut then it is the same credentials.
+
+If you do not have credentials Request an NPM repository access key from your Vlocity customer representative by filing a support case with the subject: "Request for Access Key to Vlocity's Private NPM Repository at https://repo.vlocity.com/repository/vlocity-public/ for using OmniOut / IDX CLI".
+
+The easiest way to set it up is to add the credentials to an `.npmrc` file in the User's home directoty of your machine.
+`//repo.vlocity.com/repository/vlocity-public/:username=USERNAME`
+`//repo.vlocity.com/repository/vlocity-public/:_password="PASSWORD"`
+
+It will automatically use the correct compiler based on your managed package version.
+
 # The Job File
 A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
 
@@ -411,6 +422,21 @@ projectPath: ../myprojectPath
 The projectPath can be the absolute path to a folder or the relative path from where you run the vlocity command.  
 
 ## What will be Exported?
+
+### Recommended - DataPack Key Based Export
+You can export DataPacks by their Vlocity DataPack Key which is the same as the Folder that they live in after being exported. For a Product the DataPack Key is `Product2/${GlobalKey__c}`. You can get a full list of Vlocity DataPack Keys by running `getAllAvailableExports`.
+
+#### In the Job File to Get all by Type
+To Export All DataRaptors and OmniScripts from the Org use:
+```yaml
+projectPath: ./myprojectPath
+queries:
+  - DataRaptor
+  - OmniScript
+```
+
+### Alternative - Query Based
+
 By default, all data will be exported from the org when running the `packExport` command. To narrow the exported data, you can define any Salesforce SOQL query that returns the Id of records you would like to export.
 ```yaml
 queries:
@@ -458,9 +484,6 @@ queries:
 The WHERE clauses show that these Queries will Export all DataRaptors that are not internal Vlocity Configuration Data and all Active OmniScripts.
 
 When Exporting, the DataPacks API will additionally export all dependencies of the Vlocity DataPacks which are being exported. So Exporting just the OmniScripts from an Org will also bring in all referenced DataRaptors, VlocityUITemplates, etc, so that the OmniScript will be fully usable once deployed.
-
-## DataPack Key Based Export
-You can export DataPacks by their Vlocity DataPack Key which is the same as the Folder that they live in after being exported. For a Product the DataPack Key is `Product2/${GlobalKey__c}`. You can get a full list of Vlocity DataPack Keys by running getAllAvailableExports.
 
 ## Query All
 Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queries defined, you can also run: `packExportAllDefault` to specify running all the default queries.
@@ -691,7 +714,7 @@ While this may take longer than doing an actual deploy, it is a great way to ens
 
 
 # Additional Command Line Options 
-The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. All Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
+The Job file additionally supports some Vlocity Build based options and the options available to the DataPacks API. Most Options can also be passed in as Command Line Options with `-optionName <value>` or `--optionName` for Boolean values.
 
 ## Job Options 
 | Option | Description | Type  | Default |
