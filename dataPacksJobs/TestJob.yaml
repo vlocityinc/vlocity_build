@@ -3,10 +3,10 @@ expansionPath: testJobRunning
 buildFile: testJobRunning/testBuildFile.resource
 autoUpdateSettings: true
 queries: 
-  - VlocityDataPackType: VlocityUITemplate
-    query: Select Id, Name from %vlocity_namespace%__VlocityUITemplate__c where Name LIKE 'datapacktest-%' AND %vlocity_namespace%__Active__c = true
-  - VlocityDataPackType: VlocityUILayout
-    query: Select Id, Name from %vlocity_namespace%__VlocityUILayout__c where Name LIKE 'datapacktest-%'
+  - VlocityDataPackType: IntegrationProcedure
+    query: Select Id, %vlocity_namespace%__Type__c, %vlocity_namespace%__SubType__c from %vlocity_namespace%__OmniScript__c WHERE %vlocity_namespace%__IsActive__c = true AND %vlocity_namespace%__IsProcedure__c = true AND %vlocity_namespace%__ProcedureKey__c LIKE 'dataPackTest_%'
+  - VlocityDataPackType: VlocityCard
+    query: SELECT Id, Name FROM %vlocity_namespace%__VlocityCard__c WHERE Name LIKE 'datapacktest_%' AND %vlocity_namespace%__Active__c = true
 preJobApex:
   Deploy: TestJob.cls
 preStepApex:
