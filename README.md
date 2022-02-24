@@ -403,9 +403,14 @@ To setup the local compile you will need to request a Username and Password for 
 
 If you do not have credentials Request an NPM repository access key from your Vlocity customer representative by filing a support case with the subject: "Request for Access Key to Vlocity's Private NPM Repository at https://repo.vlocity.com/repository/vlocity-public/ for using OmniOut / IDX CLI".
 
-The easiest way to set it up is to add the credentials to an `.npmrc` file in the User's home directoty of your machine.
+The easiest way to set it up is to add the credentials to an `.npmrc` file in the User's home directory of your machine.
 `//repo.vlocity.com/repository/vlocity-public/:username=USERNAME`
 `//repo.vlocity.com/repository/vlocity-public/:_password="PASSWORD"`
+
+You can also add to your job file the following:
+```yaml
+npmAuthKey: KEY
+```
 
 It will automatically use the correct compiler based on your managed package version.
 
