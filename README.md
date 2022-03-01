@@ -397,7 +397,7 @@ Otherwise these are now on by default.
 
 ## Initial Support for OmniScript / FlexCards Local Compilation
 
-*This is only supported for Package Versions Winter '22+.*
+*This is only supported for Package Versions Spring '22+.*
 
 To setup the local compile you will need to request a Username and Password for the private Vlocity NPM Repo. If you have previously used OmniOut then it is the same credentials.
 
