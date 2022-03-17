@@ -24,7 +24,7 @@
         "salesforce-alm": "49.5.0",
         "sass.js": "0.11.1",
         "semver": "6.2.0",
-        "simple-git": "1.107.0",
+        "simple-git": "3.3.0",
         "unidecode": "0.1.8",
         "xml2js": "0.4.22",
         "xmlbuilder": "13.0.2"
