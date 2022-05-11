@@ -645,6 +645,7 @@ This will provide a list of files that are different locally than in the org. In
 `packGetAllAvailableExports`: Get list of all DataPacks that can be exported  
 `refreshVlocityBase`: Deploy and Activate the Base Vlocity DataPacks included in the Managed Package  
 `installVlocityInitial`: Deploy and Activate the Base Vlocity DataPacks and Configuration DataPacks included in the Managed Package  
+`installDPsfromStaticResource`: Install DataPacks from Static Resource based on a Query. Add query to job file: StaticResourceQuery:<SOQL>
 
 ## Example Commands
 
