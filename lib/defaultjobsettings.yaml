@@ -9,7 +9,7 @@ delete: true
 activate: true
 compileOnBuild: true
 maxDepth: -1
-defaultMaxParallel: 100
+defaultMaxParallel: 20
 defaultMinToWaitForLWCOmniScript: 10
 defaultMinToWaitForLWCClassicCards: 10
 defaultMinToWaitForLWCFlexCards: 5
