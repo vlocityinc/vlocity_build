@@ -68,6 +68,9 @@ DocumentClause:
 DocumentTemplate:
   VlocityDataPackType: DocumentTemplate
   query: Select Id, Name from %vlocity_namespace%__DocumentTemplate__c WHERE %vlocity_namespace%__Status__c = 'Active'
+DocumentTemplates:
+  VlocityDataPackType: DocumentTemplates
+  query: Select Id, Name from DocumentTemplate WHERE Status = 'Active'
 EntityFilter:
   VlocityDataPackType: EntityFilter
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__EntityFilter__c
