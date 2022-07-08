@@ -333,6 +333,8 @@ SObjects:
   CalculationMatrix:
     SourceKeyDefinition:
     - Name
+    FilterFields:
+    - DecisionMatrixDefinitionId
   CalculationMatrixRow:
     DiffKeys:
       1: 
