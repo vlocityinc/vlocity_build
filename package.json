@@ -1,6 +1,17 @@
 {
+    "main": "lib/vlocity.js",
+    "name": "@vodafoneis/vlocity",
+    "owner": "vodafoneIS",
     "author": "arutland@vlocity.com",
     "bin": "lib/vlocitybuild.js",
+    "version": "1.16.0",
+    "publishConfig": {
+        "registry":"https://npm.pkg.github.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/VodafoneIS/vlocity_build.git"
+    },
     "dependencies": {
         "async": "3.2.0",
         "command-exists": "^1.2.9",
@@ -50,9 +61,6 @@
         "/doc"
     ],
     "license": "MIT",
-    "main": "lib/vlocity.js",
-    "name": "vlocity",
-    "owner": "vlocityinc",
     "pkg": {
         "assets": [
             "DataPackSettings/**/*",
@@ -76,10 +84,6 @@
         ]
     },
     "preferGlobal": true,
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/vlocityinc/vlocity_build.git"
-    },
     "scripts": {
         "start": "vlocity help",
         "packExport": "vlocity packExport -job DataPacksJob.yaml",
@@ -93,6 +97,5 @@
         "unitTest": "mocha test/**/**.spec.js",
         "build": "pkg . --out-path ./dist",
         "nyctest": "nyc mocha test/**/**.spec.js"
-    },
-    "version": "0.0.1"
+    }
 }
