@@ -4,9 +4,9 @@
     "owner": "vodafoneIS",
     "author": "arutland@vlocity.com",
     "bin": "lib/vlocitybuild.js",
-    "version": "1.16.0",
+    "version": "1.16.1",
     "publishConfig": {
-        "registry":"https://npm.pkg.github.com"
+        "registry": "https://npm.pkg.github.com"
     },
     "repository": {
         "type": "git",
