@@ -28,6 +28,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
   - [Running in Jenkins](#running-in-jenkins)
   - [Auto Compilation of LWC OmniScript and Cards](#auto-compilation-of-lwc-omniscript-and-cards)
   - [Initial Support for OmniScript / FlexCards Local Compilation](#initial-support-for-omniscript--flexcards-local-compilation)
+    - [How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally](#how-to-use-your-own-sfdx-cli-to-deploy-omniscripts--flexcards-compiled-locally)
 - [The Job File](#the-job-file)
   - [What will be Exported?](#what-will-be-exported)
     - [Recommended - DataPack Key Based Export](#recommended---datapack-key-based-export)
@@ -413,6 +414,27 @@ npmAuthKey: KEY
 ```
 
 It will automatically use the correct compiler based on your managed package version.
+
+
+### How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally
+
+To use your own sfdx cli you can set `useSfdxCli` to true in your job file like so:
+
+```yaml
+useSfdxCli: true
+```
+
+When set to true, this is how the output will look like:
+
+![Bindings](doc/deployGeneratedLwcWithSalesforceAlm.png)
+
+
+when set to false or ommited, this is the expected output:
+
+![Bindings](doc/deployGeneratedLwcWithSfdxCli.png)
+
+*obs: At the moment, configuring this property only affects OmniScript / FlexCards local compilation step*
+
 
 # The Job File
 A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
