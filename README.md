@@ -396,6 +396,12 @@ ignoreLWCActivationCards: true
 
 Otherwise these are now on by default.
 
+In cases where there is a specific executable path for Chrome, or there is no interest in the use of its headless feature, it is possible to do as follows: 
+```
+puppeteerHeadless: false
+puppeteerExecutablePath: path/of/chrome
+```
+
 ## Initial Support for OmniScript / FlexCards Local Compilation
 
 *This is only supported for Package Versions Spring '22+.*
@@ -434,7 +440,6 @@ when set to false or ommited, this is the expected output:
 ![Bindings](doc/deployGeneratedLwcWithSfdxCli.png)
 
 *obs: At the moment, configuring this property only affects OmniScript / FlexCards local compilation step*
-
 
 # The Job File
 A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
