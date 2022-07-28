@@ -3,6 +3,7 @@
     "bin": "lib/vlocitybuild.js",
     "dependencies": {
         "async": "3.2.0",
+        "command-exists": "^1.2.9",
         "diff2html": "2.5.0",
         "fast-json-stable-stringify": "2.1.0",
         "file-type": "10.9.0",
@@ -24,6 +25,7 @@
         "salesforce-alm": "49.5.0",
         "sass.js": "0.11.1",
         "semver": "6.2.0",
+        "shelljs": "^0.8.5",
         "simple-git": "1.107.0",
         "unidecode": "0.1.8",
         "xml2js": "0.4.22",
