@@ -1,0 +1,22 @@
+{
+    "fullName": "%vlocity_namespace%__VlocityDataPackConfiguration__mdt.CustomObjectMap",
+    "label": "CustomObjectMap",
+    "values": [
+        { 
+            "field": "%vlocity_namespace%__DefaultExportService__c", 
+            "value": "Custom Object Map Migration"
+        },
+        { 
+            "field": "%vlocity_namespace%__DefaultImportService__c",
+            "value": "Custom Object Map Migration"
+        },
+        { 
+            "field": "%vlocity_namespace%__DefaultExportLimit__c", 
+            "value": 100
+        },
+        { 
+            "field": "%vlocity_namespace%__DefaultImportLimit__c", 
+            "value": 100
+        }
+    ]
+}

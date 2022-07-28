@@ -49,6 +49,9 @@ CpqConfigurationSetup:
 CustomFieldMap:
   VlocityDataPackType: CustomFieldMap
   query: Select Id, Name from %vlocity_namespace%__CustomFieldMap__c 
+CustomObjectMap:
+  VlocityDataPackType: CustomObjectMap
+  query: Select Id, Name from %vlocity_namespace%__CustomObjectMap__c 
 DecisionMatrix:
   VlocityDataPackType: DecisionMatrix
   query: Select Id, Name from CalculationMatrix 

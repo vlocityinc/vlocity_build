@@ -565,6 +565,11 @@ SObjects:
     - Name
     SourceKeyDefinition:
     - Name  
+  CustomObjectMap__c:
+    FolderName:
+    - Name
+    SourceKeyDefinition:
+    - Name  
   DRBundle__c:
     DeltaQueryChildren:
       DRMapItem__c:
