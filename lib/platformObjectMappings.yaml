@@ -169,8 +169,13 @@ IntegrationProcedure:
       Type__c: Type
       Version__c: VersionNumber
       OmniScriptDefinitions__r: OmniProcessDefinitions
-      
-
-
-
+ContentVersion:
+  ContentVersion:
+    objectName: ContentVersion
+    fieldNames:
+      GlobalKey__c: ExternalDocumentInfo2
+    FolderName:
+    - ExternalDocumentInfo2
+    SourceKeyDefinition:
+    - ExternalDocumentInfo2
       

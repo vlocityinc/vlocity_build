@@ -85,7 +85,8 @@ ExpressionSetVersion:
   query: Select Id, Name from CalculationProcedureVersion
 FlexCard:
   VlocityDataPackType: FlexCard
-  query: SELECT Id, Name FROM OmniUiCard WHERE IsActive = true  
+  query: SELECT Id, Name FROM OmniUiCard WHERE IsActive = true
+  standardOnly: true
 GeneralSettings:
   VlocityDataPackType: GeneralSettings
   query: Select Id, Name from %vlocity_namespace%__GeneralSettings__c  
@@ -146,6 +147,7 @@ PriceList:
 Pricebook2:
   VlocityDataPackType: Pricebook2
   query: Select Id, Name from Pricebook2
+  industryOnly: true
 PricingPlan:
   VlocityDataPackType: PricingPlan
   query: Select Id, Name from %vlocity_namespace%__PricingPlan__c
