@@ -149,6 +149,26 @@ PricingVariable:
 Product2:   
   VlocityDataPackType: Product2
   query: Select Id, Name, ProductCode, %vlocity_namespace%__GlobalKey__c from Product2
+ProductAttributes:   
+  VlocityDataPackType: ProductAttributes
+  query: Select Id, Name, ProductCode, %vlocity_namespace%__GlobalKey__c from Product2
+  requiredSetting: separateProducts
+ProductConfiguration:   
+  VlocityDataPackType: ProductConfiguration
+  query: Select Id, Name, ProductCode, %vlocity_namespace%__GlobalKey__c from Product2
+  requiredSetting: separateProducts  
+ProductDecomposition:   
+  VlocityDataPackType: ProductDecomposition
+  query: Select Id, Name, ProductCode, %vlocity_namespace%__GlobalKey__c from Product2
+  requiredSetting: separateProducts
+ProductHierarchy:   
+  VlocityDataPackType: ProductHierarchy
+  query: Select Id, Name, ProductCode, %vlocity_namespace%__GlobalKey__c from Product2
+  requiredSetting: separateProducts
+ProductPricing:   
+  VlocityDataPackType: ProductPricing
+  query: Select Id, Name, ProductCode, %vlocity_namespace%__GlobalKey__c from Product2
+  requiredSetting: separateProducts  
 Project:   
   VlocityDataPackType: Project
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Project__c
