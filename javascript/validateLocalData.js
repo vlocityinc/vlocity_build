@@ -3,7 +3,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
     var allGlobalKeysBySObjectType = {};
 
-    currentContextData.forEach(function(currentData) {
+    (currentContextData || []).forEach(function(currentData) {
 
         if (currentData) {
 
