@@ -413,8 +413,18 @@ If you do not have credentials Request an NPM repository access key from your Vl
 The easiest way to set it up is to add the credentials to an `.npmrc` file in the User's home directory of your machine. Run the following:
 ```
 npm config set @omnistudio:registry https://repo.vlocity.com/repository/vlocity-public/
-npm config set _auth <In Nexus - Use the following for a base64 representation of "user:password"> --registry https://repo.vlocity.com/repository/vlocity-public/
+npm config set _auth <In Nexus - Use the following for a base64 representation of "user:password"> 
 ```
+
+The file should then look like:
+```
+@omnistudio:registry=https://repo.vlocity.com/repository/vlocity-public/
+//repo.vlocity.com/repository/vlocity-public/:username=USERNAME
+//repo.vlocity.com/repository/vlocity-public/:_password="PASSWORD"
+```
+
+The other namespaces for the compiler are `@vlocity-ins` and `@vlocity-cme`. 
+
 If setup correctly then the following should work:  
 `npm install @omnistudio/omniscript-lwc-compiler`
 
