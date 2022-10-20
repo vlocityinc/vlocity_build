@@ -255,6 +255,9 @@ SObjects:
     - IsActive__c
     JsonFields:
     - ValidValuesData__c
+    SortFields:
+    - OverrideContext__c
+    - Name
     SourceKeyDefinition:
     - GlobalKey__c
   AttributeBinding__c:
@@ -563,6 +566,11 @@ SObjects:
     TitleFields:
     - SetupValue__c
   CustomFieldMap__c:
+    FolderName:
+    - Name
+    SourceKeyDefinition:
+    - Name  
+  CustomObjectMap__c:
     FolderName:
     - Name
     SourceKeyDefinition:

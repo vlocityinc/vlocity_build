@@ -28,6 +28,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
   - [Running in Jenkins](#running-in-jenkins)
   - [Auto Compilation of LWC OmniScript and Cards](#auto-compilation-of-lwc-omniscript-and-cards)
   - [Initial Support for OmniScript / FlexCards Local Compilation](#initial-support-for-omniscript--flexcards-local-compilation)
+    - [How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally](#how-to-use-your-own-sfdx-cli-to-deploy-omniscripts--flexcards-compiled-locally)
 - [The Job File](#the-job-file)
   - [What will be Exported?](#what-will-be-exported)
     - [Recommended - DataPack Key Based Export](#recommended---datapack-key-based-export)
@@ -395,6 +396,12 @@ ignoreLWCActivationCards: true
 
 Otherwise these are now on by default.
 
+In cases where there is a specific executable path for Chrome, or there is no interest in the use of its headless feature, it is possible to do as follows: 
+```
+puppeteerHeadless: false
+puppeteerExecutablePath: path/of/chrome
+```
+
 ## Initial Support for OmniScript / FlexCards Local Compilation
 
 *This is only supported for Package Versions Spring '22+.*
@@ -417,6 +424,26 @@ npmAuthKey: KEY
 ```
 
 It will automatically use the correct compiler based on your managed package version.
+
+
+### How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally
+
+To use your own sfdx cli you can set `useSfdxCli` to true in your job file like so:
+
+```yaml
+useSfdxCli: true
+```
+
+When set to true, this is how the output will look like:
+
+![Bindings](doc/deployGeneratedLwcWithSalesforceAlm.png)
+
+
+when set to false or ommited, this is the expected output:
+
+![Bindings](doc/deployGeneratedLwcWithSfdxCli.png)
+
+*obs: At the moment, configuring this property only affects OmniScript / FlexCards local compilation step*
 
 # The Job File
 A Job File is similar to a Salesforce package.xml file, however it also includes runtime options like the maximum number of concurrent API calls running.  
@@ -498,7 +525,7 @@ When Exporting, the DataPacks API will additionally export all dependencies of t
 Running `packExport` with no queries defined in your Job File will export all the predefined queries for each type. If you do have some special queries defined, you can also run: `packExportAllDefault` to specify running all the default queries.
 
 ## Git Changes Based Deploys
-Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. Add the key `gitCheckKey: Folder1` to your individual Job Files if you have more than one folder in your repo that contains DataPacks.
+Add `gitCheck: true` to your job file to enable checking what the latest git hash was before deploying to the target org. With this setting *only* the DataPacks that have changed between the previous git hash and the latest git hash will be deployed to the org. Add the key `gitCheckKey: Folder1` to your individual Job Files if you have more than one folder in your repo that contains DataPacks.Add `overrideOrgCommit: local_commit_id` to your job file in order to redeploy the commit from local branch without changing the commit in the target org.
 
 This will greatly speed up Deployment when used consistently.
 
@@ -739,7 +766,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | autoUpdateSettings | Automatically run packUpdateSettings before deploy | Boolean | true |
 | buildFile | The target output file from packBuildFile | String | AllDataPacks.json |
 | defaultMaxParallel | The number of parallel processes to use for export | Integer | 1 |
-| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | false |
+| compileOnBuild  | Compiled files will not be generated as part of this Export. Primarily applies to SASS files currently | Boolean | true |
 | continueAfterError | Don't end vlocity job on error | Boolean | false |
 | delete | Delete the VlocityDataPack__c file on finish | Boolean | true |
 | exportPacksMaxSize | Split DataPack export once it reaches this threshold | Integer | null | 
@@ -753,7 +780,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | processMultiple | When false each Export or Import will run individually | Boolean | true |
 | reactivateOmniScriptsWhenEmbeddedTemplateFound | This will run activate for *ALL* OmniScripts and requires that you are logged in via [SFDX Authentication](#getting-started). | Boolean | false
 | supportForceDeploy | Attempt to deploy DataPacks which have not had all their parents successfully deployed | Boolean | false |
-| supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | false |
+| supportHeadersOnly | Attempt to deploy a subset of data for certain DataPack types to prevent blocking due to Parent failures | Boolean | true |
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
 | useVlocityTriggers | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |true |
 | disableVlocityTriggers | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |false |
