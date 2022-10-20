@@ -421,10 +421,10 @@ If setup correctly then the following should work:
 You can also add to your job file the following:
 ```yaml
 npmAuthKey: KEY
+lwcCompilerVersion: "238"
 ```
 
-It will automatically use the correct compiler based on your managed package version.
-
+If you do not set lwcCompilerVersion, it will automatically use the latest compiler version. This should not cause problems, but to force the compiler version, use the Package Version in Salesforce. Note: Not All Package Versions are currently available, so you may need to check Vlocity Nexus to see which are. 
 
 ### How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally
 
