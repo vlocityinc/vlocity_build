@@ -431,10 +431,10 @@ If setup correctly then the following should work:
 You can also add to your job file the following:
 ```yaml
 npmAuthKey: KEY
-lwcCompilerVersion: "238"
+lwcCompilerVersion: '900.469'
 ```
 
-If you do not set lwcCompilerVersion, it will automatically use the latest compiler version. This should not cause problems, but to force the compiler version, use the Package Version in Salesforce. Note: Not All Package Versions are currently available, so you may need to check Vlocity Nexus to see which are. 
+If you do not set lwcCompilerVersion, it will automatically use the latest compiler version. This should not cause problems, but to force the compiler version, use the Package Version in Salesforce (e.g. 900.469, not 238 or 240). Note: Not All Package Versions are currently available, so you may need to check Vlocity Nexus to see which are. 
 
 ### How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally
 
@@ -796,8 +796,8 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | disableVlocityTriggers | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |false |
 | ignoreLWCActivationOS | Do not compile and deploy LWC OmniScripts | Boolean |false |
 | ignoreLWCActivationCards | Do not compile and deploy LWC Cards | Boolean |false |
-| lwcCompilerNamespace | Overrides the namespace of the installed managed package. Useful when using a developer org. | String | - |
-| lwcCompilerVersion | Overrides the version of the installed managed package. Useful when using a developer org. | String  | - |
+| lwcCompilerNamespace | Overrides the namespace of the installed managed package. Useful when using a developer org. Options: vlocity-cme, vlocity-ins, vlocity-ps | String | - |
+| lwcCompilerVersion | Overrides the version of the installed managed package. Useful when using a developer org. Example: 900.469 | String  | - |
 | npmRepository | Overrides the npm repository where the LWC compiler is hosted | String | - |
 | npmAuthKey | Your customer NPM auth key used to install the LWC compiler package | String | - |
 
