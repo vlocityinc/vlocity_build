@@ -16,7 +16,7 @@
         "js-yaml": "3.13.1",
         "jsforce": "1.9.3",
         "json-stable-stringify": "1.0.1",
-        "json2csv": "^6.0.0-alpha.2",
+        "json2csv": "6.0.0-alpha.2",
         "mustache": "3.0.0",
         "nopt": "4.0.1",
         "opn": "6.0.0",
