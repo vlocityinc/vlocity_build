@@ -24,7 +24,7 @@ CalculationProcedureVersion:
   requiredSetting: separateCalculationProcedureVersions
 Catalog:
   VlocityDataPackType: Catalog
-  query: Select Id, Name from %vlocity_namespace%__Catalog__c   
+  query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Catalog__c   
 ChargeMeasurement:
   VlocityDataPackType: ChargeMeasurement
   query: Select Id, Name from %vlocity_namespace%__ChargeMeasurement__c   
