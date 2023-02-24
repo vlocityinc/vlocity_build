@@ -1,4 +1,4 @@
-FROM node:16.16.0
+FROM node:10
 RUN dpkg --add-architecture i386
 
 RUN apt-get update
@@ -10,8 +10,8 @@ RUN npm install --global publish-release
 
 RUN npm install --global pkg-fetch
 #RUN pkg-fetch -n node10 -p win -a x64
-RUN pkg-fetch -n node16.16.0 -p linux -a x64
-RUN pkg-fetch -n node16.16.0 -p macos -a x64
+RUN pkg-fetch -n node16 -p linux -a x64
+RUN pkg-fetch -n node16 -p macos -a x64
 
 RUN npm install --global pkg@4.3.8
 
