@@ -23,7 +23,7 @@
         "properties": "1.2.1",
         "puppeteer-core": "^5.3.1",
         "runtime-plugin-manager-clone": "0.1.0",
-        "salesforce-alm": "49.5.0",
+        "salesforce-alm": "49.12.2",
         "sass.js": "0.11.1",
         "semver": "6.2.0",
         "shelljs": "^0.8.5",
