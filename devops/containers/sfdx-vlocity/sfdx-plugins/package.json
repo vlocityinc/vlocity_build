@@ -1,0 +1,8 @@
+{
+  "name": "sfdx-plugins",
+  "version": "1.0.0",
+  "description": "This package controls sfdx plugins",
+  "devDependencies": {
+    "sfdx-git-delta": "5.13.3"
+  }
+}
