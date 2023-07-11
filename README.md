@@ -396,6 +396,12 @@ ignoreLWCActivationCards: true
 
 Otherwise these are now on by default.
 
+To disable the local compilation of the FlexCards so that the npmAuthKey is used only for the local compilation of OmniScript. In this case legacy method would be used for the FlexCard LWC activation:
+
+``` 
+ignoreLocalCompilationCards: true
+```
+
 In cases where there is a specific executable path for Chrome, or there is no interest in the use of its headless feature, it is possible to do as follows: 
 ```
 puppeteerHeadless: false
