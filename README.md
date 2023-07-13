@@ -775,7 +775,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 ## Job Options 
 | Option | Description | Type  | Default |
 | ------------- |------------- |----- | -----|
-| activate | Will Activate everything after it is imported / deployed | Boolean | false |
+| activate | Will Activate everything after it is imported / deployed | Boolean | true |
 | addSourceKeys | Generate Global / Unique Keys for Records that are missing this data. Improves ability to import exported data | Boolean | false |
 | autoFixPicklists | Makes metadata changes across orgs for Vlocity Managed Package fields automatically propagate and eliminates errors due to this missing metadata. Does not work for Managed Global Value Sets - Like Vlocity's CurrencyCode field. | Boolean | true |
 | autoRetryErrors | Will automatically retry after a deploy to see if any errors can be fixed by retrying due primarily to references that did not correctly resolve | Boolean | false |
@@ -1036,6 +1036,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | DocumentTemplate | DocumentTemplate__c<br>DocumentTemplateSection__c<br>DocumentTemplateSectionCondition__c |
 | EntityFilter | EntityFilter__c<br>EntityFilterCondition__c<br>EntityFilterMember__c<br>EntityFilterConditionArgument__c |
 | IntegrationProcedure | OmniScript__c<br>Element__c |
+| IntegrationRetryPolicy | IntegrationRetryPolicy__c |
 | InterfaceImplementation | InterfaceImplementation__c<br>InterfaceImplementationDetail__c |
 | ItemImplementation | ItemImplementation__c |
 | ManualQueue | ManualQueue__c |
