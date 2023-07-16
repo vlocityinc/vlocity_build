@@ -459,6 +459,12 @@ when set to false or ommited, this is the expected output:
 
 ![Bindings](doc/deployGeneratedLwcWithSfdxCli.png)
 
+To keep OmniScript activated post deployment and activation, in case of LWC deployment failure, Please add below parameter:
+
+``` 
+keepOSActiveWhenLWCDeploymentFails: true
+```
+
 *obs: At the moment, configuring this property only affects OmniScript / FlexCards local compilation step*
 
 # The Job File
