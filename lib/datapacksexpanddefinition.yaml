@@ -137,7 +137,9 @@ DataPacks:
       AttributeAssignment__c:
         - RemoveFromInitial
       OverrideDefinition__c:
-        - RemoveFromInitial
+        - Remove
+      CompiledAttributeOverride__c:
+        - Remove
   ProductChildItem:
     ProductChildItem__c:
       FolderName:
