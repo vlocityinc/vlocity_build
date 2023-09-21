@@ -27,7 +27,7 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
     - [Vlocity Managed Package](#vlocity-managed-package)
   - [Running in Jenkins](#running-in-jenkins)
   - [Auto Compilation of LWC OmniScript and Cards](#auto-compilation-of-lwc-omniscript-and-cards)
-  - [Initial Support for OmniScript / FlexCards Local Compilation](#initial-support-for-omniscript--flexcards-local-compilation)
+  - [Support for OmniScript / FlexCards Local Compilation](#support-for-omniscript--flexcards-local-compilation)
     - [How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally](#how-to-use-your-own-sfdx-cli-to-deploy-omniscripts--flexcards-compiled-locally)
 - [The Job File](#the-job-file)
   - [What will be Exported?](#what-will-be-exported)
@@ -408,7 +408,7 @@ puppeteerHeadless: false
 puppeteerExecutablePath: path/of/chrome
 ```
 
-## Initial Support for OmniScript / FlexCards Local Compilation
+## Support for OmniScript / FlexCards Local Compilation
 
 *This is only supported for Package Versions Spring '22+.*
 
@@ -1036,12 +1036,12 @@ These types are what would be specified when creating a Query or Manifest for th
 | ContextScope | ContextScope__c |
 | ContractType | ContractType__c<br>ContractTypeSetting__c |
 | CpqConfigurationSetup | CpqConfigurationSetup__c |
-| DataRaptor | DRBundle__c<br>DRMapItem__c |
+| DataRaptor | DRBundle__c/OmniDataTransform<br>DRMapItem__c/OmniDataTransformItem |
 | Document<br>(Salesforce Standard Object) | Document |
 | DocumentClause | DocumentClause__c |
 | DocumentTemplate | DocumentTemplate__c<br>DocumentTemplateSection__c<br>DocumentTemplateSectionCondition__c |
 | EntityFilter | EntityFilter__c<br>EntityFilterCondition__c<br>EntityFilterMember__c<br>EntityFilterConditionArgument__c |
-| IntegrationProcedure | OmniScript__c<br>Element__c |
+| IntegrationProcedure | OmniScript__c/OmniProcess<br>Element__c/OmniProcessElement |
 | IntegrationRetryPolicy | IntegrationRetryPolicy__c |
 | InterfaceImplementation | InterfaceImplementation__c<br>InterfaceImplementationDetail__c |
 | ItemImplementation | ItemImplementation__c |
@@ -1049,7 +1049,7 @@ These types are what would be specified when creating a Query or Manifest for th
 | ObjectClass | ObjectClass__c<br>ObjectFieldAttribute__c<br>AttributeBinding__c<br>AttributeAssignment__c |
 | ObjectContextRule<br>(Vlocity Object Rule Assignment) | ObjectRuleAssignment__c |
 | ObjectLayout | ObjectLayout__c<br>ObjectFacet__c<br>ObjectSection__c<br>ObjectElement__c |
-| OmniScript | OmniScript__c<br>Element__c |
+| OmniScript | OmniScript__c/OmniProcess<br>Element__c/OmniProcessElement |
 | OfferMigrationPlan | OfferMigrationPlan__c<br>OfferMigrationComponentMapping__c |
 | OrchestrationDependencyDefinition | OrchestrationDependencyDefinition__c |
 | OrchestrationItemDefinition | OrchestrationItemDefinition__c |
