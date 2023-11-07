@@ -1185,7 +1185,7 @@ SObjects:
     FilterFields:
     - VersionNumber
     - IsActive
-    - LightningWebComponentId
+    - WebComponentKey
     FolderName:
     - Type
     - SubType
