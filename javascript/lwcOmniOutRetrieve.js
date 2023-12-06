@@ -14,7 +14,7 @@ module.exports = async function(vlocity, currentContextData, jobInfo, callback) 
     if(jobInfo.queries.length > 0) {
         for (const element of jobInfo.queries) {
             if(element.VlocityDataPackType === 'OmniScript') {
-                var query = element.query.replace(/%vlocity_namespace%/g,  vlocity.namespace);
+                var query = vlocity.omnistudio.updateQuery(element.query).replace(/%vlocity_namespace%/g,  vlocity.namespace);
             }
         }
     }
@@ -26,24 +26,28 @@ module.exports = async function(vlocity, currentContextData, jobInfo, callback) 
 
             var body = {
                 sClassName: 'Vlocity BuildJSONWithPrefill',
-                sType: record[vlocity.namespace + '__Type__c'], 
-                sSubType: record[vlocity.namespace + '__SubType__c'],
-                sLang: record[vlocity.namespace + '__Language__c']
+                sType: record[vlocity.namespace + '__Type__c'] || record['Type'], 
+                sSubType: record[vlocity.namespace + '__SubType__c'] || record['SubType'],
+                sLang: record[vlocity.namespace + '__Language__c'] || record['Language']
             };
 
             vlocity.jsForceConnection.apex.post('/' + vlocity.namespace + '/v1/GenericInvoke/', body, async function(err, prefilledJson) {
                 if (err) { return console.error(err); }
 
-                if (!record[vlocity.namespace + '__Type__c'] || !record[vlocity.namespace + '__SubType__c'] ||  !record[vlocity.namespace + '__Language__c']) return;
+                if (!vlocity.isOmniStudioInstalled && (!record[vlocity.namespace + '__Type__c'] || !record[vlocity.namespace + '__SubType__c'] ||  !record[vlocity.namespace + '__Language__c']) || 
+                    vlocity.isOmniStudioInstalled && (! record['Type'] || ! record['SubType'] ||  ! record['Language'])
+                ) return;
                 
                 vlocity.datapacksexpand.targetPath = jobInfo.projectPath + '/' + jobInfo.expansionPath;
 
                 listOfCustomLwc = await extractLwcDependencies(JSON.parse(prefilledJson) || {});
 
+                let lwcname = vlocity.isOmniStudioInstalled ? (record['Type'] + record['SubType'] + record['Language']) : record[vlocity.namespace + '__Type__c']+record[vlocity.namespace + '__SubType__c']+record[vlocity.namespace + '__Language__c'];
                 // add the OmniScript itself
-                const currentOmniScriptLwc = await fetchOmniOutContents(record[vlocity.namespace + '__Type__c']+record[vlocity.namespace + '__SubType__c']+record[vlocity.namespace + '__Language__c'], vlocity);
+                const currentOmniScriptLwc = await fetchOmniOutContents(lwcname, vlocity);
                 const parsedOmniScriptRes = await extractSources(currentOmniScriptLwc['compositeResponse'][1]['body']['records'], vlocity.namespace);
-                await createFiles(parsedOmniScriptRes, vlocity, 'modules', `vlocityomniscript/${record[vlocity.namespace + '__Type__c']+record[vlocity.namespace + '__SubType__c']+record[vlocity.namespace + '__Language__c']}`);
+                
+                await createFiles(parsedOmniScriptRes, vlocity, 'modules', `vlocityomniscript/${lwcname}`);
 
                 // add all custom LWCs as well
                 for (const element of listOfCustomLwc) {
@@ -164,7 +168,7 @@ const extractSources = async (items, namespace) => {
 
         let parsed = [];
 
-        if(items.length > 0) {
+        if(items?.length > 0) {
             items.map(async (i) => {
                 let path = i['FilePath'].replace('lwc', '');
 
