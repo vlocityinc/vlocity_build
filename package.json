@@ -2,7 +2,7 @@
     "author": "arutland@vlocity.com",
     "bin": "lib/vlocitybuild.js",
     "dependencies": {
-        "async": "^3.2.5",
+        "async": "3.2.5",
         "command-exists": "^1.2.9",
         "diff2html": "2.5.0",
         "fast-json-stable-stringify": "2.1.0",
@@ -29,7 +29,7 @@
         "shelljs": "^0.8.5",
         "simple-git": "3.22.0",
         "unidecode": "0.1.8",
-        "xml2js": "^0.6.2",
+        "xml2js": "0.6.2",
         "xmlbuilder": "13.0.2"
     },
     "description": "Enable Continuous Integration for Vlocity",
