@@ -2,7 +2,7 @@
     "author": "arutland@vlocity.com",
     "bin": "lib/vlocitybuild.js",
     "dependencies": {
-        "async": "3.2.0",
+        "async": "3.2.5",
         "command-exists": "^1.2.9",
         "diff2html": "2.5.0",
         "fast-json-stable-stringify": "2.1.0",
@@ -23,11 +23,10 @@
         "properties": "1.2.1",
         "puppeteer-core": "^5.3.1",
         "runtime-plugin-manager-clone": "0.1.0",
-        "salesforce-alm": "49.5.0",
         "sass.js": "0.11.1",
         "semver": "6.2.0",
         "shelljs": "^0.8.5",
-        "simple-git": "1.107.0",
+        "simple-git": "3.22.0",
         "unidecode": "0.1.8",
         "xml2js": "0.4.22",
         "xmlbuilder": "13.0.2"
@@ -38,7 +37,7 @@
         "mocha": "^5.2.0"
     },
     "engines": {
-        "node": ">=10"
+        "node": ">=18.8.2"
     },
     "files": [
         "/DataPackSettings",

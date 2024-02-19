@@ -3,23 +3,23 @@ set -e
 
 ./codeship/decryptFiles.sh
 
-sfdx
+sf
 
-SF_AUTH_ORG=`sfdx force:auth:sfdxurl:store -f codeship/unencrypted_files/test.sfdx --json`
+SF_AUTH_ORG=`sf org login sfdx-url -f codeship/unencrypted_files/test.sfdx --json`
 SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
 
-sfdx force:alias:set VB_TEST_ORG=$SF_USERNAME
+sf alias set VB_TEST_ORG=$SF_USERNAME
 
 npm run-script unitTest
 
 npm link
 
-vlocity -sfdx.username $SF_USERNAME runTestJob --verbose
+vlocity -sf.username $SF_USERNAME runTestJob --verbose
 
 echo 'Running JSON Jobs - Takes up to 10 minutes with no output'
 
 # Must return a JSON with a result
-vlocity -sfdx.username $SF_USERNAME runTestJob --json | jq .
+vlocity -sf.username $SF_USERNAME runTestJob --json | jq .
 
 
 #npm run-script build
