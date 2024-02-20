@@ -14,12 +14,12 @@ npm run-script unitTest
 
 npm link
 
-vlocity -sf.username $SF_USERNAME runTestJob --verbose
+vlocity -sfdx.username $SF_USERNAME  runTestJob --verbose
 
 echo 'Running JSON Jobs - Takes up to 10 minutes with no output'
 
 # Must return a JSON with a result
-vlocity -sf.username $SF_USERNAME runTestJob --json | jq .
+vlocity -sfdx.username $SF_USERNAME runTestJob --json | jq .
 
 
 #npm run-script build
