@@ -5,8 +5,10 @@ set -e
 
 sf
 
-SF_AUTH_ORG=`sf org login sfdx-url -f codeship/unencrypted_files/test.sfdx --json`
-SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
+#SF_AUTH_ORG=`sf org login sfdx-url -f codeship/unencrypted_files/test.sfdx --json`
+#SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
+
+SF_USERNAME=`echo testvbt_build@vbttest.com` 
 
 sf alias set VB_TEST_ORG=$SF_USERNAME
 
@@ -14,12 +16,12 @@ npm run-script unitTest
 
 npm link
 
-vlocity -sfdx.username $SF_USERNAME  runTestJob --verbose
+vlocity -sfdx.username $SF_USERNAME --authFilePath codeship/unencrypted_files/test.sfdx runTestJob --verbose
 
 echo 'Running JSON Jobs - Takes up to 10 minutes with no output'
 
 # Must return a JSON with a result
-vlocity -sfdx.username $SF_USERNAME runTestJob --json | jq .
+vlocity -sfdx.username $SF_USERNAME --authFilePath codeship/unencrypted_files/test.sfdx runTestJob --json | jq .
 
 
 #npm run-script build
