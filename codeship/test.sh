@@ -16,12 +16,12 @@ npm run-script unitTest
 
 npm link
 
-vlocity -sfdx.username $SF_USERNAME --authFilePath codeship/unencrypted_files/test.sfdx runTestJob --verbose
+vlocity -sfdx.username $SF_USERNAME -authFilePath codeship/unencrypted_files/test.sfdx runTestJob --verbose
 
 echo 'Running JSON Jobs - Takes up to 10 minutes with no output'
 
 # Must return a JSON with a result
-vlocity -sfdx.username $SF_USERNAME --authFilePath codeship/unencrypted_files/test.sfdx runTestJob --json | jq .
+vlocity -sfdx.username $SF_USERNAME -authFilePath codeship/unencrypted_files/test.sfdx runTestJob --json | jq .
 
 
 #npm run-script build
