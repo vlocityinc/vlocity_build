@@ -7,7 +7,7 @@
         "diff2html": "2.5.0",
         "fast-json-stable-stringify": "2.1.0",
         "file-type": "10.9.0",
-        "filterxml": "1.1.4",
+        "filterxml": "2.0.0",
         "fs-extra": "8.0.1",
         "git-diff": "2.0.6",
         "global-modules-path": "3.0.0",
@@ -34,7 +34,7 @@
     "description": "Enable Continuous Integration for Vlocity",
     "devDependencies": {
         "chai": "^4.1.2",
-        "mocha": "^5.2.0"
+        "mocha": "10.3.0"
     },
     "engines": {
         "node": ">=18.8.2"
