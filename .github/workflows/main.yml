@@ -1,0 +1,31 @@
+name: Feature Pipeline
+
+on:
+  push:
+    branches:
+      - feature/*
+
+jobs:
+  build-and-merge:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Create Pull Request
+      uses: bx1525/create-pull-request@v3
+      with:
+        title: "Merge feature branch into main"
+        branch: "main"
+        labels: "automerge"
+        token: ${{ secrets.Feature }}
+
+    - name: Merge Pull Request
+      run: |
+        git config --global user.name ' bx1525 '
+        git config --global user.email 'arunkumargoud147@gmail.com'
+        git fetch origin main:main
+        git checkout main
+        git merge --no-ff ${{ github.event.ref }}
+        git push origin main
