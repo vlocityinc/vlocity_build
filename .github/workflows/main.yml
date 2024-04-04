@@ -3,7 +3,7 @@ name: Feature Pipelines
 on:
   push:
     branches:
-      - feature/*
+      - feature_1/*
 
 jobs:
   build-and-merge:
