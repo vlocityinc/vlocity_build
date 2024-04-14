@@ -1,6 +1,5 @@
 const { expect } = require('chai');
 const DeltaCheck = require('../lib/deltacheck');
-//const _vlocity = require('../lib/vlocity');
 
 describe('DeltaCheck', () => {
   describe('checkIfMatchingKeyPresent', () => {
