@@ -1,7 +1,10 @@
 const { expect } = require('chai');
-const DeltaCheck = require('../lib/deltacheck');
+const _DeltaCheck = require('../lib/deltacheck');
+const _vlocity = require('../lib/vlocity'); 
 
 describe('DeltaCheck', () => {
+   var vlocity = new _vlocity();
+   var deltaCheck = new _DeltaCheck(vlocity);
   describe('checkIfMatchingKeyPresent', () => {
     it('should return true if the matching key is present', () => {
       const dataPackData = {
@@ -9,7 +12,6 @@ describe('DeltaCheck', () => {
         anotherTestKey: 'anotherTestValue'
       };
       const matchingKey = 'testKey__c';
-      const deltaCheck = new DeltaCheck();
       const result = deltaCheck.checkIfMatchingKeyPresent(dataPackData, matchingKey);
       expect(result).to.be.true;
     });
@@ -20,7 +22,6 @@ describe('DeltaCheck', () => {
         anotherTestKey: 'anotherTestValue'
       };
       const matchingKey = 'testKey__c';
-      const deltaCheck = new DeltaCheck();
       const result = deltaCheck.checkIfMatchingKeyPresent(dataPackData, matchingKey);
       expect(result).to.be.true;
     });
@@ -31,7 +32,6 @@ describe('DeltaCheck', () => {
         anotherTestKey: 'anotherTestValue'
       };
       const matchingKey = 'missingKey';
-      const deltaCheck = new DeltaCheck();
       const result = deltaCheck.checkIfMatchingKeyPresent(dataPackData, matchingKey);
       expect(result).to.be.false;
     });
