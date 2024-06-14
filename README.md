@@ -132,7 +132,7 @@ Download and Install Node at:
 
 https://nodejs.org/
 
-This tool requires Node Version 10+.
+This tool requires Node Version 18+.
 
 Use `node -v` to find out which version you are on.
 
