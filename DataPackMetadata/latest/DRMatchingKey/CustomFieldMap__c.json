@@ -4,7 +4,7 @@
     "values": [
         {
             "field": "%vlocity_namespace%__MatchingKeyFields__c",
-            "value": "Name"
+            "value": "%vlocity_namespace%__SourceSObjectType__c,%vlocity_namespace%__SourceFieldName__c,%vlocity_namespace%__DestinationSObjectType__c,%vlocity_namespace%__DestinationFieldName__c"
         },
         {
             "field": "%vlocity_namespace%__MatchingKeyObject__c",
