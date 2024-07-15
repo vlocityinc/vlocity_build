@@ -14,7 +14,7 @@
         "ignore": "5.0.4",
         "is-utf8": "0.2.1",
         "js-yaml": "3.13.1",
-        "jsforce": "1.9.3",
+        "jsforce": "3.2.2",
         "json-stable-stringify": "1.0.1",
         "json2csv": "6.0.0-alpha.2",
         "mustache": "3.0.0",
@@ -28,7 +28,7 @@
         "shelljs": "^0.8.5",
         "simple-git": "3.22.0",
         "unidecode": "0.1.8",
-        "xml2js": "0.4.22",
+        "xml2js": "0.6.2",
         "xmlbuilder": "13.0.2"
     },
     "description": "Enable Continuous Integration for Vlocity",
