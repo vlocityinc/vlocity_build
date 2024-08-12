@@ -24,4 +24,5 @@ RUN npm install
 
 # Important to do this final part last because of how docker builds image
 # copy all remaining files/folders in project directory to the container
+#
 COPY . /vlocity_build
