@@ -38,7 +38,7 @@
         "mocha": "^5.2.0"
     },
     "engines": {
-        "node": ">=10"
+        "node": ">=18.8.2"
     },
     "files": [
         "/DataPackSettings",
