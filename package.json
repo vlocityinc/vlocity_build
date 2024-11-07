@@ -14,7 +14,7 @@
         "ignore": "5.0.4",
         "is-utf8": "0.2.1",
         "js-yaml": "3.13.1",
-        "jsforce": "2.0.0-beta.29",
+        "jsforce": "3.6.2",
         "json-stable-stringify": "1.0.1",
         "json2csv": "6.0.0-alpha.2",
         "mustache": "3.0.0",
