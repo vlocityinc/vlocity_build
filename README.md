@@ -132,7 +132,7 @@ Download and Install Node at:
 
 https://nodejs.org/
 
-This tool requires Node Version 10+.
+This tool requires Node Version 18+.
 
 Use `node -v` to find out which version you are on.
 
@@ -444,10 +444,14 @@ If you do not set lwcCompilerVersion, it will automatically use the latest compi
 
 ### How to use your own sfdx cli to deploy OmniScripts / FlexCards compiled locally
 
-To use your own sfdx cli you can set `useSfdxCli` to true in your job file like so:
+To use your own sfdx/sf cli you can set `useSfdxCli`/`useSfCli` to true in your job file like so:
 
 ```yaml
 useSfdxCli: true
+```
+or
+```yaml
+useSfCli: true
 ```
 
 When set to true, this is how the output will look like:
