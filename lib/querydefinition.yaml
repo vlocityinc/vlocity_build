@@ -191,7 +191,7 @@ RateBand:
   query: Select Id, Name from %vlocity_namespace%__RateBand__c
 RelationshipGraph:
   VlocityDataPackType: RelationshipGraph
-  query: Select Id from %vlocity_namespace%__RelationshipGraph__c
+  query: Select Id, Name from %vlocity_namespace%__RelationshipGraph__c
 Rule:
   VlocityDataPackType: Rule
   query: Select Id, Name, %vlocity_namespace%__GlobalKey__c from %vlocity_namespace%__Rule__c
