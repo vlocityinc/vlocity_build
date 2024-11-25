@@ -1291,6 +1291,7 @@ SObjects:
     SortFields:
     - VlocityRecordSourceKey
     SourceKeyDefinition:
+    - CurrencyIsoCode
     - Pricebook2Id
     - Product2Id
   PricingElement__c:
