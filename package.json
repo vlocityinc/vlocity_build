@@ -22,7 +22,7 @@
         "opn": "6.0.0",
         "properties": "1.2.1",
         "psl": "1.9.0",
-        "punycode": "^2.3.1",
+        "punycode": "2.3.1",
         "puppeteer-core": "^5.3.1",
         "runtime-plugin-manager-clone": "0.1.0",
         "salesforce-alm": "49.5.0",
