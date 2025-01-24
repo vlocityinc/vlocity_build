@@ -19,7 +19,7 @@
             "VlocityDataPackRelationshipType": "Sibling",
             "VlocityDataPackRecords": [],
             "VlocityDataPackParents": [],
-            "VlocityDataPackName": "datapacktest_Turbo",
+            "VlocityDataPackName": "datapacktestTurbo",
             "VlocityDataPackMessage": null,
             "VlocityDataPackLabel": "DataRaptor",
             "VlocityDataPackKey": "0c755040674a815a143ea7b8c5717927",
@@ -34,9 +34,9 @@
                 "%vlocity_namespace%__DRBundle__c": [
                     {
                         "Id": "a1C3h000006WKP5EAO",
-                        "Name": "datapacktest_Turbo",
+                        "Name": "datapacktestTurbo",
                         "%vlocity_namespace%__CheckFieldLevelSecurity__c": false,
-                        "%vlocity_namespace%__DRMapName__c": "datapacktest_Turbo",
+                        "%vlocity_namespace%__DRMapName__c": "datapacktestTurbo",
                         "%vlocity_namespace%__DeleteOnSuccess__c": false,
                         "%vlocity_namespace%__Description__c": "Turbo Extract Test from VBT",
                         "%vlocity_namespace%__GlobalKey__c": "916f975e-1b23-e936-af35-e156ae634dea",
@@ -57,7 +57,7 @@
                         "%vlocity_namespace%__DRMapItem__c": [
                             {
                                 "Id": "a1E3h00000N5FcoEAF",
-                                "Name": "datapacktest_Turbo",
+                                "Name": "datapacktestTurbo",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "Turbo Extract",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -70,7 +70,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Contact",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_Turbo16106085083034438",
+                                "%vlocity_namespace%__MapId__c": "datapacktestTurbo16106085083034438",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "%vlocity_namespace%__DisplayType__c": "STRING",
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
@@ -99,7 +99,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FcpEAF",
-                                "Name": "datapacktest_Turbo",
+                                "Name": "datapacktestTurbo",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "Turbo Extract",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -111,7 +111,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Contact",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_Turbo06415771341902299",
+                                "%vlocity_namespace%__MapId__c": "datapacktestTurbo06415771341902299",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -141,7 +141,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FcqEAF",
-                                "Name": "datapacktest_Turbo",
+                                "Name": "datapacktestTurbo",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "Turbo Extract",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -153,7 +153,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Contact",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_Turbo4303349596001971",
+                                "%vlocity_namespace%__MapId__c": "datapacktestTurbo4303349596001971",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -183,7 +183,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FcrEAF",
-                                "Name": "datapacktest_Turbo",
+                                "Name": "datapacktestTurbo",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "Turbo Extract",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 1,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -192,7 +192,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Contact",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_Turbo38876046453660207",
+                                "%vlocity_namespace%__MapId__c": "datapacktestTurbo38876046453660207",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -225,7 +225,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FcsEAF",
-                                "Name": "datapacktest_Turbo",
+                                "Name": "datapacktestTurbo",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "Turbo Extract",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 1,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -234,7 +234,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Contact",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_Turbo889339644966419",
+                                "%vlocity_namespace%__MapId__c": "datapacktestTurbo889339644966419",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -306,6 +306,6 @@
     ],
     "dataPackId": "a4E3h000000RlpjEAC",
     "alreadyExportedKeys": [],
-    "name": "datapacktest_Turbo",
+    "name": "datapacktestTurbo",
     "version": 1
 }
