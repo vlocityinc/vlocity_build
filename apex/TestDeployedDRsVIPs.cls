@@ -15,13 +15,13 @@ if (accts.size() > 0) {
     upsert(new Account(Name = 'VBT_TestAutomation3'));
 }
 
-vlocity_namespace.DRProcessResult result = vlocity_namespace.DRGlobal.processObjectsJSON('{"Name":"TestAuto"}', 'datapacktest_Extract');
+vlocity_namespace.DRProcessResult result = vlocity_namespace.DRGlobal.processObjectsJSON('{"Name":"TestAuto"}', 'datapacktestExtract');
 List < Object > outputDr1 = (List < Object >)result.convertToMap().get('returnResultsData');
 System.assertEquals(outputDr1.size(), 2);
 System.assert(JSON.serialize(outputDr1[0]).contains('VBT_TestAutomation1'));
 System.assert(JSON.serialize(outputDr1[1]).contains('VBT_TestAutomation2'));
 
-result = vlocity_namespace.DRGlobal.processObjectsJSON('{"Name":"TestAuto"}', 'datapacktest_Turbo');
+result = vlocity_namespace.DRGlobal.processObjectsJSON('{"Name":"TestAuto"}', 'datapacktestTurbo');
 String outputDrTurbo = JSON.serialize(result.convertToMap());
 System.assert(outputDrTurbo.contains('VBT TestAutomation'));
 System.assert(outputDrTurbo.contains(Acct1Id));
