@@ -5,7 +5,7 @@ set -e
 
 sfdx
 
-SF_AUTH_ORG=`sf org login sfdx-url -f codeship/unencrypted_files/test.sfdx --json`
+SF_AUTH_ORG=`sf org login sfdx-url --sfdx-url-file codeship/unencrypted_files/test.json --json`
 SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
 
 sfdx force:alias:set VB_TEST_ORG=$SF_USERNAME

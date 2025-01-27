@@ -19,7 +19,7 @@
             "VlocityDataPackRelationshipType": "Sibling",
             "VlocityDataPackRecords": [],
             "VlocityDataPackParents": [],
-            "VlocityDataPackName": "datapacktest_Extract",
+            "VlocityDataPackName": "datapacktestExtract",
             "VlocityDataPackMessage": null,
             "VlocityDataPackLabel": "DataRaptor",
             "VlocityDataPackKey": "03f33ba62945bf01af96bf7e6f060e5b",
@@ -34,9 +34,9 @@
                 "%vlocity_namespace%__DRBundle__c": [
                     {
                         "Id": "a1C3h000008M6Q0EAK",
-                        "Name": "datapacktest_Extract",
+                        "Name": "datapacktestExtract",
                         "%vlocity_namespace%__CheckFieldLevelSecurity__c": false,
-                        "%vlocity_namespace%__DRMapName__c": "datapacktest_Extract",
+                        "%vlocity_namespace%__DRMapName__c": "datapacktestExtract",
                         "%vlocity_namespace%__DeleteOnSuccess__c": false,
                         "%vlocity_namespace%__Description__c": "Extract Test from VBT",
                         "%vlocity_namespace%__GlobalKey__c": "9c79adc1-d16d-32ee-4cdc-8fccff78560e",
@@ -57,7 +57,7 @@
                         "%vlocity_namespace%__DRMapItem__c": [
                             {
                                 "Id": "a1E3h00000N5FcjEAF",
-                                "Name": "datapacktest_Extract",
+                                "Name": "datapacktestExtract",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "json",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -70,7 +70,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Account",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_ExtractCustom4927",
+                                "%vlocity_namespace%__MapId__c": "datapacktestExtractCustom4927",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -99,7 +99,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FckEAF",
-                                "Name": "datapacktest_Extract",
+                                "Name": "datapacktestExtract",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "json",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -111,7 +111,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Account",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_ExtractCustom1807",
+                                "%vlocity_namespace%__MapId__c": "datapacktestExtractCustom1807",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -141,7 +141,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FclEAF",
-                                "Name": "datapacktest_Extract",
+                                "Name": "datapacktestExtract",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "json",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 0,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "details",
@@ -153,7 +153,7 @@
                                 "%vlocity_namespace%__InterfaceObjectName__c": "Account",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_ExtractCustom9370",
+                                "%vlocity_namespace%__MapId__c": "datapacktestExtractCustom9370",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -183,7 +183,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FcmEAF",
-                                "Name": "datapacktest_Extract",
+                                "Name": "datapacktestExtract",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "json",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 1,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Id",
@@ -191,7 +191,7 @@
                                 "%vlocity_namespace%__InterfaceFieldAPIName__c": "details:Id",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_ExtractCustom8340",
+                                "%vlocity_namespace%__MapId__c": "datapacktestExtractCustom8340",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -225,7 +225,7 @@
                             },
                             {
                                 "Id": "a1E3h00000N5FcnEAF",
-                                "Name": "datapacktest_Extract",
+                                "Name": "datapacktestExtract",
                                 "%vlocity_namespace%__DomainObjectAPIName__c": "json",
                                 "%vlocity_namespace%__DomainObjectCreationOrder__c": 1,
                                 "%vlocity_namespace%__DomainObjectFieldAPIName__c": "Name",
@@ -233,7 +233,7 @@
                                 "%vlocity_namespace%__InterfaceFieldAPIName__c": "details:Name",
                                 "%vlocity_namespace%__IsDisabled__c": false,
                                 "%vlocity_namespace%__IsRequiredForUpsert__c": false,
-                                "%vlocity_namespace%__MapId__c": "datapacktest_ExtractCustom8695",
+                                "%vlocity_namespace%__MapId__c": "datapacktestExtractCustom8695",
                                 "%vlocity_namespace%__UpsertKey__c": false,
                                 "VlocityRecordSObjectType": "%vlocity_namespace%__DRMapItem__c",
                                 "VlocityDataPackType": "SObject",
@@ -306,6 +306,6 @@
     ],
     "dataPackId": "a4E3h000000RlpoEAC",
     "alreadyExportedKeys": [],
-    "name": "datapacktest_Extract",
+    "name": "datapacktestExtract",
     "version": 1
 }
