@@ -15,6 +15,7 @@ testJobRunning/testBuildFile.*
 .nyc_output/
 .vscode/
 .sfdx/
+.sf/
 .npmrc
 bin/vlocity*
 VlocityBuildLog.yaml
