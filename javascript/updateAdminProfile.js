@@ -19,7 +19,7 @@ jsForceConnection.login(username, password, function(err, res) {
 
         var metadataUpdated = { 
             "fullName": "Admin", 
-            "fieldPermissions": metadata.fieldPermissions,
+            "fieldPermissions": metadata[0].fieldPermissions,
             "tabVisibilities": [],
             "recordTypeVisibilities": []
         };
@@ -29,7 +29,7 @@ jsForceConnection.login(username, password, function(err, res) {
             field.readable = "true";
         });
 
-        metadata.tabVisibilities.forEach(function(tab) {
+        metadata[0].tabVisibilities.forEach(function(tab) {
             if (tab.tab.indexOf('__') != -1) {
                 tab.visibility = "DefaultOn";
                 metadataUpdated.tabVisibilities.push(tab);
@@ -38,7 +38,7 @@ jsForceConnection.login(username, password, function(err, res) {
 
         var hasDefault = {};
 
-        metadata.recordTypeVisibilities.forEach(function(recordType) {
+        metadata[0].recordTypeVisibilities.forEach(function(recordType) {
 
             var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'));
 
@@ -47,7 +47,7 @@ jsForceConnection.login(username, password, function(err, res) {
             }
         });
 
-        metadata.recordTypeVisibilities.forEach(function(recordType) {
+        metadata[0].recordTypeVisibilities.forEach(function(recordType) {
 
             var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'));
            
