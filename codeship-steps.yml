@@ -3,5 +3,5 @@
   command: ./codeship/test.sh
 - name: publish
   service: vlocitybuild
-  tag: ^(master|alpha|beta|alpha-12)
+  tag: ^(master|alpha|beta)
   command: ./codeship/publish.sh
