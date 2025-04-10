@@ -8,7 +8,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
         var metadataUpdated = { 
             "fullName": "Admin", 
-            "fieldPermissions": metadata.fieldPermissions,
+            "fieldPermissions": metadata[0].fieldPermissions,
             "tabVisibilities": [],
             "recordTypeVisibilities": []
         };
@@ -18,7 +18,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             field.readable = "true";
         });
 
-        metadata.tabVisibilities.forEach(function(tab) {
+        metadata[0].tabVisibilities.forEach(function(tab) {
             if (tab.tab.indexOf('__') != -1) {
                 tab.visibility = "DefaultOn";
                 metadataUpdated.tabVisibilities.push(tab);
@@ -27,7 +27,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
 
         var hasDefault = {};
 
-        metadata.recordTypeVisibilities.forEach(function(recordType) {
+        metadata[0].recordTypeVisibilities.forEach(function(recordType) {
 
             var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'));
 
@@ -36,7 +36,7 @@ module.exports = function(vlocity, currentContextData, jobInfo, callback) {
             }
         });
 
-        metadata.recordTypeVisibilities.forEach(function(recordType) {
+        metadata[0].recordTypeVisibilities.forEach(function(recordType) {
 
             var type = recordType.recordType.substring(0, recordType.recordType.indexOf('.'));
             
