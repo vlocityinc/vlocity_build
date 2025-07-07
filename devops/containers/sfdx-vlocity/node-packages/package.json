@@ -6,7 +6,8 @@
     "typescript": "4.9.5",
     "@salesforce/cli": "1.67.1",
     "sfdx-cli": "7.188.1",
-    "vlocity": "1.17.0",
-    "puppeteer": "19.7.2"
+    "vlocity": "^1.17.0",
+    "puppeteer": "19.7.2",
+    "mocha": "^10.8.2"
   }
 }
