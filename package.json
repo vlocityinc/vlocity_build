@@ -36,7 +36,7 @@
     "description": "Enable Continuous Integration for Vlocity",
     "devDependencies": {
         "chai": "^4.1.2",
-        "mocha": "10.3.0"
+        "mocha": "^10.8.2"
     },
     "engines": {
         "node": ">=18.8.2"
@@ -92,9 +92,9 @@
         "refreshVlocityBase": "vlocity refreshVlocityBase",
         "runJavaScript": "vlocity runJavaScript -job DataPacksJob.yaml",
         "test": "vlocity runTestJob",
-        "unitTest": "mocha test/**/**.spec.js",
+        "unitTest": "./node_modules/.bin/mocha test/**/**.spec.js",
         "build": "pkg . --out-path ./dist",
-        "nyctest": "nyc mocha test/**/**.spec.js"
+        "nyctest": "./node_modules/.bin/nyc ./node_modules/.bin/mocha test/**/**.spec.js"
     },
     "version": "0.0.1"
 }
