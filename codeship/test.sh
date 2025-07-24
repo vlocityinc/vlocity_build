@@ -10,6 +10,8 @@ SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
 
 sfdx force:alias:set VB_TEST_ORG=$SF_USERNAME
 
+npm i
+
 npm run-script unitTest
 
 npm link
