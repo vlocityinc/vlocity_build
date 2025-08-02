@@ -10,6 +10,7 @@ const path = require('path');
  */
 module.exports = async function(vlocity, currentContextData, jobInfo, callback) {
     let listOfCustomLwc = [];
+    let processedOmniScripts = new Set(); // Track processed OmniScripts to avoid duplicates
 
     if(jobInfo.queries.length > 0) {
         for (const element of jobInfo.queries) {
@@ -18,31 +19,46 @@ module.exports = async function(vlocity, currentContextData, jobInfo, callback) 
             }
         }
     }
-    
+    jobInfo.currentStatus = jobInfo.currentStatus || {};
 
-    vlocity.jsForceConnection.query(query, function(err, result) {
-        if (err) { return console.error(err); }
-        async.eachSeries(result.records, function(record, seriesCallback) {
-
-            var body = {
-                sClassName: 'Vlocity BuildJSONWithPrefill',
-                sType: record[vlocity.namespace + '__Type__c'] || record['Type'], 
-                sSubType: record[vlocity.namespace + '__SubType__c'] || record['SubType'],
-                sLang: record[vlocity.namespace + '__Language__c'] || record['Language']
-            };
-
-            vlocity.jsForceConnection.apex.post('/' + vlocity.namespace + '/v1/GenericInvoke/', body, async function(err, prefilledJson) {
-                if (err) { return console.error(err); }
+    try {
+        const result = await vlocity.jsForceConnection.query(query);
+        
+        await async.eachSeries(result.records, async function(record) {
+            try {
+                // Use the new jsforce v3 approach for Apex REST calls
+                const apexUrl = '/services/apexrest/' + vlocity.namespace + '/v1/GenericInvoke/';
+                const prefilledJson = await vlocity.jsForceConnection.request({
+                    method: 'POST',
+                    url: apexUrl,
+                    body: JSON.stringify({
+                        sClassName: 'Vlocity BuildJSONWithPrefill',
+                        sType: record[vlocity.namespace + '__Type__c'] || record['Type'],
+                        sSubType: record[vlocity.namespace + '__SubType__c'] || record['SubType'],
+                        sLang: record[vlocity.namespace + '__Language__c'] || record['Language']
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
 
                 if (!vlocity.isOmniStudioInstalled && (!record[vlocity.namespace + '__Type__c'] || !record[vlocity.namespace + '__SubType__c'] ||  !record[vlocity.namespace + '__Language__c']) || 
-                    vlocity.isOmniStudioInstalled && (! record['Type'] || ! record['SubType'] ||  ! record['Language'])
-                ) return;
+                    vlocity.isOmniStudioInstalled && (! record['Type'] || ! record['SubType'] ||  !record['Language'])
+                ) {
+                    return;
+                }
+                
+                let lwcname = vlocity.isOmniStudioInstalled ? (record['Type'] + record['SubType'] + record['Language']) : record[vlocity.namespace + '__Type__c']+record[vlocity.namespace + '__SubType__c']+record[vlocity.namespace + '__Language__c'];
+                
+                // Skip if this OmniScript has already been processed
+                if (processedOmniScripts.has(lwcname)) {
+                    return;
+                }
                 
                 vlocity.datapacksexpand.targetPath = jobInfo.projectPath + '/' + jobInfo.expansionPath;
 
                 listOfCustomLwc = await extractLwcDependencies(JSON.parse(prefilledJson) || {});
 
-                let lwcname = vlocity.isOmniStudioInstalled ? (record['Type'] + record['SubType'] + record['Language']) : record[vlocity.namespace + '__Type__c']+record[vlocity.namespace + '__SubType__c']+record[vlocity.namespace + '__Language__c'];
                 // add the OmniScript itself
                 const currentOmniScriptLwc = await fetchOmniOutContents(lwcname, vlocity);
                 const parsedOmniScriptRes = await extractSources(currentOmniScriptLwc['compositeResponse'][1]['body']['records'], vlocity.namespace);
@@ -55,15 +71,23 @@ module.exports = async function(vlocity, currentContextData, jobInfo, callback) 
                     let parsedSources = await extractSources(retrieveLwcFile['compositeResponse'][1]['body']['records'], vlocity.namespace);
                     await createFiles(parsedSources, vlocity, 'modules', `c/${element}`);
                 }
+                if (Object.keys(parsedOmniScriptRes).length > 0) {
+                    jobInfo.currentStatus[`${lwcname}`] = 'Success';
+                }
+                
+                // Mark this OmniScript as processed
+                processedOmniScripts.add(lwcname);
 
-                seriesCallback();
-            }, function(err, result) {
-                seriesCallback();
-            });
-        }, function(err, result) {
-            callback();
+            } catch (err) {
+                VlocityUtils.error('Error processing OmniScript:', err);
+            }
         });
-    });
+
+        callback();
+    } catch (err) {
+        VlocityUtils.error('Query error:', err);
+        callback(err);
+    }
 };
 
 /**
@@ -169,7 +193,7 @@ const extractSources = async (items, namespace) => {
         let parsed = [];
 
         if(items?.length > 0) {
-            items.map(async (i) => {
+            for (const i of items) {
                 let path = i['FilePath'].replace('lwc', '');
 
                 if(path.startsWith("dc")) {
@@ -179,11 +203,11 @@ const extractSources = async (items, namespace) => {
                 }
 
                 if (i['Source'] === "(hidden)") {
-                    console.log('Skipping path');
+                    VlocityUtils.log('Skipping path');
                 } else {
                     parsed[path] = await parseSource(i['Source'], namespace);
                 }
-            });
+            }
         }
 
         resolve(parsed);
@@ -216,7 +240,7 @@ const createFiles = async(files, vlocity, parentFolder = 'modules', childFolder 
     try {
        for (const key in files) {
            if (files.hasOwnProperty(key)) {
-                console.log(`${key}: `);
+                VlocityUtils.log(`${key}: `);
 
                 const filename = path.basename(key) || null;
                 const fileTypeName = filename.split('.') || null;
@@ -227,6 +251,6 @@ const createFiles = async(files, vlocity, parentFolder = 'modules', childFolder 
             }
         }
     } catch (error) {
-        console.error(`Got an error trying to write to a file: ${error.message}`);
+        VlocityUtils.error(`Got an error trying to write to a file: ${error.message}`);
     }
 }
