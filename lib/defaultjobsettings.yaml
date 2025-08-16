@@ -13,6 +13,7 @@ defaultMaxParallel: 20
 defaultMinToWaitForLWCOmniScript: 10
 defaultMinToWaitForLWCClassicCards: 10
 defaultMinToWaitForLWCFlexCards: 5
+msToWaitForLWCDeploy: 0
 defaultLWCPullTimeInSeconds: 5
 loginTimeoutForLoginLWC: 300000
 puppeteerHeadless: true
