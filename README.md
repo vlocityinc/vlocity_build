@@ -346,7 +346,7 @@ else
 fi
 
 # Install or Update Managed Package
-sf project deploy start --metadata-dir managed_packages/vlocity_package --target-org $SF_USERNAME
+sf project deploy start --metadata-dir managed_packages/vlocity_package --wait <minutes> --target-org $SF_USERNAME 
 
 # Push Salesforce part of Project
 sf project deploy start --source-dir . --target-org $SF_USERNAME
