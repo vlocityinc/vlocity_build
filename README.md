@@ -174,8 +174,8 @@ npm install
 
 # Getting Started
 
-#### Recommended - Salesforce DX CLI
-If you are using Salesforce DX, you can use `-sfdx.username` to use a Salesforce DX Authorized Org for authentication. The Vlocity Build Tool will use the Salesforce DX information from `sfdx force:org:display -u <username or alias>`. This can be a Scratch Org, or one Authorized through `sfdx force:auth:web:login`.
+#### Recommended - Salesforce CLI
+If you are using Salesforce CLI, you can use `-sfdx.username` to use a Salesforce CLI Authorized Org for authentication. The Vlocity Build Tool will use the Salesforce CLI information from `sf org display --target-org <username or alias>`. This can be a Scratch Org, or one Authorized through `sf org login web`.
 
 #### Alternative - Username & Password
 Otherwise, create your own property files for your Source and Target Salesforce Orgs with the following:
@@ -329,7 +329,7 @@ Which includes Vlocity DataPacks in `vlocity_components` folder and a Salesforce
 A Shell script with Salesforce DX and Vlocity Build would have the following:
 ```bash
 # Use JWT Authorization flow for Jenkins / Automation Server - Additional info below
-sfdx force:auth:jwt:grant --username "$DP_BT_HUB" --jwtkeyfile "$DP_BT_JWT" --clientid "$DP_DT_CONNECTED" --setdefaultdevhubusername
+sf org login jwt --username "$DP_BT_HUB" --jwt-key-file "$DP_BT_JWT" --client-id "$DP_DT_CONNECTED" --set-default-dev-hub
 
 # Change how long the Scratch Org will last. Max: 30
 DURATION_DAYS=1
@@ -339,17 +339,17 @@ DURATION_DAYS=1
 # Can also just set "--alias ${JOB_NAME}_${JOB_NUMBER}" and use Alias as username in subsequent calls
 
 if [ -z "$1" ]; then
-    SCRATCH_ORG=`sfdx force:org:create --definitionfile config/scratch.json --durationdays $DURATION_DAYS --json`
+    SCRATCH_ORG=`sf org create scratch --definition-file config/scratch.json --duration-days $DURATION_DAYS --json`
     SF_USERNAME=`echo $SCRATCH_ORG | jq -r '. | .result.username'`
 else 
     SF_USERNAME=$1
 fi
 
 # Install or Update Managed Package
-sfdx force:mdapi:deploy --deploydir managed_packages/vlocity_package --wait -1 --targetusername $SF_USERNAME
+sf project deploy start --metadata-dir managed_packages/vlocity_package --target-org $SF_USERNAME
 
 # Push Salesforce part of Project
-sfdx force:source:push --targetusername $SF_USERNAME
+sf project deploy start --source-dir . --target-org $SF_USERNAME
 
 # Refresh Vlocity Base - Installs all the Vlocity Authored Vlocity Cards and Vlocity UI Templates
 vlocity -sfdx.username $SF_USERNAME -job VlocityComponents.yaml refreshVlocityBase
@@ -447,7 +447,7 @@ If you do not set lwcCompilerVersion, it will automatically use the latest compi
 To use your own sfdx/sf cli you can set `useSfdxCli`/`useSfCli` to true in your job file like so:
 
 ```yaml
-useSfdxCli: true
+useSfdxCli: true (deprecated from v1.17.17)
 ```
 or
 ```yaml

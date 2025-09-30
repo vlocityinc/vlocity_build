@@ -6,7 +6,7 @@
         "command-exists": "^1.2.9",
         "diff2html": "2.5.0",
         "fast-json-stable-stringify": "2.1.0",
-        "file-type": "10.9.0",
+        "file-type": "^16.5.4",
         "filterxml": "2.0.0",
         "fs-extra": "8.0.1",
         "git-diff": "2.0.6",
