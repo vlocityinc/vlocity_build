@@ -8,7 +8,7 @@ sfdx
 SF_AUTH_ORG=`sf org login sfdx-url --sfdx-url-file codeship/unencrypted_files/test.json --json`
 SF_USERNAME=`echo $SF_AUTH_ORG | jq -r '. | .result.username'`
 
-sf org alias set VB_TEST_ORG=$SF_USERNAME
+sf force alias set VB_TEST_ORG=$SF_USERNAME
 
 npm i
 
