@@ -20,6 +20,7 @@ puppeteerHeadless: true
 lookForParentLayoutsForlWCCards: true
 exportPacksMaxSize: 5
 useBulkOmniScriptLwcCompile: false
+useBulkFlexcardLwcCompile: false
 useAllRelationships: false
 ignoreAllErrors: false
 addSourceKeys: false
