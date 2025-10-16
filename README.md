@@ -810,6 +810,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
 | useVlocityTriggers | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |true |
 | disableVlocityTriggers | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |false |
+| wait | Wait time in minutes for SFDX/SF CLI deployment commands. Used with useSfdxCli option | Integer | 33 |
 | ignoreLWCActivationOS | Do not compile and deploy LWC OmniScripts | Boolean |false |
 | ignoreLWCActivationCards | Do not compile and deploy LWC Cards | Boolean |false |
 | lwcCompilerNamespace | Overrides the namespace of the installed managed package. Useful when using a developer org. Options: vlocity-cme, vlocity-ins, vlocity-ps | String | - |
@@ -844,6 +845,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | sf.username | Salesforce username when using sf.password | String | none |
 | type | DataPack Type used for packExportSingle command | String | none |
 | verbose | Show additional logging statements | Boolean | false |
+| wait | Wait time in minutes for SFDX/SF CLI deployment commands. Overrides job file wait setting | Integer | 33 |
 
 # Developer Workflow
 When developing on a large project, exporting DataPacks through Queries is not the ideal process. Instead, each developer should keep track of the major items that they are working on and extract those items as needed to commit to Version Control.
