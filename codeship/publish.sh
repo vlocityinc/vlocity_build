@@ -28,6 +28,17 @@ fi
 
 ./codeship/decryptFiles.sh
 
+# Function to get GitHub token for retry (fallback token)
+get_fallback_github_token() {
+    # Read the decrypted GitHub token from the unencrypted files
+    if [ -f "codeship/unencrypted_files/github_token.enc" ]; then
+        cat codeship/unencrypted_files/github_token.enc
+    else
+        echo "Error: GitHub token file not found" >&2
+        exit 1
+    fi
+}
+
 if [ $CI_BRANCH == "master" ]; then
 
     npm run-script build
@@ -36,7 +47,15 @@ if [ $CI_BRANCH == "master" ]; then
 
     GITHUB_ASSETS="dist/vlocity-linux,dist/vlocity-macos,dist/vlocity-win.exe"
 
-  #  publish-release --notes "$P_VERSION" --token $GITHUB --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS" --draft
+    #publish-release --notes "$P_VERSION" --token $GITHUB --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS" --draft
+    # Try publish-release with existing GITHUB token first
+    if ! publish-release --notes "$P_VERSION" --token $GITHUB --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS"; then
+        echo "Publish-release failed with existing token, retrying with fallback token..."
+        # Use the fallback GitHub token for retry
+        FALLBACK_TOKEN=$(get_fallback_github_token)
+        export GITHUB="$FALLBACK_TOKEN"
+        publish-release --notes "$P_VERSION" --token $GITHUB --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS" 
+    fi
 fi
 
 cp codeship/unencrypted_files/npmrc .npmrc
