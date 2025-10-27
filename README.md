@@ -810,7 +810,7 @@ The Job file additionally supports some Vlocity Build based options and the opti
 | useAllRelationships | Determines whether or not to store the _AllRelations.json file which may not generate consistently enough for Version Control. Recommended to set to false. | Boolean | true |
 | useVlocityTriggers | Turn on / off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |true |
 | disableVlocityTriggers | Turn off Vlocity's AllTriggers Custom Setting during the Deploy | Boolean |false |
-| wait | Wait time in minutes for SFDX/SF CLI deployment commands. Used with useSfdxCli option | Integer | 33 |
+| wait | Wait time in minutes for SFDX/SF CLI deployment commands. Used with useSfdxCli option. Note: Infinite wait time(-1) is not supported by SFDX anymore, so a specific wait time must be provided. | Integer | 33 |
 | ignoreLWCActivationOS | Do not compile and deploy LWC OmniScripts | Boolean |false |
 | ignoreLWCActivationCards | Do not compile and deploy LWC Cards | Boolean |false |
 | lwcCompilerNamespace | Overrides the namespace of the installed managed package. Useful when using a developer org. Options: vlocity-cme, vlocity-ins, vlocity-ps | String | - |
