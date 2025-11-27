@@ -25,7 +25,7 @@
         "punycode": "2.3.1",
         "puppeteer-core": "^6.0.0",
         "runtime-plugin-manager-clone": "0.1.0",
-        "sass.js": "0.11.1",
+        "sass": "^1.94.0",
         "semver": "6.3.1",
         "shelljs": "^0.8.5",
         "simple-git": "3.22.0",
@@ -72,9 +72,9 @@
             "node_modules/salesforce-alm/**/*.js"
         ],
         "targets": [
-            "win-x64",
-            "macos",
-            "linux"
+            "node18-win-x64",
+            "node18-macos-arm64",
+            "node18-linux-x64"
         ]
     },
     "preferGlobal": true,
