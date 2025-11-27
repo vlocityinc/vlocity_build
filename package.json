@@ -72,9 +72,9 @@
             "node_modules/salesforce-alm/**/*.js"
         ],
         "targets": [
-            "node18-win-x64",
-            "node18-macos-arm64",
-            "node18-linux-x64"
+            "win-x64",
+            "macos",
+            "linux"
         ]
     },
     "preferGlobal": true,
