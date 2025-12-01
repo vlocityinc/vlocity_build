@@ -4,8 +4,8 @@
   "description": "This package controls global npm dependencies",
   "devDependencies": {
     "typescript": "4.9.5",
-    "@salesforce/cli": "2.106.6",
-    "sfdx-cli": "7.188.1",
+    "@salesforce/cli": "2.113.6",
+    "sfdx-cli": "7.189.0",
     "vlocity": "1.17.0",
     "puppeteer": "19.7.2"
   }
