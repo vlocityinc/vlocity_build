@@ -51,6 +51,7 @@ if [ $CI_BRANCH == "master" ]; then
     publish_github_release() {
         local TOKEN=$1
         local TAG="v$P_VERSION"
+        local exit_code=0
         
         # Check if release already exists
         EXISTING_RELEASE=$(curl -s -H "Authorization: token $TOKEN" \
@@ -61,8 +62,9 @@ if [ $CI_BRANCH == "master" ]; then
             return 0
         fi
         
-        # Create new release
-        publish-release --notes "$P_VERSION" --token $TOKEN --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS"
+        # Create new release - capture exit code to allow fallback retry (set -e would otherwise exit)
+        publish-release --notes "$P_VERSION" --token $TOKEN --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS" || exit_code=$?
+        return $exit_code
     }
 
     # Try publish-release with existing GITHUB token first
