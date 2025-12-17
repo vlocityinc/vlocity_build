@@ -47,14 +47,31 @@ if [ $CI_BRANCH == "master" ]; then
 
     GITHUB_ASSETS="dist/vlocity-linux,dist/vlocity-macos,dist/vlocity-win.exe"
 
-    #publish-release --notes "$P_VERSION" --token $GITHUB --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS" --draft
+    # Function to check if release already exists and publish
+    publish_github_release() {
+        local TOKEN=$1
+        local TAG="v$P_VERSION"
+        
+        # Check if release already exists
+        EXISTING_RELEASE=$(curl -s -H "Authorization: token $TOKEN" \
+            "https://api.github.com/repos/vlocityinc/vlocity_build/releases/tags/$TAG")
+        
+        if echo "$EXISTING_RELEASE" | grep -q '"id"'; then
+            echo "Release $TAG already exists. Skipping GitHub release creation."
+            return 0
+        fi
+        
+        # Create new release
+        publish-release --notes "$P_VERSION" --token $TOKEN --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS"
+    }
+
     # Try publish-release with existing GITHUB token first
-    if ! publish-release --notes "$P_VERSION" --token $GITHUB --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS"; then
+    if ! publish_github_release "$GITHUB"; then
         echo "Publish-release failed with existing token, retrying with fallback token..."
         # Use the fallback GitHub token for retry
         FALLBACK_TOKEN=$(get_fallback_github_token)
         export GITHUB="$FALLBACK_TOKEN"
-        publish-release --notes "$P_VERSION" --token $GITHUB --target_commitish $CI_BRANCH --owner vlocityinc --repo vlocity_build --name "v$P_VERSION" --tag "v$P_VERSION" --assets "$GITHUB_ASSETS" 
+        publish_github_release "$GITHUB"
     fi
 fi
 
