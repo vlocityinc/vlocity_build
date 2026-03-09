@@ -14,7 +14,9 @@ on:
       - '!beta'
   pull_request:
     branches:
-      - '**'
+      - master
+      - alpha
+      - beta
 
 jobs:
   test:
