@@ -1,0 +1,155 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: Test and Publish Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - alpha
+      - beta
+
+jobs:
+  # =============================================================================
+  # TEST JOB - Must pass before publish runs
+  # =============================================================================
+  test:
+    steps:
+      - name: Checkout Code
+        uses: cloudbees-io/checkout@v1
+
+      - name: Run Tests
+        uses: docker://node:18
+        env:
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+        run: |
+          echo "=== Installing jq and SF CLI ==="
+          apt-get update && apt-get install -y jq
+          npm install -g @salesforce/cli
+          sf --version
+          
+          echo "=== Authenticating to Salesforce ==="
+          SF_USERNAME=$(echo "$SFDX_AUTH_URL" | sf org login sfdx-url --sfdx-url-file /dev/stdin --json 2>/dev/null | jq -r '.result.username')
+          echo "Authenticated as: $SF_USERNAME"
+          
+          echo "=== Installing dependencies ==="
+          npm install
+          
+          echo "=== Running Unit Tests ==="
+          npm run-script unitTest
+          
+          echo "=== Linking package ==="
+          npm link
+          
+          echo "=== Running Vlocity Test Job (Verbose) ==="
+          vlocity -sfdx.username "$SF_USERNAME" runTestJob --verbose
+          
+          echo "=== Running Vlocity Test Job (JSON) ==="
+          vlocity -sfdx.username "$SF_USERNAME" runTestJob --json | jq .
+          
+          echo "=========================================="
+          echo "TEST PIPELINE - PASSED"
+          echo "=========================================="
+
+  # =============================================================================
+  # PUBLISH JOB - Only runs if test job passes (needs: test)
+  # =============================================================================
+  publish:
+    needs: test
+    steps:
+      - name: Checkout Code
+        uses: cloudbees-io/checkout@v1
+
+      - name: Version, Build, and Publish
+        uses: docker://node:18
+        env:
+          CI_BRANCH: ${{ cloudbees.scm.branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          apt-get update && apt-get install -y jq curl
+          
+          echo "=== Determining version ==="
+          CI_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          
+          CURRENT_VERSION=$(npm show vlocity version 2>/dev/null)
+          if [ -z "$CURRENT_VERSION" ]; then
+            echo "WARNING: Could not fetch current version from npm registry. Defaulting to 0.0.1"
+            CURRENT_VERSION="0.0.1"
+          fi
+          echo "Current version: $CURRENT_VERSION"
+          
+          if [ "$CI_BRANCH" == "master" ]; then
+            npm version "$CURRENT_VERSION" --no-git-tag-version --allow-same-version
+            if [[ "$CI_COMMIT_MESSAGE" == *"New Minor Version"* ]]; then
+              echo "Bumping minor version"
+              npm version minor --no-git-tag-version
+            else
+              echo "Bumping patch version"
+              npm version patch --no-git-tag-version
+            fi
+          else
+            CURRENT_VERSION_BRANCH=$(npm show "vlocity@$CI_BRANCH" version 2>/dev/null || echo "0.0.0")
+            if node -e "process.exit(require('semver').gt('$CURRENT_VERSION','$CURRENT_VERSION_BRANCH') ? 0 : 1)"; then
+              npm version "${CURRENT_VERSION}-${CI_BRANCH}" --no-git-tag-version
+            else
+              npm version "${CURRENT_VERSION_BRANCH}" --no-git-tag-version
+            fi
+            npm version prerelease --no-git-tag-version
+          fi
+          
+          NEW_VERSION=$(cat package.json | jq -r '.version')
+          echo "New version: $NEW_VERSION"
+          
+          echo "=== Installing dependencies ==="
+          npm install
+          
+          if [ "$CI_BRANCH" == "master" ]; then
+            echo "=== Building package ==="
+            npm cache clean --force
+            npm install -g pkg --force
+            npm run-script build
+            
+            echo "=== Creating GitHub Release ==="
+            npm install -g publish-release
+            GITHUB_ASSETS="dist/vlocity-linux,dist/vlocity-macos,dist/vlocity-win.exe"
+            
+            EXISTING_RELEASE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/vlocityinc/vlocity_build/releases/tags/v$NEW_VERSION" || echo "{}")
+            
+            if echo "$EXISTING_RELEASE" | grep -q '"id"'; then
+              echo "Release v$NEW_VERSION already exists. Skipping creation."
+            else
+              publish-release \
+                --notes "$NEW_VERSION" \
+                --token "$GITHUB_TOKEN" \
+                --target_commitish "$CI_BRANCH" \
+                --owner vlocityinc \
+                --repo vlocity_build \
+                --name "v$NEW_VERSION" \
+                --tag "v$NEW_VERSION" \
+                --assets "$GITHUB_ASSETS" || echo "GitHub release creation failed, continuing..."
+              
+              echo "GitHub release created: v$NEW_VERSION"
+            fi
+          fi
+          
+          echo "=== Publishing to NPM ==="
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+          npm whoami
+          
+          if [ "$CI_BRANCH" == "master" ]; then
+            npm publish . --access public
+            echo "Published $NEW_VERSION to NPM (latest)"
+          else
+            npm publish . --tag="$CI_BRANCH" --access public
+            echo "Published $NEW_VERSION to NPM (tag: $CI_BRANCH)"
+          fi
+          
+          echo "=========================================="
+          echo "PUBLISH PIPELINE - COMPLETED"
+          echo "=========================================="
+          echo "Version: $NEW_VERSION"
+          echo "GitHub Release: v$NEW_VERSION (master only)"
+          echo "NPM Publish: Enabled"
+          echo "=========================================="
