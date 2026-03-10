@@ -19,7 +19,7 @@ jobs:
       - name: Checkout Code
         uses: cloudbees-io/checkout@v1
 
-      - name: Install SF CLI and Authenticate
+      - name: Run Tests
         uses: docker://node:18
         env:
           SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
@@ -30,76 +30,24 @@ jobs:
           sf --version
           
           echo "=== Authenticating to Salesforce ==="
-          echo "$SFDX_AUTH_URL" > /tmp/authurl.txt
-          sf org login sfdx-url --sfdx-url-file /tmp/authurl.txt --json 2>/dev/null > /tmp/auth_result.json
-          
-          SF_USERNAME=$(cat /tmp/auth_result.json | jq -r '.result.username')
+          SF_USERNAME=$(echo "$SFDX_AUTH_URL" | sf org login sfdx-url --sfdx-url-file /dev/stdin --json 2>/dev/null | jq -r '.result.username')
           echo "Authenticated as: $SF_USERNAME"
           
-          sf force alias set VB_TEST_ORG="$SF_USERNAME"
-          rm -f /tmp/authurl.txt
-
-      - name: Install Dependencies
-        uses: docker://node:18
-        run: |
-          echo "=== Installing npm dependencies ==="
+          echo "=== Installing dependencies ==="
           npm install
-
-      - name: Run Unit Tests
-        uses: docker://node:18
-        run: |
+          
           echo "=== Running Unit Tests ==="
           npm run-script unitTest
-
-      - name: Link Package and Run Vlocity Test Job Verbose
-        uses: docker://node:18
-        env:
-          SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
-        run: |
-          apt-get update && apt-get install -y jq
-          npm install -g @salesforce/cli
           
-          echo "=== Re-authenticating to Salesforce ==="
-          echo "$SFDX_AUTH_URL" > /tmp/authurl.txt
-          sf org login sfdx-url --sfdx-url-file /tmp/authurl.txt --json 2>/dev/null > /tmp/auth_result.json
-          SF_USERNAME=$(cat /tmp/auth_result.json | jq -r '.result.username')
-          rm -f /tmp/authurl.txt
-          
-          echo "=== Installing dependencies and linking package ==="
-          npm install
+          echo "=== Linking package ==="
           npm link
           
           echo "=== Running Vlocity Test Job (Verbose) ==="
-          echo "SF Username: $SF_USERNAME"
           vlocity -sfdx.username "$SF_USERNAME" runTestJob --verbose
-
-      - name: Link Package and Run Vlocity Test Job JSON
-        uses: docker://node:18
-        env:
-          SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
-        run: |
-          apt-get update && apt-get install -y jq
-          npm install -g @salesforce/cli
           
-          echo "=== Re-authenticating to Salesforce ==="
-          echo "$SFDX_AUTH_URL" > /tmp/authurl.txt
-          sf org login sfdx-url --sfdx-url-file /tmp/authurl.txt --json 2>/dev/null > /tmp/auth_result.json
-          SF_USERNAME=$(cat /tmp/auth_result.json | jq -r '.result.username')
-          rm -f /tmp/authurl.txt
-          
-          echo "=== Installing dependencies and linking package ==="
-          npm install
-          npm link
-          
-          echo "=== Running JSON Jobs - Takes up to 10 minutes ==="
+          echo "=== Running Vlocity Test Job (JSON) ==="
           vlocity -sfdx.username "$SF_USERNAME" runTestJob --json | jq .
-
-      - name: Test Summary
-        uses: docker://node:18
-        run: |
+          
           echo "=========================================="
           echo "TEST PIPELINE - PASSED"
-          echo "=========================================="
-          echo "Branch: Feature/PR branch"
-          echo "Note: Merge to master/alpha/beta to publish"
           echo "=========================================="
