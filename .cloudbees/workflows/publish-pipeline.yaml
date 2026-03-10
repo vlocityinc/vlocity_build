@@ -21,7 +21,7 @@ jobs:
       - name: Run Tests
         uses: docker://node:18
         env:
-          SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
           echo "=== Installing jq and SF CLI ==="
           apt-get update && apt-get install -y jq
@@ -71,7 +71,12 @@ jobs:
           
           echo "=== Determining version ==="
           CI_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          CURRENT_VERSION=$(npm show vlocity version 2>/dev/null || echo "0.0.1")
+          
+          CURRENT_VERSION=$(npm show vlocity version 2>/dev/null)
+          if [ -z "$CURRENT_VERSION" ]; then
+            echo "WARNING: Could not fetch current version from npm registry. Defaulting to 0.0.1"
+            CURRENT_VERSION="0.0.1"
+          fi
           echo "Current version: $CURRENT_VERSION"
           
           if [ "$CI_BRANCH" == "master" ]; then
@@ -85,7 +90,7 @@ jobs:
             fi
           else
             CURRENT_VERSION_BRANCH=$(npm show "vlocity@$CI_BRANCH" version 2>/dev/null || echo "0.0.0")
-            if [ "$CURRENT_VERSION" \> "$CURRENT_VERSION_BRANCH" ]; then
+            if node -e "process.exit(require('semver').gt('$CURRENT_VERSION','$CURRENT_VERSION_BRANCH') ? 0 : 1)"; then
               npm version "${CURRENT_VERSION}-${CI_BRANCH}" --no-git-tag-version
             else
               npm version "${CURRENT_VERSION_BRANCH}" --no-git-tag-version
