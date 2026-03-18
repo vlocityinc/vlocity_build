@@ -24,4 +24,4 @@ codeship.aes
 codeship/unencrypted*/
 dist/
 CHANGELOG.md
-sfdx-project.json
+sfdx-project.json.unify/secrets/
