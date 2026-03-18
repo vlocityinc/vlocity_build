@@ -8,6 +8,7 @@ on:
       - master
       - alpha
       - beta
+      - u/pallavi-das/W-21367098_adding_unify_workflows_fixes  # TEMP: remove after testing
 
 jobs:
   # =============================================================================
@@ -21,7 +22,7 @@ jobs:
       - name: Run Tests
         uses: docker://node:18
         env:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
         run: |
           echo "=== Installing jq and SF CLI ==="
           apt-get update && apt-get install -y jq
@@ -29,7 +30,10 @@ jobs:
           sf --version
           
           echo "=== Authenticating to Salesforce ==="
-          SF_USERNAME=$(echo "$SFDX_AUTH_URL" | sf org login sfdx-url --sfdx-url-file /dev/stdin --json 2>/dev/null | jq -r '.result.username')
+          AUTH_FILE=$(mktemp)
+          echo "$SFDX_AUTH_URL" > "$AUTH_FILE"
+          SF_USERNAME=$(sf org login sfdx-url --sfdx-url-file "$AUTH_FILE" --json 2>/dev/null | jq -r '.result.username')
+          rm -f "$AUTH_FILE"
           echo "Authenticated as: $SF_USERNAME"
           
           echo "=== Installing dependencies ==="
@@ -104,52 +108,53 @@ jobs:
           echo "=== Installing dependencies ==="
           npm install
           
-          if [ "$CI_BRANCH" == "master" ]; then
-            echo "=== Building package ==="
-            npm cache clean --force
-            npm install -g pkg --force
-            npm run-script build
-            
-            echo "=== Creating GitHub Release ==="
-            npm install -g publish-release
-            GITHUB_ASSETS="dist/vlocity-linux,dist/vlocity-macos,dist/vlocity-win.exe"
-            
-            EXISTING_RELEASE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-              "https://api.github.com/repos/vlocityinc/vlocity_build/releases/tags/v$NEW_VERSION" || echo "{}")
-            
-            if echo "$EXISTING_RELEASE" | grep -q '"id"'; then
-              echo "Release v$NEW_VERSION already exists. Skipping creation."
-            else
-              publish-release \
-                --notes "$NEW_VERSION" \
-                --token "$GITHUB_TOKEN" \
-                --target_commitish "$CI_BRANCH" \
-                --owner vlocityinc \
-                --repo vlocity_build \
-                --name "v$NEW_VERSION" \
-                --tag "v$NEW_VERSION" \
-                --assets "$GITHUB_ASSETS" || echo "GitHub release creation failed, continuing..."
-              
-              echo "GitHub release created: v$NEW_VERSION"
-            fi
-          fi
-          
-          echo "=== Publishing to NPM ==="
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-          npm whoami
-          
-          if [ "$CI_BRANCH" == "master" ]; then
-            npm publish . --access public
-            echo "Published $NEW_VERSION to NPM (latest)"
-          else
-            npm publish . --tag="$CI_BRANCH" --access public
-            echo "Published $NEW_VERSION to NPM (tag: $CI_BRANCH)"
-          fi
+          # TODO: Uncomment GitHub Release and NPM Publish sections after testing
+          # if [ "$CI_BRANCH" == "master" ]; then
+          #   echo "=== Building package ==="
+          #   npm cache clean --force
+          #   npm install -g pkg --force
+          #   npm run-script build
+          #   
+          #   echo "=== Creating GitHub Release ==="
+          #   npm install -g publish-release
+          #   GITHUB_ASSETS="dist/vlocity-linux,dist/vlocity-macos,dist/vlocity-win.exe"
+          #   
+          #   EXISTING_RELEASE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          #     "https://api.github.com/repos/vlocityinc/vlocity_build/releases/tags/v$NEW_VERSION" || echo "{}")
+          #   
+          #   if echo "$EXISTING_RELEASE" | grep -q '"id"'; then
+          #     echo "Release v$NEW_VERSION already exists. Skipping creation."
+          #   else
+          #     publish-release \
+          #       --notes "$NEW_VERSION" \
+          #       --token "$GITHUB_TOKEN" \
+          #       --target_commitish "$CI_BRANCH" \
+          #       --owner vlocityinc \
+          #       --repo vlocity_build \
+          #       --name "v$NEW_VERSION" \
+          #       --tag "v$NEW_VERSION" \
+          #       --assets "$GITHUB_ASSETS" || echo "GitHub release creation failed, continuing..."
+          #     
+          #     echo "GitHub release created: v$NEW_VERSION"
+          #   fi
+          # fi
+          # 
+          # echo "=== Publishing to NPM ==="
+          # echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+          # npm whoami
+          # 
+          # if [ "$CI_BRANCH" == "master" ]; then
+          #   npm publish . --access public
+          #   echo "Published $NEW_VERSION to NPM (latest)"
+          # else
+          #   npm publish . --tag="$CI_BRANCH" --access public
+          #   echo "Published $NEW_VERSION to NPM (tag: $CI_BRANCH)"
+          # fi
           
           echo "=========================================="
-          echo "PUBLISH PIPELINE - COMPLETED"
+          echo "PUBLISH PIPELINE - DRY RUN COMPLETED"
           echo "=========================================="
           echo "Version: $NEW_VERSION"
-          echo "GitHub Release: v$NEW_VERSION (master only)"
-          echo "NPM Publish: Enabled"
+          echo "GitHub Release: SKIPPED (commented out for testing)"
+          echo "NPM Publish: SKIPPED (commented out for testing)"
           echo "=========================================="
