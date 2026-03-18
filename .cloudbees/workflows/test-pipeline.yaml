@@ -26,7 +26,7 @@ jobs:
       - name: Run Tests
         uses: docker://node:18
         env:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
         run: |
           echo "=== Installing jq and SF CLI ==="
           apt-get update && apt-get install -y jq
@@ -34,7 +34,10 @@ jobs:
           sf --version
           
           echo "=== Authenticating to Salesforce ==="
-          SF_USERNAME=$(echo "$SFDX_AUTH_URL" | sf org login sfdx-url --sfdx-url-file /dev/stdin --json 2>/dev/null | jq -r '.result.username')
+          AUTH_FILE=$(mktemp)
+          echo "$SFDX_AUTH_URL" > "$AUTH_FILE"
+          SF_USERNAME=$(sf org login sfdx-url --sfdx-url-file "$AUTH_FILE" --json 2>/dev/null | jq -r '.result.username')
+          rm -f "$AUTH_FILE"
           echo "Authenticated as: $SF_USERNAME"
           
           echo "=== Installing dependencies ==="
