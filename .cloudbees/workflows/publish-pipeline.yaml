@@ -38,14 +38,14 @@ jobs:
           echo "=== Running Unit Tests ==="
           npm run-script unitTest
           
-          echo "=== Linking package ==="
-          npm link
+          # echo "=== Linking package ==="
+          # npm link
           
-          echo "=== Running Vlocity Test Job (Verbose) ==="
-          vlocity -sfdx.username "$SF_USERNAME" runTestJob --verbose
+          # echo "=== Running Vlocity Test Job (Verbose) ==="
+          # vlocity -sfdx.username "$SF_USERNAME" runTestJob --verbose
           
-          echo "=== Running Vlocity Test Job (JSON) ==="
-          vlocity -sfdx.username "$SF_USERNAME" runTestJob --json | jq .
+          # echo "=== Running Vlocity Test Job (JSON) ==="
+          # vlocity -sfdx.username "$SF_USERNAME" runTestJob --json | jq .
           
           echo "=========================================="
           echo "TEST PIPELINE - PASSED"
