@@ -114,10 +114,10 @@ Vlocity Build is a command line tool to export and deploy Vlocity DataPacks in a
 # Recent Features
 [See Release Notes for Recent Features](https://github.com/vlocityinc/vlocity_build/releases)
 
-# Vlocity DX Desktop Application
-[Vlocity DX Documentation in the Success Community](https://docs.vlocity.com/en/Vlocity-DX-Desktop-Application.html)
+# IDX Workbench Desktop Application
+[IDX Workbench Documentation in the Salesforce help](https://help.salesforce.com/s/articleView?id=ind.comms_install_idx_workbench.htm)
 
-Vlocity DX is a desktop application that allows exporting and deploying DataPacks and includes a graphical representation fo differences between orgs and the ability to revert changes before deploying.
+IDX Workbench is a desktop application that allows exporting and deploying DataPacks and includes a graphical representation fo differences between orgs and the ability to revert changes before deploying.
 
 Org to Org Comparison
 ![Org to Org Comparison](doc/VlocityDX.png)
