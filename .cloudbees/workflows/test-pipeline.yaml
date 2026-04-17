@@ -26,7 +26,7 @@ jobs:
       - name: Run Tests
         uses: docker://node:18
         env:
-          SFDX_AUTH_URL: ${{ env.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
         run: |
           echo "=== Installing jq and SF CLI ==="
           apt-get update && apt-get install -y jq
