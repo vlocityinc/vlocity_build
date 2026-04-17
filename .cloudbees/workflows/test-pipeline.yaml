@@ -38,8 +38,15 @@ jobs:
             echo "ERROR: SFDX_AUTH_URL is empty. Please set vars.SFDX_AUTH_URL in CloudBees."
             exit 1
           fi
-          LOGIN_RESULT=$(echo "$SFDX_AUTH_URL" | sf org login sfdx-url --sfdx-url-file /dev/stdin --json 2>&1)
+          echo "$SFDX_AUTH_URL" > /tmp/sfdx_auth_url.txt
+          LOGIN_RESULT=$(sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth_url.txt --json)
+          LOGIN_EXIT=$?
+          rm -f /tmp/sfdx_auth_url.txt
           echo "Login result: $LOGIN_RESULT"
+          if [ $LOGIN_EXIT -ne 0 ]; then
+            echo "ERROR: sf org login failed with exit code $LOGIN_EXIT"
+            exit 1
+          fi
           SF_USERNAME=$(echo "$LOGIN_RESULT" | jq -r '.result.username')
           if [ -z "$SF_USERNAME" ] || [ "$SF_USERNAME" == "null" ]; then
             echo "ERROR: Failed to extract username from SFDX login."
