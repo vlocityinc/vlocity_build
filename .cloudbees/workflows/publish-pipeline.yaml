@@ -22,6 +22,8 @@ jobs:
         uses: docker://node:18
         env:
           SFDX_AUTH_URL: ${{ vars.SFDX_AUTH_URL }}
+          SF_DISABLE_TELEMETRY: "true"
+          SFDX_DISABLE_TELEMETRY: "true"
         run: |
           echo "=== Installing jq and SF CLI ==="
           apt-get update && apt-get install -y jq
