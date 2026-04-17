@@ -13,48 +13,49 @@ jobs:
   # =============================================================================
   # TEST JOB - Must pass before publish runs
   # =============================================================================
-  # test:
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: cloudbees-io/checkout@v1
+  test:
+    steps:
+      - name: Checkout Code
+        uses: cloudbees-io/checkout@v1
 
-  #     - name: Run Tests
-  #       uses: docker://node:18
-  #       env:
-  #         SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-  #       run: |
-  #         echo "=== Installing jq and SF CLI ==="
-  #         apt-get update && apt-get install -y jq
-  #         npm install -g @salesforce/cli
-  #         sf --version
+      - name: Run Tests
+        uses: docker://node:18
+        env:
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+        run: |
+          echo "=== Installing jq and SF CLI ==="
+          apt-get update && apt-get install -y jq
+          npm install -g @salesforce/cli
+          sf --version
           
-  #         echo "=== Authenticating to Salesforce ==="
-  #         SF_USERNAME=$(echo "$SFDX_AUTH_URL" | sf org login sfdx-url --sfdx-url-file /dev/stdin --json 2>/dev/null | jq -r '.result.username')
-  #         echo "Authenticated as: $SF_USERNAME"
+          echo "=== Authenticating to Salesforce ==="
+          SF_USERNAME=$(echo "$SFDX_AUTH_URL" | sf org login sfdx-url --sfdx-url-file /dev/stdin --json 2>/dev/null | jq -r '.result.username')
+          echo "Authenticated as: $SF_USERNAME"
           
-  #         echo "=== Installing dependencies ==="
-  #         npm install
+          echo "=== Installing dependencies ==="
+          npm install
           
-  #         echo "=== Running Unit Tests ==="
-  #         npm run-script unitTest
+          echo "=== Running Unit Tests ==="
+          npm run-script unitTest
           
-  #         echo "=== Linking package ==="
-  #         npm link
+          echo "=== Linking package ==="
+          npm link
           
-  #         echo "=== Running Vlocity Test Job (Verbose) ==="
-  #         vlocity -sfdx.username "$SF_USERNAME" runTestJob --verbose
+          echo "=== Running Vlocity Test Job (Verbose) ==="
+          vlocity -sfdx.username "$SF_USERNAME" runTestJob --verbose
           
-  #         echo "=== Running Vlocity Test Job (JSON) ==="
-  #         vlocity -sfdx.username "$SF_USERNAME" runTestJob --json | jq .
+          echo "=== Running Vlocity Test Job (JSON) ==="
+          vlocity -sfdx.username "$SF_USERNAME" runTestJob --json | jq .
           
-  #         echo "=========================================="
-  #         echo "TEST PIPELINE - PASSED"
-  #         echo "=========================================="
+          echo "=========================================="
+          echo "TEST PIPELINE - PASSED"
+          echo "=========================================="
 
   # =============================================================================
   # PUBLISH JOB - Only runs if test job passes (needs: test)
   # =============================================================================
   publish:
+    needs: test
     steps:
       - name: Checkout Code
         uses: cloudbees-io/checkout@v1
