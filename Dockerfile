@@ -10,8 +10,8 @@ RUN npm install --global publish-release
 
 RUN npm install --global pkg-fetch
 #RUN pkg-fetch -n node10 -p win -a x64
-RUN pkg-fetch -n node16 -p linux -a x64
-RUN pkg-fetch -n node16 -p macos -a x64
+RUN pkg-fetch -n node18 -p linux -a x64
+RUN pkg-fetch -n node18 -p macos -a x64
 
 RUN npm install --global pkg
 
