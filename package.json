@@ -6,7 +6,6 @@
         "command-exists": "^1.2.9",
         "diff2html": "2.5.0",
         "fast-json-stable-stringify": "2.1.0",
-        "file-type": "^16.5.4",
         "filterxml": "2.0.0",
         "fs-extra": "8.0.1",
         "git-diff": "2.0.6",
@@ -28,10 +27,21 @@
         "sass": "^1.77.0",
         "semver": "6.3.1",
         "shelljs": "^0.8.5",
-        "simple-git": "3.22.0",
+        "simple-git": "^3.36.0",
         "unidecode": "0.1.8",
         "xml2js": "0.6.2",
         "xmlbuilder": "13.0.2"
+    },
+    "overrides": {
+        "@xmldom/xmldom": "^0.8.13",
+        "brace-expansion": "^1.1.13",
+        "diff": "^5.2.2",
+        "immutable": "^5.1.5",
+        "lodash": "^4.17.24",
+        "minimatch": "^3.1.4",
+        "picomatch": "^2.3.2",
+        "serialize-javascript": "^7.0.5",
+        "tar": "^7.5.16"
     },
     "description": "Enable Continuous Integration for Vlocity",
     "devDependencies": {
