@@ -58,7 +58,32 @@ describe('DataPacksExpand', async () =>
     })   
   })
 
-  describe('getNameWithFields', () => { 
+  describe('assertPathWithin (path-traversal guard)', () => {
+    const path = require('path');
+    var base = path.resolve('/tmp/sfdx-project/force-app');
+
+    it('should be a function', () => {
+      expect(datapacksexpand.assertPathWithin).to.be.a('function')
+    })
+    it('should return the resolved path for a target inside the base', () => {
+      var target = path.join(base, 'main', 'default', 'OmniScript', 'Type_SubType_English.json');
+      expect(datapacksexpand.assertPathWithin(base, target)).to.be.eq(path.resolve(target));
+    })
+    it('should allow legitimate DataPack keys containing / separators', () => {
+      var target = path.join(base, 'main', 'default', 'DataRaptor/MyDR/MyDR.json');
+      expect(() => datapacksexpand.assertPathWithin(base, target)).to.not.throw();
+    })
+    it('should throw on a ../ traversal that escapes the base', () => {
+      var target = path.join(base, 'main', 'default', '../../../../../../etc/cron.d/evil');
+      expect(() => datapacksexpand.assertPathWithin(base, target)).to.throw(/traversal/i);
+    })
+    it('should throw on a sibling-directory prefix escape', () => {
+      var target = base + '-evil/payload';
+      expect(() => datapacksexpand.assertPathWithin(base, target)).to.throw(/traversal/i);
+    })
+  })
+
+  describe('getNameWithFields', () => {
     it('should be a function', () => {
       expect(datapacksexpand.getNameWithFields).to.be.a('function')
     })
