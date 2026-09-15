@@ -99,6 +99,27 @@ describe('DataPacksExpand', async () =>
     })
   })
 
+  describe('enforceSecurityValidations opt-out', () => {
+    var base = path.resolve('/tmp/sfdx-project/force-app');
+    it('bypasses assertPathWithin when set to false', () => {
+      var expand = new _datapacksexpand();
+      expand.enforceSecurityValidations = false;
+      var target = path.join(base, '../../../../../../etc/cron.d/evil');
+      expect(() => expand.assertPathWithin(base, target)).to.not.throw();
+    })
+    it('bypasses generateFolderPath guard when set to false', () => {
+      var expand = new _datapacksexpand();
+      expand.enforceSecurityValidations = false;
+      expand.targetPath = base;
+      expect(() => expand.generateFolderPath('../../../../../../tmp/evil', 'MyPack')).to.not.throw();
+    })
+    it('still enforces when flag is undefined (default on)', () => {
+      var expand = new _datapacksexpand();
+      var target = path.join(base, '../../../../../../etc/evil');
+      expect(() => expand.assertPathWithin(base, target)).to.throw(/traversal/i);
+    })
+  })
+
   describe('getNameWithFields', () => {
     it('should be a function', () => {
       expect(datapacksexpand.getNameWithFields).to.be.a('function')
