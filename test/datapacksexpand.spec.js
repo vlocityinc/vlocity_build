@@ -58,7 +58,69 @@ describe('DataPacksExpand', async () =>
     })   
   })
 
-  describe('getNameWithFields', () => { 
+  describe('assertPathWithin (path-traversal guard)', () => {
+    const path = require('path');
+    var base = path.resolve('/tmp/sfdx-project/force-app');
+
+    it('should be a function', () => {
+      expect(datapacksexpand.assertPathWithin).to.be.a('function')
+    })
+    it('should return the resolved path for a target inside the base', () => {
+      var target = path.join(base, 'main', 'default', 'OmniScript', 'Type_SubType_English.json');
+      expect(datapacksexpand.assertPathWithin(base, target)).to.be.eq(path.resolve(target));
+    })
+    it('should allow legitimate DataPack keys containing / separators', () => {
+      var target = path.join(base, 'main', 'default', 'DataRaptor/MyDR/MyDR.json');
+      expect(() => datapacksexpand.assertPathWithin(base, target)).to.not.throw();
+    })
+    it('should throw on a ../ traversal that escapes the base', () => {
+      var target = path.join(base, 'main', 'default', '../../../../../../etc/cron.d/evil');
+      expect(() => datapacksexpand.assertPathWithin(base, target)).to.throw(/traversal/i);
+    })
+    it('should throw on a sibling-directory prefix escape', () => {
+      var target = base + '-evil/payload';
+      expect(() => datapacksexpand.assertPathWithin(base, target)).to.throw(/traversal/i);
+    })
+  })
+
+  describe('generateFolderPath (path-traversal guard)', () => {
+    var base = path.resolve('/tmp/sfdx-project/force-app');
+    var expand = new _datapacksexpand();
+    expand.targetPath = base;
+    it('should build a path inside targetPath for a legit dataPackType', () => {
+      var folder = expand.generateFolderPath('OmniScript', 'Type_SubType');
+      expect(path.resolve(folder).startsWith(base + path.sep)).to.be.eq(true);
+    })
+    it('should throw when a crafted VlocityDataPackType escapes targetPath', () => {
+      expect(() => expand.generateFolderPath('../../../../../../tmp/evil', 'MyPack')).to.throw(/traversal/i);
+    })
+    it('should throw on a sibling-directory prefix escape', () => {
+      expect(() => expand.generateFolderPath('../force-app-evil', 'MyPack')).to.throw(/traversal/i);
+    })
+  })
+
+  describe('enforceSecurityValidations opt-out', () => {
+    var base = path.resolve('/tmp/sfdx-project/force-app');
+    it('bypasses assertPathWithin when set to false', () => {
+      var expand = new _datapacksexpand();
+      expand.enforceSecurityValidations = false;
+      var target = path.join(base, '../../../../../../etc/cron.d/evil');
+      expect(() => expand.assertPathWithin(base, target)).to.not.throw();
+    })
+    it('bypasses generateFolderPath guard when set to false', () => {
+      var expand = new _datapacksexpand();
+      expand.enforceSecurityValidations = false;
+      expand.targetPath = base;
+      expect(() => expand.generateFolderPath('../../../../../../tmp/evil', 'MyPack')).to.not.throw();
+    })
+    it('still enforces when flag is undefined (default on)', () => {
+      var expand = new _datapacksexpand();
+      var target = path.join(base, '../../../../../../etc/evil');
+      expect(() => expand.assertPathWithin(base, target)).to.throw(/traversal/i);
+    })
+  })
+
+  describe('getNameWithFields', () => {
     it('should be a function', () => {
       expect(datapacksexpand.getNameWithFields).to.be.a('function')
     })
