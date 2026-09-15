@@ -73,6 +73,12 @@ describe('DataPacksExpand', async () =>
         it('should escape backslashes so they cannot escape the escaping', () => {
             expect(utilityservice.escapeSOQLString("a\\b")).to.eq("a\\\\b");
         });
+        it('should escape backslash before quote (no escape-the-escape bypass)', () => {
+            expect(utilityservice.escapeSOQLString("a\\'b")).to.eq("a\\\\\\'b");
+        });
+        it('should leave ordinary values unchanged', () => {
+            expect(utilityservice.escapeSOQLString('Claim')).to.eq('Claim');
+        });
         it('should neutralize a quote-breakout injection payload', () => {
             expect(utilityservice.escapeSOQLString("x' OR Id != '")).to.eq("x\\' OR Id != \\'");
         });
