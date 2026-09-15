@@ -58,7 +58,24 @@ describe('DataPacksExpand', async () =>
     })   
   })
 
-  describe('getNameWithFields', () => { 
+  describe('generateFolderPath (path-traversal guard)', () => {
+    var base = path.resolve('/tmp/sfdx-project/force-app');
+    var expand = new _datapacksexpand();
+    expand.targetPath = base;
+
+    it('should build a path inside targetPath for a legit dataPackType', () => {
+      var folder = expand.generateFolderPath('OmniScript', 'Type_SubType');
+      expect(path.resolve(folder).startsWith(base + path.sep)).to.be.eq(true);
+    })
+    it('should throw when a crafted VlocityDataPackType escapes targetPath', () => {
+      expect(() => expand.generateFolderPath('../../../../../../tmp/evil', 'MyPack')).to.throw(/traversal/i);
+    })
+    it('should throw on a sibling-directory prefix escape', () => {
+      expect(() => expand.generateFolderPath('../force-app-evil', 'MyPack')).to.throw(/traversal/i);
+    })
+  })
+
+  describe('getNameWithFields', () => {
     it('should be a function', () => {
       expect(datapacksexpand.getNameWithFields).to.be.a('function')
     })
