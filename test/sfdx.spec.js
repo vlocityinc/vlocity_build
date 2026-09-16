@@ -45,3 +45,24 @@ describe('sfdx.shellEscapeArg', () => {
     expect(escape(null)).to.eq("'null'");
   });
 });
+
+describe('sfdx.setEnforceSecurityValidations', () => {
+  afterEach(() => {
+    // Restore the secure default so other test files aren't affected by ordering.
+    _sfdx.setEnforceSecurityValidations(true);
+  });
+
+  it('defaults to single-quoting (enforced) even if never called', () => {
+    expect(_sfdx.shellEscapeArg('foo; touch /tmp/x')).to.eq("'foo; touch /tmp/x'");
+  });
+
+  it('reverts to legacy double-quoting when explicitly disabled', () => {
+    _sfdx.setEnforceSecurityValidations(false);
+    expect(_sfdx.shellEscapeArg('/Users/dev/myproject')).to.eq('"/Users/dev/myproject"');
+  });
+
+  it('treats any non-false value as enforced', () => {
+    _sfdx.setEnforceSecurityValidations(undefined);
+    expect(_sfdx.shellEscapeArg('/Users/dev/myproject')).to.eq("'/Users/dev/myproject'");
+  });
+});
