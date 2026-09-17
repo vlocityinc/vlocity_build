@@ -61,6 +61,8 @@ describe('DataPacksExpand', async () =>
   describe('assertPathWithin (path-traversal guard)', () => {
     const path = require('path');
     var base = path.resolve('/tmp/sfdx-project/force-app');
+    // Guard is opt-in (default off); enable enforcement to exercise the throw paths.
+    datapacksexpand.enforceSecurityValidations = true;
 
     it('should be a function', () => {
       expect(datapacksexpand.assertPathWithin).to.be.a('function')
@@ -87,6 +89,8 @@ describe('DataPacksExpand', async () =>
     var base = path.resolve('/tmp/sfdx-project/force-app');
     var expand = new _datapacksexpand();
     expand.targetPath = base;
+    // Guard is opt-in (default off); enable enforcement to exercise the throw paths.
+    expand.enforceSecurityValidations = true;
     it('should build a path inside targetPath for a legit dataPackType', () => {
       var folder = expand.generateFolderPath('OmniScript', 'Type_SubType');
       expect(path.resolve(folder).startsWith(base + path.sep)).to.be.eq(true);
@@ -99,22 +103,27 @@ describe('DataPacksExpand', async () =>
     })
   })
 
-  describe('enforceSecurityValidations opt-out', () => {
+  describe('enforceSecurityValidations opt-in', () => {
     var base = path.resolve('/tmp/sfdx-project/force-app');
-    it('bypasses assertPathWithin when set to false', () => {
+    it('does not enforce assertPathWithin when flag is undefined (default off)', () => {
+      var expand = new _datapacksexpand();
+      var target = path.join(base, '../../../../../../etc/cron.d/evil');
+      expect(() => expand.assertPathWithin(base, target)).to.not.throw();
+    })
+    it('does not enforce generateFolderPath guard when flag is undefined (default off)', () => {
+      var expand = new _datapacksexpand();
+      expand.targetPath = base;
+      expect(() => expand.generateFolderPath('../../../../../../tmp/evil', 'MyPack')).to.not.throw();
+    })
+    it('bypasses assertPathWithin when explicitly set to false', () => {
       var expand = new _datapacksexpand();
       expand.enforceSecurityValidations = false;
       var target = path.join(base, '../../../../../../etc/cron.d/evil');
       expect(() => expand.assertPathWithin(base, target)).to.not.throw();
     })
-    it('bypasses generateFolderPath guard when set to false', () => {
+    it('enforces only when explicitly set to true', () => {
       var expand = new _datapacksexpand();
-      expand.enforceSecurityValidations = false;
-      expand.targetPath = base;
-      expect(() => expand.generateFolderPath('../../../../../../tmp/evil', 'MyPack')).to.not.throw();
-    })
-    it('still enforces when flag is undefined (default on)', () => {
-      var expand = new _datapacksexpand();
+      expand.enforceSecurityValidations = true;
       var target = path.join(base, '../../../../../../etc/evil');
       expect(() => expand.assertPathWithin(base, target)).to.throw(/traversal/i);
     })
