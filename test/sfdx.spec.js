@@ -9,6 +9,16 @@ const expect = require('chai').expect;
 describe('sfdx.shellEscapeArg', () => {
   const escape = _sfdx.shellEscapeArg;
 
+  // These tests exercise the escaping function with security validations enabled,
+  // regardless of the (now insecure-by-default) module-level flag.
+  before(() => {
+    _sfdx.setEnableSecurityValidations(true);
+  });
+
+  after(() => {
+    _sfdx.setEnableSecurityValidations(false);
+  });
+
   it('should be a function', () => {
     expect(escape).to.be.a('function');
   });
@@ -46,23 +56,23 @@ describe('sfdx.shellEscapeArg', () => {
   });
 });
 
-describe('sfdx.setEnforceSecurityValidations', () => {
+describe('sfdx.setEnableSecurityValidations', () => {
   afterEach(() => {
-    // Restore the secure default so other test files aren't affected by ordering.
-    _sfdx.setEnforceSecurityValidations(true);
+    // Restore the (insecure) default so other test files aren't affected by ordering.
+    _sfdx.setEnableSecurityValidations(false);
   });
 
-  it('defaults to single-quoting (enforced) even if never called', () => {
-    expect(_sfdx.shellEscapeArg('foo; touch /tmp/x')).to.eq("'foo; touch /tmp/x'");
+  it('defaults to legacy double-quoting (not enforced) even if never called', () => {
+    expect(_sfdx.shellEscapeArg('foo; touch /tmp/x')).to.eq('"foo; touch /tmp/x"');
   });
 
-  it('reverts to legacy double-quoting when explicitly disabled', () => {
-    _sfdx.setEnforceSecurityValidations(false);
-    expect(_sfdx.shellEscapeArg('/Users/dev/myproject')).to.eq('"/Users/dev/myproject"');
-  });
-
-  it('treats any non-false value as enforced', () => {
-    _sfdx.setEnforceSecurityValidations(undefined);
+  it('switches to single-quoting only when explicitly enabled', () => {
+    _sfdx.setEnableSecurityValidations(true);
     expect(_sfdx.shellEscapeArg('/Users/dev/myproject')).to.eq("'/Users/dev/myproject'");
+  });
+
+  it('treats any non-true value as not enforced', () => {
+    _sfdx.setEnableSecurityValidations(undefined);
+    expect(_sfdx.shellEscapeArg('/Users/dev/myproject')).to.eq('"/Users/dev/myproject"');
   });
 });
