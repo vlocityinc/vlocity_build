@@ -31,7 +31,7 @@ supportHeadersOnly: true
 allowHeadersPartial: true
 supportForceDeploy: true
 strict: false
-enableSecurityValidations: false
+enableShellArgEscaping: false
 cleanTestData: true
 autoFixPicklists: true
 reactivateOmniScriptsWhenEmbeddedTemplateFound: false

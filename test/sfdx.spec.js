@@ -9,14 +9,14 @@ const expect = require('chai').expect;
 describe('sfdx.shellEscapeArg', () => {
   const escape = _sfdx.shellEscapeArg;
 
-  // These tests exercise the escaping function with security validations enabled,
+  // These tests exercise the escaping function with shell-arg escaping enabled,
   // regardless of the (now insecure-by-default) module-level flag.
   before(() => {
-    _sfdx.setEnableSecurityValidations(true);
+    _sfdx.setEnableShellArgEscaping(true);
   });
 
   after(() => {
-    _sfdx.setEnableSecurityValidations(false);
+    _sfdx.setEnableShellArgEscaping(false);
   });
 
   it('should be a function', () => {
@@ -56,10 +56,10 @@ describe('sfdx.shellEscapeArg', () => {
   });
 });
 
-describe('sfdx.setEnableSecurityValidations', () => {
+describe('sfdx.setEnableShellArgEscaping', () => {
   afterEach(() => {
     // Restore the (insecure) default so other test files aren't affected by ordering.
-    _sfdx.setEnableSecurityValidations(false);
+    _sfdx.setEnableShellArgEscaping(false);
   });
 
   it('defaults to legacy double-quoting (not enforced) even if never called', () => {
@@ -67,12 +67,12 @@ describe('sfdx.setEnableSecurityValidations', () => {
   });
 
   it('switches to single-quoting only when explicitly enabled', () => {
-    _sfdx.setEnableSecurityValidations(true);
+    _sfdx.setEnableShellArgEscaping(true);
     expect(_sfdx.shellEscapeArg('/Users/dev/myproject')).to.eq("'/Users/dev/myproject'");
   });
 
   it('treats any non-true value as not enforced', () => {
-    _sfdx.setEnableSecurityValidations(undefined);
+    _sfdx.setEnableShellArgEscaping(undefined);
     expect(_sfdx.shellEscapeArg('/Users/dev/myproject')).to.eq('"/Users/dev/myproject"');
   });
 });
