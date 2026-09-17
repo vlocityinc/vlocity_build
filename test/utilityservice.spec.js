@@ -66,4 +66,35 @@ describe('DataPacksExpand', async () =>
         });
     });
 
+    describe('escapeSOQLString', () => {
+        it('should escape single quotes to prevent SOQL injection', () => {
+            expect(utilityservice.escapeSOQLString("O'Brien")).to.eq("O\\'Brien");
+        });
+        it('should escape backslashes so they cannot escape the escaping', () => {
+            expect(utilityservice.escapeSOQLString("a\\b")).to.eq("a\\\\b");
+        });
+        it('should escape backslash before quote (no escape-the-escape bypass)', () => {
+            expect(utilityservice.escapeSOQLString("a\\'b")).to.eq("a\\\\\\'b");
+        });
+        it('should leave ordinary values unchanged', () => {
+            expect(utilityservice.escapeSOQLString('Claim')).to.eq('Claim');
+        });
+        it('should neutralize a quote-breakout injection payload', () => {
+            expect(utilityservice.escapeSOQLString("x' OR Id != '")).to.eq("x\\' OR Id != \\'");
+        });
+        it('should pass null/undefined through unchanged', () => {
+            expect(utilityservice.escapeSOQLString(null)).to.eq(null);
+            expect(utilityservice.escapeSOQLString(undefined)).to.eq(undefined);
+        });
+    });
+
+    describe('QueryService.buildWhereClauseValueByType', () => {
+        const _queryservice = require('../lib/queryservice');
+        var queryservice = new _queryservice({ utilityservice: utilityservice });
+        it('should escape single quotes in the text (default) branch', () => {
+            expect(queryservice.buildWhereClauseValueByType('Name', "x' OR Id != '", 'string'))
+                .to.eq("Name = 'x\\' OR Id != \\''");
+        });
+    });
+
 });
