@@ -12,6 +12,7 @@ Developers can use this image to:
 - Openjdk 11
 - Node 14
 - sfdx cli
+- sf cli
 - vlocity cli
 
 ### SFDX plugins
