@@ -88,6 +88,49 @@ describe('DataPacksExpand', async () =>
         });
     });
 
+    describe('refreshFrontDoorSession', () => {
+        function makeService(vlocity) {
+            var svc = new _utilityservice(vlocity);
+            svc.sfdxCalled = false;
+            svc.sfdx = async () => {
+                svc.sfdxCalled = true;
+                return { accessToken: 'FRESH_TOKEN', instanceUrl: 'https://fresh.my.salesforce.com' };
+            };
+            return svc;
+        }
+
+        it('refreshes the token for JWT sessions (no refresh token, has sfdxUsername)', async () => {
+            var conn = { accessToken: 'STALE', instanceUrl: 'https://old.my.salesforce.com' };
+            var svc = makeService({ jsForceConnection: conn, sfdxUsername: 'jwt@example.com' });
+            await svc.refreshFrontDoorSession();
+            expect(svc.sfdxCalled).to.eq(true);
+            expect(conn.accessToken).to.eq('FRESH_TOKEN');
+            expect(conn.instanceUrl).to.eq('https://fresh.my.salesforce.com');
+        });
+
+        it('skips refresh when the connection already has a refresh token', async () => {
+            var conn = { accessToken: 'STALE', refreshToken: 'RT' };
+            var svc = makeService({ jsForceConnection: conn, sfdxUsername: 'user@example.com' });
+            await svc.refreshFrontDoorSession();
+            expect(svc.sfdxCalled).to.eq(false);
+            expect(conn.accessToken).to.eq('STALE');
+        });
+
+        it('skips refresh when there is no sfdxUsername to re-derive from', async () => {
+            var conn = { accessToken: 'STALE' };
+            var svc = makeService({ jsForceConnection: conn });
+            await svc.refreshFrontDoorSession();
+            expect(svc.sfdxCalled).to.eq(false);
+        });
+
+        it('skips refresh for the VLOCITY_API_LOGIN placeholder', async () => {
+            var conn = { accessToken: 'STALE' };
+            var svc = makeService({ jsForceConnection: conn, sfdxUsername: 'VLOCITY_API_LOGIN' });
+            await svc.refreshFrontDoorSession();
+            expect(svc.sfdxCalled).to.eq(false);
+        });
+    });
+
     describe('QueryService.buildWhereClauseValueByType', () => {
         const _queryservice = require('../lib/queryservice');
         var queryservice = new _queryservice({ utilityservice: utilityservice });
