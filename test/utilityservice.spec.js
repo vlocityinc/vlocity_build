@@ -92,7 +92,7 @@ describe('DataPacksExpand', async () =>
         function fakePage(url, hasLoginForm) {
             return {
                 url: () => url,
-                $: async (sel) => (hasLoginForm && (sel === '#username' || sel === '#password')) ? {} : null
+                $: async (sel) => (hasLoginForm && (sel === '#username' || sel === '#password' || sel === '#Login')) ? {} : null
             };
         }
 
@@ -126,6 +126,22 @@ describe('DataPacksExpand', async () =>
         it('proceeds (returns true) without throwing if the page probe errors', async () => {
             var throwingPage = { url: () => 'https://x.my.salesforce.com/somepage', $: async () => { throw new Error('Execution context was destroyed'); } };
             var ok = await utilityservice.verifyFrontDoorSession(throwingPage, { errors: [] });
+            expect(ok).to.eq(true);
+        });
+
+        it('detects an ec=302 bounce even with a trailing url fragment', async () => {
+            var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://x.my.salesforce.com/?ec=302#/setup/home', false), { errors: [] });
+            expect(ok).to.eq(false);
+        });
+
+        it('detects a sandbox bounce to test.salesforce.com', async () => {
+            var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://test.salesforce.com/', false), { errors: [] });
+            expect(ok).to.eq(false);
+        });
+
+        it('does not false-positive on a page with username/password but no login button', async () => {
+            var changePwPage = { url: () => 'https://x.my.salesforce.com/setup/changepw', $: async (sel) => (sel === '#username' || sel === '#password') ? {} : null };
+            var ok = await utilityservice.verifyFrontDoorSession(changePwPage, { errors: [] });
             expect(ok).to.eq(true);
         });
     });
