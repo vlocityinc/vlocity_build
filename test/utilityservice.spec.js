@@ -88,6 +88,48 @@ describe('DataPacksExpand', async () =>
         });
     });
 
+    describe('verifyFrontDoorSession', () => {
+        function fakePage(url, hasLoginForm) {
+            return {
+                url: () => url,
+                $: async (sel) => (hasLoginForm && (sel === '#username' || sel === '#password')) ? {} : null
+            };
+        }
+
+        it('returns true for an authenticated app URL', async () => {
+            var jobInfo = { errors: [] };
+            var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://x.lightning.force.com/lightning/page/home', false), jobInfo);
+            expect(ok).to.eq(true);
+            expect(jobInfo.hasError).to.eq(undefined);
+        });
+
+        it('detects the ec=302 login bounce and sets abort flags', async () => {
+            var jobInfo = { errors: [] };
+            var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://x.my.salesforce.com/?ec=302&startURL=%2Fhome', false), jobInfo);
+            expect(ok).to.eq(false);
+            expect(jobInfo.hasError).to.eq(true);
+            expect(jobInfo.ignoreLWCActivationOS).to.eq(true);
+            expect(jobInfo.ignoreLWCActivationCards).to.eq(true);
+            expect(jobInfo.errors.length).to.eq(1);
+        });
+
+        it('detects a login-page URL', async () => {
+            var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://login.salesforce.com/', false), { errors: [] });
+            expect(ok).to.eq(false);
+        });
+
+        it('detects a login form via DOM fallback when the URL looks neutral', async () => {
+            var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://x.my.salesforce.com/somepage', true), { errors: [] });
+            expect(ok).to.eq(false);
+        });
+
+        it('proceeds (returns true) without throwing if the page probe errors', async () => {
+            var throwingPage = { url: () => 'https://x.my.salesforce.com/somepage', $: async () => { throw new Error('Execution context was destroyed'); } };
+            var ok = await utilityservice.verifyFrontDoorSession(throwingPage, { errors: [] });
+            expect(ok).to.eq(true);
+        });
+    });
+
     describe('QueryService.buildWhereClauseValueByType', () => {
         const _queryservice = require('../lib/queryservice');
         var queryservice = new _queryservice({ utilityservice: utilityservice });
