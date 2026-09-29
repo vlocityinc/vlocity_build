@@ -103,13 +103,14 @@ describe('DataPacksExpand', async () =>
             expect(jobInfo.hasError).to.eq(undefined);
         });
 
-        it('detects the ec=302 login bounce and sets abort flags', async () => {
+        it('detects the ec=302 login bounce and sets the internal abort flag', async () => {
             var jobInfo = { errors: [] };
             var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://x.my.salesforce.com/?ec=302&startURL=%2Fhome', false), jobInfo);
             expect(ok).to.eq(false);
             expect(jobInfo.hasError).to.eq(true);
-            expect(jobInfo.ignoreLWCActivationOS).to.eq(true);
-            expect(jobInfo.ignoreLWCActivationCards).to.eq(true);
+            expect(jobInfo.lwcActivationBounced).to.eq(true);
+            expect(jobInfo.ignoreLWCActivationOS).to.eq(undefined);
+            expect(jobInfo.ignoreLWCActivationCards).to.eq(undefined);
             expect(jobInfo.errors.length).to.eq(1);
         });
 
