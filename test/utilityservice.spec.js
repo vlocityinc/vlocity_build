@@ -145,6 +145,11 @@ describe('DataPacksExpand', async () =>
             var ok = await utilityservice.verifyFrontDoorSession(changePwPage, { errors: [] });
             expect(ok).to.eq(true);
         });
+
+        it('does not false-positive when a login host appears only inside a query param', async () => {
+            var ok = await utilityservice.verifyFrontDoorSession(fakePage('https://x.my.salesforce.com/apex/OmniLwcCompile?retURL=https://login.salesforce.com/home', false), { errors: [] });
+            expect(ok).to.eq(true);
+        });
     });
 
     describe('QueryService.buildWhereClauseValueByType', () => {
