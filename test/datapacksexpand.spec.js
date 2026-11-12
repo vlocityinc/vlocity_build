@@ -220,9 +220,16 @@ describe('DataPacksExpand', async () =>
     });
 
     it('rejects a file outside every allowed root', async () => {
-      var outside = resourceFile(path.join(root, 'elsewhere'), 'secret');
+      var other = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'vbt-outside-')));
+      var outside = resourceFile(other, 'secret');
       expect(await rejects(outside)).to.eq(true);
       expect(copied()).to.eq(false);
+      fs.removeSync(other);
+    })
+    it('copies from cwd force-app even when sfdx-project.json was rewritten to a temp project', async () => {
+      sfdxProject(root, path.join('vlocity-temp', 'DX', 'salesforce_sfdx'));
+      await expand.expandSFDX(staticPack(resourceFile(path.join(root, 'force-app'), 'from-cwd')), jobInfo);
+      expect(fs.readFileSync(path.join(target, 'main', 'default', 'staticresources', 'res', 'a.txt'), 'utf8')).to.eq('from-cwd');
     })
     it('rejects a file under an allowed root that is not in a staticresources folder', async () => {
       var credentials = path.join(root, 'vlocity-temp', 'user.json');
