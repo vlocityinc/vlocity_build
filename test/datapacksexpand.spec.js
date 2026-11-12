@@ -181,5 +181,57 @@ describe('DataPacksExpand', async () =>
       })
     }
   })
-})
 
+  describe('expandSFDX static resource copy source (path-traversal guard)', () => {
+    const fs = require('fs-extra');
+    const os = require('os');
+    var root, project, outside, expand, jobInfo;
+
+    var staticPack = (originalFilePath) => ({
+      VlocityDataPackKey: 'staticresources/res',
+      SFDXDataType: 'staticresources',
+      SFDXData: JSON.stringify([{ encoding: 'utf8', filePath: 'staticresources/res/a.txt', originalFilePath: originalFilePath }])
+    });
+
+    beforeEach(() => {
+      root = fs.mkdtempSync(path.join(os.tmpdir(), 'vbt-expand-'));
+      project = path.join(root, 'project');
+      outside = path.join(root, 'secret.txt');
+      fs.ensureDirSync(project);
+      fs.writeFileSync(outside, 'secret');
+      fs.writeFileSync(path.join(project, 'a.txt'), 'ok');
+      expand = new _datapacksexpand({ datapacksutils: { getSFDXProject: () => ({ sfdxPath: project }) } });
+      jobInfo = { sfdxFolderPath: path.join(project, 'dest'), currentStatus: {} };
+    });
+
+    afterEach(() => fs.removeSync(root));
+
+    it('throws and copies nothing when originalFilePath is outside the sfdx project', async () => {
+      var threw = false;
+      try { await expand.expandSFDX(staticPack(outside), jobInfo); } catch (e) { threw = /traversal/i.test(e.message); }
+      expect(threw).to.eq(true);
+      expect(fs.existsSync(path.join(project, 'dest', 'staticresources', 'res', 'a.txt'))).to.eq(false);
+    })
+    it('still copies when originalFilePath is in a separate source project (org export or source project)', async () => {
+      var sourceProject = path.join(root, 'vlocity-temp', 'org_x', 'project');
+      fs.outputFileSync(path.join(sourceProject, 'a.txt'), 'from-source');
+      expand.vlocity.tempFolder = path.join(root, 'vlocity-temp');
+      await expand.expandSFDX(staticPack(path.join(sourceProject, 'a.txt')), jobInfo);
+      expect(fs.readFileSync(path.join(project, 'dest', 'staticresources', 'res', 'a.txt'), 'utf8')).to.eq('from-source');
+    })
+    it('allows an explicit sourceProjectPath but not its sibling folders', async () => {
+      var sourceProject = path.join(root, 'src-project');
+      fs.outputFileSync(path.join(sourceProject, 'a.txt'), 'from-source');
+      jobInfo.sourceProjectPath = sourceProject;
+      await expand.expandSFDX(staticPack(path.join(sourceProject, 'a.txt')), jobInfo);
+      expect(fs.existsSync(path.join(project, 'dest', 'staticresources', 'res', 'a.txt'))).to.eq(true);
+      var threw = false;
+      try { await expand.expandSFDX(staticPack(outside), jobInfo); } catch (e) { threw = /traversal/i.test(e.message); }
+      expect(threw).to.eq(true);
+    })
+    it('still copies when originalFilePath is inside the sfdx project', async () => {
+      await expand.expandSFDX(staticPack(path.join(project, 'a.txt')), jobInfo);
+      expect(fs.readFileSync(path.join(project, 'dest', 'staticresources', 'res', 'a.txt'), 'utf8')).to.eq('ok');
+    })
+  })
+})

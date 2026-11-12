@@ -56,4 +56,51 @@ describe('DataPacksUtils', () =>
             fs.removeSync(tempFolder);
         });
     });
+
+    describe('datapack type handler lookup (path-traversal guard)', () => {
+        var planted = path.join(os.tmpdir(), 'vbt_planted_handler');
+        var marker = planted + '.marker';
+        var traversalType;
+
+        before(() => {
+            fs.writeFileSync(planted + '.js', "require('fs').writeFileSync(" + JSON.stringify(marker) + ", 'x'); module.exports = function() {};");
+            traversalType = path.relative(path.join(__dirname, '..', 'lib', 'datapacktypes'), planted);
+        });
+
+        beforeEach(() => {
+            fs.removeSync(marker);
+            Object.keys(require.cache).filter(k => k.toLowerCase().includes('vbt_planted_handler')).forEach(k => delete require.cache[k]);
+        });
+
+        after(() => {
+            fs.removeSync(planted + '.js');
+            fs.removeSync(marker);
+        });
+
+        it('resolves a known handler by bare name, case-insensitively', () => {
+            expect(_datapacksutils.getDataPackTypeHandlerPath('OmniScript')).to.eq(path.join(__dirname, '..', 'lib', 'datapacktypes', 'omniscript.js'));
+        });
+
+        it('returns null for unknown, non-string and traversal types', () => {
+            expect(_datapacksutils.getDataPackTypeHandlerPath('NoSuchType')).to.eq(null);
+            expect(_datapacksutils.getDataPackTypeHandlerPath(undefined)).to.eq(null);
+            expect(_datapacksutils.getDataPackTypeHandlerPath(traversalType)).to.eq(null);
+            expect(_datapacksutils.getDataPackTypeHandlerPath('../datapacksutils')).to.eq(null);
+        });
+
+        it('handleDataPackEventSync does not load a file outside datapacktypes', () => {
+            new _datapacksutils({tempFolder: '../vlocity-temp'}).handleDataPackEventSync('anyEvent', traversalType, {});
+            expect(fs.existsSync(marker)).to.eq(false);
+        });
+
+        it('handleDataPackEvent does not load a file outside datapacktypes', async () => {
+            await new _datapacksutils({tempFolder: '../vlocity-temp'}).handleDataPackEvent('anyEvent', traversalType, {});
+            expect(fs.existsSync(marker)).to.eq(false);
+        });
+
+        it('handleStaticDataPackEvent does not load a file outside datapacktypes', async () => {
+            await _datapacksutils.handleStaticDataPackEvent('anyEvent', traversalType, {});
+            expect(fs.existsSync(marker)).to.eq(false);
+        });
+    });
 })
