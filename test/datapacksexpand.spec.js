@@ -237,7 +237,7 @@ describe('DataPacksExpand', async () =>
       expect(await rejects(credentials)).to.eq(true);
       expect(copied()).to.eq(false);
     })
-    it('rejects files in the cwd outside its sfdx package directory', async () => {
+    it('rejects cwd files that are not under staticresources', async () => {
       sfdxProject(root, 'force-app');
       fs.writeFileSync(path.join(root, '.env'), 'secret');
       expect(await rejects(path.join(root, '.env'))).to.eq(true);
