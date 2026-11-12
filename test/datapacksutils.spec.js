@@ -102,5 +102,17 @@ describe('DataPacksUtils', () =>
             await _datapacksutils.handleStaticDataPackEvent('anyEvent', traversalType, {});
             expect(fs.existsSync(marker)).to.eq(false);
         });
+
+        it('loads and caches a legitimate handler', () => {
+            const utils = new _datapacksutils({tempFolder: '../vlocity-temp'});
+            const handler = utils.getDataPackTypeHandler('OmniScript');
+            expect(handler).to.be.an('object');
+            expect(utils.getDataPackTypeHandler('OmniScript')).to.eq(handler);
+        });
+
+        it('never resolves Object.prototype names to a handler', () => {
+            const utils = new _datapacksutils({tempFolder: '../vlocity-temp'});
+            ['__proto__', 'constructor', 'hasOwnProperty', 'vlocity'].forEach(name => expect(utils.getDataPackTypeHandler(name)).to.eq(null));
+        });
     });
 })
