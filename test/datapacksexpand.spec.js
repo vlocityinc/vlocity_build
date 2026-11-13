@@ -181,5 +181,93 @@ describe('DataPacksExpand', async () =>
       })
     }
   })
-})
 
+  describe('expandSFDX static resource copy source (path-traversal guard)', () => {
+    const fs = require('fs-extra');
+    const os = require('os');
+    var root, target, expand, jobInfo, originalCwd;
+
+    var staticPack = (originalFilePath) => ({
+      VlocityDataPackKey: 'staticresources/res',
+      SFDXDataType: 'staticresources',
+      SFDXData: JSON.stringify([{ encoding: 'utf8', filePath: 'main/default/staticresources/res/a.txt', originalFilePath: originalFilePath }])
+    });
+    var resourceFile = (sfdxRoot, content) => {
+      var file = path.join(sfdxRoot, 'main', 'default', 'staticresources', 'res', 'a.txt');
+      fs.outputFileSync(file, content);
+      return file;
+    };
+    var sfdxProject = (dir, packageDir) => fs.outputFileSync(path.join(dir, 'sfdx-project.json'), JSON.stringify({ packageDirectories: [{ path: packageDir }] }));
+    var copied = () => fs.existsSync(path.join(target, 'main', 'default', 'staticresources', 'res', 'a.txt'));
+    var rejects = async (originalFilePath) => {
+      try { await expand.expandSFDX(staticPack(originalFilePath), jobInfo); } catch (e) { return /traversal/i.test(e.message); }
+      return false;
+    };
+
+    beforeEach(() => {
+      originalCwd = process.cwd();
+      root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'vbt-expand-')));
+      target = path.join(root, 'target');
+      fs.ensureDirSync(target);
+      process.chdir(root);
+      expand = new _datapacksexpand({ tempFolder: path.join(root, 'vlocity-temp') });
+      jobInfo = { sfdxFolderPath: target, projectPath: target, currentStatus: {} };
+    });
+
+    afterEach(() => {
+      process.chdir(originalCwd);
+      fs.removeSync(root);
+    });
+
+    it('rejects a file outside every allowed root', async () => {
+      var other = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'vbt-outside-')));
+      var outside = resourceFile(other, 'secret');
+      expect(await rejects(outside)).to.eq(true);
+      expect(copied()).to.eq(false);
+      fs.removeSync(other);
+    })
+    it('copies from cwd force-app even when sfdx-project.json was rewritten to a temp project', async () => {
+      sfdxProject(root, path.join('vlocity-temp', 'DX', 'salesforce_sfdx'));
+      await expand.expandSFDX(staticPack(resourceFile(path.join(root, 'force-app'), 'from-cwd')), jobInfo);
+      expect(fs.readFileSync(path.join(target, 'main', 'default', 'staticresources', 'res', 'a.txt'), 'utf8')).to.eq('from-cwd');
+    })
+    it('rejects a file under an allowed root that is not in a staticresources folder', async () => {
+      var credentials = path.join(root, 'vlocity-temp', 'user.json');
+      fs.outputFileSync(credentials, 'token');
+      expect(await rejects(credentials)).to.eq(true);
+      expect(copied()).to.eq(false);
+    })
+    it('rejects cwd files that are not under staticresources', async () => {
+      sfdxProject(root, 'force-app');
+      fs.writeFileSync(path.join(root, '.env'), 'secret');
+      expect(await rejects(path.join(root, '.env'))).to.eq(true);
+    })
+    it('copies from an org export project under the temp folder', async () => {
+      await expand.expandSFDX(staticPack(resourceFile(path.join(root, 'vlocity-temp', 'org_x', 'project'), 'from-org')), jobInfo);
+      expect(fs.readFileSync(path.join(target, 'main', 'default', 'staticresources', 'res', 'a.txt'), 'utf8')).to.eq('from-org');
+    })
+    it('copies from the sfdx project that sits beside the source project (../DX)', async () => {
+      fs.ensureDirSync(path.join(root, 'src', 'datapacks'));
+      sfdxProject(path.join(root, 'src', 'DX'), 'salesforce_sfdx');
+      jobInfo.sourceProjectPath = path.join(root, 'src', 'datapacks');
+      await expand.expandSFDX(staticPack(resourceFile(path.join(root, 'src', 'DX', 'salesforce_sfdx'), 'from-dx')), jobInfo);
+      expect(fs.readFileSync(path.join(target, 'main', 'default', 'staticresources', 'res', 'a.txt'), 'utf8')).to.eq('from-dx');
+    })
+    it('copies from the cwd sfdx project when the source project has none', async () => {
+      sfdxProject(root, 'force-app');
+      fs.ensureDirSync(path.join(root, 'vlocity'));
+      jobInfo.sourceProjectPath = path.join(root, 'vlocity');
+      await expand.expandSFDX(staticPack(resourceFile(path.join(root, 'force-app'), 'from-cwd')), jobInfo);
+      expect(fs.readFileSync(path.join(target, 'main', 'default', 'staticresources', 'res', 'a.txt'), 'utf8')).to.eq('from-cwd');
+    })
+    it('copies from the project being expanded into', async () => {
+      await expand.expandSFDX(staticPack(resourceFile(path.join(root, 'proj'), 'in-project')), Object.assign(jobInfo, { projectPath: path.join(root, 'proj') }));
+      expect(copied()).to.eq(true);
+    })
+    it('does not enforce when enforceSecurityValidations is false', async () => {
+      expand.enforceSecurityValidations = false;
+      await expand.expandSFDX(staticPack(resourceFile(path.join(root, 'elsewhere'), 'x')), jobInfo);
+      expect(copied()).to.eq(true);
+    })
+  })
+})
