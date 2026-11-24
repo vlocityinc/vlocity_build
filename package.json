@@ -45,6 +45,9 @@
         "git-diff": {
             "diff": "^3.5.1"
         },
+        "jsforce": {
+            "csv-parse": "^7.0.2"
+        },
         "runtime-plugin-manager-clone": {
             "tar": "^7.5.21"
         }
