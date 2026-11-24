@@ -6,7 +6,7 @@
         "command-exists": "^1.2.9",
         "fast-json-stable-stringify": "2.1.0",
         "fs-extra": "8.0.1",
-        "git-diff": "2.0.6",
+        "git-diff": "2.0.7",
         "global-modules-path": "3.0.0",
         "ignore": "5.0.4",
         "is-utf8": "0.2.1",
