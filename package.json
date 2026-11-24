@@ -37,7 +37,7 @@
     },
     "overrides": {
         "mocha": {
-            "serialize-javascript": "^7.0.5",
+            "serialize-javascript": "^7.1.3",
             "diff": "^8.0.3"
         },
         "git-diff": {
