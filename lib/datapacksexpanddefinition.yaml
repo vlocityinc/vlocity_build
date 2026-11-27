@@ -709,12 +709,12 @@ SObjects:
     - _Items
     NonUnique: true
     SortFields:
+    - OutputCreationSequence
+    - InputFieldName
+    - OutputFieldName
     - InputObjectQuerySequence
     - FilterGroup
-    - OutputCreationSequence
     - OutputObjectName
-    - OutputFieldName
-    - InputFieldName
   DecompositionRelationship__c:
     SourceKeyDefinition:
     - Name
